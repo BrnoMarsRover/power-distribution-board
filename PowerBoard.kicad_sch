@@ -11434,7 +11434,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "22ea631c-9a6d-4f36-84a6-fe5abb33d0ce")
-		(property "Reference" "SPI"
+		(property "Reference" "SPI1"
 			(at 267.97 99.0599 0)
 			(effects
 				(font
@@ -11495,7 +11495,7 @@
 		(instances
 			(project ""
 				(path "/0dc459cd-c845-409c-9d50-e420f03142d8"
-					(reference "SPI")
+					(reference "SPI1")
 					(unit 1)
 				)
 			)
@@ -16899,7 +16899,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9793ac85-6f7c-4f07-85fb-0345430c3a4e")
-		(property "Reference" "I2C"
+		(property "Reference" "I2C1"
 			(at 185.42 52.07 0)
 			(effects
 				(font
@@ -16952,7 +16952,7 @@
 		(instances
 			(project ""
 				(path "/0dc459cd-c845-409c-9d50-e420f03142d8"
-					(reference "I2C")
+					(reference "I2C1")
 					(unit 1)
 				)
 			)
