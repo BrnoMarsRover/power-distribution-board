@@ -12,4 +12,16 @@ K
 F 
 $ENDCMP
 #
+$CMP LTC7004EMSE#PBF
+D LINEAR TECHNOLOGY - LTC7004EMSE#PBF - MOSFET DRIVER, HIGH SIDE, MSOP-10
+K
+F http://www.linear.com/docs/58427
+$ENDCMP
+#
+$CMP LT1910ES8#PBF
+D Gate Drivers Protected High Side MOSFET Driver
+K
+F https://static6.arrow.com/aropdfconversion/230e4198e2eb20faae892530e1e6f994cbeeef6a/42677300557795112downloaddocument.doid3996.doid3996.pdf
+$ENDCMP
+#
 #End Doc Library
