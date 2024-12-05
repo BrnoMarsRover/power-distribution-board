@@ -24,4 +24,22 @@ K
 F https://static6.arrow.com/aropdfconversion/230e4198e2eb20faae892530e1e6f994cbeeef6a/42677300557795112downloaddocument.doid3996.doid3996.pdf
 $ENDCMP
 #
+$CMP CRE2512-FZ-R003E-2
+D BOURNS - CRE2512-FZ-R003E-2 - SMD Current Sense Resistor, 0.003 ohm, CRE Series, 2512 [6432 Metric], 2 W, +/- 1%, Metal Alloy
+K
+F https://www.bourns.com/docs/product-datasheets/cre.pdf
+$ENDCMP
+#
+$CMP WSL12061L000FEA
+D Res Metal Strip 1206 0.001 Ohm 1% 0.25W(1/4W) +/-275ppm/C Sulfur Resistant Pad SMD Automotive T/R
+K
+F https://www.vishay.com/docs/30100/wsl.pdf
+$ENDCMP
+#
+$CMP IRFS7530-7PPBF
+D Infineon IRFS7530-7PPBF N-channel MOSFET, 240 A, 60 V HEXFET, 7-Pin D2PAK
+K
+F https://www.infineon.com/dgdl/irfs7530-7ppbf.pdf?fileId=5546d462533600a40153563a9d1e21d8
+$ENDCMP
+#
 #End Doc Library
