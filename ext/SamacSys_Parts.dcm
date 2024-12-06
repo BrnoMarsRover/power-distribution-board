@@ -42,4 +42,10 @@ K
 F https://www.infineon.com/dgdl/irfs7530-7ppbf.pdf?fileId=5546d462533600a40153563a9d1e21d8
 $ENDCMP
 #
+$CMP IRFS7530TRL7PP
+D MOSFET MOSFET N CH 60V 240A D2PAK
+K
+F https://www.infineon.com/dgdl/Infineon-IRFS7530-7P-DataSheet-v01_01-EN.pdf?fileId=5546d462533600a40153563a9d1e21d8
+$ENDCMP
+#
 #End Doc Library
