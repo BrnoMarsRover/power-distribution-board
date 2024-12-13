@@ -202,4 +202,118 @@ P 5 0 1 6 200 100 700 100 700 -600 200 -600 200 100 N
 ENDDRAW
 ENDDEF
 #
+#SamacSys ECAD Model MAX17541GATB+T
+#/1058045/1551259/2.50/11/2/Integrated Circuit
+DEF MAX17541GATB+T IC 0 30 Y Y 1 F N
+F0 "IC" 1250 300 50 H V L CNN
+F1 "MAX17541GATB+T" 1250 200 50 H V L CNN
+F2 "SON50P200X300X80-11N" 1250 100 50 H I L CNN
+F3 "https://pdfserv.maximintegrated.com/en/ds/MAX17541G.pdf" 1250 0 50 H I L CNN
+F4 "Switching Voltage Regulators 40V, 0.5A, Ultra-Small, High efficiency, Synchronous Step-Down DC/DC converter" 1250 -100 50 H I L CNN "Description"
+F5 "0.8" 1250 -200 50 H I L CNN "Height"
+F6 "700-MAX17541GATB+T" 1250 -300 50 H I L CNN "Mouser Part Number"
+F7 "https://www.mouser.co.uk/ProductDetail/Maxim-Integrated/MAX17541GATB%2bT?qs=NHTRUjBBRiPgKa7snMi8eQ%3D%3D" 1250 -400 50 H I L CNN "Mouser Price/Stock"
+F8 "Analog Devices" 1250 -500 50 H I L CNN "Manufacturer_Name"
+F9 "MAX17541GATB+T" 1250 -600 50 H I L CNN "Manufacturer_Part_Number"
+DRAW
+X PGND 1 0 0 200 R 50 50 0 0 P
+X VIN 2 0 -100 200 R 50 50 0 0 P
+X EN/UVLO 3 0 -200 200 R 50 50 0 0 P
+X VCC 4 0 -300 200 R 50 50 0 0 P
+X FB 5 0 -400 200 R 50 50 0 0 P
+X EP 11 700 -900 200 U 50 50 0 0 P
+X LX 10 1400 0 200 L 50 50 0 0 P
+X GND 9 1400 -100 200 L 50 50 0 0 P
+X ~RESET 8 1400 -200 200 L 50 50 0 0 P
+X COMP 7 1400 -300 200 L 50 50 0 0 P
+X SS 6 1400 -400 200 L 50 50 0 0 P
+P 5 0 1 6 200 100 1200 100 1200 -700 200 -700 200 100 N
+ENDDRAW
+ENDDEF
+#
+#SamacSys ECAD Model SRR5828A-470M
+#/19107529/1551259/2.50/2/2/Inductor
+DEF SRR5828A-470M L 0 30 Y Y 1 F N
+F0 "L" 650 250 50 H V L CNN
+F1 "SRR5828A-470M" 650 150 50 H V L CNN
+F2 "SRR5828A2R6Y" 650 50 50 H I L CNN
+F3 "https://www.bourns.com/docs/Product-Datasheets/SRR5828A.pdf" 650 -50 50 H I L CNN
+F4 "Ind,5.8x5.8x2.8,47uH+/-20%,1.33A,shd" 650 -150 50 H I L CNN "Description"
+F5 "3.2" 650 -250 50 H I L CNN "Height"
+F6 "6521-SRR5828A-470M" 650 -350 50 H I L CNN "Mouser Part Number"
+F7 "https://www.mouser.co.uk/ProductDetail/Bourns/SRR5828A-470M?qs=QpmGXVUTftGYSNaYsooeqg%3D%3D" 650 -450 50 H I L CNN "Mouser Price/Stock"
+F8 "Bourns" 650 -550 50 H I L CNN "Manufacturer_Name"
+F9 "SRR5828A-470M" 650 -650 50 H I L CNN "Manufacturer_Part_Number"
+DRAW
+X ~ 1 0 0 200 R 50 50 0 0 P
+X ~ 2 800 0 200 L 50 50 0 0 P
+A 250 -2 50 1777 -23 0 1 6 N 300 0 200 0
+A 350 -2 50 1777 -23 0 1 6 N 400 0 300 0
+A 450 -2 50 1777 -23 0 1 6 N 500 0 400 0
+A 550 -2 50 1777 -23 0 1 6 N 600 0 500 0
+ENDDRAW
+ENDDEF
+#
+#SamacSys ECAD Model INA4230AIYBJR
+#/20063025/1551259/2.50/16/3/Integrated Circuit
+DEF INA4230AIYBJR IC 0 30 Y Y 1 F N
+F0 "IC" 1050 300 50 H V L CNN
+F1 "INA4230AIYBJR" 1050 200 50 H V L CNN
+F2 "BGA16C40P4X4_160X160X35" 1050 100 50 H I L CNN
+F3 "https://www.ti.com/lit/ds/symlink/ina4230.pdf?ts=1731585738971&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FINA4230" 1050 0 50 H I L CNN
+F4 "Current & Power Monitors & Regulators Quad channel, 16-bit, high-precision, current, voltage, power and energy monitor with IC Interface" 1050 -100 50 H I L CNN "Description"
+F5 "0.35" 1050 -200 50 H I L CNN "Height"
+F6 "595-INA4230AIYBJR" 1050 -300 50 H I L CNN "Mouser Part Number"
+F7 "https://www.mouser.co.uk/ProductDetail/Texas-Instruments/INA4230AIYBJR?qs=IKkN%2F947nfAhBGb0LyQp4w%3D%3D" 1050 -400 50 H I L CNN "Mouser Price/Stock"
+F8 "Texas Instruments" 1050 -500 50 H I L CNN "Manufacturer_Name"
+F9 "INA4230AIYBJR" 1050 -600 50 H I L CNN "Manufacturer_Part_Number"
+DRAW
+X IN+2 A1 0 0 200 R 50 50 0 0 P
+X IN-1 A2 0 -100 200 R 50 50 0 0 P
+X IN+1 A3 0 -200 200 R 50 50 0 0 P
+X VS A4 0 -300 200 R 50 50 0 0 P
+X IN-2 B1 0 -400 200 R 50 50 0 0 P
+X ALERT B2 0 -500 200 R 50 50 0 0 P
+X EN B3 0 -600 200 R 50 50 0 0 P
+X GND B4 0 -700 200 R 50 50 0 0 P
+X IN-3 C1 1200 0 200 L 50 50 0 0 P
+X A0 C2 1200 -100 200 L 50 50 0 0 P
+X A1 C3 1200 -200 200 L 50 50 0 0 P
+X SCL C4 1200 -300 200 L 50 50 0 0 P
+X IN+3 D1 1200 -400 200 L 50 50 0 0 P
+X IN-4 D2 1200 -500 200 L 50 50 0 0 P
+X IN+4 D3 1200 -600 200 L 50 50 0 0 P
+X SDA D4 1200 -700 200 L 50 50 0 0 P
+P 5 0 1 6 200 100 1000 100 1000 -800 200 -800 200 100 N
+ENDDRAW
+ENDDEF
+#
+#SamacSys ECAD Model INA238AIDGSR
+#/13694458/1551259/2.50/10/3/Integrated Circuit
+DEF INA238AIDGSR IC 0 30 Y Y 1 F N
+F0 "IC" 1050 300 50 H V L CNN
+F1 "INA238AIDGSR" 1050 200 50 H V L CNN
+F2 "SOP50P490X110-10N" 1050 100 50 H I L CNN
+F3 "https://www.ti.com/lit/ds/symlink/ina238.pdf?ts=1623483707955&ref_url=https%253A%252F%252Fwww.ti.com%252Fstore%252Fti%252Fen%252Fp%252Fproduct%252F%253Fp%253DINA238AIDGSR" 1050 0 50 H I L CNN
+F4 "Analog to Digital Converters - ADC 85-V, 16-bit, high-precision I2C output current/voltage/power monitor with alert 10-VSSOP -40 to 125" 1050 -100 50 H I L CNN "Description"
+F5 "1.1" 1050 -200 50 H I L CNN "Height"
+F6 "595-INA238AIDGSR" 1050 -300 50 H I L CNN "Mouser Part Number"
+F7 "https://www.mouser.co.uk/ProductDetail/Texas-Instruments/INA238AIDGSR?qs=DRkmTr78QAQpWvQMAkqDfQ%3D%3D" 1050 -400 50 H I L CNN "Mouser Price/Stock"
+F8 "Texas Instruments" 1050 -500 50 H I L CNN "Manufacturer_Name"
+F9 "INA238AIDGSR" 1050 -600 50 H I L CNN "Manufacturer_Part_Number"
+DRAW
+X A1 1 0 0 200 R 50 50 0 0 P
+X A0 2 0 -100 200 R 50 50 0 0 P
+X ALERT 3 0 -200 200 R 50 50 0 0 P
+X SDA 4 0 -300 200 R 50 50 0 0 P
+X SCL 5 0 -400 200 R 50 50 0 0 P
+X IN+ 10 1200 0 200 L 50 50 0 0 P
+X IN- 9 1200 -100 200 L 50 50 0 0 P
+X VBUS 8 1200 -200 200 L 50 50 0 0 P
+X GND 7 1200 -300 200 L 50 50 0 0 P
+X VS 6 1200 -400 200 L 50 50 0 0 P
+P 5 0 1 6 200 100 1000 100 1000 -500 200 -500 200 100 N
+ENDDRAW
+ENDDEF
+#
 #End Library
