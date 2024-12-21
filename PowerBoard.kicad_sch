@@ -6751,15 +6751,6 @@
 		(at 288.29 118.11)
 		(uuid "f697646b-f8e1-4ac2-a6f6-c31a2bed2dad")
 	)
-	(bus_entry
-		(at 265.43 302.26)
-		(size 2.54 2.54)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1758108d-516f-48f6-9ab1-f218cbd214cd")
-	)
 	(wire
 		(pts
 			(xy 78.74 204.47) (xy 78.74 205.74)
@@ -12736,7 +12727,7 @@
 	)
 	(rectangle
 		(start 341.63 93.98)
-		(end 400.05 143.51)
+		(end 374.65 143.51)
 		(stroke
 			(width 0)
 			(type default)
@@ -14542,7 +14533,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "6k8"
+		(property "Value" "2k2"
 			(at 193.04 139.6999 0)
 			(effects
 				(font
@@ -15330,8 +15321,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "80k"
-			(at 237.236 49.53 0)
+		(property "Value" "82k5"
+			(at 236.22 49.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15958,7 +15949,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "6k8"
+		(property "Value" "4k7"
 			(at 199.39 80.0099 0)
 			(effects
 				(font
@@ -16028,7 +16019,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "6k8"
+		(property "Value" "2k2"
 			(at 82.55 139.6999 0)
 			(effects
 				(font
@@ -16236,7 +16227,7 @@
 				)
 			)
 		)
-		(property "Value" "SMAJ30CA"
+		(property "Value" "SMAJ24A"
 			(at 115.57 273.05 0)
 			(effects
 				(font
@@ -18346,8 +18337,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "SMAJ6.5CA"
-			(at 180.34 280.416 0)
+		(property "Value" "SMAJ5A"
+			(at 181.356 280.416 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18549,7 +18540,7 @@
 				)
 			)
 		)
-		(property "Value" "SMAJ48A"
+		(property "Value" "SMAJ43A"
 			(at 33.274 64.77 0)
 			(effects
 				(font
@@ -19869,8 +19860,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "17.5k"
-			(at 235.458 57.658 0)
+		(property "Value" "18k2"
+			(at 236.22 57.404 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19938,7 +19929,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "2k2"
 			(at 317.5 113.03 90)
 			(effects
 				(font
@@ -20144,7 +20135,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "2k2"
 			(at 317.5 123.19 90)
 			(effects
 				(font
@@ -21267,7 +21258,7 @@
 				)
 			)
 		)
-		(property "Value" "SMAJ15CA"
+		(property "Value" "SMAJ12A"
 			(at 163.83 271.78 0)
 			(effects
 				(font
@@ -22708,7 +22699,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "6k8"
+		(property "Value" "470"
 			(at 93.98 201.9299 0)
 			(effects
 				(font
@@ -23400,7 +23391,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "6k8"
+		(property "Value" "2k2"
 			(at 95.25 139.6999 0)
 			(effects
 				(font
@@ -24759,7 +24750,7 @@
 				)
 			)
 		)
-		(property "Value" "SMAJ30CA"
+		(property "Value" "SMAJ15A"
 			(at 139.7 271.78 0)
 			(effects
 				(font
@@ -26154,7 +26145,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "6k8"
+		(property "Value" "470"
 			(at 81.28 201.9299 0)
 			(effects
 				(font
@@ -26769,7 +26760,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "2k2"
 			(at 317.5 133.35 90)
 			(effects
 				(font
@@ -27036,7 +27027,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "6k8"
+		(property "Value" "2k2"
 			(at 180.34 139.6999 0)
 			(effects
 				(font
@@ -27582,7 +27573,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "6k8"
+		(property "Value" "4k7"
 			(at 186.69 80.0099 0)
 			(effects
 				(font
