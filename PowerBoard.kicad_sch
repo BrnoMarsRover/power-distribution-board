@@ -21753,7 +21753,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "1m"
+		(property "Value" "5m"
 			(at 181.61 45.7199 90)
 			(effects
 				(font
