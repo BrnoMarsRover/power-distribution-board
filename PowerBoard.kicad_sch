@@ -6933,6 +6933,16 @@
 	)
 	(wire
 		(pts
+			(xy 27.94 265.43) (xy 33.02 265.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0623f2d9-e934-4567-91b6-61875b051e44")
+	)
+	(wire
+		(pts
 			(xy 176.53 34.29) (xy 184.15 34.29)
 		)
 		(stroke
@@ -11643,16 +11653,6 @@
 	)
 	(wire
 		(pts
-			(xy 27.94 265.43) (xy 33.02 265.43)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d689c1b8-074e-4a4d-af20-3bfd32abf94e")
-	)
-	(wire
-		(pts
 			(xy 24.13 179.07) (xy 30.48 179.07)
 		)
 		(stroke
@@ -15374,17 +15374,15 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 22.86 265.43 0)
-		(mirror y)
+		(at 22.86 267.97 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "0fe7fd09-0891-468b-ae44-5f5a550f2ffe")
 		(property "Reference" "J4"
-			(at 20.32 265.43 0)
+			(at 20.32 267.97 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15393,7 +15391,7 @@
 			)
 		)
 		(property "Value" "XT30"
-			(at 20.32 267.97 0)
+			(at 20.32 265.43 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15403,7 +15401,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
-			(at 22.86 265.43 0)
+			(at 22.86 267.97 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15412,7 +15410,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 22.86 265.43 0)
+			(at 22.86 267.97 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15421,7 +15419,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 22.86 265.43 0)
+			(at 22.86 267.97 0)
 			(effects
 				(font
 					(size 1.27 1.27)
