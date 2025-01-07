@@ -1,0 +1,75 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP NE555DR
+D Single Precision Timer
+K
+F http://www.ti.com/lit/ds/symlink/ne555.pdf
+$ENDCMP
+#
+$CMP LTC7004HMSE#PBF
+D Gate Drivers Fast 65V Protected High-Side NMOS Static Switch Driver
+K
+F 
+$ENDCMP
+#
+$CMP LTC7004EMSE#PBF
+D LINEAR TECHNOLOGY - LTC7004EMSE#PBF - MOSFET DRIVER, HIGH SIDE, MSOP-10
+K
+F http://www.linear.com/docs/58427
+$ENDCMP
+#
+$CMP LT1910ES8#PBF
+D Gate Drivers Protected High Side MOSFET Driver
+K
+F https://static6.arrow.com/aropdfconversion/230e4198e2eb20faae892530e1e6f994cbeeef6a/42677300557795112downloaddocument.doid3996.doid3996.pdf
+$ENDCMP
+#
+$CMP CRE2512-FZ-R003E-2
+D BOURNS - CRE2512-FZ-R003E-2 - SMD Current Sense Resistor, 0.003 ohm, CRE Series, 2512 [6432 Metric], 2 W, +/- 1%, Metal Alloy
+K
+F https://www.bourns.com/docs/product-datasheets/cre.pdf
+$ENDCMP
+#
+$CMP WSL12061L000FEA
+D Res Metal Strip 1206 0.001 Ohm 1% 0.25W(1/4W) +/-275ppm/C Sulfur Resistant Pad SMD Automotive T/R
+K
+F https://www.vishay.com/docs/30100/wsl.pdf
+$ENDCMP
+#
+$CMP IRFS7530-7PPBF
+D Infineon IRFS7530-7PPBF N-channel MOSFET, 240 A, 60 V HEXFET, 7-Pin D2PAK
+K
+F https://www.infineon.com/dgdl/irfs7530-7ppbf.pdf?fileId=5546d462533600a40153563a9d1e21d8
+$ENDCMP
+#
+$CMP IRFS7530TRL7PP
+D MOSFET MOSFET N CH 60V 240A D2PAK
+K
+F https://www.infineon.com/dgdl/Infineon-IRFS7530-7P-DataSheet-v01_01-EN.pdf?fileId=5546d462533600a40153563a9d1e21d8
+$ENDCMP
+#
+$CMP MAX17541GATB+T
+D Switching Voltage Regulators 40V, 0.5A, Ultra-Small, High efficiency, Synchronous Step-Down DC/DC converter
+K
+F https://pdfserv.maximintegrated.com/en/ds/MAX17541G.pdf
+$ENDCMP
+#
+$CMP SRR5828A-470M
+D Ind,5.8x5.8x2.8,47uH+/-20%,1.33A,shd
+K
+F https://www.bourns.com/docs/Product-Datasheets/SRR5828A.pdf
+$ENDCMP
+#
+$CMP INA4230AIYBJR
+D Current & Power Monitors & Regulators Quad channel, 16-bit, high-precision, current, voltage, power and energy monitor with IC Interface
+K
+F https://www.ti.com/lit/ds/symlink/ina4230.pdf?ts=1731585738971&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FINA4230
+$ENDCMP
+#
+$CMP INA238AIDGSR
+D Analog to Digital Converters - ADC 85-V, 16-bit, high-precision I2C output current/voltage/power monitor with alert 10-VSSOP -40 to 125
+K
+F https://www.ti.com/lit/ds/symlink/ina238.pdf?ts=1623483707955&ref_url=https%253A%252F%252Fwww.ti.com%252Fstore%252Fti%252Fen%252Fp%252Fproduct%252F%253Fp%253DINA238AIDGSR
+$ENDCMP
+#
+#End Doc Library
