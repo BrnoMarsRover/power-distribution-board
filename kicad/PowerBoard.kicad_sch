@@ -5680,12 +5680,6 @@
 		(uuid "0fdb49b6-9b06-4972-accf-a6861ca74d5f")
 	)
 	(junction
-		(at 246.38 44.45)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "0fdf63f0-8623-4672-bea3-db0c69743f7a")
-	)
-	(junction
 		(at 297.18 101.6)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6118,6 +6112,12 @@
 		(uuid "692be25a-64d9-462d-a547-e5c8ff584b35")
 	)
 	(junction
+		(at 38.1 71.12)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "69a7f7f6-c900-47c6-a1eb-304f904bdab8")
+	)
+	(junction
 		(at 93.98 234.95)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -6182,6 +6182,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "6ffc5153-dcbb-47e4-947c-65e2dd17631a")
+	)
+	(junction
+		(at 246.38 44.45)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "704b3f95-9d33-4b17-8ab9-d914990f2f68")
 	)
 	(junction
 		(at 142.24 260.35)
@@ -7165,13 +7171,13 @@
 	)
 	(wire
 		(pts
-			(xy 246.38 31.75) (xy 246.38 34.29)
+			(xy 238.76 36.83) (xy 246.38 36.83)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0f29407a-d04d-4653-a86c-71f91038e8ca")
+		(uuid "0e5accd9-d04b-4089-9f7d-aa474640af9e")
 	)
 	(wire
 		(pts
@@ -7202,6 +7208,16 @@
 			(type default)
 		)
 		(uuid "105087e7-a778-44d8-addc-95d91b062c60")
+	)
+	(wire
+		(pts
+			(xy 228.6 36.83) (xy 231.14 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "10b23ae4-b482-45ca-89a6-a976aaae1278")
 	)
 	(wire
 		(pts
@@ -7811,7 +7827,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "25687aa9-c1c4-41c9-afbd-d28a961f640f")
+		(uuid "25c2defa-5692-4e0b-84af-9da66beba062")
 	)
 	(wire
 		(pts
@@ -8515,16 +8531,6 @@
 	)
 	(wire
 		(pts
-			(xy 246.38 41.91) (xy 246.38 44.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "451ba910-fa11-4279-94c9-d2ae7ae87b6a")
-	)
-	(wire
-		(pts
 			(xy 162.56 111.76) (xy 195.58 111.76)
 		)
 		(stroke
@@ -9112,6 +9118,16 @@
 			(type default)
 		)
 		(uuid "5d0632e8-c807-4a14-8d7f-27742784ef9a")
+	)
+	(wire
+		(pts
+			(xy 27.94 71.12) (xy 38.1 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5d37440f-411e-48b1-9e88-13d1059fb554")
 	)
 	(wire
 		(pts
@@ -11615,7 +11631,7 @@
 	)
 	(wire
 		(pts
-			(xy 242.57 44.45) (xy 242.57 33.02)
+			(xy 242.57 33.02) (xy 242.57 44.45)
 		)
 		(stroke
 			(width 0)
@@ -11702,6 +11718,16 @@
 			(type default)
 		)
 		(uuid "c931b079-e49a-4b89-825d-92aa9db678d5")
+	)
+	(wire
+		(pts
+			(xy 246.38 36.83) (xy 246.38 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c9a0109f-d6cb-49a2-b332-83cff1d1ca44")
 	)
 	(wire
 		(pts
@@ -13066,7 +13092,7 @@
 		(uuid 13f20c2c-6a35-4669-a833-3ab2abe9e2e7)
 	)
 	(rectangle
-		(start 19.05 21.59)
+		(start 13.97 21.59)
 		(end 113.03 86.36)
 		(stroke
 			(width 0)
@@ -13090,7 +13116,7 @@
 		(uuid 4d97f9b3-8fa5-4b6e-b02d-5fdc76080458)
 	)
 	(rectangle
-		(start 218.44 21.59)
+		(start 214.63 21.59)
 		(end 332.74 81.28)
 		(stroke
 			(width 0)
@@ -13287,7 +13313,7 @@
 	)
 	(text "5V AUX Switched Power Supply"
 		(exclude_from_sim no)
-		(at 249.428 24.638 0)
+		(at 246.126 24.638 0)
 		(effects
 			(font
 				(size 2.54 2.54)
@@ -13467,6 +13493,28 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "42_SHUNT"
+		(shape input)
+		(at 27.94 71.12 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "1dd8cdd6-5efb-4802-9077-d126a09e146b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 15.3996 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 				(hide yes)
 			)
 		)
@@ -14879,6 +14927,28 @@
 			)
 		)
 	)
+	(global_label "42_SHUNT"
+		(shape input)
+		(at 228.6 36.83 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ef0a0033-a2c9-4c6b-afcf-1331a9cf5df1")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 216.0596 36.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "24V_2"
 		(shape input)
 		(at 116.84 228.6 180)
@@ -15598,7 +15668,7 @@
 	)
 	(symbol
 		(lib_id "Device:D")
-		(at 246.38 38.1 90)
+		(at 234.95 36.83 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -15607,25 +15677,23 @@
 		(fields_autoplaced yes)
 		(uuid "0c7ee3c2-b554-4a7f-b853-a0226b0435d6")
 		(property "Reference" "D20"
-			(at 248.92 36.8299 90)
+			(at 234.95 30.48 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Value" "D"
-			(at 248.92 39.3699 90)
+			(at 234.95 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Footprint" "Diode_SMD:D_1206_3216Metric"
-			(at 246.38 38.1 0)
+			(at 234.95 36.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15634,7 +15702,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 246.38 38.1 0)
+			(at 234.95 36.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15643,7 +15711,7 @@
 			)
 		)
 		(property "Description" "Diode"
-			(at 246.38 38.1 0)
+			(at 234.95 36.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15652,7 +15720,7 @@
 			)
 		)
 		(property "Sim.Device" "D"
-			(at 246.38 38.1 0)
+			(at 234.95 36.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15661,7 +15729,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=K 2=A"
-			(at 246.38 38.1 0)
+			(at 234.95 36.83 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18406,72 +18474,6 @@
 			(project "PowerBoard"
 				(path "/0dc459cd-c845-409c-9d50-e420f03142d8"
 					(reference "U1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+48V")
-		(at 246.38 31.75 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "43595d06-ceff-4c31-868b-e77fc815aef8")
-		(property "Reference" "#PWR023"
-			(at 246.38 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+42V"
-			(at 243.84 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 246.38 31.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 246.38 31.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+42V\""
-			(at 246.38 31.75 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "28dfc213-8b62-42e0-be7e-0b1b2dc488c3")
-		)
-		(instances
-			(project "PowerBoard"
-				(path "/0dc459cd-c845-409c-9d50-e420f03142d8"
-					(reference "#PWR023")
 					(unit 1)
 				)
 			)
