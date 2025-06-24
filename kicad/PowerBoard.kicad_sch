@@ -19638,7 +19638,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100k"
+		(property "Value" "680"
 			(at 40.386 178.308 90)
 			(effects
 				(font
@@ -22970,7 +22970,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100k"
+		(property "Value" "4.7k"
 			(at 25.908 197.104 90)
 			(effects
 				(font
@@ -24449,7 +24449,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100k"
+		(property "Value" "1k"
 			(at 55.626 178.308 90)
 			(effects
 				(font
@@ -29637,7 +29637,7 @@
 		(dnp no)
 		(uuid "ccf6c017-7a35-4189-a37e-2e4920532517")
 		(property "Reference" "C5"
-			(at 129.54 68.58 0)
+			(at 128.778 68.834 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29646,7 +29646,7 @@
 			)
 		)
 		(property "Value" "1u"
-			(at 125.222 68.834 0)
+			(at 127.254 68.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -30253,7 +30253,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100k"
+		(property "Value" "470"
 			(at 40.386 163.068 90)
 			(effects
 				(font
