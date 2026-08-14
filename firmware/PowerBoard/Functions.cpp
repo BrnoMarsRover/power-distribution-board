@@ -48,6 +48,16 @@ void printSingleStatus(uint8_t index)
     else if (physicallyActive) Serial.println("ACTIVE");
     else Serial.println("OFF");
 
+    Serial.print("OCP         : ");
+    Serial.print(ocpEnabled ? "ENABLED" : "DISABLED");
+    if (branchOverLimit[index]) {
+        Serial.print("  >>> OVER LIMIT (");
+        Serial.print(branchOverLimitCount[index]);
+        Serial.print(" samples)");
+    }
+    Serial.println();
+    Serial.print("Trips       : "); Serial.println(branchTripCounts[index]);
+
     Serial.print("Voltage [V] : "); Serial.println(vbusValues[index], 3);
     Serial.print("Current [mA]: "); Serial.println(currentValues[index], 3);
     Serial.print("Calc [mA]   : "); Serial.println(calcCurrentValues[index], 3);
@@ -81,6 +91,38 @@ void processSerialCommand()
         return;
     }
 
+    // Over-current protection master switch. Default off - see Config.cpp.
+    if (cmd == "OCP") {
+        Serial.print("OCP IS ");
+        Serial.println(ocpEnabled ? "ENABLED" : "DISABLED");
+        return;
+    }
+
+    if (cmd == "OCP ON" || cmd == "OCP 1") {
+        ocpEnabled = true;
+        for (uint8_t i = 0; i < INA_COUNT; i++) branchOverLimitCount[i] = 0;
+        Serial.println("OCP ENABLED - branches will be switched off above their limit");
+        Serial.println("WARNING: bridged high-side drivers cannot be opened in hardware");
+        return;
+    }
+
+    if (cmd == "OCP OFF" || cmd == "OCP 0") {
+        ocpEnabled = false;
+        // Release anything currently held off by a trip, so disabling protection does
+        // not silently leave a branch dark.
+        for (uint8_t i = 0; i < INA_COUNT; i++) {
+            branchOverLimitCount[i] = 0;
+            if (branchTripped[i] && !branchManualOff[i]) {
+                branchTripped[i] = false;
+                branchActive[i] = true;
+                digitalWrite(controlPins[i], HIGH);
+                strcpy(branchStatusMsgs[i], "OK");
+            }
+        }
+        Serial.println("OCP DISABLED - limits are monitored and reported only");
+        return;
+    }
+
     for (uint8_t i = 0; i < INA_COUNT; i++) {
         String uName = String(inaNames[i]);
         String shortNum = String(i + 2);
@@ -103,6 +145,8 @@ void processSerialCommand()
         }
     }
     Serial.print("UNKNOWN COMMAND: "); Serial.println(cmd);
+    Serial.println("COMMANDS: ON | OFF | ON <U2..U6|2..6> | OFF <U2..U6|2..6>");
+    Serial.println("          STATUS [<U2..U6|2..6>] | OCP [ON|OFF]");
 }
 
 void initializeSystem()
@@ -160,21 +204,48 @@ void readINAData()
 
         bool physicallyActive = (i == 0) ? branchActive[0] : (branchActive[i] && branchActive[0]);
 
-        // OCP
-        if (physicallyActive && !branchManualOff[i] && calibratedCurrentValues[i] > currentLimits_mA[i]) {
-            branchTripped[i] = true;
-            branchActive[i] = false;
-            digitalWrite(controlPins[i], LOW);
-            branchTrippedTime[i] = currentTime;
-            strcpy(branchStatusMsgs[i], "OCP TRIPPED");
+        // The over-current check uses the SHUNT-DERIVED current, not the INA CURRENT
+        // register. The register is scaled by current_LSB = maxBusAmps / 32768 with
+        // maxBusAmps = 8.0 for every device, so it saturates at ~7.9998 A - below U2's
+        // 15 A and U6's 12 A limits, which could therefore never be reached.
+        // The shunt path has both more range (+-54.6 A on U2's 3 mOhm, +-32.8 A on the
+        // 5 mOhm branches at ADCRANGE=0) and finer resolution (1.67 mA / 1.0 mA vs
+        // 244 uA), so it is the better basis for protection on every branch.
+        const float protectionCurrent_mA = calcCurrentValues[i];
+
+        // OVER-LIMIT DETECTION - always evaluated, even with OCP disabled, so that an
+        // overloaded branch is still visible in the table and in telemetry.
+        if (physicallyActive && !branchManualOff[i] && protectionCurrent_mA > currentLimits_mA[i]) {
+            if (branchOverLimitCount[i] < 255) branchOverLimitCount[i]++;
+            branchOverLimit[i] = true;
+        } else {
+            branchOverLimitCount[i] = 0;
+            branchOverLimit[i] = false;
         }
 
-        // AUTO RECOVERY
-        if (!branchManualOff[i] && branchTripped[i] && (currentTime - branchTrippedTime[i] >= 5000UL)) {
-            branchActive[i] = true;
-            branchTripped[i] = false;
-            digitalWrite(controlPins[i], HIGH);
-            strcpy(branchStatusMsgs[i], "OK");
+        // OCP - only ever switches anything when explicitly enabled. Default is off
+        // because some high-side drivers on this board are bridged and cannot be
+        // opened, so a software trip would report TRIPPED while current kept flowing.
+        if (ocpEnabled) {
+            if (branchOverLimit[i] && branchOverLimitCount[i] >= ocpTripSamples && !branchTripped[i]) {
+                branchTripped[i] = true;
+                branchActive[i] = false;
+                digitalWrite(controlPins[i], LOW);
+                branchTrippedTime[i] = currentTime;
+                branchTripCounts[i]++;
+                strcpy(branchStatusMsgs[i], "OCP TRIPPED");
+            }
+
+            // AUTO RECOVERY
+            if (!branchManualOff[i] && branchTripped[i] && (currentTime - branchTrippedTime[i] >= 5000UL)) {
+                branchActive[i] = true;
+                branchTripped[i] = false;
+                branchOverLimitCount[i] = 0;
+                digitalWrite(controlPins[i], HIGH);
+                strcpy(branchStatusMsgs[i], "OK");
+            }
+        } else if (branchOverLimit[i]) {
+            strcpy(branchStatusMsgs[i], "OVER LIMIT (OCP OFF)");
         }
     }
 }
@@ -184,7 +255,8 @@ void printTable()
     for (int i = 0; i < 20; i++) Serial.println();
 
     Serial.println("=================================================================================================");
-    Serial.println("| Parameter  |    U2    |    U3    |    U4    |    U5    |    U6    |");
+    Serial.print("| Parameter  |    U2    |    U3    |    U4    |    U5    |    U6    |   OCP: ");
+    Serial.println(ocpEnabled ? "ENABLED  |" : "DISABLED |");
     Serial.println("=================================================================================================");
 
     if (showAddressRow) {
@@ -215,6 +287,16 @@ void printTable()
         }
         Serial.println();
     }
+    Serial.println("-------------------------------------------------------------------------------------------------");
+
+    // Over-limit is reported whether or not OCP is enabled, so an overloaded branch is
+    // never invisible just because protection is switched off.
+    Serial.print("| OverLimit  |");
+    for (uint8_t i = 0; i < INA_COUNT; i++) {
+        if (branchOverLimit[i]) Serial.print("  >LIMIT |");
+        else Serial.print("    ok   |");
+    }
+    Serial.println();
     Serial.println("-------------------------------------------------------------------------------------------------");
 
     if (showLimitRow) {
