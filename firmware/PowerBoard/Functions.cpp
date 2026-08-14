@@ -66,6 +66,92 @@ void printSingleStatus(uint8_t index)
     Serial.println("======================================");
 }
 
+void printRawDump()
+{
+    Serial.println();
+    Serial.println("=========================== RAW REGISTER DUMP ===========================");
+    Serial.print("devicesFound: "); Serial.print(devicesFound);
+    Serial.print("   INA_COUNT: "); Serial.println(INA_COUNT);
+    if (devicesFound != INA_COUNT) {
+        Serial.println("!! devicesFound != INA_COUNT - device indices no longer line up with");
+        Serial.println("!! inaAddresses[]/inaNames[]/controlPins[], readings may be attributed");
+        Serial.println("!! to the wrong branch.");
+    }
+
+    for (uint8_t i = 0; i < INA_COUNT; i++) {
+        char buf[128];
+
+        // Read straight from the chip. Registers are read back so that a failed write
+        // in initDevice() becomes visible - writeWord() discards the I2C result, so a
+        // NACKed configuration write is otherwise completely silent.
+        uint16_t dieId   = INA.readRegister(INA_DIE_ID_REGISTER, i);
+        uint16_t cfg     = INA.readRegister(INA_CONFIGURATION_REGISTER, i);
+        uint16_t adccfg  = INA.readRegister(INA_ADC_CONFIGURATION_REGISTER, i);
+        uint16_t cal     = INA.readRegister(INA_CALIBRATION_REGISTER, i);
+        uint16_t vbusRaw = INA.getBusRaw(i);
+        int16_t  vshRaw  = (int16_t)INA.getShuntRaw(i);
+        int16_t  curRaw  = INA.getBusMicroAmpsRaw(i);
+        int16_t  tmpRaw  = INA.getDieTemperatureRaw(i);
+
+        uint32_t rShunt  = INA.getMicroOhmR(i);
+        float    cLsb    = INA.getCurrentLSB(i);
+
+        // What SHUNT_CAL should contain for this device, per the INA238 datasheet:
+        // SHUNT_CAL = 819.2e6 * CURRENT_LSB * R_SHUNT
+        uint16_t calExpect = (uint16_t)(819200000.0f * cLsb * ((float)rShunt / 1000000.0f));
+
+        Serial.println("-------------------------------------------------------------------------");
+        snprintf(buf, sizeof(buf), "[%u] %-3s  addr 0x%02X   configured: R=%lu uOhm  currentLSB=%.6f A",
+                 i, inaNames[i], INA.getDeviceAddress(i),
+                 (unsigned long)rShunt, cLsb);
+        Serial.println(buf);
+
+        snprintf(buf, sizeof(buf), "    DEVICE_ID  0x%04X  %s", dieId,
+                 (dieId == INA_DIE_ID_VALUE) ? "(INA238 ok)" : "(UNEXPECTED - read failed or wrong part)");
+        Serial.println(buf);
+
+        snprintf(buf, sizeof(buf), "    CONFIG     0x%04X  ADCRANGE=%u %s", cfg,
+                 (unsigned)((cfg >> 4) & 0x01),
+                 (cfg == 0x0000) ? "(as written)" : "(NOT what initDevice wrote - 0x0000)");
+        Serial.println(buf);
+
+        snprintf(buf, sizeof(buf), "    ADC_CONFIG 0x%04X  MODE=0x%X AVG=%u %s", adccfg,
+                 (unsigned)((adccfg >> 12) & 0x0F), (unsigned)(adccfg & 0x07),
+                 (adccfg == 0xAB6A) ? "(as written)" : "(NOT what initDevice wrote - 0xAB6A)");
+        Serial.println(buf);
+
+        snprintf(buf, sizeof(buf), "    SHUNT_CAL  0x%04X = %u   expected %u %s",
+                 cal, cal, calExpect,
+                 (cal == calExpect) ? "(match)" : "(MISMATCH)");
+        Serial.println(buf);
+
+        // Raw values plus the conversion the firmware applies, so the two can be
+        // compared against an external meter without guessing at the scaling.
+        snprintf(buf, sizeof(buf), "    VBUS   raw 0x%04X = %5u  x 3.125 mV = %9.3f V",
+                 vbusRaw, vbusRaw, (float)vbusRaw * 3.125f / 1000.0f);
+        Serial.println(buf);
+
+        snprintf(buf, sizeof(buf), "    VSHUNT raw 0x%04X = %6d  x 5 uV    = %9.3f mV",
+                 (uint16_t)vshRaw, vshRaw, (float)vshRaw * 5.0f / 1000.0f);
+        Serial.println(buf);
+
+        snprintf(buf, sizeof(buf), "    CURRENT raw 0x%04X = %6d  x LSB     = %9.3f mA  (saturates at +-32767)",
+                 (uint16_t)curRaw, curRaw, (float)curRaw * cLsb * 1000.0f);
+        Serial.println(buf);
+
+        snprintf(buf, sizeof(buf), "    DIETEMP raw 0x%04X = %6d  >>4 x0.125 = %9.1f C",
+                 (uint16_t)tmpRaw, tmpRaw, (float)(tmpRaw >> 4) * 0.125f);
+        Serial.println(buf);
+
+        // Shunt-derived current: independent of SHUNT_CAL and of the CURRENT register,
+        // and the value the over-current check uses.
+        snprintf(buf, sizeof(buf), "    shunt-derived current            = %9.3f mA  <- used by OCP",
+                 ((float)vshRaw * 5.0f / 1000.0f) * 1000000.0f / (float)(rShunt ? rShunt : 1));
+        Serial.println(buf);
+    }
+    Serial.println("=========================================================================");
+}
+
 void processSerialCommand()
 {
     if (!Serial.available()) return;
@@ -88,6 +174,13 @@ void processSerialCommand()
 
     if (cmd == "STATUS") {
         for (uint8_t i = 0; i < INA_COUNT; i++) printSingleStatus(i);
+        return;
+    }
+
+    // Read-only diagnostic: unconverted registers plus a read-back of the config, so a
+    // silently failed initDevice() write or an implausible raw value becomes visible.
+    if (cmd == "RAW") {
+        printRawDump();
         return;
     }
 
@@ -146,7 +239,7 @@ void processSerialCommand()
     }
     Serial.print("UNKNOWN COMMAND: "); Serial.println(cmd);
     Serial.println("COMMANDS: ON | OFF | ON <U2..U6|2..6> | OFF <U2..U6|2..6>");
-    Serial.println("          STATUS [<U2..U6|2..6>] | OCP [ON|OFF]");
+    Serial.println("          STATUS [<U2..U6|2..6>] | OCP [ON|OFF] | RAW");
 }
 
 void initializeSystem()

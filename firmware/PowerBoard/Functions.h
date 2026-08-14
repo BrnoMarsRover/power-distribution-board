@@ -9,6 +9,7 @@ void readINAData();
 void printTable();
 void setBranch(uint8_t index, bool state);
 void printSingleStatus(uint8_t index);
+void printRawDump();
 int8_t getDeviceIndexByAddress(uint8_t addr);
 
 #endif

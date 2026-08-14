@@ -136,6 +136,50 @@ uint8_t INA_Class::getDeviceAddress(const uint8_t deviceNumber) {
   return _DeviceArray[deviceNumber].address;
 }
 
+// ---------------------------------------------------------------------------------
+// Diagnostics. These expose the unconverted register contents and the per-device
+// scaling actually in use, so a RAW dump can show what the chip really holds
+// independently of any conversion the normal getters apply.
+// ---------------------------------------------------------------------------------
+
+uint16_t INA_Class::readRegister(const uint8_t reg, const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0xFFFF;
+  return readWord(reg, _DeviceArray[deviceNumber].address);
+}
+
+float INA_Class::getCurrentLSB(const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0.0f;
+  return _DeviceArray[deviceNumber].current_LSB;
+}
+
+uint32_t INA_Class::getMicroOhmR(const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0;
+  return _DeviceArray[deviceNumber].microOhmR;
+}
+
+// The four *Raw getters below were declared in the header but never defined, so any
+// call to them would have failed at link time. Defined here because the RAW dump
+// needs them.
+uint16_t INA_Class::getBusRaw(const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0xFFFF;
+  return readWord(INA_BUS_VOLTAGE_REGISTER, _DeviceArray[deviceNumber].address);
+}
+
+uint16_t INA_Class::getShuntRaw(const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0xFFFF;
+  return readWord(INA_SHUNT_VOLTAGE_REGISTER, _DeviceArray[deviceNumber].address);
+}
+
+int16_t INA_Class::getBusMicroAmpsRaw(const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0;
+  return (int16_t)readWord(INA_CURRENT_REGISTER, _DeviceArray[deviceNumber].address);
+}
+
+int16_t INA_Class::getDieTemperatureRaw(const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0;
+  return (int16_t)readWord(INA_TEMP_REGISTER, _DeviceArray[deviceNumber].address);
+}
+
 uint16_t INA_Class::readWord(const uint8_t reg, const uint8_t deviceAddress) const {
   Wire1.beginTransmission(deviceAddress);
   Wire1.write(reg);

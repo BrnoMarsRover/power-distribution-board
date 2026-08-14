@@ -94,6 +94,15 @@ class INA_Class {
   float       getDieTemperature(const uint8_t deviceNumber = 0);
   int16_t     getDieTemperatureRaw(const uint8_t deviceNumber = 0);
   uint8_t     getDeviceAddress(const uint8_t deviceNumber = 0);
+  /// Read any register of a device by index. Returns 0xFFFF if the index is out of
+  /// range or the I2C transaction failed. Intended for diagnostics: it is the only way
+  /// to read CONFIG / ADC_CONFIG / SHUNT_CAL back and confirm initDevice() actually
+  /// landed, because writeWord() discards the I2C transaction result.
+  uint16_t    readRegister(const uint8_t reg, const uint8_t deviceNumber = 0);
+  /// Current LSB in amps, as configured for this device (maxBusAmps / 32768).
+  float       getCurrentLSB(const uint8_t deviceNumber = 0);
+  /// Shunt resistance in micro-ohms, as configured for this device.
+  uint32_t    getMicroOhmR(const uint8_t deviceNumber = 0);
   void        reset(const uint8_t deviceNumber = 0);
   bool        conversionFinished(const uint8_t deviceNumber = 0);
   void        waitForConversion(const uint8_t deviceNumber = UINT8_MAX);
