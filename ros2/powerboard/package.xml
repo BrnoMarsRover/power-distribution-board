@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>powerboard</name>
+  <version>1.0.0</version>
+  <description>
+    ROS 2 driver for the BrnoMarsRover power distribution board (Raspberry Pi Pico 2,
+    5x INA238). Parses the board's JSON line protocol over USB CDC-ACM and publishes
+    diagnostics, per-rail voltage/current and a BatteryState for the battery feed.
+    Forwards commands back to the board.
+  </description>
+  <maintainer email="standa.svediroh@gmail.com">standa</maintainer>
+  <license>MIT</license>
+
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>diagnostic_msgs</exec_depend>
+  <exec_depend>python3-serial</exec_depend>
+  <!-- Satisfied by the apt package python3 serial on Ubuntu; rosdep resolves
+       this key straight to it. Avoid a pip user site install instead: it is
+       only visible to that one user and will not survive a re image. -->
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

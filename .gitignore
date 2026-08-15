@@ -1,0 +1,14 @@
+# KiCad strays at the repo root. The real project lives in kicad/ and has its own
+# .gitignore; these appear when KiCad is opened against the repo root by mistake.
+/PowerBoard.kicad_pro
+/PowerBoard.kicad_prl
+/PowerBoard-backups/
+/fp-info-cache
+
+# Python / ROS 2 build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+/ros2/**/build/
+/ros2/**/install/
+/ros2/**/log/
