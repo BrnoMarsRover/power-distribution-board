@@ -16,6 +16,12 @@ extern bool ocpEnabled;
 // Consecutive over-limit samples required before OCP acts (inrush debounce).
 extern const uint8_t ocpTripSamples;
 
+// Output format: true = machine-readable JSON lines (default), false = human table.
+// Runtime commands: "JSON", "HUMAN", "ONCE".
+extern bool jsonOutput;
+// JSON schema version, bumped when the field set changes.
+extern const uint8_t jsonSchemaVersion;
+
 extern bool showAddressRow;
 extern bool showOnlineRow;
 extern bool showOutputRow;

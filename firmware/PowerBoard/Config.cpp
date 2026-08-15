@@ -68,6 +68,18 @@ const float currentLimits_mA[INA_COUNT] = {
 // Toggle at runtime with "OCP ON" / "OCP OFF", query with "OCP".
 bool ocpEnabled = false;
 
+// OUTPUT FORMAT.
+// true  = one JSON object per cycle, machine readable (default - the primary consumer
+//         is a ROS 2 node, and a host gets parseable data the moment it plugs in).
+// false = the original human table.
+// Switch at runtime with "JSON" / "HUMAN"; "ONCE" emits a single JSON frame without
+// changing the mode, which is handy while a terminal is in HUMAN mode.
+bool jsonOutput = true;
+
+// Schema version, bumped whenever the JSON field set changes so a consumer can refuse
+// or adapt to firmware it does not understand.
+const uint8_t jsonSchemaVersion = 1;
+
 // Consecutive over-limit samples required before acting, once OCP is enabled.
 // The loop samples every 500 ms, so 2 means ~1 s of sustained overload. This exists
 // so that inrush - the thing that damaged the drivers in the first place - cannot

@@ -66,6 +66,122 @@ void printSingleStatus(uint8_t index)
     Serial.println("======================================");
 }
 
+// ---------------------------------------------------------------------------------
+// JSON line protocol.
+//
+// One object per line, newline terminated, so a reader can frame on '\n' and never has
+// to care about field order or column alignment. Four line types share the stream and
+// are distinguished by "t", which is why command replies can never corrupt telemetry
+// parsing:
+//   {"t":"tel",...}   periodic telemetry, one per cycle
+//   {"t":"evt",...}   something happened, emitted immediately rather than sampled
+//   {"t":"ack",...}   a command succeeded
+//   {"t":"err",...}   a command failed
+//   {"t":"info",...}  emitted once at startup, identifies the firmware and schema
+//
+// Units are fixed by the schema and never appear in the payload: volts, milliamps,
+// milliohms, degrees C, milliseconds.
+// ---------------------------------------------------------------------------------
+
+// Status bitfield packed into "s". Bit flags rather than English words so that adding a
+// state later cannot break an existing parser.
+static uint8_t branchStatusBits(uint8_t i)
+{
+    bool physicallyActive = (i == 0) ? branchActive[0] : (branchActive[i] && branchActive[0]);
+    return (uint8_t)((inaOnline[i]         ? 0x01 : 0)   // b0 online
+                   | (branchActive[i]      ? 0x02 : 0)   // b1 enabled in software
+                   | (branchTripped[i]     ? 0x04 : 0)   // b2 tripped by OCP
+                   | (branchManualOff[i]   ? 0x08 : 0)   // b3 switched off by a command
+                   | (physicallyActive     ? 0x10 : 0)   // b4 actually powered
+                   | (branchOverLimit[i]   ? 0x20 : 0)); // b5 over its current limit
+}
+
+void printTelemetryJson()
+{
+    static uint32_t seq = 0;
+    char buf[192];
+
+    Serial.print(F("{\"t\":\"tel\",\"v\":"));
+    Serial.print(jsonSchemaVersion);
+    Serial.print(F(",\"seq\":"));
+    Serial.print(++seq);
+    Serial.print(F(",\"up\":"));
+    Serial.print(millis());
+    Serial.print(F(",\"ocp\":"));
+    Serial.print(ocpEnabled ? 1 : 0);
+    // U2 gates every other branch, so a consumer needs it explicitly to explain why
+    // the others read as unpowered.
+    Serial.print(F(",\"mst\":"));
+    Serial.print(branchActive[0] ? 1 : 0);
+    Serial.print(F(",\"b\":["));
+
+    for (uint8_t i = 0; i < INA_COUNT; i++) {
+        if (i) Serial.print(',');
+        // "i"  is the shunt-derived current, the value OCP acts on
+        // "ir" is the INA CURRENT register, kept for cross-checking - it saturates at
+        //      about 8 A, so it can disagree with "i" on the high-current branches
+        snprintf(buf, sizeof(buf),
+                 "{\"n\":\"%s\",\"a\":%u,\"s\":%u,\"lim\":%.0f,"
+                 "\"vb\":%.3f,\"vs\":%.3f,\"i\":%.1f,\"ir\":%.1f,\"tc\":%.1f,\"tr\":%lu}",
+                 inaNames[i], (unsigned)inaAddresses[i], (unsigned)branchStatusBits(i),
+                 currentLimits_mA[i], vbusValues[i], vshuntValues[i],
+                 calcCurrentValues[i], currentValues[i], tempValues[i],
+                 (unsigned long)branchTripCounts[i]);
+        Serial.print(buf);
+    }
+    Serial.println(F("]}"));
+}
+
+// Events are pushed the moment they happen rather than waiting for the next telemetry
+// frame. That matters most with OCP disabled, where an over-limit event is the only
+// actionable signal the board can give.
+void emitEventJson(const char* event, uint8_t index)
+{
+    if (!jsonOutput) return;
+    char buf[176];
+    snprintf(buf, sizeof(buf),
+             "{\"t\":\"evt\",\"up\":%lu,\"ev\":\"%s\",\"n\":\"%s\",\"i\":%.1f,\"lim\":%.0f,\"ocp\":%u}",
+             (unsigned long)millis(), event, inaNames[index],
+             calcCurrentValues[index], currentLimits_mA[index], ocpEnabled ? 1u : 0u);
+    Serial.println(buf);
+}
+
+// Command replies. In JSON mode they are framed so they cannot be mistaken for
+// telemetry; in human mode they stay the plain text they always were.
+void replyOk(const String& cmd, const char* text)
+{
+    if (jsonOutput) {
+        char buf[160];
+        snprintf(buf, sizeof(buf), "{\"t\":\"ack\",\"up\":%lu,\"cmd\":\"%s\",\"ok\":1,\"msg\":\"%s\"}",
+                 (unsigned long)millis(), cmd.c_str(), text);
+        Serial.println(buf);
+    } else {
+        Serial.println(text);
+    }
+}
+
+void replyErr(const String& cmd, const char* text)
+{
+    if (jsonOutput) {
+        char buf[160];
+        snprintf(buf, sizeof(buf), "{\"t\":\"err\",\"up\":%lu,\"cmd\":\"%s\",\"ok\":0,\"msg\":\"%s\"}",
+                 (unsigned long)millis(), cmd.c_str(), text);
+        Serial.println(buf);
+    } else {
+        Serial.print("UNKNOWN COMMAND: "); Serial.println(cmd);
+        Serial.println("COMMANDS: ON | OFF | ON <U2..U6|2..6> | OFF <U2..U6|2..6>");
+        Serial.println("          STATUS [<U2..U6|2..6>] | OCP [ON|OFF] | RAW");
+        Serial.println("          JSON | HUMAN | ONCE");
+    }
+}
+
+// Chooses the periodic output format. Called from loop() instead of printTable().
+void printOutput()
+{
+    if (jsonOutput) printTelemetryJson();
+    else            printTable();
+}
+
 void printRawDump()
 {
     Serial.println();
@@ -162,13 +278,13 @@ void processSerialCommand()
 
     if (cmd == "OFF" || cmd == "0") {
         for (uint8_t i = 0; i < INA_COUNT; i++) setBranch(i, false);
-        Serial.println("ALL BRANCHES OFF");
+        replyOk(cmd, "all branches off");
         return;
     }
 
     if (cmd == "ON" || cmd == "1") {
         for (uint8_t i = 0; i < INA_COUNT; i++) setBranch(i, true);
-        Serial.println("ALL BRANCHES ON");
+        replyOk(cmd, "all branches on");
         return;
     }
 
@@ -184,18 +300,36 @@ void processSerialCommand()
         return;
     }
 
+    // Output format. JSON is the default; HUMAN restores the table for a terminal.
+    if (cmd == "JSON") {
+        jsonOutput = true;
+        replyOk(cmd, "json output");
+        return;
+    }
+
+    if (cmd == "HUMAN" || cmd == "TABLE") {
+        jsonOutput = false;
+        Serial.println("MODE: human table");
+        return;
+    }
+
+    // One telemetry frame without changing the mode - useful while a terminal is
+    // showing the table.
+    if (cmd == "ONCE") {
+        printTelemetryJson();
+        return;
+    }
+
     // Over-current protection master switch. Default off - see Config.cpp.
     if (cmd == "OCP") {
-        Serial.print("OCP IS ");
-        Serial.println(ocpEnabled ? "ENABLED" : "DISABLED");
+        replyOk(cmd, ocpEnabled ? "ocp enabled" : "ocp disabled");
         return;
     }
 
     if (cmd == "OCP ON" || cmd == "OCP 1") {
         ocpEnabled = true;
         for (uint8_t i = 0; i < INA_COUNT; i++) branchOverLimitCount[i] = 0;
-        Serial.println("OCP ENABLED - branches will be switched off above their limit");
-        Serial.println("WARNING: bridged high-side drivers cannot be opened in hardware");
+        replyOk(cmd, "ocp enabled - bridged drivers still cannot be opened in hardware");
         return;
     }
 
@@ -212,7 +346,7 @@ void processSerialCommand()
                 strcpy(branchStatusMsgs[i], "OK");
             }
         }
-        Serial.println("OCP DISABLED - limits are monitored and reported only");
+        replyOk(cmd, "ocp disabled - limits monitored and reported only");
         return;
     }
 
@@ -222,13 +356,15 @@ void processSerialCommand()
 
         if (cmd == ("OFF " + uName) || cmd == ("OFF " + shortNum) || cmd == ("0" + shortNum)) {
             setBranch(i, false);
-            Serial.print(uName); Serial.println(" OFF");
+            char msg[40]; snprintf(msg, sizeof(msg), "%s off", uName.c_str());
+            replyOk(cmd, msg);
             return;
         }
 
         if (cmd == ("ON " + uName) || cmd == ("ON " + shortNum) || cmd == ("1" + shortNum)) {
             setBranch(i, true);
-            Serial.print(uName); Serial.println(" ON");
+            char msg[40]; snprintf(msg, sizeof(msg), "%s on", uName.c_str());
+            replyOk(cmd, msg);
             return;
         }
 
@@ -237,14 +373,23 @@ void processSerialCommand()
             return;
         }
     }
-    Serial.print("UNKNOWN COMMAND: "); Serial.println(cmd);
-    Serial.println("COMMANDS: ON | OFF | ON <U2..U6|2..6> | OFF <U2..U6|2..6>");
-    Serial.println("          STATUS [<U2..U6|2..6>] | OCP [ON|OFF] | RAW");
+    replyErr(cmd, "unknown command");
 }
 
 void initializeSystem()
 {
-    Serial.println("\n======================================\nPOWER BOARD MONITOR START\n======================================");
+    if (jsonOutput) {
+        // Identifies the firmware and schema once, so a consumer can log what it is
+        // talking to and refuse a schema it does not understand.
+        char buf[160];
+        snprintf(buf, sizeof(buf),
+                 "{\"t\":\"info\",\"v\":%u,\"fw\":\"powerboard-1.1\",\"rails\":%u,\"ocp\":%u,"
+                 "\"note\":\"send HUMAN for the table, RAW for registers\"}",
+                 (unsigned)jsonSchemaVersion, (unsigned)INA_COUNT, ocpEnabled ? 1u : 0u);
+        Serial.println(buf);
+    } else {
+        Serial.println("\n======================================\nPOWER BOARD MONITOR START\n======================================");
+    }
     for (uint8_t i = 0; i < INA_COUNT; i++) {
         pinMode(controlPins[i], OUTPUT);
         digitalWrite(controlPins[i], LOW); // Štartujeme bezpečne vo vypnutom stave
@@ -308,12 +453,19 @@ void readINAData()
 
         // OVER-LIMIT DETECTION - always evaluated, even with OCP disabled, so that an
         // overloaded branch is still visible in the table and in telemetry.
+        const bool wasOverLimit = branchOverLimit[i];
         if (physicallyActive && !branchManualOff[i] && protectionCurrent_mA > currentLimits_mA[i]) {
             if (branchOverLimitCount[i] < 255) branchOverLimitCount[i]++;
             branchOverLimit[i] = true;
         } else {
             branchOverLimitCount[i] = 0;
             branchOverLimit[i] = false;
+        }
+        // Push the transition immediately. With OCP off this is the only actionable
+        // signal the board can give, and a host should not have to catch it in a
+        // 2 Hz sample.
+        if (branchOverLimit[i] != wasOverLimit) {
+            emitEventJson(branchOverLimit[i] ? "over_limit" : "over_limit_clear", i);
         }
 
         // OCP - only ever switches anything when explicitly enabled. Default is off
@@ -327,6 +479,7 @@ void readINAData()
                 branchTrippedTime[i] = currentTime;
                 branchTripCounts[i]++;
                 strcpy(branchStatusMsgs[i], "OCP TRIPPED");
+                emitEventJson("ocp_trip", i);
             }
 
             // AUTO RECOVERY
@@ -336,6 +489,7 @@ void readINAData()
                 branchOverLimitCount[i] = 0;
                 digitalWrite(controlPins[i], HIGH);
                 strcpy(branchStatusMsgs[i], "OK");
+                emitEventJson("ocp_recover", i);
             }
         } else if (branchOverLimit[i]) {
             strcpy(branchStatusMsgs[i], "OVER LIMIT (OCP OFF)");
