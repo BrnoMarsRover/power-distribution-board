@@ -17,6 +17,6 @@ void loop()
 {
     processSerialCommand();
     readINAData();
-    printTable();
+    printOutput();   // JSON by default, human table after the HUMAN command
     delay(500);
 }

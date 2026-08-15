@@ -1,0 +1,2 @@
+Not a ROS package. Keeps colcon from walking this directory when the repo is
+cloned into a ROS 2 workspace source tree.

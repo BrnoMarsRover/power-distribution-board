@@ -74,8 +74,32 @@ void INA_Class::initDevice(const uint8_t deviceNumber) {
   writeWord(INA_CONFIGURATION_REGISTER, INA_RESET_DEVICE, addr);
   delay(10);
   
-  // 2. ADC CONFIG: Nastavenie Continuous All, AVG = 16, 1052us (0xAB6A)
-  writeWord(INA_ADC_CONFIGURATION_REGISTER, 0xAB6A, addr);
+  // 2. ADC CONFIG: continuous bus + shunt + temperature, AVG = 16, 1052 us each.
+  //
+  // This used to be the literal 0xAB6A, and the comment above it claimed "Continuous
+  // All" - but MODE lives in bits [15:12], and 0xA there is INA_MODE_CONTINUOUS_SHUNT,
+  // i.e. SHUNT ONLY. The shunt (and so the current) kept converting, while BUS VOLTAGE
+  // and DIE TEMPERATURE were frozen at whatever the device happened to convert before
+  // this register was written - effectively the values at board boot.
+  //
+  // That is why voltages looked "miscalibrated": they were not wrong, they were stale.
+  // The four regulated rails hid the bug almost perfectly, because a frozen reading of
+  // a regulated output is indistinguishable from a correct one. Only the battery, which
+  // actually sags as it discharges, ever exposed it.
+  //
+  // Built from the enum rather than a literal so the two cannot drift apart again.
+  constexpr uint16_t adcConfig =
+      ((uint16_t)INA_MODE_CONTINUOUS_ALL << 12) |  // MODE   [15:12] bus + shunt + temp
+      ((uint16_t)0x5 << 9)                      |  // VBUSCT  [11:9] 1052 us
+      ((uint16_t)0x5 << 6)                      |  // VSHCT    [8:6] 1052 us
+      ((uint16_t)0x5 << 3)                      |  // VTCT     [5:3] 1052 us
+      ((uint16_t)0x2);                             // AVG      [2:0] 16 samples
+  // Full cycle is now 3 x 1052 us x 16 = ~50.5 ms, comfortably inside the 500 ms
+  // telemetry period; before, with shunt only, it was ~16.8 ms.
+  static_assert((int)INA_MODE_CONTINUOUS_ALL == 0xF,
+                "MODE nibble comes from ina_Mode ordering; INA_MODE_CONTINUOUS_ALL must be 0xF");
+  static_assert(adcConfig == 0xFB6A, "ADC_CONFIG must encode to 0xFB6A");
+  writeWord(INA_ADC_CONFIGURATION_REGISTER, adcConfig, addr);
   delay(10);
   
   // 3. CONFIG: ADCRANGE = 0
@@ -134,6 +158,50 @@ float INA_Class::getDieTemperature(const uint8_t deviceNumber) {
 uint8_t INA_Class::getDeviceAddress(const uint8_t deviceNumber) {
   if (deviceNumber >= _DeviceCount) return 0;
   return _DeviceArray[deviceNumber].address;
+}
+
+// ---------------------------------------------------------------------------------
+// Diagnostics. These expose the unconverted register contents and the per-device
+// scaling actually in use, so a RAW dump can show what the chip really holds
+// independently of any conversion the normal getters apply.
+// ---------------------------------------------------------------------------------
+
+uint16_t INA_Class::readRegister(const uint8_t reg, const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0xFFFF;
+  return readWord(reg, _DeviceArray[deviceNumber].address);
+}
+
+float INA_Class::getCurrentLSB(const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0.0f;
+  return _DeviceArray[deviceNumber].current_LSB;
+}
+
+uint32_t INA_Class::getMicroOhmR(const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0;
+  return _DeviceArray[deviceNumber].microOhmR;
+}
+
+// The four *Raw getters below were declared in the header but never defined, so any
+// call to them would have failed at link time. Defined here because the RAW dump
+// needs them.
+uint16_t INA_Class::getBusRaw(const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0xFFFF;
+  return readWord(INA_BUS_VOLTAGE_REGISTER, _DeviceArray[deviceNumber].address);
+}
+
+uint16_t INA_Class::getShuntRaw(const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0xFFFF;
+  return readWord(INA_SHUNT_VOLTAGE_REGISTER, _DeviceArray[deviceNumber].address);
+}
+
+int16_t INA_Class::getBusMicroAmpsRaw(const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0;
+  return (int16_t)readWord(INA_CURRENT_REGISTER, _DeviceArray[deviceNumber].address);
+}
+
+int16_t INA_Class::getDieTemperatureRaw(const uint8_t deviceNumber) {
+  if (deviceNumber >= _DeviceCount) return 0;
+  return (int16_t)readWord(INA_TEMP_REGISTER, _DeviceArray[deviceNumber].address);
 }
 
 uint16_t INA_Class::readWord(const uint8_t reg, const uint8_t deviceAddress) const {

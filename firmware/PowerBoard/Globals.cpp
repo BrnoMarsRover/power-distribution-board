@@ -21,6 +21,18 @@ bool branchTripped[INA_COUNT] = {
     false, false, false, false, false
 };
 
+bool branchOverLimit[INA_COUNT] = {
+    false, false, false, false, false
+};
+
+uint8_t branchOverLimitCount[INA_COUNT] = {
+    0, 0, 0, 0, 0
+};
+
+uint32_t branchTripCounts[INA_COUNT] = {
+    0, 0, 0, 0, 0
+};
+
 uint32_t branchTrippedTime[INA_COUNT] = {
     0, 0, 0, 0, 0
 };
