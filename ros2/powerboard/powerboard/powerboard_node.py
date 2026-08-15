@@ -76,7 +76,13 @@ class PowerboardNode(Node):
         # by-id is the default because /dev/ttyACM* numbering moves when other USB
         # serial devices appear - the Xsens IMU on this NUC is exactly such a device.
         self.declare_parameter('port', '/dev/serial/by-id/usb-Raspberry_Pi_Pico_2_*-if00')
-        self.declare_parameter('poll_rate_hz', 50.0)
+        # The board emits one frame every 500 ms, so polling faster than this buys
+        # nothing but CPU. Measured on the rover's Raspberry Pi 4, the tightest machine
+        # this runs on: 50 Hz cost 14.2% of a core, 20 Hz 7.1%, 10 Hz 4.5%, 5 Hz 3.4%.
+        # 10 Hz adds at most 100 ms of latency to a 500 ms signal - including to pushed
+        # over-limit events - which is a good trade for a third of the CPU. Nothing is
+        # lost at a lower rate: the kernel buffers, and each poll drains all of it.
+        self.declare_parameter('poll_rate_hz', 10.0)
         self.declare_parameter('stale_timeout_s', 3.0)
         self.declare_parameter('reconnect_period_s', 2.0)
         # Fraction of a branch's limit above which we report a warning. The board only
