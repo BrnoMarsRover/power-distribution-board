@@ -26,19 +26,23 @@ That run does six things:
    intended.
 
 Result at generation time:
-- 435 parts and 249 nets.
+- 435 parts and 251 nets.
 - Netlist check passes.
 - ERC is clean at every severity.
 
-There are two drawing styles:
-- **Drawn** (the six eFuse sheets, `sw_*`): parts sit at chosen positions and real wires
-  connect them, laid out like a hand-drawn sheet.
-  - Power flows left to right along the rails, with the driver below.
-  - Labels appear only where a signal leaves the sheet.
-- **Labelled** (the other sheets, for now): every pin has a short stub and a net label.
+Every sheet is drawn like a hand-made schematic: parts sit at chosen positions and real
+wires connect them.
+- Power flows left to right along the rails. Converters and drivers sit below their power
+  path, with their setting parts below or beside them.
+- Labels appear only where a signal leaves the sheet. The exception is the ESP32 module,
+  whose GPIOs carry labels in the usual way, while the circuits around it (reset, boot,
+  USB, host UART, LEDs, sense dividers) are drawn out.
+- On the outputs sheet each rail is a column: a bus with one row per output (PTC,
+  connector, GND).
 
-Both styles go through the same netlist check, so a wire landing where it shouldn't is
-caught before anyone opens KiCad.
+The drawing goes through the same netlist check, so a wire landing where it shouldn't is
+caught before anyone opens KiCad. One crossing is intentional: on the `can` sheet, CANH
+crosses CANL without a junction on its way to the second connector.
 
 **Once you start editing in KiCad, these files are the source of truth.** Re-running
 `build.py` overwrites them. The generator is a bootstrap, not a build step.
@@ -60,9 +64,12 @@ caught before anyone opens KiCad.
 
 ## Custom parts
 
-- **Symbols:** TPS48111-Q1, LM5122, LMR38010 and TCAN1044AV, with pinouts taken from the
-  TI datasheets. Q_NMOS_GDS covers the D2PAK and DPAK FETs: KiCad 10 dropped its
-  GDS-numbered FET symbols.
+- **Symbols:** TPS48111-Q1, LM5122, LMR38010, TCAN1044AV and INA228, with pinouts taken
+  from the TI datasheets.
+  - Their pins are arranged for the drawing. For example, the INA228 sense inputs sit on
+    top, 7.62 mm apart, so the Kelvin lines drop straight from the shunt.
+  - Q_NMOS_GDS covers the D2PAK and DPAK FETs: KiCad 10 dropped its GDS-numbered FET
+    symbols.
 - **Footprints:** TI_DGX0019A_VSSOP-19 is drawn from TI's land pattern, with pads
   lengthened for hand soldering. XT90PB-M, XT90PB-F and DEANS-T are copied from rev2's
   SamacSys library.
@@ -89,3 +96,6 @@ These are the things the generator could not settle on its own:
   LM5122, the LMR38010 and the ESP32 module (layout step).
 - [ ] **Placement.** Put the MMBT3904 temperature sensors against their main FETs, and
   route every shunt Kelvin.
+- [ ] **ESD arrays are flow-through.** On both USBLC6-2SC6, pins 1/6 and 3/4 are joined
+  inside the part. The connector side and the MCU side are therefore separate nets, which
+  forces each line across its pad pair in layout.

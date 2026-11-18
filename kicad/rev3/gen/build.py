@@ -165,15 +165,21 @@ CUSTOM = {
         datasheet=TI + "tps4811-q1.pdf",
         desc="100 V smart high-side driver with pre-charge, current monitor and protection. "
              "DGX-19: pin 16 is absent for creepage."),
-    "LM5122": box_symbol(
-        "LM5122",
-        left=[("5", "VIN", "power_in"), ("4", "CSP", "input"), ("3", "CSN", "input"),
-              ("6", "UVLO", "input"), ("10", "FB", "input"), ("11", "COMP", "output"),
-              ("7", "SS", "passive"), ("8", "SYNCIN/RT", "input"), ("12", "SLOPE", "passive"),
-              ("14", "RES", "passive"), ("13", "MODE", "input"), ("2", "OPT", "input")],
-        right=[("20", "BST", "passive"), ("19", "HO", "output"), ("18", "SW", "passive"),
-               ("16", "LO", "output"), ("17", "VCC", "power_out"), ("1", "SYNCOUT", "output")],
-        bottom=[("9", "AGND", "power_in"), ("15", "PGND", "power_in"), ("21", "EP", "passive")],
+    # Laid out for the drawn boost sheet: VIN / current sense / LO up to the power stage, the
+    # high-side drive on the right, the setting pins on the left, FB and grounds below.
+    "LM5122": pinned_symbol(
+        "LM5122", 17.78, 20.32, [
+            ("5", "VIN", "power_in", -15.24, 22.86, 270), ("4", "CSP", "input", -7.62, 22.86, 270),
+            ("3", "CSN", "input", 0, 22.86, 270), ("16", "LO", "output", 10.16, 22.86, 270),
+            ("6", "UVLO", "input", -20.32, 12.7, 0), ("7", "SS", "passive", -20.32, 7.62, 0),
+            ("8", "SYNCIN/RT", "input", -20.32, 2.54, 0), ("12", "SLOPE", "passive", -20.32, -2.54, 0),
+            ("14", "RES", "passive", -20.32, -7.62, 0), ("11", "COMP", "output", -20.32, -12.7, 0),
+            ("18", "SW", "passive", 20.32, 15.24, 180), ("20", "BST", "passive", 20.32, 7.62, 180),
+            ("17", "VCC", "power_out", 20.32, 0, 180), ("1", "SYNCOUT", "output", 20.32, -12.7, 180),
+            ("19", "HO", "output", 20.32, -17.78, 180),
+            ("10", "FB", "input", -12.7, -22.86, 90), ("9", "AGND", "power_in", -7.62, -22.86, 90),
+            ("15", "PGND", "power_in", -2.54, -22.86, 90), ("21", "EP", "passive", 2.54, -22.86, 90),
+            ("13", "MODE", "input", 7.62, -22.86, 90), ("2", "OPT", "input", 12.7, -22.86, 90)],
         footprint="Package_SO:HTSSOP-20-1EP_4.4x6.5mm_P0.65mm_EP3.4x6.5mm_Mask2.96x2.96mm",
         datasheet=TI + "lm5122.pdf", desc="Synchronous boost controller, 65 V in, HTSSOP-20 (MH)"),
     # Input on the left, BOOT 7.62 above SW so the bootstrap cap stands between them.
@@ -246,6 +252,7 @@ class Part:
     def __init__(self, lib_id, prefix, value, footprint, conns, rot=0, fields=None, unit=1, at=None, mirror=False):
         self.lib_id, self.prefix, self.value, self.footprint = lib_id, prefix, value, footprint
         self.at, self.mirror = at, mirror
+        self.label_at = {}             # field name -> (dx, dy): text placed there, reading left to right
         self.rot, self.unit, self.fields = rot, unit, fields or {}
         self.sym = get_symbol(lib_id)
         self.pins = lib_pins(self.sym, unit)
@@ -272,8 +279,10 @@ class Part:
             y = p["x"] * math.sin(th) + p["y"] * math.cos(th)
             a = (p["angle"] + self.rot) % 360
             o = (a + 180) % 360            # outward, lib (y-up) degrees
-            if self.mirror:                # KiCad (mirror y): x -> -x, used with rot 0 only
+            if self.mirror in (True, "y"):   # KiCad (mirror y): x -> -x after rotation
                 x, o = -x, (180 - o) % 360
+            elif self.mirror == "x":         # KiCad (mirror x): y -> -y after rotation
+                y, o = -y, (360 - o) % 360
             out.append(dict(p, sx=round(x, 3), sy=round(-y, 3), out=o))
         return out
 
@@ -416,13 +425,13 @@ class Emitter:
                       f'(effects (font (size 1.27 1.27)) (justify {just}) (hide yes))))')
 
     def symbol(self, lib_id, ref, value, x, y, rot, pins, footprint="", fields=None, unit=1, hide_ref=False,
-               two_pin=False, vertical=False, mirror=False):
+               two_pin=False, vertical=False, mirror=False, label_at=None):
         self.lib_ids.add(lib_id)
         key = uid(self.s.name, "sym", ref)
         props = [("Reference", ref, hide_ref), ("Value", value, False), ("Footprint", footprint, True),
                  ("Datasheet", "", True), ("Description", "", True)]
         props += [(k, v, True) for k, v in (fields or {}).items()]
-        s = (f'(symbol (lib_id {q(lib_id)}) (at {fmt(x)} {fmt(y)} {rot}){" (mirror y)" if mirror else ""} (unit {unit}) '
+        s = (f'(symbol (lib_id {q(lib_id)}) (at {fmt(x)} {fmt(y)} {rot}){"" if not mirror else " (mirror x)" if mirror == "x" else " (mirror y)"} (unit {unit}) '
              f'(exclude_from_sim no) (in_bom {"no" if ref.startswith("#") else "yes"}) '
              f'(on_board {"no" if ref.startswith("#") else "yes"}) (dnp no) (uuid {q(key)})\n')
         sym = get_symbol(lib_id)
@@ -430,7 +439,15 @@ class Emitter:
         for i, (k, v, hide) in enumerate(props):
             lib_at = next((find(pp, "at")[0] for pp in find(sym, "property") if unq(pp[1]) == k), None)
             just = ""
-            if two_pin and rot in (90, 270) and vertical and k in ("Reference", "Value"):
+            if label_at and k in label_at:
+                # explicit spot: horizontal text starting at the spot
+                px, py = x + label_at[k][0], y + label_at[k][1]
+                ang = 90 if rot in (90, 270) else 0
+                right = rot in (90, 180)
+                if mirror in (True, "y"):
+                    right = not right
+                just = " (justify right)" if right else " (justify left)"
+            elif two_pin and rot in (90, 270) and vertical and k in ("Reference", "Value"):
                 # diode / LED turned upright: text to the right, reading horizontally
                 px, py, ang = x + 2.54, y + (-1.27 if k == "Reference" else 1.27), 90
                 just = " (justify right)" if rot == 90 else " (justify left)"
@@ -438,14 +455,18 @@ class Emitter:
                 px, py, ang = x, y + (-2.54 if k == "Reference" else 2.54), 90
             elif lib_at is not None and k in ("Reference", "Value"):
                 lx, ly = float(lib_at[1]), float(lib_at[2])
-                lx = -lx if mirror else lx
                 ang = float(lib_at[3]) if len(lib_at) > 3 else 0
-                px = x + lx * math.cos(th) - ly * math.sin(th)
-                py = y - (lx * math.sin(th) + ly * math.cos(th))
+                rx = lx * math.cos(th) - ly * math.sin(th)
+                ry = lx * math.sin(th) + ly * math.cos(th)
+                if mirror in (True, "y"):
+                    rx = -rx
+                elif mirror == "x":
+                    ry = -ry
+                px, py = x + rx, y - ry
                 lib_eff = next((find(pp, "effects")[0] for pp in find(sym, "property") if unq(pp[1]) == k), [])
                 j = find(lib_eff, "justify")
                 jw = list(j[0][1:]) if j else []
-                if mirror:
+                if mirror in (True, "y"):
                     jw = [{"left": "right", "right": "left"}.get(w, w) for w in jw]
                 just = f" (justify {' '.join(jw)})" if jw else ""
             else:
@@ -486,7 +507,7 @@ class Emitter:
         g = p.geom()
         self.symbol(p.lib_id, ref, p.value, X, Y, p.rot, [a["number"] for a in p.pins],
                     footprint=p.footprint, fields=fields, unit=p.unit, two_pin=len(p.pins) == 2,
-                    vertical=len(g) == 2 and g[0]["sx"] == g[1]["sx"], mirror=p.mirror)
+                    vertical=len(g) == 2 and g[0]["sx"] == g[1]["sx"], mirror=p.mirror, label_at=p.label_at)
         done = set()
         for a in p.geom():
             net = p.conns[a["number"]]
@@ -664,10 +685,11 @@ def TP(sh, net, at=None):
     return sh.add("Connector:TestPoint", "TP", net.split(":")[-1], FP["TP"], {1: net}, at=at)
 
 
-def FET(sh, part, g, d, s, at=None):
+def FET(sh, part, g, d, s, at=None, rot=0, mirror=False):
     fp = FP["D2PAK"] if part == "IPB042N10N3G" else FP["DPAK"]
     lcsc = rails.FETS[part][1]
-    return sh.add("PowerBoard_rev3:Q_NMOS_GDS", "Q", part, fp, {1: g, 2: d, 3: s}, fields={"LCSC": lcsc}, at=at)
+    return sh.add("PowerBoard_rev3:Q_NMOS_GDS", "Q", part, fp, {1: g, 2: d, 3: s}, fields={"LCSC": lcsc}, at=at,
+                  rot=rot, mirror=mirror)
 
 
 def CONN2(sh, value, fp, p1, p2, at=None, rot=0, mirror=False):
@@ -994,25 +1016,56 @@ def sheet_outputs():
     sh = Sheet("outputs", "Rail inputs, output connectors and per-output PTCs", [
         "Male connectors are inputs (the cable side is the source), female are outputs. Pin 1 = +.",
         "Check every connector footprint's pin 1 against the housing's + marking before ordering.",
-        "PTC per 24 / 12 / 5 V output: 3 A hold. Device cables must carry the PTC trip current (AWG 20 or heavier)."])
-    CONN2(sh, "Deans T male (24 V in)", "DEANS", "VIN24", "GND")
-    CONN2(sh, "XT60 male (12 V in)", "XT60M", "VIN12", "GND")
-    CONN2(sh, "XT30 male (5 V in)", "XT30M", "VIN5", "GND")
-    for i in range(4):
-        CONN2(sh, f"XT90 female (drives {i + 1})", "XT90F", "OUT42D", "GND")
-    for i in range(4):
-        CONN2(sh, f"XT90 female (converter feed {i + 1})", "XT90F", "OUT42C", "GND")
-    ptc = {"24": ("SMD2920P300TF/33", "PTC2920", "C2943634", 8, "DEANS", "Deans T female"),
-           "12": ("SMD2920P300TF/16", "PTC2920", "C167318", 7, "XT60F", "XT60 female"),
-           "5": ("SMD1812P300TF", "PTC1812", "C21004", 11, "XT30F", "XT30 female")}
-    for n, (part, fp, lcsc, count, cfp, cname) in ptc.items():
-        for i in range(count):
-            sh.add("Device:Polyfuse", "F", part, FP[fp], {1: f"OUT{n}", 2: f"L:O{n}_{i + 1}"}, rot=90,
-                   fields={"LCSC": lcsc})
-            CONN2(sh, f"{cname} ({n} V out {i + 1})", cfp, f"L:O{n}_{i + 1}", "GND")
-    CONN2(sh, "JST-XH 2p (54 V to Zyxel XMG-105HP)", "XH2", "OUT54", "GND")
-    for n in ("VIN24", "VIN12", "VIN5"):
-        sh.flag(n)
+        "PTC per 24 / 12 / 5 V output: 3 A hold. Device cables must carry the PTC trip current (AWG 20 or heavier).",
+        "OUT42D = drive group (two EPOS4 50/5 per XT90, 2 spare). OUT42C = converter feeds (3 + 1 spare)."],
+        drawn=True)
+    W, gnd, v33, lab = marks(sh)
+    pitch = 10.16
+
+    def conn(value, fp, net, pin1):
+        """A 2-pin connector with pin 1 at pin1 (pins facing left), GND on pin 2, text to the right."""
+        j = CONN2(sh, value, fp, net, "GND")
+        at_pin(j, 1, pin1)
+        j.label_at = {"Reference": (2.54, 0), "Value": (2.54, 2.54)}
+        W(PIN(j, 2), (pin1[0] - 2.54, pin1[1] + 2.54))
+        gnd((pin1[0] - 2.54, pin1[1] + 2.54))
+        return j
+
+    def column(net, xb, y0, rows, ptc=None):
+        """A rail bus running down from its label, one connector (behind a PTC if given) per row."""
+        ys = [y0 + pitch * i for i in range(len(rows))]
+        W((xb - 5.08, y0 - 5.08), (xb, y0 - 5.08), (xb, ys[-1]))
+        lab(net, (xb - 5.08, y0 - 5.08), 180)
+        for i, ((value, fp), y) in enumerate(zip(rows, ys)):
+            if ptc:
+                part, pfp, lcsc = ptc
+                f = sh.add("Device:Polyfuse", "F", part, FP[pfp], {1: net, 2: f"L:O{net[3:]}_{i + 1}"}, rot=90,
+                           fields={"LCSC": lcsc})
+                at_pin(f, 1, (xb + 2.54, y))
+                f.label_at = {"Reference": (-3.81, -2.54), "Value": (-3.81, 2.54)}
+                W((xb, y), PIN(f, 1))
+                W(PIN(f, 2), (xb + 27.94, y))
+                conn(value, fp, f"L:O{net[3:]}_{i + 1}", (xb + 27.94, y))
+            else:
+                W((xb, y), (xb + 10.16, y))
+                conn(value, fp, net, (xb + 10.16, y))
+
+    # rail inputs: label on the left, flag, connector
+    for i, (net, value, fp) in enumerate((("VIN24", "Deans T male (24 V in)", "DEANS"),
+                                          ("VIN12", "XT60 male (12 V in)", "XT60M"),
+                                          ("VIN5", "XT30 male (5 V in)", "XT30M"))):
+        y = 71.12 + 15.24 * i
+        lab(net, (35.56, y), 180)
+        W((35.56, y), (45.72, y))
+        sh.mark("flag", (40.64, y))
+        conn(value, fp, net, (45.72, y))
+
+    column("OUT42D", 116.84, 71.12, [("XT90 female", "XT90F")] * 4)
+    column("OUT42C", 177.8, 71.12, [("XT90 female", "XT90F")] * 4)
+    column("OUT54", 238.76, 71.12, [("JST-XH 2p (54 V to Zyxel XMG-105HP)", "XH2")])
+    column("OUT24", 45.72, 137.16, [("Deans T female", "DEANS")] * 8, ("SMD2920P300TF/33", "PTC2920", "C2943634"))
+    column("OUT12", 134.62, 137.16, [("XT60 female", "XT60F")] * 7, ("SMD2920P300TF/16", "PTC2920", "C167318"))
+    column("OUT5", 223.52, 137.16, [("XT30 female", "XT30F")] * 11, ("SMD1812P300TF", "PTC1812", "C21004"))
     return sh
 
 
@@ -1022,53 +1075,124 @@ def sheet_boost():
         "30-42 V in (from the 54 V supply eFuse) -> 54.35 V, 100 W, 400 kHz. Values from docs/rev3/rails.md.",
         "VERIFY before layout: R_SLOPE, R_COMP / C_COMP / C_HF are starting values from the LM5122 datasheet "
         "example. Run TI's LM5122 quickstart calculator with these operating points.",
-        "Keep the SW node, Q_LS, Q_HS and the output ceramics in one tight loop. EP must be soldered (hand-solder hole)."])
-    sh.add("PowerBoard_rev3:LM5122", "U", "LM5122MH",
-           "Package_SO:HTSSOP-20-1EP_4.4x6.5mm_P0.65mm_EP3.4x6.5mm_Mask2.96x2.96mm",
-           {5: "L:VIN_LM", 4: "L:CSP", 3: "L:CSN", 6: "L:UVLO", 10: "L:FB", 11: "L:COMP", 7: "L:SS",
-            8: "L:RT", 12: "L:SLOPE", 14: "L:RES", 13: "GND", 2: "GND",
-            20: "L:BST", 19: "L:HO", 18: "L:SW", 16: "L:LO", 17: "L:VCC", 1: None,
-            9: "GND", 15: "GND", 21: "GND"}, fields={"LCSC": "C77241"})
-    R(sh, 3, "SW54_OUT", "L:VIN_LM")
-    C(sh, 1e-6, "L:VIN_LM", "GND", fp="C1206", volt=100)
-    R(sh, "10m 2512", "SW54_OUT", "L:LIN", fp="R2512", LCSC="C163051")
-    R(sh, 100, "SW54_OUT", "L:CSP")
-    R(sh, 100, "L:LIN", "L:CSN")
-    C(sh, 1e-9, "L:CSP", "L:CSN")
-    for _ in range(4):
-        C(sh, 2.2e-6, "SW54_OUT", "GND", fp="C1210", volt=100)
-    sh.add("Device:L", "L", "22uH 10A (TMPA1265SP-220MN-D)", FP["L12"], {1: "L:LIN", 2: "L:SW"},
-           rot=90, fields={"LCSC": "C357119"})
-    FET(sh, b["fet"], "L:LO", "L:SW", "GND")
-    FET(sh, b["fet"], "L:HO", "OUT54", "L:SW")
-    C(sh, 100e-9, "L:BST", "L:SW", volt=25)
-    DS(sh, "1N4148W (100 V)", "L:BST", "L:VCC", fp="SOD123")
-    C(sh, 4.7e-6, "L:VCC", "GND", fp="C0805", volt=16)
-    R(sh, 200e3, "SW54_OUT", "L:UVLO")
-    R(sh, 9.31e3, "L:UVLO", "GND")
-    C(sh, 100e-9, "L:SS", "GND")
-    C(sh, 470e-9, "L:RES", "GND")
-    R(sh, rails.nearest(9e9 / b["fsw"], rails.E96), "L:RT", "GND")
-    R(sh, 100e3, "L:SLOPE", "GND")
-    R(sh, 20e3, "L:COMP", "L:CC")
-    C(sh, 22e-9, "L:CC", "GND")
-    C(sh, 330e-12, "L:COMP", "GND")
-    R(sh, 221e3, "OUT54", "L:FB")
-    R(sh, 4.99e3, "L:FB", "GND")
-    for _ in range(6):
-        C(sh, 2.2e-6, "OUT54", "GND", fp="C1210", volt=100)
-    for _ in range(2):
-        CP(sh, "100uF/80V", "OUT54", "GND")
-    DZ(sh, "SMBJ58A", "OUT54", "GND")
-    R(sh, 100e3, "OUT54", "VSNS_OUT_54")
-    R(sh, divider_bottom(100e3, 62), "VSNS_OUT_54", "GND")
-    C(sh, 10e-9, "VSNS_OUT_54", "GND")
-    R(sh, 26.1e3, "OUT54", "L:LED", fp="R1206")
-    LED(sh, "green", "GND", "L:LED")
-    TP(sh, "OUT54")
-    TP(sh, "L:VCC")
-    sh.flag("OUT54")
-    sh.flag("L:VIN_LM")
+        "Keep the SW node, Q_LS, Q_HS and the output ceramics in one tight loop. EP must be soldered (hand-solder hole)."],
+        drawn=True)
+    W, gnd, v33, lab = marks(sh)
+    yi = 86.36                                   # power path: input rail, SW node, output rail
+    U = sh.add("PowerBoard_rev3:LM5122", "U", "LM5122MH",
+               "Package_SO:HTSSOP-20-1EP_4.4x6.5mm_P0.65mm_EP3.4x6.5mm_Mask2.96x2.96mm",
+               {5: "L:VIN_LM", 4: "L:CSP", 3: "L:CSN", 6: "L:UVLO", 10: "L:FB", 11: "L:COMP", 7: "L:SS",
+                8: "L:RT", 12: "L:SLOPE", 14: "L:RES", 13: "GND", 2: "GND",
+                20: "L:BST", 19: "L:HO", 18: "L:SW", 16: "L:LO", 17: "L:VCC", 1: None,
+                9: "GND", 15: "GND", 21: "GND"}, fields={"LCSC": "C77241"}, at=(109.22, 139.7))
+    P = lambda n: PIN(U, n)
+
+    # input rail: label, ceramics, current shunt
+    lab("SW54_OUT", (25.4, yi), 180)
+    rs = R(sh, "10m 2512", "SW54_OUT", "L:LIN", fp="R2512", LCSC="C163051")
+    at_pin(rs, 1, (P(4)[0], yi))
+    W((25.4, yi), PIN(rs, 1))
+    for x in (40.64, 53.34, 66.04, 78.74):
+        hang(sh, C(sh, 2.2e-6, "SW54_OUT", "GND", fp="C1210", volt=100, rot=0), (x, yi))
+
+    # VIN through an RC filter; current sense through 100 ohm + 1 nF, Kelvin from the shunt pads
+    rv = hang(sh, R(sh, 3, "SW54_OUT", "L:VIN_LM", rot=0), (P(5)[0], yi), gnd=False)
+    W(PIN(rv, 2), P(5))
+    W((P(5)[0], 106.68), (86.36, 106.68))
+    hang(sh, C(sh, 1e-6, "L:VIN_LM", "GND", fp="C1206", volt=100, rot=0), (86.36, 106.68))
+    sh.mark("flag", (90.17, 106.68))
+    rcp = hang(sh, R(sh, 100, "SW54_OUT", "L:CSP", rot=0), PIN(rs, 1), gap=7.62, gnd=False)
+    rcn = hang(sh, R(sh, 100, "L:LIN", "L:CSN", rot=0), PIN(rs, 2), gap=7.62, gnd=False)
+    ccs = C(sh, 1e-9, "L:CSP", "L:CSN")
+    at_pin(ccs, 1, (P(4)[0], 106.68))
+    W(PIN(rcp, 2), P(4))
+    W(PIN(rcn, 2), P(3))
+
+    # power stage: inductor, SW node with the low-side FET, high-side FET to the output
+    ind = sh.add("Device:L", "L", "22uH 10A", FP["L12"], {1: "L:LIN", 2: "L:SW"}, rot=90,
+                 fields={"LCSC": "C357119", "MPN": "TMPA1265SP-220MN-D"})
+    at_pin(ind, 1, (119.38, yi))
+    W(PIN(rs, 2), PIN(ind, 1))
+    ql = FET(sh, b["fet"], "L:LO", "L:SW", "GND")
+    at_pin(ql, 2, (134.62, 91.44))
+    qh = FET(sh, b["fet"], "L:HO", "OUT54", "L:SW", rot=90, mirror="y")
+    at_pin(qh, 3, (144.78, yi))
+    qh.label_at = {"Reference": (-3.81, -8.89), "Value": (-3.81, -6.35)}
+    W(PIN(ind, 2), PIN(qh, 3))
+    W((134.62, yi), PIN(ql, 2))
+    gnd(PIN(ql, 3))
+    W(P(16), (P(16)[0], PIN(ql, 1)[1]), PIN(ql, 1))
+
+    # gate drive: SW back to the node, bootstrap cap and diode, VCC, HO up to the high-side gate
+    W(P(18), (139.7, P(18)[1]), (139.7, yi))
+    cb = C(sh, 100e-9, "L:SW", "L:BST", volt=25, rot=0)
+    at_pin(cb, 2, (134.62, P(20)[1]))
+    W(P(20), (137.16, P(20)[1]))
+    db = DS(sh, "1N4148W", "L:BST", "L:VCC", fp="SOD123", rot=270)
+    at_pin(db, 1, (137.16, P(20)[1]))
+    W(P(17), (144.78, P(17)[1]))
+    hang(sh, C(sh, 4.7e-6, "L:VCC", "GND", fp="C0805", volt=16, rot=0), (144.78, P(17)[1]))
+    sh.add("Connector:TestPoint", "TP", "VCC", FP["TP"], {1: "L:VCC"}, rot=180, at=(132.08, P(17)[1]))
+    W(P(19), (PIN(qh, 1)[0], P(19)[1]), PIN(qh, 1))
+
+    # settings comb on the left: each pin runs left, then down to its part
+    yt = P(11)[1] + 5.08
+    rut = R(sh, 200e3, "SW54_OUT", "L:UVLO", rot=0)
+    at_pin(rut, 2, (35.56, P(6)[1]))
+    W((35.56, yi), PIN(rut, 1))
+    W(P(6), PIN(rut, 2))
+    hang(sh, R(sh, 9.31e3, "L:UVLO", "GND", rot=0), PIN(rut, 2))
+    comb = [(7, 43.18, C(sh, 100e-9, "L:SS", "GND", rot=0)),
+            (8, 50.8, R(sh, rails.nearest(9e9 / b["fsw"], rails.E96), "L:RT", "GND", rot=0)),
+            (12, 58.42, R(sh, 100e3, "L:SLOPE", "GND", rot=0)),
+            (14, 66.04, C(sh, 470e-9, "L:RES", "GND", rot=0)),
+            (11, 73.66, C(sh, 330e-12, "L:COMP", "GND", rot=0))]
+    for pin_, x, part in comb:
+        W(P(pin_), (x, P(pin_)[1]))
+        hang(sh, part, (x, P(pin_)[1]), gap=yt - P(pin_)[1])
+    rc = hang(sh, R(sh, 20e3, "L:COMP", "L:CC", rot=0), (81.28, P(11)[1]), gap=yt - P(11)[1], gnd=False)
+    hang(sh, C(sh, 22e-9, "L:CC", "GND", rot=0), PIN(rc, 2))
+
+    # grounds and feedback below the IC
+    g = [P(n) for n in (9, 15, 21, 13, 2)]
+    yb = g[0][1] + 2.54
+    W(g[0], (g[0][0], yb), (g[-1][0], yb), g[-1])
+    for pt in g[1:-1]:
+        W(pt, (pt[0], yb))
+    W((P(21)[0], yb), (P(21)[0], yb + 2.54))
+    gnd((P(21)[0], yb + 2.54))
+    yf, xo = 177.8, 160.02
+    W(P(10), (P(10)[0], yf))
+    rft = R(sh, 221e3, "OUT54", "L:FB", rot=270)
+    at_pin(rft, 2, (P(10)[0] + 5.08, yf))
+    W((P(10)[0], yf), PIN(rft, 2))
+    W(PIN(rft, 1), (xo, yf), (xo, yi))
+    hang(sh, R(sh, 4.99e3, "L:FB", "GND", rot=0), (P(10)[0], yf))
+
+    # output rail: ceramics, bulk, TVS, indicator, voltage sense, test point, flag, label
+    xe = 360.68
+    W(PIN(qh, 2), (xe, yi))
+    lab("OUT54", (xe, yi), 0)
+    for k in range(6):
+        hang(sh, C(sh, 2.2e-6, "OUT54", "GND", fp="C1210", volt=100, rot=0), (167.64 + 15.24 * k, yi))
+    for x in (259.08, 274.32):
+        hang(sh, CP(sh, "100uF/80V", "OUT54", "GND", rot=0), (x, yi))
+    hang(sh, DZ(sh, "SMBJ58A", "OUT54", "GND", rot=270), (289.56, yi))
+    rl = hang(sh, R(sh, 26.1e3, "OUT54", "L:LED", fp="R1206", rot=0), (304.8, yi), gnd=False)
+    led = LED(sh, "green", "GND", "L:LED", rot=90)
+    at_pin(led, 2, (304.8, PIN(rl, 2)[1] + 2.54))
+    W(PIN(rl, 2), PIN(led, 2))
+    gnd(PIN(led, 1))
+    xv = 320.04
+    rvt = hang(sh, R(sh, 100e3, "OUT54", "VSNS_OUT_54", rot=0), (xv, yi), gnd=False)
+    yn = PIN(rvt, 2)[1] + 2.54
+    W(PIN(rvt, 2), (xv, yn))
+    hang(sh, R(sh, divider_bottom(100e3, 62), "VSNS_OUT_54", "GND", rot=0), (xv, yn))
+    W((xv, yn), (xv + 15.24, yn))
+    hang(sh, C(sh, 10e-9, "VSNS_OUT_54", "GND", rot=0), (xv + 7.62, yn))
+    lab("VSNS_OUT_54", (xv + 15.24, yn), 0)
+    TP(sh, "OUT54", at=(345.44, yi))
+    sh.mark("flag", (353.06, yi))
     return sh
 
 
@@ -1169,43 +1293,155 @@ def sheet_mcu():
         "Pin map from docs/rev3/design.md section 6.6. Strapping pins IO0/3/45/46 are not used for I/O.",
         "Host UART1 (IO17 TX, IO18 RX) goes to the Jetson AGX Orin 40-pin header (pins 10 / 8, GND pin 6).",
         "USB-C is for flashing and debug only (built-in USB-Serial/JTAG). VBUS only feeds the logic OR in aux_power.",
-        "N8 module variant (no octal PSRAM). u.FL antenna: route the cable out of the rover body."])
-    sh.add("RF_Module:ESP32-S3-WROOM-1", "U", "ESP32-S3-WROOM-1U-N8", FP["ESP"], ESP_PINS,
-           fields={"LCSC": "C2980297"})
-    C(sh, 22e-6, "+3V3", "GND", fp="C1206", volt=10)
-    C(sh, 100e-9, "+3V3", "GND")
-    R(sh, 10e3, "+3V3", "ESP_EN")
-    C(sh, 1e-6, "ESP_EN", "GND")
-    sh.add("Switch:SW_Push", "SW", "RESET", FP["BTN"], {1: "ESP_EN", 2: "GND"})
-    R(sh, 10e3, "+3V3", "ESP_IO0")
-    sh.add("Switch:SW_Push", "SW", "BOOT", FP["BTN"], {1: "ESP_IO0", 2: "GND"})
-    R(sh, 4.7e3, "+3V3", "I2C_SDA")
-    R(sh, 4.7e3, "+3V3", "I2C_SCL")
-    sh.add("Connector:USB_C_Receptacle_USB2.0_16P", "J", "USB-C (flash/debug)", FP["USBC"],
-           {"A1": "GND", "A4": "VBUS_USB", "A5": "L:CC1", "B5": "L:CC2", "A6": "USB_DP", "B6": "USB_DP",
-            "A7": "USB_DN", "B7": "USB_DN", "A8": None, "B8": None, "SH": "GND"})
-    R(sh, 5.1e3, "L:CC1", "GND")
-    R(sh, 5.1e3, "L:CC2", "GND")
-    sh.add("Power_Protection:USBLC6-2SC6", "U", "USBLC6-2SC6", FP["SOT23"].replace("SOT-23", "SOT-23-6"),
-           {1: "USB_DP", 6: "USB_DP", 3: "USB_DN", 4: "USB_DN", 5: "VBUS_USB", 2: "GND"})
-    sh.add("Connector_Generic_MountingPin:Conn_01x04_MountingPin", "J", "JST-GH 4p (host UART to Orin)",
-           FP["GH4"], {1: "L:TX_C", 2: "L:RX_C", 3: "GND", 4: "L:SP_C", "MP": "GND"})
-    R(sh, 100, "UART_TX", "L:TX_C")
-    R(sh, 100, "L:RX_C", "UART_RX")
-    R(sh, 100, "UART_SP", "L:SP_C")
-    sh.add("Power_Protection:USBLC6-2SC6", "U", "USBLC6-2SC6", FP["SOT23"].replace("SOT-23", "SOT-23-6"),
-           {1: "L:TX_C", 6: "L:TX_C", 3: "L:RX_C", 4: "L:RX_C", 5: "+3V3", 2: "GND"})
+        "N8 module variant (no octal PSRAM). u.FL antenna: route the cable out of the rover body.",
+        "USBLC6 arrays are flow-through: pins 1/6 and 3/4 are joined inside the part. Route each line across its pad pair."],
+        drawn=True)
+    W, gnd, v33, lab = marks(sh)
+    sot236 = FP["SOT23"].replace("SOT-23", "SOT-23-6")
+
+    # --- module: supply and decoupling on top, signals out to labels on both sides
+    E = sh.add("RF_Module:ESP32-S3-WROOM-1", "U", "ESP32-S3-WROOM-1U-N8", FP["ESP"], ESP_PINS,
+               fields={"LCSC": "C2980297"}, at=(165.1, 152.4))
+    E.label_at = {"Reference": (2.54, 30.48), "Value": (2.54, 33.02)}
+    P = lambda n: PIN(E, n)
+    W(P(2), (P(2)[0], 99.06))
+    v33((P(2)[0], 99.06))
+    W((P(2)[0], 101.6), (142.24, 101.6))
+    hang(sh, C(sh, 22e-6, "+3V3", "GND", fp="C1206", volt=10, rot=0), (154.94, 101.6))
+    hang(sh, C(sh, 100e-9, "+3V3", "GND", rot=0), (142.24, 101.6))
+    gnd(P(1))
+    for num, net in ESP_PINS.items():
+        if net in (None, "GND", "+3V3") or net.startswith("L:"):
+            continue
+        pt = P(num)
+        dx = -5.08 if pt[0] < 165.1 else 5.08
+        W(pt, (pt[0] + dx, pt[1]))
+        lab(net, (pt[0] + dx, pt[1]), 180 if dx < 0 else 0)
+    W(P(37), (185.42, P(37)[1]), (185.42, 121.92))
+    TP(sh, "L:TXD0", at=(185.42, 121.92))
+    W(P(36), (193.04, P(36)[1]), (193.04, 116.84))
+    TP(sh, "L:RXD0", at=(193.04, 116.84))
+
+    # --- reset and boot: pull-up, (cap), button to GND, test point on each node
+    for net, y, cap in (("ESP_EN", 83.82, True), ("ESP_IO0", 116.84, False)):
+        lab(net, (25.4, y), 180)
+        W((25.4, y), (66.04, y))
+        r = R(sh, 10e3, "+3V3", net, rot=0)
+        at_pin(r, 2, (35.56, y))
+        v33(PIN(r, 1))
+        if cap:
+            hang(sh, C(sh, 1e-6, net, "GND", rot=0), (45.72, y))
+        sw = sh.add("Switch:SW_Push", "SW", "RESET" if cap else "BOOT", FP["BTN"], {1: net, 2: "GND"}, rot=270)
+        hang(sh, sw, (55.88, y))
+        sw.label_at = {"Reference": (2.54, -1.27), "Value": (2.54, 1.27)}
+        TP(sh, net, at=(66.04, y))
+
+    # --- I2C pull-ups
+    for x, net in ((30.48, "I2C_SDA"), (63.5, "I2C_SCL")):
+        r = R(sh, 4.7e3, "+3V3", net, rot=0)
+        at_pin(r, 1, (x, 144.78))
+        v33(PIN(r, 1))
+        W(PIN(r, 2), (x, 154.94), (x + 7.62, 154.94))
+        lab(net, (x + 7.62, 154.94), 0)
+
+    # --- board temperature (NTC) and logic supply sense
+    nt = sh.add("Device:Thermistor_NTC", "TH", "10k NTC", FP["R0603"], {1: "+3V3", 2: "NTC_SNS"})
+    at_pin(nt, 1, (30.48, 175.26))
+    v33(PIN(nt, 1))
+    yn = PIN(nt, 2)[1] + 2.54
+    W(PIN(nt, 2), (30.48, yn), (48.26, yn))
+    hang(sh, R(sh, 10e3, "NTC_SNS", "GND", rot=0), (30.48, yn))
+    hang(sh, C(sh, 100e-9, "NTC_SNS", "GND", rot=0), (40.64, yn))
+    lab("NTC_SNS", (48.26, yn), 0)
+    lab("+5V_LOGIC", (68.58, 172.72), 180)
+    W((68.58, 172.72), (83.82, 172.72))
+    ra = hang(sh, R(sh, 10e3, "+5V_LOGIC", "AUX5_SNS", rot=0), (83.82, 172.72), gnd=False)
+    ya = PIN(ra, 2)[1] + 2.54
+    W(PIN(ra, 2), (83.82, ya), (93.98, ya))
+    hang(sh, R(sh, 10e3, "AUX5_SNS", "GND", rot=0), (83.82, ya))
+    lab("AUX5_SNS", (93.98, ya), 0)
+
+    # --- USB-C: VBUS out to the logic OR, CC pull-downs, D-/D+ through the ESD array
+    J = sh.add("Connector:USB_C_Receptacle_USB2.0_16P", "J", "USB-C (flash/debug)", FP["USBC"],
+               {"A1": "GND", "A4": "VBUS_USB", "A5": "L:CC1", "B5": "L:CC2", "A6": "L:DP_C", "B6": "L:DP_C",
+                "A7": "L:DN_C", "B7": "L:DN_C", "A8": None, "B8": None, "SH": "GND"}, at=(241.3, 101.6))
+    Pj = lambda n: PIN(J, n)
+    xu = Pj("A4")[0]
+    W(Pj("A4"), (320.04, Pj("A4")[1]))
+    lab("VBUS_USB", (320.04, Pj("A4")[1]), 0)
+    sh.mark("flag", (271.78, Pj("A4")[1]))
+    for n, net in (("A5", "L:CC1"), ("B5", "L:CC2")):
+        W(Pj(n), (xu + 2.54, Pj(n)[1]))
+        lab(net, (xu + 2.54, Pj(n)[1]), 0)
+    W(Pj("A7"), (xu + 2.54, Pj("A7")[1]), (xu + 2.54, Pj("B7")[1]))
+    W(Pj("A6"), (xu + 2.54, Pj("A6")[1]), (xu + 2.54, Pj("B6")[1]))
+    W(Pj("B6"), (xu + 2.54, Pj("B6")[1]))
+    gnd(Pj("A1"))
+    gnd(Pj("SH"))
+    esd = sh.add("Power_Protection:USBLC6-2SC6", "U", "USBLC6-2SC6", sot236,
+                 {1: "L:DN_C", 6: "USB_DN", 3: "L:DP_C", 4: "USB_DP", 5: "VBUS_USB", 2: "GND"})
+    at_pin(esd, 1, (276.86, Pj("B7")[1]))
+    esd.label_at = {"Reference": (7.62, -7.62), "Value": (7.62, -5.08)}
+    W(Pj("B7"), PIN(esd, 1))
+    W((xu + 2.54, Pj("A6")[1]), PIN(esd, 3))
+    W(PIN(esd, 5), (PIN(esd, 5)[0], Pj("A4")[1]))
+    gnd(PIN(esd, 2))
+    for n, net in ((6, "USB_DN"), (4, "USB_DP")):
+        W(PIN(esd, n), (299.72, PIN(esd, n)[1]))
+        lab(net, (299.72, PIN(esd, n)[1]), 0)
+    for x, net in ((271.78, "L:CC1"), (292.1, "L:CC2")):
+        lab(net, (x - 5.08, 124.46), 180)
+        W((x - 5.08, 124.46), (x, 124.46))
+        hang(sh, R(sh, 5.1e3, net, "GND", rot=0), (x, 124.46))
+
+    # --- host UART to the Orin: 100 ohm series, ESD on TX/RX, JST-GH 4p
+    x0, yt = 220.98, 152.4
+    lab("UART_TX", (x0, yt), 180)
+    lab("UART_RX", (x0, yt + 2.54), 180)
+    rtx = R(sh, 100, "UART_TX", "L:TX_R")
+    at_pin(rtx, 1, (x0 + 5.08, yt))
+    rrx = R(sh, 100, "L:RX_R", "UART_RX", rot=270)
+    at_pin(rrx, 2, (x0 + 5.08, yt + 2.54))
+    rtx.label_at = {"Reference": (-3.81, -5.08), "Value": (-3.81, -2.54)}
+    rrx.label_at = {"Reference": (-3.81, 5.08), "Value": (-3.81, 7.62)}
+    W((x0, yt), PIN(rtx, 1))
+    W((x0, yt + 2.54), PIN(rrx, 2))
+    e2 = sh.add("Power_Protection:USBLC6-2SC6", "U", "USBLC6-2SC6", sot236,
+                {1: "L:TX_R", 6: "L:TX_C", 3: "L:RX_R", 4: "L:RX_C", 5: "+3V3", 2: "GND"})
+    at_pin(e2, 1, (x0 + 17.78, yt))
+    e2.label_at = {"Reference": (7.62, -7.62), "Value": (7.62, -5.08)}
+    W(PIN(rtx, 2), PIN(e2, 1))
+    W(PIN(rrx, 1), PIN(e2, 3))
+    v33(PIN(e2, 5))
+    gnd(PIN(e2, 2))
+    gh = sh.add("Connector_Generic_MountingPin:Conn_01x04_MountingPin", "J", "JST-GH 4p (host UART to Orin)",
+                FP["GH4"], {1: "L:TX_C", 2: "L:RX_C", 3: "GND", 4: "L:SP_C", "MP": "GND"})
+    xg = x0 + 50.8
+    at_pin(gh, 1, (xg, yt))
+    gh.label_at = {"Reference": (3.81, -5.08), "Value": (3.81, -2.54)}
+    W(PIN(e2, 6), PIN(gh, 1))
+    W(PIN(e2, 4), PIN(gh, 2))
+    W(PIN(gh, 3), (xg - 5.08, yt + 5.08), (xg - 5.08, yt + 15.24))
+    gnd((xg - 5.08, yt + 15.24))
+    gnd(PIN(gh, "MP"))
+    rsp = R(sh, 100, "L:SP_C", "UART_SP", rot=0)
+    at_pin(rsp, 1, (xg - 2.54, yt + 10.16))
+    W(PIN(rsp, 1), (xg - 2.54, yt + 7.62), PIN(gh, 4))
+    W(PIN(rsp, 2), (xg - 2.54, yt + 22.86), (xg - 12.7, yt + 22.86))
+    lab("UART_SP", (xg - 12.7, yt + 22.86), 180)
+
+    # --- status LEDs
     for i in (1, 2, 3):
-        R(sh, 1e3, f"LED_{i}", f"L:LED{i}")
-        LED(sh, ["green", "yellow", "red"][i - 1], "GND", f"L:LED{i}")
-    sh.add("Device:Thermistor_NTC", "TH", "10k NTC", FP["R0603"], {1: "+3V3", 2: "NTC_SNS"}, rot=90)
-    R(sh, 10e3, "NTC_SNS", "GND")
-    C(sh, 100e-9, "NTC_SNS", "GND")
-    R(sh, 10e3, "+5V_LOGIC", "AUX5_SNS")
-    R(sh, 10e3, "AUX5_SNS", "GND")
-    for n in ("L:TXD0", "L:RXD0", "ESP_EN", "ESP_IO0"):
-        TP(sh, n)
-    sh.flag("VBUS_USB")
+        y = 193.04 + 10.16 * (i - 1)
+        lab(f"LED_{i}", (x0, y), 180)
+        rl = R(sh, 1e3, f"LED_{i}", f"L:LED{i}")
+        at_pin(rl, 1, (x0 + 5.08, y))
+        W((x0, y), PIN(rl, 1))
+        led = LED(sh, ["green", "yellow", "red"][i - 1], "GND", f"L:LED{i}", rot=180)
+        at_pin(led, 2, (x0 + 17.78, y))
+        W(PIN(rl, 2), PIN(led, 2))
+        W(PIN(led, 1), (x0 + 27.94, y))
+        gnd((x0 + 27.94, y))
     return sh
 
 
@@ -1289,38 +1525,123 @@ def sheet_io():
         "TCA9535 at 0x20 holds INP / INP_G for all six switches, so they keep their state across an ESP32 reset.",
         "ADC128D818 at 0x1D (A1 = A0 = LOW) and 0x1E (A1 = LOW, A0 = MID). Internal 2.56 V reference; 12 ms per channel.",
         "E-STOP: opening the loop clears the latch (Q low, /Q high) -> ESTOP_KILL holds the drive group off. "
-        "It stays off after the loop closes until the ESP32 clocks ESTOP_ARM. Power-on also starts latched off."])
+        "It stays off after the loop closes until the ESP32 clocks ESTOP_ARM. Power-on also starts latched off."],
+        drawn=True)
+    W, gnd, v33, lab = marks(sh)
+
+    # --- I/O expander: I2C in from the left, switch controls out to the right
     exp = {1: None, 2: "GND", 3: "GND", 21: "GND", 22: "I2C_SCL", 23: "I2C_SDA", 24: "+3V3", 12: "GND"}
     exp.update(EXP_MAP)
-    sh.add("Interface_Expansion:TCA9535PWR", "U", "TCA9535PWR", "Package_SO:TSSOP-24_4.4x7.8mm_P0.65mm",
-           exp, fields={"LCSC": "C130204"})
-    C(sh, 100e-9, "+3V3", "GND")
-    for i, chans in enumerate(ADC_MAP):
+    X = sh.add("Interface_Expansion:TCA9535PWR", "U", "TCA9535PWR", "Package_SO:TSSOP-24_4.4x7.8mm_P0.65mm",
+               exp, fields={"LCSC": "C130204"}, at=(91.44, 109.22))
+    P = lambda n: PIN(X, n)
+    W(P(24), (P(24)[0], 68.58))
+    v33((P(24)[0], 68.58))
+    W((P(24)[0], 71.12), (111.76, 71.12))
+    hang(sh, C(sh, 100e-9, "+3V3", "GND", rot=0), (111.76, 71.12))
+    gnd(P(12))
+    for n, net in ((23, "I2C_SDA"), (22, "I2C_SCL")):
+        W(P(n), (50.8, P(n)[1]))
+        lab(net, (50.8, P(n)[1]), 180)
+    xa = P(3)[0] - 5.08
+    W(P(3), (xa, P(3)[1]), (xa, P(21)[1] + 2.54))
+    W(P(2), (xa, P(2)[1]))
+    W(P(21), (xa, P(21)[1]))
+    gnd((xa, P(21)[1] + 2.54))
+    for n, net in EXP_MAP.items():
+        if net and net != "ESTOP_ARM":
+            W(P(n), (129.54, P(n)[1]))
+            lab(net, (129.54, P(n)[1]), 0)
+
+    # --- E-STOP latch: ESTOP_ARM clocks it, the loop clears it
+    F = sh.add("74xGxx:74AUP1G74", "U", "74LVC1G74DCTR", FP["SSOP8"],
+               {1: "ESTOP_ARM", 2: "+3V3", 3: "ESTOP_KILL", 4: "GND", 5: "L:LATCH_Q", 6: "L:CLR",
+                7: "+3V3", 8: "+3V3"}, at=(152.4, 175.26))
+    F.label_at = {"Reference": (5.08, 13.97), "Value": (5.08, 16.51)}
+    Q = lambda n: PIN(F, n)
+    arm = P(17)
+    W(arm, (116.84, arm[1]), (116.84, Q(1)[1]), Q(1))
+    hang(sh, R(sh, 100e3, "ESTOP_ARM", "GND", rot=0), (127.0, Q(1)[1]))
+    yb = 157.48                                    # +3V3 bar over the flip-flop
+    W(Q(2), (134.62, Q(2)[1]), (134.62, yb), (Q(8)[0], yb), Q(8))
+    W(Q(7), (Q(7)[0], yb))
+    W((134.62, yb), (127.0, yb))
+    hang(sh, C(sh, 100e-9, "+3V3", "GND", rot=0), (127.0, yb))
+    W((144.78, yb), (144.78, yb - 2.54))
+    v33((144.78, yb - 2.54))
+    gnd(Q(4))
+    W(Q(3), (172.72, Q(3)[1]))
+    lab("ESTOP_KILL", (172.72, Q(3)[1]), 0)
+    W(Q(5), (180.34, Q(5)[1]))
+    TP(sh, "L:LATCH_Q", at=(180.34, Q(5)[1]))
+
+    # --- E-STOP loop: +3V3 -> 1k -> NC contact -> 10k to GND; filtered into ESTOP_OK and the CLR RC
+    yl = 198.12
+    j = CONN2(sh, "JST-PH 2p E-STOP (NC)", "PH2", "L:ESRC", "L:ELOOP", mirror=True)
+    at_pin(j, 2, (40.64, yl))
+    W(PIN(j, 1), (48.26, PIN(j, 1)[1]))
+    rsrc = R(sh, 1e3, "+3V3", "L:ESRC", rot=0)
+    at_pin(rsrc, 2, (48.26, PIN(j, 1)[1]))
+    v33(PIN(rsrc, 1))
+    re1 = R(sh, 1e3, "L:ELOOP", "ESTOP_OK")
+    at_pin(re1, 1, (63.5, yl))
+    W(PIN(j, 2), PIN(re1, 1))
+    hang(sh, R(sh, 10e3, "L:ELOOP", "GND", rot=0), (55.88, yl))
+    r1m = R(sh, 1e6, "ESTOP_OK", "L:CLR")
+    at_pin(r1m, 1, (83.82, yl))
+    W(PIN(re1, 2), PIN(r1m, 1))
+    hang(sh, C(sh, 100e-9, "ESTOP_OK", "GND", rot=0), (76.2, yl))
+    dc = DS(sh, "1N5819HW", "ESTOP_OK", "L:CLR", fp="SOD123")
+    at_pin(dc, 1, (83.82, 190.5))
+    W((78.74, yl), (78.74, 190.5), PIN(dc, 1))
+    W(PIN(dc, 2), (96.52, 190.5), (96.52, yl))
+    W(PIN(r1m, 2), (Q(6)[0], yl), Q(6))
+    hang(sh, C(sh, 100e-9, "L:CLR", "GND", rot=0), (101.6, yl))
+    W((73.66, yl), (73.66, 182.88), (66.04, 182.88))
+    lab("ESTOP_OK", (66.04, 182.88), 180)
+    TP(sh, "ESTOP_OK", at=(69.85, 182.88))
+
+    # --- two ADCs: inputs from the left, I2C to the right, decoupling cap clear of the labels
+    for i, (chans, yc) in enumerate(zip(ADC_MAP, (106.68, 177.8))):
         conns = {1: None, 2: "I2C_SDA", 3: "I2C_SCL", 4: "GND", 5: "+3V3", 6: None,
                  7: "GND" if i == 0 else "L:A0MID", 8: "GND"}
         for k, net in enumerate(chans):
             conns[16 - k] = net
-        sh.add("Analog_ADC:ADC128D818", "U", "ADC128D818", "Package_SO:TSSOP-16_4.4x5mm_P0.65mm",
-               conns, fields={"LCSC": "C139062"})
-        C(sh, 100e-9, "+3V3", "GND")
-    R(sh, 10e3, "+3V3", "L:A0MID")
-    R(sh, 10e3, "L:A0MID", "GND")
-    sh.add("Connector_Generic:Conn_01x02", "J", "E-STOP loop (JST-PH 2p, NC contact)", FP["PH2"],
-           {1: "L:ESRC", 2: "L:ELOOP"})
-    R(sh, 1e3, "+3V3", "L:ESRC")
-    R(sh, 10e3, "L:ELOOP", "GND")
-    R(sh, 1e3, "L:ELOOP", "ESTOP_OK")
-    C(sh, 100e-9, "ESTOP_OK", "GND")
-    R(sh, 1e6, "ESTOP_OK", "L:CLR")
-    C(sh, 100e-9, "L:CLR", "GND")
-    DS(sh, "1N5819HW", "ESTOP_OK", "L:CLR", fp="SOD123")
-    R(sh, 100e3, "ESTOP_ARM", "GND")
-    sh.add("74xGxx:74AUP1G74", "U", "74LVC1G74DCTR", FP["SSOP8"],
-           {1: "ESTOP_ARM", 2: "+3V3", 3: "ESTOP_KILL", 4: "GND", 5: "L:LATCH_Q", 6: "L:CLR",
-            7: "+3V3", 8: "+3V3"})
-    C(sh, 100e-9, "+3V3", "GND")
-    TP(sh, "L:LATCH_Q")
-    TP(sh, "ESTOP_OK")
+        A = sh.add("Analog_ADC:ADC128D818", "U", "ADC128D818", "Package_SO:TSSOP-16_4.4x5mm_P0.65mm",
+                   conns, fields={"LCSC": "C139062"}, at=(231.14, yc))
+        Pa = lambda n: PIN(A, n)
+        for k, net in enumerate(chans):
+            pt = Pa(16 - k)
+            if net == "GND":
+                W(pt, (pt[0] - 5.08, pt[1]))
+                gnd((pt[0] - 5.08, pt[1]))
+            else:
+                W(pt, (195.58, pt[1]))
+                lab(net, (195.58, pt[1]), 180)
+        for n, net in ((2, "I2C_SDA"), (3, "I2C_SCL")):
+            W(Pa(n), (248.92, Pa(n)[1]))
+            lab(net, (248.92, Pa(n)[1]), 0)
+        vp = Pa(5)
+        W(vp, (vp[0], vp[1] - 10.16))
+        v33((vp[0], vp[1] - 10.16))
+        W((vp[0], vp[1] - 7.62), (269.24, vp[1] - 7.62))
+        hang(sh, C(sh, 100e-9, "+3V3", "GND", rot=0), (269.24, vp[1] - 7.62))
+        gnd(Pa(4))
+        a0, a1 = Pa(7), Pa(8)
+        xg = a0[0] - 5.08
+        if i == 0:
+            W(a0, (xg, a0[1]), (xg, a1[1] + 2.54))
+            W(a1, (xg, a1[1]))
+            gnd((xg, a1[1] + 2.54))
+        else:
+            W(a1, (xg, a1[1]), (xg, a1[1] + 2.54))
+            gnd((xg, a1[1] + 2.54))
+            W(a0, (a0[0] - 10.16, a0[1]))
+            hang(sh, R(sh, 10e3, "L:A0MID", "GND", rot=0), (a0[0] - 10.16, a0[1]))
+            rt = R(sh, 10e3, "+3V3", "L:A0MID")
+            at_pin(rt, 2, (a0[0] - 15.24, a0[1]))
+            W(PIN(rt, 2), (a0[0] - 10.16, a0[1]))
+            v33(PIN(rt, 1))
     return sh
 
 
