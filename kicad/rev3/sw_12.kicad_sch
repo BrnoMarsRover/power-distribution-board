@@ -2377,6 +2377,12 @@
 		(uuid "08d9df08-ddcb-5021-9952-4f3fb8df076a")
 	)
 	(junction
+		(at 153.67 96.52)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "16d3fa1e-ce69-5e05-ae6c-cb421d8fb934")
+	)
+	(junction
 		(at 205.74 185.42)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2795,16 +2801,6 @@
 			(type default)
 		)
 		(uuid "35fca9d6-7090-553f-b23e-70101fa79ce9")
-	)
-	(wire
-		(pts
-			(xy 149.86 96.52) (xy 205.74 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "360308e1-5a0c-53b5-8ec4-36e9e73ab2d4")
 	)
 	(wire
 		(pts
@@ -3248,6 +3244,16 @@
 	)
 	(wire
 		(pts
+			(xy 153.67 96.52) (xy 205.74 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "94f7a180-94a1-55a4-bb53-5146082eac13")
+	)
+	(wire
+		(pts
 			(xy 86.36 96.52) (xy 119.38 96.52)
 		)
 		(stroke
@@ -3285,6 +3291,16 @@
 			(type default)
 		)
 		(uuid "a2cd2a6a-37fe-5c6e-8958-3c305c828ed6")
+	)
+	(wire
+		(pts
+			(xy 149.86 96.52) (xy 153.67 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a9d51b76-c696-533c-b118-4af1060d3f3b")
 	)
 	(wire
 		(pts
@@ -3555,6 +3571,16 @@
 			(type default)
 		)
 		(uuid "ffc75dc5-e33d-55a1-ad48-18662eb10003")
+	)
+	(label "DRN"
+		(at 153.67 96.52 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "9beba9f1-ae07-5b78-a117-0cdb5cd65d65")
 	)
 	(global_label "VSNS_OUT_12"
 		(shape passive)

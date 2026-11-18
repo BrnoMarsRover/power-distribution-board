@@ -2070,6 +2070,12 @@
 		(uuid "1fbdf6c1-e473-5a84-a34d-35e28e4c3b62")
 	)
 	(junction
+		(at 153.67 96.52)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "28eef511-fd3e-5759-b44c-a835944ca84e")
+	)
+	(junction
 		(at 124.46 208.28)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2939,6 +2945,16 @@
 	)
 	(wire
 		(pts
+			(xy 149.86 96.52) (xy 153.67 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b79ac7d2-f7b8-5b16-a1fb-ec23f922ab81")
+	)
+	(wire
+		(pts
 			(xy 271.78 127) (xy 281.94 127)
 		)
 		(stroke
@@ -3039,16 +3055,6 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 96.52) (xy 205.74 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dbda14b3-c243-5b0a-8fba-172f21b39903")
-	)
-	(wire
-		(pts
 			(xy 185.42 127) (xy 205.74 127)
 		)
 		(stroke
@@ -3076,6 +3082,16 @@
 			(type default)
 		)
 		(uuid "e1500d27-54ed-55f0-a356-605f1d872663")
+	)
+	(wire
+		(pts
+			(xy 153.67 96.52) (xy 205.74 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e15ef8d8-b5ee-51f6-8422-9c31d98c55d3")
 	)
 	(wire
 		(pts
@@ -3186,6 +3202,16 @@
 			(type default)
 		)
 		(uuid "ff664b82-6edb-55bc-af99-adb202414ab1")
+	)
+	(label "DRN"
+		(at 153.67 96.52 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "ffb37593-c8d6-541a-bc6f-74871e16adc3")
 	)
 	(global_label "INPG_42C"
 		(shape passive)

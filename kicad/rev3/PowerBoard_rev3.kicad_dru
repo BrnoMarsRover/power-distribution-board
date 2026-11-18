@@ -1,0 +1,49 @@
+(version 1)
+# JLCPCB standard 4-layer process: limits KiCad's board setup has no field for.
+# Sources: jlcpcb.com/capabilities/pcb-capabilities, checked 2026-11-19.
+
+(rule "JLC: plated pad annular ring >= 0.15 mm"
+  (constraint annular_width (min 0.15mm))
+  (condition "A.Type == 'Pad' && A.isPlated()"))
+
+(rule "JLC: plated pad hole to copper >= 0.28 mm"
+  (constraint hole_clearance (min 0.28mm))
+  (condition "A.Type == 'Pad' && A.isPlated()"))
+
+(rule "JLC: pad hole to pad hole >= 0.45 mm"
+  (constraint hole_to_hole (min 0.45mm))
+  (condition "A.Type == 'Pad' && B.Type == 'Pad'"))
+
+(rule "JLC: NPTH >= 0.5 mm"
+  (constraint hole_size (min 0.5mm))
+  (condition "A.Type == 'Pad' && !A.isPlated()"))
+
+(rule "JLC: NPTH to copper >= 0.2 mm"
+  (constraint hole_clearance (min 0.2mm))
+  (condition "A.Type == 'Pad' && !A.isPlated()"))
+
+(rule "JLC: silkscreen text >= 1.0 mm, lines >= 0.15 mm"
+  (layer "?.Silkscreen")
+  (constraint text_height (min 1.0mm))
+  (constraint text_thickness (min 0.15mm)))
+
+(rule "JLC: no blind, buried or micro vias"
+  (constraint disallow buried_via micro_via))
+
+# 42 V and 54 V copper: IPC-2221B asks 0.6 mm for bare conductors at 31-150 V (B2) and
+# 0.13 mm under solder mask (B4). Pours and wide tracks get 0.5 mm from other nets; pins of
+# fine-pitch parts keep the 0.2 mm default (they are masked and the part sets the pitch).
+(rule "HV: 0.5 mm around 42 / 54 V pours"
+  (layer outer)
+  (constraint clearance (min 0.5mm))
+  (condition "A.Type == 'Zone' && (A.hasNetclass('HV_Bus') || A.hasNetclass('HV_Power')) && A.Net != B.Net"))
+
+(rule "HV: 0.5 mm around wide 42 / 54 V tracks"
+  (layer outer)
+  (constraint clearance (min 0.5mm))
+  (condition "A.Type == 'Track' && A.Width >= 1mm && (A.hasNetclass('HV_Bus') || A.hasNetclass('HV_Power')) && A.Net != B.Net"))
+
+# Current-carrying nets: no track thinner than the class default once it leaves a pad area.
+(rule "Power: tracks >= 0.5 mm"
+  (constraint track_width (min 0.5mm))
+  (condition "A.Type == 'Track' && (A.hasNetclass('HV_Bus') || A.hasNetclass('HV_Power') || A.hasNetclass('Power'))"))

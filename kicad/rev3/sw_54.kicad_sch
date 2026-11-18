@@ -2058,6 +2058,12 @@
 		(uuid "3ddf3df7-0c4a-58c2-a87e-deb91fbcbe20")
 	)
 	(junction
+		(at 153.67 96.52)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "45395382-b48b-5df4-988c-5c837ab6cab5")
+	)
+	(junction
 		(at 281.94 127)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2823,13 +2829,23 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 96.52) (xy 205.74 96.52)
+			(xy 149.86 96.52) (xy 153.67 96.52)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c5cba8c6-c71d-581e-ad6b-707a53a8c828")
+		(uuid "c422d84f-f38d-5c85-9bf8-c80982316e62")
+	)
+	(wire
+		(pts
+			(xy 153.67 96.52) (xy 205.74 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c5671f8d-c823-5eae-b271-39073e1d47a7")
 	)
 	(wire
 		(pts
@@ -3010,6 +3026,16 @@
 			(type default)
 		)
 		(uuid "fd43e110-30b0-59ce-b911-dbf153d6fde8")
+	)
+	(label "DRN"
+		(at 153.67 96.52 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "96c67ac0-d7a6-5e1e-881f-0e9de061f785")
 	)
 	(global_label "FLT_54"
 		(shape passive)

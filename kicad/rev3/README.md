@@ -44,6 +44,21 @@ The drawing goes through the same netlist check, so a wire landing where it shou
 caught before anyone opens KiCad. One crossing is intentional: on the `can` sheet, CANH
 crosses CANL without a junction on its way to the second connector.
 
+## Board rules
+
+`gen/board_rules.py` sets up the PCB side for JLCPCB's standard 4-layer process, with
+nothing that adds a surcharge:
+- **Stackup:** 1.6 mm, JLC04161H-7628, 1 oz outer / 0.5 oz inner, HASL lead-free.
+- **Limits:** 0.127 mm tracks and clearance, vias of 0.3 mm drill and 0.6 mm pad, 1.0 mm
+  silkscreen text.
+- **Netclasses** for the 42 V, 54 V and rail nets, and a 0.5 mm clearance on the outer
+  layers around 42 / 54 V pours.
+
+It writes the rules into `PowerBoard_rev3.kicad_pro` and `PowerBoard_rev3.kicad_dru`.
+It creates `PowerBoard_rev3.kicad_pcb` only if the board doesn't exist yet, so re-running
+it never touches a layout. The values and the reasons for them are in
+`docs/rev3/design.md`, section 8.
+
 **Once you start editing in KiCad, these files are the source of truth.** Re-running
 `build.py` overwrites them. The generator is a bootstrap, not a build step.
 

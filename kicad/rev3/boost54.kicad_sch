@@ -2507,10 +2507,22 @@
 		(uuid "a0cdb41a-3f05-599d-b593-ec35b78a510a")
 	)
 	(junction
+		(at 113.03 86.36)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "aa517ad0-a15f-56c0-8f5d-bd08370573a8")
+	)
+	(junction
 		(at 134.62 132.08)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "ad5a92a1-f80a-5d02-a8a6-7bce15a6574f")
+	)
+	(junction
+		(at 128.27 86.36)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ad85dc46-df12-5729-8988-3d1b0dc21f42")
 	)
 	(junction
 		(at 274.32 86.36)
@@ -3042,6 +3054,16 @@
 	)
 	(wire
 		(pts
+			(xy 113.03 86.36) (xy 119.38 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "73581194-8bea-5405-948a-889e898d2b8e")
+	)
+	(wire
+		(pts
 			(xy 289.56 86.36) (xy 304.8 86.36)
 		)
 		(stroke
@@ -3069,6 +3091,16 @@
 			(type default)
 		)
 		(uuid "78a0fd3b-c34d-51cb-8a1e-5344da2291ed")
+	)
+	(wire
+		(pts
+			(xy 127 86.36) (xy 128.27 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "79ddbcb9-c520-5e46-9457-e64eb4409ceb")
 	)
 	(wire
 		(pts
@@ -3292,16 +3324,6 @@
 	)
 	(wire
 		(pts
-			(xy 109.22 86.36) (xy 119.38 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "adeb0800-83a6-5d0f-9004-078c642a9b87")
-	)
-	(wire
-		(pts
 			(xy 35.56 86.36) (xy 40.64 86.36)
 		)
 		(stroke
@@ -3472,6 +3494,16 @@
 	)
 	(wire
 		(pts
+			(xy 128.27 86.36) (xy 134.62 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dab91d40-f33d-59df-918a-3466e5f24f86")
+	)
+	(wire
+		(pts
 			(xy 134.62 132.08) (xy 137.16 132.08)
 		)
 		(stroke
@@ -3552,16 +3584,6 @@
 	)
 	(wire
 		(pts
-			(xy 127 86.36) (xy 134.62 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f16e6aab-bc00-582d-9b72-7e59288365cd")
-	)
-	(wire
-		(pts
 			(xy 66.04 147.32) (xy 66.04 157.48)
 		)
 		(stroke
@@ -3612,6 +3634,16 @@
 	)
 	(wire
 		(pts
+			(xy 109.22 86.36) (xy 113.03 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fa2cbcc6-4e7e-5831-9b4a-92423104457c")
+	)
+	(wire
+		(pts
 			(xy 160.02 177.8) (xy 160.02 86.36)
 		)
 		(stroke
@@ -3639,6 +3671,26 @@
 			(type default)
 		)
 		(uuid "ffc6937a-ead9-5eca-9aca-20763193d70a")
+	)
+	(label "LIN"
+		(at 113.03 86.36 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "8932f879-79c5-5553-9bcf-cfc35a549be4")
+	)
+	(label "SW"
+		(at 128.27 86.36 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "d13aeae5-1269-5aa1-8a62-aff4ceea0863")
 	)
 	(global_label "VSNS_OUT_54"
 		(shape passive)

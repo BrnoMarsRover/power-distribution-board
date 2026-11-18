@@ -2389,6 +2389,12 @@
 		(uuid "28731152-3788-5c07-aeb4-f6ca0725bcb6")
 	)
 	(junction
+		(at 153.67 96.52)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2c456d77-0c63-5bde-8c18-ba563a25edd9")
+	)
+	(junction
 		(at 238.76 127)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2582,16 +2588,6 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 96.52) (xy 205.74 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "036f61fa-f921-5b9d-984a-86215756a951")
-	)
-	(wire
-		(pts
 			(xy 205.74 127) (xy 238.76 127)
 		)
 		(stroke
@@ -2782,6 +2778,16 @@
 	)
 	(wire
 		(pts
+			(xy 153.67 96.52) (xy 205.74 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "453d3c25-15e9-5343-bb17-b459d8766ea5")
+	)
+	(wire
+		(pts
 			(xy 127 198.12) (xy 127 208.28)
 		)
 		(stroke
@@ -2849,6 +2855,16 @@
 			(type default)
 		)
 		(uuid "558ba42c-e11b-5e56-8068-04bdad2e4f8f")
+	)
+	(wire
+		(pts
+			(xy 149.86 96.52) (xy 153.67 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "57abf140-c0f7-5eda-a386-4cabdea8e2b4")
 	)
 	(wire
 		(pts
@@ -3539,6 +3555,16 @@
 			(type default)
 		)
 		(uuid "ff992560-5bc5-5101-ae5f-d53e12918358")
+	)
+	(label "DRN"
+		(at 153.67 96.52 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "c8361c5c-6f95-51de-9964-24b3568fd5bd")
 	)
 	(global_label "INP_24"
 		(shape passive)

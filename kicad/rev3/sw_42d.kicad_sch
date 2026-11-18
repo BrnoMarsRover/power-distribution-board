@@ -2456,6 +2456,12 @@
 		(uuid "7d9deae1-a7aa-518d-8ac3-6d1c9992748c")
 	)
 	(junction
+		(at 153.67 96.52)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "86b73088-a1b4-5462-a306-6ee734ff95ab")
+	)
+	(junction
 		(at 149.86 134.62)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2826,16 +2832,6 @@
 			(type default)
 		)
 		(uuid "392dfb3f-611b-53ac-a872-eb82c26a1509")
-	)
-	(wire
-		(pts
-			(xy 149.86 96.52) (xy 205.74 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "393c8e8a-a7bc-573f-aa98-e55bf7055ad9")
 	)
 	(wire
 		(pts
@@ -3259,6 +3255,16 @@
 	)
 	(wire
 		(pts
+			(xy 149.86 96.52) (xy 153.67 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b18e4e71-e19b-5653-aadb-13a7a32491e7")
+	)
+	(wire
+		(pts
 			(xy 292.1 146.05) (xy 297.18 146.05)
 		)
 		(stroke
@@ -3296,6 +3302,16 @@
 			(type default)
 		)
 		(uuid "be1682a1-87af-5464-baaf-6f4e9a6da10d")
+	)
+	(wire
+		(pts
+			(xy 153.67 96.52) (xy 205.74 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "be4807fe-fad0-59f3-984c-1f9f7989a76e")
 	)
 	(wire
 		(pts
@@ -3516,6 +3532,16 @@
 			(type default)
 		)
 		(uuid "ff7f3ed6-4d53-5b8a-8d66-f387b80037d4")
+	)
+	(label "DRN"
+		(at 153.67 96.52 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "f727d72d-ab7e-5c2c-9367-7f0959191623")
 	)
 	(global_label "BUS42"
 		(shape passive)

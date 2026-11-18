@@ -744,6 +744,7 @@ def sheet_power_in():
     W((35.56, 111.76), (43.18, 111.76))
     sh.mark("flag", (43.18, 111.76))
     TP(sh, "VBAT", at=(45.72, Y))
+    lab("VBAT", (162.56, Y), 90)
     sh.mark("flag", (53.34, Y))
     hang(sh, DZ(sh, "SMCJ45A", "VBAT", "GND", fp="SMC", rot=270), (63.5, Y))
     for x in (76.2, 91.44):
@@ -945,6 +946,7 @@ def sheet_switch(r):
     W(PIN(rgp, 2), PIN(cgp, 1))
     gnd(PIN(cgp, 2))
     W(PIN(rs, 2), (PIN(qp, 2)[0], yR))
+    lab("L:DRN", (PIN(rs, 2)[0] + 5.08, yR), 0)        # named so board netclasses can find it
 
     # --- output rail: voltage sense, indicator, test point, label
     xe = 302.26
@@ -1054,6 +1056,7 @@ def sheet_outputs():
                 f.label_at = {"Reference": (-3.81, -2.54), "Value": (-3.81, 2.54)}
                 W((xb, y), PIN(f, 1))
                 W(PIN(f, 2), (xb + 27.94, y))
+                lab(f"L:O{net[3:]}_{i + 1}", (xb + 13.97, y), 0)
                 conn(value, fp, f"L:O{net[3:]}_{i + 1}", (xb + 27.94, y))
             else:
                 W((xb, y), (xb + 10.16, y))
@@ -1128,6 +1131,8 @@ def sheet_boost():
     at_pin(qh, 3, (144.78, yi))
     qh.label_at = {"Reference": (-3.81, -8.89), "Value": (-3.81, -6.35)}
     W(PIN(ind, 2), PIN(qh, 3))
+    lab("L:LIN", (113.03, yi), 0)
+    lab("L:SW", (128.27, yi), 0)
     W((134.62, yi), PIN(ql, 2))
     gnd(PIN(ql, 3))
     W(P(16), (P(16)[0], PIN(ql, 1)[1]), PIN(ql, 1))
@@ -1256,6 +1261,7 @@ def sheet_aux():
     W(PIN(rft, 1), (190.5, yf), (190.5, yo))
     hang(sh, R(sh, 23.2e3, "L:FB", "GND", rot=0), (81.28, yf))
     TP(sh, "+5V3_AUX", at=(195.58, yo))
+    lab("+5V3_AUX", (203.2, yo), 90)
     sh.mark("flag", (210.82, yo))
 
     # diode-OR with USB VBUS

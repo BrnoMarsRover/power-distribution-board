@@ -526,20 +526,63 @@ layout.
   - The 54 V boost needs about 25 × 35 mm, with the inductor as its tallest part.
   - The target is about 120 × 140 mm, against 150 × 150 mm, to be confirmed after
     placement.
-- **Stackup (decided):** 4 layers, 1.6 mm, 2 oz outer and 1 oz inner (check the fab's
-  options).
+- **Stackup (decided 2026-11-19): JLCPCB standard 4-layer, nothing that adds a surcharge.**
+  - 1.6 mm, JLC04161H-7628, 1 oz outer and 0.5 oz inner copper, HASL lead-free, green
+    mask, tented vias.
+  - This replaces the earlier 2 oz / 1 oz plan, because 2 oz copper is a paid option.
 
-  | Layer | Use |
-  |-------|-----|
-  | L1 | Components; high-current pours |
-  | L2 | Solid GND plane: unbroken, the return reference for I2C and the IMON lines |
-  | L3 | Rail pours (24 / 15 / 12 / 5 V); slow signals |
-  | L4 | 42 V bus and GND return pours that parallel L1; few components |
+  | Layer | Copper | Use |
+  |-------|--------|-----|
+  | L1 | 1 oz | Components; high-current pours |
+  | L2 | 0.5 oz | Solid GND plane: unbroken, the return reference for I2C and the IMON lines |
+  | L3 | 0.5 oz | Rail pours (24 / 12 / 5 V, 54 V); slow signals |
+  | L4 | 1 oz | 42 V bus and GND return pours that parallel L1; few components |
 
-  - High-current paths use pours on two layers, stitched with via arrays (budget roughly
-    1 A per 0.3 mm via).
-  - Size the pours with KiCad's calculator for ≤ 20 °C rise at each rail's design current.
-    The 42 V input at 40 A and the drive group at 30 A need the most care.
+- **Board rules:** `kicad/rev3/gen/board_rules.py` writes them into the project and the
+  board, with every limit taken from JLC's standard process.
+
+  | Rule | Value | JLC limit (standard price) |
+  |------|-------|----------------------------|
+  | Track / clearance | ≥ 0.127 mm (5 mil) | 0.09 mm; 3.0–3.5 mil adds 20 % |
+  | Via | ≥ 0.3 mm drill, ≥ 0.6 mm pad | drills under 0.3 mm cost extra |
+  | Annular ring (vias, PTH) | ≥ 0.15 mm | 0.15 mm absolute minimum |
+  | Hole to copper | via 0.25 mm, PTH 0.28 mm, NPTH 0.2 mm | 0.2 / 0.28 / 0.2 mm |
+  | Hole to hole | vias 0.25 mm, pads 0.45 mm | 0.2 / 0.45 mm |
+  | NPTH | ≥ 0.5 mm | 0.5 mm |
+  | Copper to board edge | ≥ 0.3 mm | 0.2 mm |
+  | Silkscreen | text ≥ 1.0 mm, lines ≥ 0.15 mm | 1.0 / 0.15 mm |
+  | Solder mask dam | ≥ 0.1 mm | 0.1 mm (green) |
+  | Blind, buried, micro vias, via-in-pad fill | not allowed | paid options |
+
+  - **Netclasses:**
+    - HV_Bus: VBAT, BUS42, the 42 V outputs and their drain rails.
+    - HV_Power: the 54 V path and the boost's LIN and SW nodes.
+    - Power: the 24 / 12 / 5 V rails, every PTC output node and CHG_N.
+    - Supply and GND.
+  - **Clearance is 0.2 mm in every class.** IPC-2221B asks 0.13 mm for 31–100 V under
+    solder mask, and a larger class clearance would fail the 0.5 mm-pitch pins of the
+    TPS48111 and INA238.
+  - **42 / 54 V pours and tracks ≥ 1 mm get 0.5 mm on the outer layers.** This is close
+    to the IPC 0.6 mm figure for bare copper.
+  - **Power-class tracks must be ≥ 0.5 mm.**
+
+- **Current capacity with free copper weights** (IPC-2221, 20 °C rise, one layer):
+
+  | Current | 1 oz outer | 0.5 oz inner |
+  |---------|-----------|--------------|
+  | 3 A (one PTC output) | 0.9 mm | 4.7 mm |
+  | 6.5 A (boost inductor) | 2.6 mm | 13.6 mm |
+  | 15 A (5 V rail) | 8.3 mm | 43 mm |
+  | 20 A (half of the 42 V input) | 12.3 mm | 64 mm |
+
+  - The inner 0.5 oz layers carry little current, so the heavy paths live on L1 and L4.
+    The 42 V input (40 A) and the drive group (30 A) need pours of about 12 mm and 8 mm
+    on each of L1 and L4, stitched with via arrays (budget roughly 1 A per 0.3 mm via).
+  - **Solder-reinforced strips** cost nothing: leave the mask open (F.Mask / B.Mask) along
+    the 42 V bus, drive-group and GND return pours. When assembling, flood them with
+    solder or lay a 1.5 mm² copper wire in the solder. That makes up for the missing
+    2 oz copper on the paths that need it.
+  - 1 oz inner copper may also be free at JLC; check the quote before relying on it.
 - **Pads:** power-connector pads connect solid, with no thermal spokes.
 - **Repeated switches:** all six switches share one hierarchical KiCad sheet, instanced
   six times with different values.
@@ -554,7 +597,7 @@ layout.
   back of the board.
   - Rev2's 2 × 3 mm leadless MAX17541G had no such access. Bad joints there may have added
     to its "finicky" reputation, on top of the wiring error.
-- **D2PAK and DPAK on 2 oz copper** need a high-power iron (≥ 80 W) or preheating, because
+- **D2PAK and DPAK on large pours** need a high-power iron (≥ 80 W) or preheating, because
   the pours sink a lot of heat.
 - **Passives:** 0603 minimum, 0805 where space allows.
 - **USB-C (16-pin, 0.5 mm)** is the hardest joint on the board. A micro-B is the fallback,
