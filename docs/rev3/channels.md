@@ -62,13 +62,13 @@ Per-output limits protect each device and its cable. They are not meant to sum t
 | 24V | 8 | 5.0 A | 40 A | 12.5 A |
 | 15V | 8 | 7.9 A | 63 A | 20.0 A |
 | 12V | 7 | 7.9 A | 55 A | 25.0 A |
-| 5V | 11 | 4.0 A | 44 A | 30.0 A |
+| 5V | 11 | 4.0 A | 44 A | 15.0 A |
 
 ## Channel map
 
 Default state = OFF for every channel unless its EN pull resistor is fitted as a pull-up (see design.md, section 5.1).
 
-| Channel | Control (TCA9535 addr.pin) | Fault in | Current (ADS7138 addr.ch) | Vout |
+| Channel | Control (TCA9535 addr.pin) | Fault in | Current (TLA2528 addr.ch) | Vout |
 |---|---|---|---|---|
 | 42V-1 | INP 0x20.P00, INP_G 0x20.P01 | 0x21.P00 | 0x10.AIN0 | 0x11.AIN0 |
 | 42V-2 | INP 0x20.P02, INP_G 0x20.P03 | 0x21.P01 | 0x10.AIN1 | 0x11.AIN1 |
@@ -127,4 +127,4 @@ Default state = OFF for every channel unless its EN pull resistor is fitted as a
 
 - Channels: 42
 - TCA9535: 6 (0x20-0x25), 4 pins spare
-- ADS7138: 7 (0x10-0x16), 2 channels spare
+- TLA2528: 7 (0x10-0x16), 2 channels spare

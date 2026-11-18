@@ -46,7 +46,7 @@ def fmt_c(farads: float) -> str:
     return f"{farads:.3g}F"
 
 
-ADC_FULL_SCALE_V = 3.0  # leave headroom below the ADS7138's 3.3 V AVDD reference
+ADC_FULL_SCALE_V = 3.0  # leave headroom below the TLA2528's 3.3 V AVDD reference
 
 
 # ---------------------------------------------------------------- per-part design
@@ -180,7 +180,7 @@ RAILS = [
          dict(i_lim=8.0, i_fs=10.0, t_ramp=5e-3, t_blank=5e-3, c_load=470e-6)),
     Rail("12V", 12.0, 7, "XT60", "TPS25982", design_tps25982, 25.0,
          dict(i_lim=8.0, i_fs=10.0, t_ramp=5e-3, t_blank=5e-3, c_load=470e-6)),
-    Rail("5V", 5.0, 11, "XT30", "TPS259470", design_tps259470, 30.0,
+    Rail("5V", 5.0, 11, "XT30", "TPS259470", design_tps259470, 15.0,   # XT30 input
          dict(i_lim=4.0, t_ramp=2e-3, t_blank=5e-3, c_load=220e-6)),
 ]
 
@@ -231,7 +231,7 @@ class Allocator:
 
 def main():
     exp = Allocator("TCA9535", 0x20, 16, lambda p: f"P{p // 8}{p % 8}")
-    adc = Allocator("ADS7138", 0x10, 8, lambda p: f"AIN{p}")
+    adc = Allocator("TLA2528", 0x10, 8, lambda p: f"AIN{p}")
 
     channels = []
     for rail in RAILS:
@@ -287,7 +287,7 @@ def main():
     w("## Channel map\n")
     w("Default state = OFF for every channel unless its EN pull resistor is fitted as a "
       "pull-up (see design.md, section 5.1).\n")
-    w("| Channel | Control (TCA9535 addr.pin) | Fault in | Current (ADS7138 addr.ch) | Vout |")
+    w("| Channel | Control (TCA9535 addr.pin) | Fault in | Current (TLA2528 addr.ch) | Vout |")
     w("|---|---|---|---|---|")
     for ch in channels:
         ctrl = ", ".join(f"{n} {a}" for n, a in ch.ctrl)
@@ -308,7 +308,7 @@ def main():
     w(f"- Channels: {len(channels)}")
     w(f"- TCA9535: {exp.devices} (0x20-0x{0x20 + exp.devices - 1:02X}), "
       f"{exp.devices * 16 - exp.taken} pins spare")
-    w(f"- ADS7138: {adc.devices} (0x10-0x{0x10 + adc.devices - 1:02X}), "
+    w(f"- TLA2528: {adc.devices} (0x10-0x{0x10 + adc.devices - 1:02X}), "
       f"{adc.devices * 8 - adc.taken} channels spare")
     print("\n".join(out))
 
