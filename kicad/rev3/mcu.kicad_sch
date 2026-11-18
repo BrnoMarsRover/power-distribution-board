@@ -3882,20 +3882,16 @@
 		(uuid "efa587a4-fbc3-5606-8a67-fa1588ea3b71")
 	)
 	(no_connect
+		(at 256.54 116.84)
+		(uuid "010aa109-f4e1-53f3-9953-59de91190e0c")
+	)
+	(no_connect
 		(at 180.34 149.86)
 		(uuid "06310358-cd00-516f-8d40-5106892a285d")
 	)
 	(no_connect
-		(at 256.54 116.84)
-		(uuid "36716d54-73c0-562e-8c18-d509dc6c7b24")
-	)
-	(no_connect
 		(at 180.34 160.02)
 		(uuid "4db27a94-392d-52b0-82dd-6a19c09f1583")
-	)
-	(no_connect
-		(at 256.54 114.3)
-		(uuid "57735c34-f719-58fb-94e1-99d2847bfb0a")
 	)
 	(no_connect
 		(at 180.34 167.64)
@@ -3924,6 +3920,10 @@
 	(no_connect
 		(at 180.34 162.56)
 		(uuid "eb011bd9-df7c-585d-a127-2c59daad6070")
+	)
+	(no_connect
+		(at 256.54 114.3)
+		(uuid "f5ec44ea-c5ef-5d3b-a3e7-e7cbeebd5709")
 	)
 	(no_connect
 		(at 180.34 152.4)
@@ -6347,8 +6347,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic_MountingPin:Conn_01x04_MountingPin")
-		(at 276.86 154.94 0)
+		(lib_id "Connector:USB_C_Receptacle_USB2.0_16P")
+		(at 241.3 101.6 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6358,29 +6358,27 @@
 		(dnp no)
 		(uuid "0ff5e1d8-31ba-546b-9b9f-e7203dadb8fb")
 		(property "Reference" "J42"
-			(at 280.67 149.86 0)
+			(at 241.3 79.375 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "JST-GH 4p (host UART to Orin)"
-			(at 280.67 152.4 0)
+		(property "Value" "USB-C (flash/debug)"
+			(at 241.3 81.915 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical"
-			(at 276.86 154.94 0)
+		(property "Footprint" "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
+			(at 241.3 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6391,7 +6389,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 276.86 154.94 0)
+			(at 241.3 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6402,7 +6400,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 276.86 154.94 0)
+			(at 241.3 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6412,20 +6410,56 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "0da1305e-0494-531d-b468-922671a26695")
+		(pin "A1"
+			(uuid "d8e923ba-2ff6-5a5b-bc60-4cecb2c6083d")
 		)
-		(pin "2"
-			(uuid "16224af5-32d9-580c-8a56-e16489cda14a")
+		(pin "A4"
+			(uuid "65443e21-d142-5fa7-b41d-8b10b886012f")
 		)
-		(pin "3"
-			(uuid "8127f7f3-6ee2-5a6a-b7e2-a8a9aa0dbf4f")
+		(pin "A5"
+			(uuid "a9440467-551c-5a41-876c-17c553f97c06")
 		)
-		(pin "4"
-			(uuid "317e0ec4-6292-5944-ad32-f2754f2b484a")
+		(pin "A6"
+			(uuid "ad3382d7-48f5-5100-9605-e6698ce3b044")
 		)
-		(pin "MP"
-			(uuid "476a640d-8cf9-5284-b4ad-27243b126ea8")
+		(pin "A7"
+			(uuid "39b72705-c724-5a7c-adfe-1f5bfb0c40c6")
+		)
+		(pin "A8"
+			(uuid "96caf1cf-3f1e-5abc-b4a5-166f30b62271")
+		)
+		(pin "A9"
+			(uuid "58b5145a-317f-53a3-b373-c210d016155a")
+		)
+		(pin "A12"
+			(uuid "7c68baca-cabc-5c02-9180-14250ca713cf")
+		)
+		(pin "B1"
+			(uuid "88106383-fefc-5971-a6e2-1ec992927cc8")
+		)
+		(pin "B4"
+			(uuid "f7a79d4f-7155-507c-98a8-db04a39989dc")
+		)
+		(pin "B5"
+			(uuid "690eb895-00a4-596e-8639-d58ac416f842")
+		)
+		(pin "B6"
+			(uuid "d0efef18-56e4-576c-8214-66dbfb111e4b")
+		)
+		(pin "B7"
+			(uuid "fa9fc54e-d9d3-5a5f-8ad7-3280c89791ba")
+		)
+		(pin "B8"
+			(uuid "9190ce65-9a82-5f84-ba45-a63fac001d06")
+		)
+		(pin "B9"
+			(uuid "d1a75b38-a1c4-5f50-b790-86f60654be0c")
+		)
+		(pin "B12"
+			(uuid "c4890838-3b8f-5b94-bf4d-8963dedf94e1")
+		)
+		(pin "SH"
+			(uuid "26d1be40-fc1d-5a29-a56e-971a65b6e71d")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -7751,6 +7785,96 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector_Generic_MountingPin:Conn_01x04_MountingPin")
+		(at 276.86 154.94 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "6dc374ca-f1cb-5d4e-a2e0-a4356545c658")
+		(property "Reference" "J43"
+			(at 280.67 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "JST-GH 4p (host UART to Orin)"
+			(at 280.67 152.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical"
+			(at 276.86 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 276.86 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 276.86 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "30f660b7-ddec-5e8a-925b-816b7e312f5a")
+		)
+		(pin "2"
+			(uuid "b96afeeb-0402-5f6a-b18a-2d2e90d804f6")
+		)
+		(pin "3"
+			(uuid "31dc7363-8bde-5c2c-a6df-b0375b96e0c2")
+		)
+		(pin "4"
+			(uuid "c37e695e-07ab-5996-ac00-5470ac1b4e12")
+		)
+		(pin "MP"
+			(uuid "1dd27bbd-bbee-5528-ba25-fbc9187a902c")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "J43")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 30.48 191.77 0)
 		(unit 1)
@@ -8452,130 +8576,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "R133")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:USB_C_Receptacle_USB2.0_16P")
-		(at 241.3 101.6 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "95d9490c-6631-5351-8833-ee922d3a1a60")
-		(property "Reference" "J41"
-			(at 241.3 79.375 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "USB-C (flash/debug)"
-			(at 241.3 81.915 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
-			(at 241.3 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 241.3 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 241.3 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "A1"
-			(uuid "71fee5c1-9a6c-59cb-a0f7-278c201882a7")
-		)
-		(pin "A4"
-			(uuid "28ed1030-6025-5304-8de2-26442f43942f")
-		)
-		(pin "A5"
-			(uuid "3d534d30-9c5d-51f1-98bf-034f1d87d806")
-		)
-		(pin "A6"
-			(uuid "0e353a84-25b4-57e0-96fd-86620a8fd744")
-		)
-		(pin "A7"
-			(uuid "6275a026-59dc-572f-b3dc-8bff01f755b0")
-		)
-		(pin "A8"
-			(uuid "bc11d286-7ac7-55b7-aff4-3a0c3d32c421")
-		)
-		(pin "A9"
-			(uuid "e11fd3dd-da9d-5e08-a835-f96e89cac441")
-		)
-		(pin "A12"
-			(uuid "7eac190a-f15b-5011-ba69-721ccc467991")
-		)
-		(pin "B1"
-			(uuid "e1b0760c-9082-57ab-a195-8f394ff69962")
-		)
-		(pin "B4"
-			(uuid "e4049f03-5219-5e9f-bc1c-5e794f8c0342")
-		)
-		(pin "B5"
-			(uuid "ad4c7ef4-359f-5cd5-befa-8f7aceb45bf6")
-		)
-		(pin "B6"
-			(uuid "60447cd8-044a-5e4e-961f-69a18f0d8388")
-		)
-		(pin "B7"
-			(uuid "a7987f11-8d57-5e85-8eb5-26fdbb4f496e")
-		)
-		(pin "B8"
-			(uuid "987c21fc-c210-50bd-92c4-5023e8edd635")
-		)
-		(pin "B9"
-			(uuid "9db12712-3a40-5d8b-bdf2-7e1e179fcd5f")
-		)
-		(pin "B12"
-			(uuid "13a8db9c-421c-5b93-b154-0b5e0796282d")
-		)
-		(pin "SH"
-			(uuid "d168db96-9b4d-5536-990b-f010ddf6e982")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "J41")
 					(unit 1)
 				)
 			)

@@ -730,7 +730,9 @@ def divider_bottom(top, v_full, v_adc=2.4):
 def sheet_power_in():
     sh = Sheet("power_in", "Battery input, bus protection and battery monitor", [
         "Battery 10S 30-42 V. The pack fuse (58 V rated) and BMS live in the harness, not on this board.",
-        "R_SHUNT: Kelvin-route the INA228 sense lines from the shunt pads. Charger port is on the bus side of the shunt, so charging is counted.",
+        "R_SHUNT: Kelvin-route the INA228 sense lines from the shunt pads.",
+        "Charging: charger + enters on the bus side of the shunt and leaves through the pack's charge port,",
+        "so the INA228 counts it (net of the rover's own load). Charger - is NOT board GND: CHG_N goes straight to the pack's C-.",
         "INA228 at 0x40 (A0 = A1 = GND): bus voltage, current, charge (Ah) and energy (Wh)."], drawn=True, paper="A4")
     W, gnd, v33, lab = marks(sh)
     Y = 99.06                                      # VBAT rail, then BUS42 after the shunt
@@ -783,16 +785,23 @@ def sheet_power_in():
     W((a0[0], a0[1] + 2.54), (a0[0], a0[1] + 5.08))
     gnd((a0[0], a0[1] + 5.08))
 
-    # bus side: test point, flag, charger port, label
-    W(PIN(rs, 2), (236.22, Y))
-    lab("BUS42", (236.22, Y), 0)
+    # bus side: test point, flag, charger input, label
+    W(PIN(rs, 2), (254.0, Y))
+    lab("BUS42", (254.0, Y), 0)
     TP(sh, "BUS42", at=(198.12, Y))
     sh.mark("flag", (205.74, Y))
-    jc = CONN2(sh, "XT60 male (charger)", "XT60M", "BUS42", "GND")
-    at_pin(jc, 1, (220.98, 114.3))
-    W((213.36, Y), (213.36, 114.3), PIN(jc, 1))
-    W(PIN(jc, 2), (218.44, PIN(jc, 2)[1]), (218.44, 121.92))
-    gnd((218.44, 121.92))
+    jc = CONN2(sh, "XT60 male (charger in)", "XT60M", "BUS42", "L:CHG_N")
+    at_pin(jc, 1, (243.84, 114.3))
+    jc.label_at = {"Reference": (2.54, 0), "Value": (2.54, 2.54)}
+    W((238.76, Y), (238.76, 114.3), PIN(jc, 1))
+
+    # pack charge port: + on the battery side of the shunt, - back to the charger only
+    yc = 170.18
+    jbc = CONN2(sh, "XT60 male (pack charge port)", "XT60M", "VBAT", "L:CHG_N", mirror=True)
+    at_pin(jbc, 1, (30.48, 132.08))
+    W(PIN(jbc, 1), (50.8, 132.08), (50.8, Y))
+    W(PIN(jbc, 2), (45.72, PIN(jbc, 2)[1]), (45.72, yc), (241.3, yc), (241.3, PIN(jc, 2)[1]), PIN(jc, 2))
+    lab("L:CHG_N", (127.0, yc), 0)
     sh.shift(0, -22.86)
     return sh
 

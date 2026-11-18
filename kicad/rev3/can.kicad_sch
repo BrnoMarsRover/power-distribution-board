@@ -2587,6 +2587,95 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector_Generic_MountingPin:Conn_01x04_MountingPin")
+		(at 215.9 152.4 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "6c730991-ea88-5142-a769-b99b36a9c0c2")
+		(property "Reference" "J45"
+			(at 215.9 147.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CAN 2 (Molex CLIK-Mate 502585-0470)"
+			(at 217.17 160.02 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal"
+			(at 215.9 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 215.9 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 215.9 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "eee44416-de94-5949-be9d-69cf24e92864")
+		)
+		(pin "2"
+			(uuid "84991865-22cf-5c2a-b3f5-14a0daee603d")
+		)
+		(pin "3"
+			(uuid "cf28cea6-ef11-5456-9ba6-791d3c7f46fc")
+		)
+		(pin "4"
+			(uuid "92f8e1f0-7716-57ea-919f-86cfe4b2b451")
+		)
+		(pin "MP"
+			(uuid "a4a73580-84d3-53b8-9a1f-57870083fbdb")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
+					(reference "J45")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 119.38 119.38 0)
 		(unit 1)
@@ -3060,7 +3149,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic_MountingPin:Conn_01x04_MountingPin")
-		(at 215.9 152.4 0)
+		(at 215.9 127 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3070,7 +3159,7 @@
 		(dnp no)
 		(uuid "ccf12bc2-4c0e-5ed5-a1aa-20906a84462a")
 		(property "Reference" "J44"
-			(at 215.9 147.32 0)
+			(at 215.9 121.92 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3079,8 +3168,8 @@
 				)
 			)
 		)
-		(property "Value" "CAN 2 (Molex CLIK-Mate 502585-0470)"
-			(at 217.17 160.02 0)
+		(property "Value" "CAN 1 (Molex CLIK-Mate 502585-0470)"
+			(at 217.17 134.62 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3091,7 +3180,7 @@
 			)
 		)
 		(property "Footprint" "Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal"
-			(at 215.9 152.4 0)
+			(at 215.9 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3102,7 +3191,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 215.9 152.4 0)
+			(at 215.9 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3113,7 +3202,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 215.9 152.4 0)
+			(at 215.9 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3223,95 +3312,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
 					(reference "C98")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic_MountingPin:Conn_01x04_MountingPin")
-		(at 215.9 127 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "e39fdf60-4b85-552f-b148-f9bae1f5cfc1")
-		(property "Reference" "J43"
-			(at 215.9 121.92 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "CAN 1 (Molex CLIK-Mate 502585-0470)"
-			(at 217.17 134.62 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal"
-			(at 215.9 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 215.9 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 215.9 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f501ca8e-226f-551b-98a2-bc1e4878f36f")
-		)
-		(pin "2"
-			(uuid "df13639d-42de-5184-90ed-4734b16bfd0a")
-		)
-		(pin "3"
-			(uuid "a13adbcc-c3e2-5bc5-9c76-05e35ea34ca4")
-		)
-		(pin "4"
-			(uuid "68112293-81f7-5414-8118-03b128d4698e")
-		)
-		(pin "MP"
-			(uuid "f6efddaf-d4a7-5b8b-9619-0b835800a40c")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
-					(reference "J43")
 					(unit 1)
 				)
 			)

@@ -1561,7 +1561,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "INA228 at 0x40 (A0 = A1 = GND): bus voltage, current, charge (Ah) and energy (Wh)."
+	(text "Charging: charger + enters on the bus side of the shunt and leaves through the pack's charge port,"
 		(exclude_from_sim no)
 		(at 20 36 0)
 		(effects
@@ -1583,6 +1583,17 @@
 		)
 		(uuid "3a8cb046-1542-5db2-b6f3-17eff788c8f1")
 	)
+	(text "INA228 at 0x40 (A0 = A1 = GND): bus voltage, current, charge (Ah) and energy (Wh)."
+		(exclude_from_sim no)
+		(at 20 48 0)
+		(effects
+			(font
+				(size 1.6 1.6)
+			)
+			(justify left bottom)
+		)
+		(uuid "3df6bdd8-36dc-5e31-84c3-621fff452f70")
+	)
 	(text "Battery input, bus protection and battery monitor"
 		(exclude_from_sim no)
 		(at 20 18 0)
@@ -1595,7 +1606,18 @@
 		)
 		(uuid "64a3f18c-3e47-57b4-9959-bdbe63b0d72f")
 	)
-	(text "R_SHUNT: Kelvin-route the INA228 sense lines from the shunt pads. Charger port is on the bus side of the shunt, so charging is counted."
+	(text "so the INA228 counts it (net of the rover's own load). Charger - is NOT board GND: CHG_N goes straight to the pack's C-."
+		(exclude_from_sim no)
+		(at 20 42 0)
+		(effects
+			(font
+				(size 1.6 1.6)
+			)
+			(justify left bottom)
+		)
+		(uuid "cb96326c-ecdd-5354-86d1-5dca72a7cd90")
+	)
+	(text "R_SHUNT: Kelvin-route the INA228 sense lines from the shunt pads."
 		(exclude_from_sim no)
 		(at 20 30 0)
 		(effects
@@ -1655,12 +1677,6 @@
 		(uuid "5614621b-12c3-5616-8295-6173c330caa3")
 	)
 	(junction
-		(at 213.36 76.2)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "64acc338-3da2-579b-b95f-2f0c119c6dcb")
-	)
-	(junction
 		(at 180.34 76.2)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1715,6 +1731,24 @@
 		(uuid "a9a8f2f5-ccde-51a7-8b5a-5281820e82bd")
 	)
 	(junction
+		(at 50.8 76.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b48f27a3-82c0-5e27-9879-4d0d2ba70b3c")
+	)
+	(junction
+		(at 127 147.32)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ba66ec14-ecea-5efe-9980-6242af608756")
+	)
+	(junction
+		(at 238.76 76.2)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bb471869-2cf1-5794-bf25-1db2ae308fe0")
+	)
+	(junction
 		(at 76.2 76.2)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1751,6 +1785,16 @@
 			(type default)
 		)
 		(uuid "0bf93fbe-e816-55d5-acd5-dd2d5f5509c5")
+	)
+	(wire
+		(pts
+			(xy 127 147.32) (xy 241.3 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0f7362a8-c255-5987-8614-380963e56dc4")
 	)
 	(wire
 		(pts
@@ -1824,6 +1868,26 @@
 	)
 	(wire
 		(pts
+			(xy 205.74 76.2) (xy 238.76 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "29a4c1e6-f65e-55bd-968c-051d63cd4562")
+	)
+	(wire
+		(pts
+			(xy 241.3 147.32) (xy 241.3 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2d4ef4dc-a758-5468-b403-6438293ab295")
+	)
+	(wire
+		(pts
 			(xy 175.26 132.08) (xy 180.34 132.08)
 		)
 		(stroke
@@ -1851,6 +1915,16 @@
 			(type default)
 		)
 		(uuid "355f1623-83a0-5f51-af65-0843a158c495")
+	)
+	(wire
+		(pts
+			(xy 50.8 76.2) (xy 53.34 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4015d851-42c6-5122-a1ea-21e2e74bf86b")
 	)
 	(wire
 		(pts
@@ -1884,13 +1958,13 @@
 	)
 	(wire
 		(pts
-			(xy 45.72 76.2) (xy 53.34 76.2)
+			(xy 238.76 76.2) (xy 254 76.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "537bae2b-78cd-57cd-bc2a-d8b3d80f784c")
+		(uuid "512bdd70-bdc2-5110-a494-5d24ce71168a")
 	)
 	(wire
 		(pts
@@ -1904,13 +1978,23 @@
 	)
 	(wire
 		(pts
-			(xy 205.74 76.2) (xy 213.36 76.2)
+			(xy 45.72 111.76) (xy 45.72 147.32)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "59ee40b1-bc96-5c94-a6f0-c19648f03b25")
+		(uuid "5848a57b-82dd-52ce-ada7-e96830021173")
+	)
+	(wire
+		(pts
+			(xy 45.72 76.2) (xy 50.8 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "59029697-9ff5-57cf-b3c9-6a07d13d9a0a")
 	)
 	(wire
 		(pts
@@ -1984,16 +2068,6 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 93.98) (xy 218.44 99.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7415bea9-24fc-5e0a-9c40-1151b0c2e37e")
-	)
-	(wire
-		(pts
 			(xy 175.26 129.54) (xy 175.26 132.08)
 		)
 		(stroke
@@ -2014,6 +2088,16 @@
 	)
 	(wire
 		(pts
+			(xy 241.3 93.98) (xy 243.84 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7fe85382-30f3-5b10-9a5d-cdba503d328b")
+	)
+	(wire
+		(pts
 			(xy 160.02 114.3) (xy 160.02 116.84)
 		)
 		(stroke
@@ -2021,16 +2105,6 @@
 			(type default)
 		)
 		(uuid "8262fc86-9eee-5468-90d7-7af4bac4028e")
-	)
-	(wire
-		(pts
-			(xy 220.98 93.98) (xy 218.44 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "86a4abe8-3744-5783-843e-5d24013b58b6")
 	)
 	(wire
 		(pts
@@ -2084,6 +2158,36 @@
 	)
 	(wire
 		(pts
+			(xy 45.72 147.32) (xy 127 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "963fab82-0b03-54ed-9f41-c85fd23141c8")
+	)
+	(wire
+		(pts
+			(xy 238.76 76.2) (xy 238.76 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a34e07a0-11af-5626-abd0-8b57bee335b3")
+	)
+	(wire
+		(pts
+			(xy 238.76 91.44) (xy 243.84 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a5f478cf-e360-5d88-864a-4ce7e2c75838")
+	)
+	(wire
+		(pts
 			(xy 76.2 76.2) (xy 91.44 76.2)
 		)
 		(stroke
@@ -2124,16 +2228,6 @@
 	)
 	(wire
 		(pts
-			(xy 213.36 76.2) (xy 213.36 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c1da8c9b-06a1-59aa-84e7-1aeea4b843f9")
-	)
-	(wire
-		(pts
 			(xy 180.34 76.2) (xy 187.96 76.2)
 		)
 		(stroke
@@ -2154,6 +2248,26 @@
 	)
 	(wire
 		(pts
+			(xy 30.48 109.22) (xy 50.8 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d63ba803-481d-5a8a-9d43-d652fc91f621")
+	)
+	(wire
+		(pts
+			(xy 50.8 109.22) (xy 50.8 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d699c255-0d00-553a-a0d0-89f744f1242d")
+	)
+	(wire
+		(pts
 			(xy 30.48 76.2) (xy 45.72 76.2)
 		)
 		(stroke
@@ -2161,16 +2275,6 @@
 			(type default)
 		)
 		(uuid "d878149f-b802-541f-bb3f-1560a58cae4a")
-	)
-	(wire
-		(pts
-			(xy 213.36 76.2) (xy 236.22 76.2)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e300cb08-9a3c-5c61-b495-6623ec947575")
 	)
 	(wire
 		(pts
@@ -2214,16 +2318,6 @@
 	)
 	(wire
 		(pts
-			(xy 213.36 91.44) (xy 220.98 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fdec4282-4061-5fc0-b079-e1c2a83dd594")
-	)
-	(wire
-		(pts
 			(xy 180.34 132.08) (xy 180.34 134.62)
 		)
 		(stroke
@@ -2231,6 +2325,26 @@
 			(type default)
 		)
 		(uuid "ff7bf4dc-c87c-5cdd-a73f-a4b45de3e9e7")
+	)
+	(wire
+		(pts
+			(xy 30.48 111.76) (xy 45.72 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ffebb1cc-f79e-576a-bd9d-133c48700cd3")
+	)
+	(label "CHG_N"
+		(at 127 147.32 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "3ce9d11b-b0c3-5086-8ebb-62f51e3d5f3c")
 	)
 	(global_label "I2C_SDA"
 		(shape passive)
@@ -2245,6 +2359,30 @@
 		(uuid "0380280e-dd93-5d58-bf67-d49791ff9325")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 215.9 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
+	(global_label "BUS42"
+		(shape passive)
+		(at 254 76.2 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "5e1e414a-f61f-5ece-8127-0de3eb3b391a")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 254 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2293,30 +2431,6 @@
 		(uuid "d07e189e-591e-53ad-9896-a987ecff292b")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 215.9 119.38 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-	)
-	(global_label "BUS42"
-		(shape passive)
-		(at 236.22 76.2 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "d830d59d-c11f-56bc-8840-bded7c4aa6a5")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 236.22 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3419,7 +3533,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 226.06 91.44 0)
+		(at 248.92 91.44 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3429,27 +3543,29 @@
 		(dnp no)
 		(uuid "81abd6ee-03e8-5e62-8164-38761d1a3d8f")
 		(property "Reference" "J2"
-			(at 226.06 88.9 0)
+			(at 251.46 91.44 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "XT60 male (charger)"
-			(at 226.06 96.52 0)
+		(property "Value" "XT60 male (charger in)"
+			(at 251.46 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT60-M_1x02_P7.20mm_Vertical"
-			(at 226.06 91.44 0)
+			(at 248.92 91.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3460,7 +3576,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 226.06 91.44 0)
+			(at 248.92 91.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3471,7 +3587,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 226.06 91.44 0)
+			(at 248.92 91.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3966,83 +4082,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 218.44 99.06 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "a4f70fa2-58a6-5207-a92a-85153f3cb6b5")
-		(property "Reference" "#PWRpowerin016"
-			(at 218.44 105.41 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 218.44 102.87 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 218.44 99.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 218.44 99.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 218.44 99.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "c61223d5-9e4e-5cb6-92c4-281ab4f9db3a")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/9e11462f-5137-5894-a3ed-fbdfe3cafb63"
-					(reference "#PWRpowerin016")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:D_Zener")
 		(at 63.5 82.55 270)
 		(unit 1)
@@ -4118,6 +4157,86 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/9e11462f-5137-5894-a3ed-fbdfe3cafb63"
 					(reference "D1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 25.4 109.22 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b3e96034-7de6-5af4-809e-707c124d420b")
+		(property "Reference" "J3"
+			(at 25.4 106.68 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "XT60 male (pack charge port)"
+			(at 25.4 114.3 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_AMASS:AMASS_XT60-M_1x02_P7.20mm_Vertical"
+			(at 25.4 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 25.4 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 25.4 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "bb310b59-732e-5ee9-b0b6-440b674cb25c")
+		)
+		(pin "2"
+			(uuid "934a3ee3-4727-5843-901e-d47f0da43d31")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/9e11462f-5137-5894-a3ed-fbdfe3cafb63"
+					(reference "J3")
 					(unit 1)
 				)
 			)

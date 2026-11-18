@@ -2491,7 +2491,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 193.04 81.28 0)
+		(at 193.04 71.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2501,7 +2501,7 @@
 		(dnp no)
 		(uuid "003ac223-b733-5b6d-be5d-47ee7cc296f6")
 		(property "Reference" "J11"
-			(at 195.58 81.28 0)
+			(at 195.58 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2512,7 +2512,7 @@
 			)
 		)
 		(property "Value" "XT90 female"
-			(at 195.58 83.82 0)
+			(at 195.58 73.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2523,7 +2523,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
-			(at 193.04 81.28 0)
+			(at 193.04 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2534,7 +2534,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 193.04 81.28 0)
+			(at 193.04 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2545,7 +2545,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 193.04 81.28 0)
+			(at 193.04 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2649,7 +2649,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 187.96 0)
+		(at 167.64 177.8 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2659,7 +2659,7 @@
 		(dnp no)
 		(uuid "05a29767-e62b-5285-a051-271df19fad52")
 		(property "Reference" "J28"
-			(at 170.18 187.96 0)
+			(at 170.18 177.8 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2670,7 +2670,7 @@
 			)
 		)
 		(property "Value" "XT60 female"
-			(at 170.18 190.5 0)
+			(at 170.18 180.34 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2681,7 +2681,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 187.96 0)
+			(at 167.64 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2692,7 +2692,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 167.64 187.96 0)
+			(at 167.64 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2703,7 +2703,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 167.64 187.96 0)
+			(at 167.64 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3483,7 +3483,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 177.8 0)
+		(at 167.64 167.64 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3493,7 +3493,7 @@
 		(dnp no)
 		(uuid "22649ef6-33d7-51fe-86b7-f852a3c054a6")
 		(property "Reference" "J27"
-			(at 170.18 177.8 0)
+			(at 170.18 167.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3504,7 +3504,7 @@
 			)
 		)
 		(property "Value" "XT60 female"
-			(at 170.18 180.34 0)
+			(at 170.18 170.18 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3515,7 +3515,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 177.8 0)
+			(at 167.64 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3526,7 +3526,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 167.64 177.8 0)
+			(at 167.64 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3537,7 +3537,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 167.64 177.8 0)
+			(at 167.64 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3564,7 +3564,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 208.28 0)
+		(at 78.74 198.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3574,7 +3574,7 @@
 		(dnp no)
 		(uuid "244ec45e-e6a7-51f4-b33f-e8781e32cdd8")
 		(property "Reference" "J22"
-			(at 81.28 208.28 0)
+			(at 81.28 198.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3585,7 +3585,7 @@
 			)
 		)
 		(property "Value" "Deans T female"
-			(at 81.28 210.82 0)
+			(at 81.28 200.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3596,7 +3596,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 208.28 0)
+			(at 78.74 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3607,7 +3607,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 208.28 0)
+			(at 78.74 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3618,7 +3618,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 208.28 0)
+			(at 78.74 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3737,7 +3737,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 218.44 0)
+		(at 256.54 208.28 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3747,7 +3747,7 @@
 		(dnp no)
 		(uuid "2a9bb93f-56b9-5c6c-b84e-10ae220cb4e6")
 		(property "Reference" "J38"
-			(at 259.08 218.44 0)
+			(at 259.08 208.28 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3758,7 +3758,7 @@
 			)
 		)
 		(property "Value" "XT30 female"
-			(at 259.08 220.98 0)
+			(at 259.08 210.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3769,7 +3769,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
-			(at 256.54 218.44 0)
+			(at 256.54 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3780,7 +3780,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 218.44 0)
+			(at 256.54 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3791,7 +3791,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 218.44 0)
+			(at 256.54 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4325,7 +4325,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 238.76 0)
+		(at 256.54 228.6 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4335,7 +4335,7 @@
 		(dnp no)
 		(uuid "3ee9361d-dd06-5c6b-86aa-7b2bc386d769")
 		(property "Reference" "J40"
-			(at 259.08 238.76 0)
+			(at 259.08 228.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4346,7 +4346,7 @@
 			)
 		)
 		(property "Value" "XT30 female"
-			(at 259.08 241.3 0)
+			(at 259.08 231.14 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4357,7 +4357,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
-			(at 256.54 238.76 0)
+			(at 256.54 228.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4368,7 +4368,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 238.76 0)
+			(at 256.54 228.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4379,7 +4379,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 238.76 0)
+			(at 256.54 228.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4498,7 +4498,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 132.08 91.44 0)
+		(at 132.08 81.28 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4508,7 +4508,7 @@
 		(dnp no)
 		(uuid "44fc3346-708c-58e5-9a7c-3dd1b440dc4c")
 		(property "Reference" "J8"
-			(at 134.62 91.44 0)
+			(at 134.62 81.28 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4519,7 +4519,7 @@
 			)
 		)
 		(property "Value" "XT90 female"
-			(at 134.62 93.98 0)
+			(at 134.62 83.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4530,7 +4530,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
-			(at 132.08 91.44 0)
+			(at 132.08 81.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4541,7 +4541,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 132.08 91.44 0)
+			(at 132.08 81.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4552,7 +4552,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 132.08 91.44 0)
+			(at 132.08 81.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4579,7 +4579,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 198.12 0)
+		(at 256.54 187.96 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4589,7 +4589,7 @@
 		(dnp no)
 		(uuid "44fe0cf9-4067-55d1-93e8-3b60dc9c7484")
 		(property "Reference" "J36"
-			(at 259.08 198.12 0)
+			(at 259.08 187.96 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4600,7 +4600,7 @@
 			)
 		)
 		(property "Value" "XT30 female"
-			(at 259.08 200.66 0)
+			(at 259.08 190.5 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4611,7 +4611,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
-			(at 256.54 198.12 0)
+			(at 256.54 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4622,7 +4622,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 198.12 0)
+			(at 256.54 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4633,7 +4633,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 198.12 0)
+			(at 256.54 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4737,7 +4737,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 167.64 0)
+		(at 78.74 157.48 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4747,7 +4747,7 @@
 		(dnp no)
 		(uuid "45b03ef4-752e-5fe7-ac04-f64a06efee93")
 		(property "Reference" "J18"
-			(at 81.28 167.64 0)
+			(at 81.28 157.48 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4758,7 +4758,7 @@
 			)
 		)
 		(property "Value" "Deans T female"
-			(at 81.28 170.18 0)
+			(at 81.28 160.02 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4769,7 +4769,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 167.64 0)
+			(at 78.74 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4780,7 +4780,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 167.64 0)
+			(at 78.74 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4791,7 +4791,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 167.64 0)
+			(at 78.74 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4987,7 +4987,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 132.08 101.6 0)
+		(at 132.08 91.44 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4997,7 +4997,7 @@
 		(dnp no)
 		(uuid "4cb8e9bc-cb9e-5ca1-a21b-6615f677021d")
 		(property "Reference" "J9"
-			(at 134.62 101.6 0)
+			(at 134.62 91.44 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5008,7 +5008,7 @@
 			)
 		)
 		(property "Value" "XT90 female"
-			(at 134.62 104.14 0)
+			(at 134.62 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5019,7 +5019,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
-			(at 132.08 101.6 0)
+			(at 132.08 91.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5030,7 +5030,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 132.08 101.6 0)
+			(at 132.08 91.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5041,7 +5041,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 132.08 101.6 0)
+			(at 132.08 91.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5237,7 +5237,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 254 71.12 0)
+		(at 193.04 101.6 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5247,7 +5247,7 @@
 		(dnp no)
 		(uuid "5292c4c7-ac8f-5240-970c-e18ed09dc8b5")
 		(property "Reference" "J14"
-			(at 256.54 71.12 0)
+			(at 195.58 101.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5257,8 +5257,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "JST-XH 2p (54 V to Zyxel XMG-105HP)"
-			(at 256.54 73.66 0)
+		(property "Value" "XT90 female"
+			(at 195.58 104.14 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5268,8 +5268,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
-			(at 254 71.12 0)
+		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
+			(at 193.04 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5280,7 +5280,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 254 71.12 0)
+			(at 193.04 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5291,7 +5291,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 254 71.12 0)
+			(at 193.04 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5472,7 +5472,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 157.48 0)
+		(at 256.54 147.32 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5482,7 +5482,7 @@
 		(dnp no)
 		(uuid "5940c3bd-3dd1-5b3e-888f-1b4565602fd3")
 		(property "Reference" "J32"
-			(at 259.08 157.48 0)
+			(at 259.08 147.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5493,7 +5493,7 @@
 			)
 		)
 		(property "Value" "XT30 female"
-			(at 259.08 160.02 0)
+			(at 259.08 149.86 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5504,7 +5504,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
-			(at 256.54 157.48 0)
+			(at 256.54 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5515,7 +5515,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 157.48 0)
+			(at 256.54 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5526,7 +5526,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 157.48 0)
+			(at 256.54 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5707,7 +5707,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 157.48 0)
+		(at 167.64 147.32 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5717,7 +5717,7 @@
 		(dnp no)
 		(uuid "5f002bbd-0b77-5ebf-91ff-53ef3b14e2a8")
 		(property "Reference" "J25"
-			(at 170.18 157.48 0)
+			(at 170.18 147.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5728,7 +5728,7 @@
 			)
 		)
 		(property "Value" "XT60 female"
-			(at 170.18 160.02 0)
+			(at 170.18 149.86 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5739,7 +5739,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 157.48 0)
+			(at 167.64 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5750,7 +5750,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 167.64 157.48 0)
+			(at 167.64 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5761,7 +5761,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 167.64 157.48 0)
+			(at 167.64 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5788,7 +5788,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 177.8 0)
+		(at 256.54 167.64 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5798,7 +5798,7 @@
 		(dnp no)
 		(uuid "6aa1a067-a7ad-59ee-8209-32f1d036be82")
 		(property "Reference" "J34"
-			(at 259.08 177.8 0)
+			(at 259.08 167.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5809,7 +5809,7 @@
 			)
 		)
 		(property "Value" "XT30 female"
-			(at 259.08 180.34 0)
+			(at 259.08 170.18 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5820,7 +5820,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
-			(at 256.54 177.8 0)
+			(at 256.54 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5831,7 +5831,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 177.8 0)
+			(at 256.54 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5842,7 +5842,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 177.8 0)
+			(at 256.54 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5869,7 +5869,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 177.8 0)
+		(at 78.74 167.64 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5879,7 +5879,7 @@
 		(dnp no)
 		(uuid "6ecfac3e-2acc-5153-a3cf-e893e3c197cd")
 		(property "Reference" "J19"
-			(at 81.28 177.8 0)
+			(at 81.28 167.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5890,7 +5890,7 @@
 			)
 		)
 		(property "Value" "Deans T female"
-			(at 81.28 180.34 0)
+			(at 81.28 170.18 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5901,7 +5901,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 177.8 0)
+			(at 78.74 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5912,7 +5912,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 177.8 0)
+			(at 78.74 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5923,7 +5923,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 177.8 0)
+			(at 78.74 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5950,7 +5950,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 228.6 0)
+		(at 256.54 218.44 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5960,7 +5960,7 @@
 		(dnp no)
 		(uuid "71c590be-40d2-55de-be27-1fb411ebb72d")
 		(property "Reference" "J39"
-			(at 259.08 228.6 0)
+			(at 259.08 218.44 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5971,7 +5971,7 @@
 			)
 		)
 		(property "Value" "XT30 female"
-			(at 259.08 231.14 0)
+			(at 259.08 220.98 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5982,7 +5982,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
-			(at 256.54 228.6 0)
+			(at 256.54 218.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5993,7 +5993,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 228.6 0)
+			(at 256.54 218.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6004,7 +6004,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 228.6 0)
+			(at 256.54 218.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6353,6 +6353,87 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 256.54 238.76 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "7df2225b-9c11-5557-be1d-b1224dfab9ff")
+		(property "Reference" "J41"
+			(at 259.08 238.76 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "XT30 female"
+			(at 259.08 241.3 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
+			(at 256.54 238.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 256.54 238.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 256.54 238.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f510d583-2d76-5d12-a871-d03d714cb1b2")
+		)
+		(pin "2"
+			(uuid "47935a49-f71c-58bd-9a97-0f19063e0934")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
+					(reference "J41")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:Polyfuse")
 		(at 229.87 157.48 90)
 		(unit 1)
@@ -6523,7 +6604,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 187.96 0)
+		(at 78.74 177.8 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6533,7 +6614,7 @@
 		(dnp no)
 		(uuid "829a3925-2a6d-5610-b575-11ecc0239bc4")
 		(property "Reference" "J20"
-			(at 81.28 187.96 0)
+			(at 81.28 177.8 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6544,7 +6625,7 @@
 			)
 		)
 		(property "Value" "Deans T female"
-			(at 81.28 190.5 0)
+			(at 81.28 180.34 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6555,7 +6636,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 187.96 0)
+			(at 78.74 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6566,7 +6647,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 187.96 0)
+			(at 78.74 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6577,7 +6658,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 187.96 0)
+			(at 78.74 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6681,7 +6762,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 50.8 101.6 0)
+		(at 50.8 86.36 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6691,7 +6772,7 @@
 		(dnp no)
 		(uuid "8b7217f8-6cb6-5351-b6c6-a6df52622ec2")
 		(property "Reference" "J5"
-			(at 53.34 101.6 0)
+			(at 53.34 86.36 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6701,8 +6782,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "XT30 male (5 V in)"
-			(at 53.34 104.14 0)
+		(property "Value" "XT60 male (12 V in)"
+			(at 53.34 88.9 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6712,8 +6793,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT30U-M_1x02_P5.0mm_Vertical"
-			(at 50.8 101.6 0)
+		(property "Footprint" "Connector_AMASS:AMASS_XT60-M_1x02_P7.20mm_Vertical"
+			(at 50.8 86.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6724,7 +6805,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 50.8 101.6 0)
+			(at 50.8 86.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6735,7 +6816,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 50.8 101.6 0)
+			(at 50.8 86.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7070,7 +7151,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 147.32 0)
+		(at 167.64 137.16 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7080,7 +7161,7 @@
 		(dnp no)
 		(uuid "9a766242-f3c7-556c-aa4e-9422d82b7da0")
 		(property "Reference" "J24"
-			(at 170.18 147.32 0)
+			(at 170.18 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7091,7 +7172,7 @@
 			)
 		)
 		(property "Value" "XT60 female"
-			(at 170.18 149.86 0)
+			(at 170.18 139.7 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7102,7 +7183,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 147.32 0)
+			(at 167.64 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7113,7 +7194,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 167.64 147.32 0)
+			(at 167.64 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7124,7 +7205,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 167.64 147.32 0)
+			(at 167.64 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7243,7 +7324,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 147.32 0)
+		(at 78.74 137.16 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7253,7 +7334,7 @@
 		(dnp no)
 		(uuid "a04e52f6-61e1-5b26-8854-b87a15c44583")
 		(property "Reference" "J16"
-			(at 81.28 147.32 0)
+			(at 81.28 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7264,7 +7345,7 @@
 			)
 		)
 		(property "Value" "Deans T female"
-			(at 81.28 149.86 0)
+			(at 81.28 139.7 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7275,7 +7356,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 147.32 0)
+			(at 78.74 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7286,7 +7367,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 147.32 0)
+			(at 78.74 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7297,7 +7378,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 147.32 0)
+			(at 78.74 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7324,7 +7405,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 167.64 0)
+		(at 167.64 157.48 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7334,7 +7415,7 @@
 		(dnp no)
 		(uuid "a233d08b-7623-5329-9fc6-743f29eee2e3")
 		(property "Reference" "J26"
-			(at 170.18 167.64 0)
+			(at 170.18 157.48 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7345,7 +7426,7 @@
 			)
 		)
 		(property "Value" "XT60 female"
-			(at 170.18 170.18 0)
+			(at 170.18 160.02 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7356,7 +7437,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 167.64 0)
+			(at 167.64 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7367,7 +7448,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 167.64 167.64 0)
+			(at 167.64 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7378,7 +7459,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 167.64 167.64 0)
+			(at 167.64 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7559,7 +7640,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 137.16 0)
+		(at 78.74 208.28 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7569,7 +7650,7 @@
 		(dnp no)
 		(uuid "a4aec258-fe49-5c78-9627-9d48fa19a4a6")
 		(property "Reference" "J23"
-			(at 170.18 137.16 0)
+			(at 81.28 208.28 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7579,8 +7660,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "XT60 female"
-			(at 170.18 139.7 0)
+		(property "Value" "Deans T female"
+			(at 81.28 210.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7590,8 +7671,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 137.16 0)
+		(property "Footprint" "PowerBoard_rev3:DEANS-T"
+			(at 78.74 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7602,7 +7683,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 167.64 137.16 0)
+			(at 78.74 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7613,7 +7694,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 167.64 137.16 0)
+			(at 78.74 208.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7640,7 +7721,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 193.04 71.12 0)
+		(at 132.08 101.6 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7650,7 +7731,7 @@
 		(dnp no)
 		(uuid "a63f71b4-a9ff-5e8c-a4f0-d02a154147e8")
 		(property "Reference" "J10"
-			(at 195.58 71.12 0)
+			(at 134.62 101.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7661,7 +7742,7 @@
 			)
 		)
 		(property "Value" "XT90 female"
-			(at 195.58 73.66 0)
+			(at 134.62 104.14 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7672,7 +7753,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
-			(at 193.04 71.12 0)
+			(at 132.08 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7683,7 +7764,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 193.04 71.12 0)
+			(at 132.08 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7694,7 +7775,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 193.04 71.12 0)
+			(at 132.08 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7952,7 +8033,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 198.12 0)
+		(at 78.74 187.96 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7962,7 +8043,7 @@
 		(dnp no)
 		(uuid "ace4ceb9-7d7f-529f-b580-5706025a7f06")
 		(property "Reference" "J21"
-			(at 81.28 198.12 0)
+			(at 81.28 187.96 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7973,7 +8054,7 @@
 			)
 		)
 		(property "Value" "Deans T female"
-			(at 81.28 200.66 0)
+			(at 81.28 190.5 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7984,7 +8065,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 198.12 0)
+			(at 78.74 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7995,7 +8076,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 198.12 0)
+			(at 78.74 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8006,7 +8087,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 198.12 0)
+			(at 78.74 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8125,7 +8206,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 137.16 0)
+		(at 254 71.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8135,7 +8216,7 @@
 		(dnp no)
 		(uuid "b13d56b9-5260-5212-87cd-870024e09174")
 		(property "Reference" "J15"
-			(at 81.28 137.16 0)
+			(at 256.54 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8145,8 +8226,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Deans T female"
-			(at 81.28 139.7 0)
+		(property "Value" "JST-XH 2p (54 V to Zyxel XMG-105HP)"
+			(at 256.54 73.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8156,8 +8237,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 137.16 0)
+		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
+			(at 254 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8168,7 +8249,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 137.16 0)
+			(at 254 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8179,7 +8260,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 137.16 0)
+			(at 254 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8206,7 +8287,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 198.12 0)
+		(at 167.64 187.96 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8216,7 +8297,7 @@
 		(dnp no)
 		(uuid "b1d740a6-a2d3-52af-9b13-8c005dfe40a6")
 		(property "Reference" "J29"
-			(at 170.18 198.12 0)
+			(at 170.18 187.96 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8227,7 +8308,7 @@
 			)
 		)
 		(property "Value" "XT60 female"
-			(at 170.18 200.66 0)
+			(at 170.18 190.5 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8238,7 +8319,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 198.12 0)
+			(at 167.64 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8249,7 +8330,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 167.64 198.12 0)
+			(at 167.64 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8260,7 +8341,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 167.64 198.12 0)
+			(at 167.64 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8287,7 +8368,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 187.96 0)
+		(at 256.54 177.8 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8297,7 +8378,7 @@
 		(dnp no)
 		(uuid "b301364a-48b5-5479-abfb-6f60b74f2797")
 		(property "Reference" "J35"
-			(at 259.08 187.96 0)
+			(at 259.08 177.8 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8308,7 +8389,7 @@
 			)
 		)
 		(property "Value" "XT30 female"
-			(at 259.08 190.5 0)
+			(at 259.08 180.34 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8319,7 +8400,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
-			(at 256.54 187.96 0)
+			(at 256.54 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8330,7 +8411,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 187.96 0)
+			(at 256.54 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8341,7 +8422,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 187.96 0)
+			(at 256.54 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8522,7 +8603,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 167.64 0)
+		(at 256.54 157.48 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8532,7 +8613,7 @@
 		(dnp no)
 		(uuid "b9a8c296-2309-5c2a-bf86-17804297cca4")
 		(property "Reference" "J33"
-			(at 259.08 167.64 0)
+			(at 259.08 157.48 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8543,7 +8624,7 @@
 			)
 		)
 		(property "Value" "XT30 female"
-			(at 259.08 170.18 0)
+			(at 259.08 160.02 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8554,7 +8635,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
-			(at 256.54 167.64 0)
+			(at 256.54 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8565,7 +8646,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 167.64 0)
+			(at 256.54 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8576,7 +8657,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 167.64 0)
+			(at 256.54 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8603,7 +8684,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 137.16 0)
+		(at 167.64 198.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8613,7 +8694,7 @@
 		(dnp no)
 		(uuid "bf997422-3288-5cf7-8c76-ccd71f3c4d74")
 		(property "Reference" "J30"
-			(at 259.08 137.16 0)
+			(at 170.18 198.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8623,8 +8704,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "XT30 female"
-			(at 259.08 139.7 0)
+		(property "Value" "XT60 female"
+			(at 170.18 200.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8634,8 +8715,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
-			(at 256.54 137.16 0)
+		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
+			(at 167.64 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8646,7 +8727,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 137.16 0)
+			(at 167.64 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8657,7 +8738,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 137.16 0)
+			(at 167.64 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8684,7 +8765,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 208.28 0)
+		(at 256.54 198.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8694,7 +8775,7 @@
 		(dnp no)
 		(uuid "c1c032c3-773c-5e38-9128-266006493fe6")
 		(property "Reference" "J37"
-			(at 259.08 208.28 0)
+			(at 259.08 198.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8705,7 +8786,7 @@
 			)
 		)
 		(property "Value" "XT30 female"
-			(at 259.08 210.82 0)
+			(at 259.08 200.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8716,7 +8797,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
-			(at 256.54 208.28 0)
+			(at 256.54 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8727,7 +8808,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 208.28 0)
+			(at 256.54 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8738,7 +8819,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 208.28 0)
+			(at 256.54 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8949,7 +9030,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 157.48 0)
+		(at 78.74 147.32 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8959,7 +9040,7 @@
 		(dnp no)
 		(uuid "c66fe266-4a61-55d8-94b9-8b7fb531161f")
 		(property "Reference" "J17"
-			(at 81.28 157.48 0)
+			(at 81.28 147.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8970,7 +9051,7 @@
 			)
 		)
 		(property "Value" "Deans T female"
-			(at 81.28 160.02 0)
+			(at 81.28 149.86 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8981,7 +9062,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 157.48 0)
+			(at 78.74 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8992,7 +9073,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 157.48 0)
+			(at 78.74 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9003,7 +9084,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 157.48 0)
+			(at 78.74 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9199,7 +9280,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 147.32 0)
+		(at 256.54 137.16 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9209,7 +9290,7 @@
 		(dnp no)
 		(uuid "c867331e-1bc2-5884-840d-60bbfd8511ed")
 		(property "Reference" "J31"
-			(at 259.08 147.32 0)
+			(at 259.08 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9220,7 +9301,7 @@
 			)
 		)
 		(property "Value" "XT30 female"
-			(at 259.08 149.86 0)
+			(at 259.08 139.7 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9231,7 +9312,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical"
-			(at 256.54 147.32 0)
+			(at 256.54 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9242,7 +9323,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 147.32 0)
+			(at 256.54 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9253,7 +9334,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 147.32 0)
+			(at 256.54 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9464,7 +9545,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 50.8 86.36 0)
+		(at 50.8 71.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9474,7 +9555,7 @@
 		(dnp no)
 		(uuid "ca46dd8f-7620-5c25-822b-279754ff484a")
 		(property "Reference" "J4"
-			(at 53.34 86.36 0)
+			(at 53.34 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9484,8 +9565,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "XT60 male (12 V in)"
-			(at 53.34 88.9 0)
+		(property "Value" "Deans T male (24 V in)"
+			(at 53.34 73.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9495,8 +9576,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT60-M_1x02_P7.20mm_Vertical"
-			(at 50.8 86.36 0)
+		(property "Footprint" "PowerBoard_rev3:DEANS-T"
+			(at 50.8 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9507,7 +9588,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 50.8 86.36 0)
+			(at 50.8 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9518,7 +9599,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 50.8 86.36 0)
+			(at 50.8 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9791,7 +9872,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 132.08 71.12 0)
+		(at 50.8 101.6 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9801,7 +9882,7 @@
 		(dnp no)
 		(uuid "cd113912-3931-5095-ab3c-d74b43a3fd45")
 		(property "Reference" "J6"
-			(at 134.62 71.12 0)
+			(at 53.34 101.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9811,8 +9892,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "XT90 female"
-			(at 134.62 73.66 0)
+		(property "Value" "XT30 male (5 V in)"
+			(at 53.34 104.14 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9822,8 +9903,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
-			(at 132.08 71.12 0)
+		(property "Footprint" "Connector_AMASS:AMASS_XT30U-M_1x02_P5.0mm_Vertical"
+			(at 50.8 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9834,7 +9915,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 132.08 71.12 0)
+			(at 50.8 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9845,7 +9926,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 132.08 71.12 0)
+			(at 50.8 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10026,7 +10107,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 132.08 81.28 0)
+		(at 132.08 71.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10036,7 +10117,7 @@
 		(dnp no)
 		(uuid "d4dc15ab-8ca1-558f-8052-5e0b480833e7")
 		(property "Reference" "J7"
-			(at 134.62 81.28 0)
+			(at 134.62 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10047,7 +10128,7 @@
 			)
 		)
 		(property "Value" "XT90 female"
-			(at 134.62 83.82 0)
+			(at 134.62 73.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10058,7 +10139,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
-			(at 132.08 81.28 0)
+			(at 132.08 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10069,7 +10150,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 132.08 81.28 0)
+			(at 132.08 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10080,7 +10161,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 132.08 81.28 0)
+			(at 132.08 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10276,7 +10357,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 193.04 101.6 0)
+		(at 193.04 91.44 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10286,87 +10367,6 @@
 		(dnp no)
 		(uuid "e7f77949-aa89-5d86-8c29-a66997130f47")
 		(property "Reference" "J13"
-			(at 195.58 101.6 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT90 female"
-			(at 195.58 104.14 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
-			(at 193.04 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 193.04 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 193.04 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "9b3a0fe1-cfc5-5147-a63b-c2718b610011")
-		)
-		(pin "2"
-			(uuid "66a2ebf2-3b86-5ed2-b30e-3e8f7b96768e")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 193.04 91.44 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "eb280f2c-b1f5-54ca-a15c-b5990e596320")
-		(property "Reference" "J12"
 			(at 195.58 91.44 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10412,6 +10412,87 @@
 		)
 		(property "Description" ""
 			(at 193.04 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9b3a0fe1-cfc5-5147-a63b-c2718b610011")
+		)
+		(pin "2"
+			(uuid "66a2ebf2-3b86-5ed2-b30e-3e8f7b96768e")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
+					(reference "J13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 193.04 81.28 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "eb280f2c-b1f5-54ca-a15c-b5990e596320")
+		(property "Reference" "J12"
+			(at 195.58 81.28 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "XT90 female"
+			(at 195.58 83.82 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
+			(at 193.04 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 193.04 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 193.04 81.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10508,87 +10589,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
 					(reference "#PWRoutputs010")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 50.8 71.12 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "ef61b82f-c884-5f7e-a4f5-611308dbe948")
-		(property "Reference" "J3"
-			(at 53.34 71.12 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Deans T male (24 V in)"
-			(at 53.34 73.66 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 50.8 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b40a7755-bcfe-59a4-86ed-ad81051b2c32")
-		)
-		(pin "2"
-			(uuid "7b64cc08-18a8-598c-9322-a8c07ad7bb77")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J3")
 					(unit 1)
 				)
 			)

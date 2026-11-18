@@ -151,7 +151,18 @@ All values per rail are in [`rails.md`](rails.md).
 - **Battery monitor:** 0.5 mΩ 4-terminal shunt (≥ 3 W) with an **INA228**. The INA228 is
   rated 85 V, has a 20-bit ADC and accumulates charge and energy on chip. This gives real
   coulomb counting instead of the OCV-curve estimate.
-- **Charger port:** on the *board side* of the shunt, so charging is counted as well.
+- **Charging through the board:** both pack connectors land on the board (power XT90 and
+  the pack's charge port), plus a charger input.
+  - Charger + enters on the bus side of the shunt and leaves through the pack charge port
+    on the battery side. The INA228 therefore counts charging while the rover runs: it
+    sees the net battery current, charger output minus rover load.
+  - Charger − (CHG_N) is not board GND. It runs straight to the charge port's − (C−), so
+    a split-port BMS keeps its charge FET in the path. On a common-port pack, C− and P−
+    are the same node anyway.
+  - A swapped plug is harmless: the two charge connectors differ only by the 0.5 mΩ
+    shunt, so swapping them only skips the measurement.
+  - Assumes the BMS switches the − side (common +), which is the usual 10S layout. A pack
+    with separate C+ and P+ must not have them joined on the board.
 - **Before the 42 V group switches:** the aux supply and the battery monitor sit upstream
   of them, so the board stays alive and measuring with every output off.
 

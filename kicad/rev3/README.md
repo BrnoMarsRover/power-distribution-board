@@ -26,7 +26,7 @@ That run does six things:
    intended.
 
 Result at generation time:
-- 435 parts and 251 nets.
+- 436 parts and 252 nets.
 - Netlist check passes.
 - ERC is clean at every severity.
 
@@ -51,7 +51,7 @@ crosses CANL without a junction on its way to the second connector.
 
 | Sheet | Contents |
 |-------|----------|
-| `power_in` | Battery XT90 input, SMCJ45A, bulk capacitance, 0.5 mΩ shunt with INA228, charger XT60 |
+| `power_in` | Battery XT90 input, SMCJ45A, bulk capacitance, 0.5 mΩ shunt with INA228, charger input XT60 and pack charge-port XT60 (charging flows through the shunt) |
 | `sw_42d`, `sw_42c` | 42 V drive group and converter-feed group eFuses (TPS48111-Q1, 2 + 1 D2PAK). The drive group has the E-STOP kill FET on EN/UVLO. |
 | `sw_24`, `sw_12`, `sw_5` | Rail eFuses, input TVS, bulk capacitance, input and output voltage sense |
 | `sw_54` | eFuse in front of the 54 V boost |
