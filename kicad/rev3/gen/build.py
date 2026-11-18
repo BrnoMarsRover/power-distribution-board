@@ -110,18 +110,57 @@ def box_symbol(name, left, right, ref="U", footprint="", datasheet="", desc="", 
     return s
 
 
+def pinned_symbol(name, hw, hh, pins, ref="U", footprint="", datasheet="", desc=""):
+    """A box symbol with explicit pin positions: pins = (number, name, type, x, y, angle)."""
+    out = [f'(pin {typ} line (at {fmt(x)} {fmt(y)} {a}) (length 2.54) (name {q(nm)} {FONT}) (number {q(num)} {FONT}))'
+           for num, nm, typ, x, y, a in pins]
+    props = [("Reference", ref, hw + 1.27, hh + 1.27, False), ("Value", name, hw + 1.27, -hh - 1.27, False),
+             ("Footprint", footprint, 0, 0, True), ("Datasheet", datasheet, 0, 0, True),
+             ("Description", desc, 0, 0, True)]
+    s = f'(symbol {q(name)} (pin_names (offset 1.016)) (exclude_from_sim no) (in_bom yes) (on_board yes)\n'
+    for k, v, x, y, hide in props:
+        s += (f'  (property {q(k)} {q(v)} (at {fmt(x)} {fmt(y)} 0) (effects (font (size 1.27 1.27))'
+              f'{" (justify left)" if not hide else ""}{" (hide yes)" if hide else ""}))\n')
+    s += (f'  (symbol {q(name + "_0_1")} (rectangle (start {fmt(-hw)} {fmt(hh)}) (end {fmt(hw)} {fmt(-hh)})'
+          f' (stroke (width 0.254) (type default)) (fill (type background))))\n')
+    s += f'  (symbol {q(name + "_1_1")}\n    ' + '\n    '.join(out) + ')\n  (embedded_fonts no))'
+    return s
+
+
+def mosfet_symbol():
+    """KiCad's Q_NMOS drawing with pins renumbered 1 = G, 2 = D, 3 = S, to match D2PAK / DPAK pads."""
+    sym = Library.load(SYM_DIR / "Device.kicad_sym").flat("Q_NMOS")
+    sym[1] = q("Q_NMOS_GDS")
+    for sub in find(sym, "symbol"):
+        sub[1] = q(unq(sub[1]).replace("Q_NMOS", "Q_NMOS_GDS", 1))
+        for pn in find(sub, "pin"):
+            num = find(pn, "number")[0]
+            num[1] = q({"D": "2", "G": "1", "S": "3"}[unq(num[1])])
+    for prop in find(sym, "property"):
+        key = unq(prop[1])
+        if key in ("Value", "Description", "Footprint"):
+            prop[2] = q({"Value": "Q_NMOS_GDS", "Footprint": "",
+                         "Description": "N-channel MOSFET, pin 1 gate, 2 drain (tab), 3 source"}[key])
+    return dump(sym, 0)
+
+
 TI = "https://www.ti.com/lit/ds/symlink/"
 CUSTOM = {
-    "TPS48111-Q1": box_symbol(
-        "TPS48111-Q1",
-        left=[("18", "CS+", "input"), ("17", "CS-", "input"),
-              ("19", "ISCP", "input"), ("1", "EN/UVLO", "input"), ("3", "INP", "input"),
-              ("2", "INP_G", "input"), ("10", "DIODE", "passive")],
-        top=[("20", "VS", "power_in")], bottom=[("6", "GND", "power_in")],
-        right=[("12", "BST", "passive"), ("15", "PU", "output"), ("14", "PD", "output"),
-               ("13", "SRC", "passive"), ("11", "G", "output"), ("5", "FLT_I", "open_collector"),
-               ("4", "FLT_T", "open_collector"), ("7", "IMON", "passive"), ("8", "IWRN", "passive"),
-               ("9", "TMR", "passive")],
+    # Pins placed for the drawn eFuse sheet: supply and sense on top (to the rails),
+    # gate drive on the right (to the FETs), control on the left, settings on the bottom.
+    "TPS48111-Q1": pinned_symbol(
+        "TPS48111-Q1", 25.4, 22.86, [
+            ("20", "VS", "power_in", -20.32, 25.4, 270), ("19", "ISCP", "input", -10.16, 25.4, 270),
+            ("18", "CS+", "input", 0, 25.4, 270), ("17", "CS-", "input", 10.16, 25.4, 270),
+            ("1", "EN/UVLO", "input", -27.94, 17.78, 0), ("3", "INP", "input", -27.94, 7.62, 0),
+            ("2", "INP_G", "input", -27.94, -5.08, 0), ("5", "FLT_I", "open_collector", -27.94, -17.78, 0),
+            ("4", "FLT_T", "open_collector", -27.94, -20.32, 0),
+            ("15", "PU", "output", 27.94, 17.78, 180), ("14", "PD", "output", 27.94, 12.7, 180),
+            ("12", "BST", "passive", 27.94, 5.08, 180), ("13", "SRC", "passive", 27.94, -2.54, 180),
+            ("11", "G", "output", 27.94, -12.7, 180),
+            ("6", "GND", "power_in", -17.78, -25.4, 90), ("10", "DIODE", "passive", -12.7, -25.4, 90),
+            ("7", "IMON", "passive", 0, -25.4, 90), ("8", "IWRN", "passive", 12.7, -25.4, 90),
+            ("9", "TMR", "passive", 22.86, -25.4, 90)],
         footprint="PowerBoard_rev3:TI_DGX0019A_VSSOP-19",
         datasheet=TI + "tps4811-q1.pdf",
         desc="100 V smart high-side driver with pre-charge, current monitor and protection. "
@@ -152,9 +191,7 @@ CUSTOM = {
         top=[("3", "VCC", "power_in"), ("5", "VIO", "power_in")], bottom=[("2", "GND", "power_in")],
         footprint="Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
         datasheet=TI + "tcan1044a-q1.pdf", desc="CAN FD transceiver, +-58 V bus fault, VIO 1.8-5.5 V"),
-    "Q_NMOS_GDS": box_symbol(
-        "Q_NMOS_GDS", left=[("1", "G", "input")], right=[("2", "D", "passive"), ("3", "S", "passive")],
-        ref="Q", desc="N-channel MOSFET, pin 1 gate, 2 drain (tab), 3 source"),
+    "Q_NMOS_GDS": mosfet_symbol(),
 }
 
 
@@ -191,8 +228,9 @@ FOOTPRINTS = set()
 
 
 class Part:
-    def __init__(self, lib_id, prefix, value, footprint, conns, rot=0, fields=None, unit=1):
+    def __init__(self, lib_id, prefix, value, footprint, conns, rot=0, fields=None, unit=1, at=None):
         self.lib_id, self.prefix, self.value, self.footprint = lib_id, prefix, value, footprint
+        self.at = at
         self.rot, self.unit, self.fields = rot, unit, fields or {}
         self.sym = get_symbol(lib_id)
         self.pins = lib_pins(self.sym, unit)
@@ -229,11 +267,31 @@ POWER = {"GND": "power:GND", "+3V3": "power:+3V3"}
 PAPERS = [("A4", 297, 210), ("A3", 420, 297), ("A2", 594, 420), ("A1", 841, 594), ("A0", 1189, 841)]
 
 
+def rnd(pt):
+    return (round(pt[0], 2), round(pt[1], 2))
+
+
+def PIN(p, num):
+    """Absolute sheet position of a placed part's pin."""
+    a = next(g for g in p.geom() if g["number"] == str(num))
+    return rnd((p.at[0] + a["sx"], p.at[1] + a["sy"]))
+
+
 class Sheet:
-    def __init__(self, name, title, notes=()):
+    def __init__(self, name, title, notes=(), drawn=False):
         self.name, self.title, self.notes = name, title, list(notes)
         self.file = f"{name}.kicad_sch"
         self.parts, self.flags = [], []
+        self.drawn, self.wires, self.marks = drawn, [], []
+
+    def wire(self, *pts):
+        """Polyline through the given points. Ends landing on other wires become junctions."""
+        pts = [rnd(p) for p in pts]
+        self.wires += list(zip(pts, pts[1:]))
+
+    def mark(self, kind, pt, net=None, ang=0):
+        """kind: gnd, 3v3, label (net + angle), flag (PWR_FLAG)."""
+        self.marks.append((kind, rnd(pt), net, ang))
 
     def add(self, *args, **kw):
         p = Part(*args, **kw)
@@ -257,6 +315,10 @@ def net_key(sheet, net):
 
 
 def layout(sheet):
+    if sheet.drawn:
+        sheet.paper, sheet.pw, sheet.ph = "A3", 420, 297
+        sheet.placed = [(p, p.at[0], p.at[1]) for p in sheet.parts]
+        return
     cells = []
     for p in sheet.parts:
         g = p.geom()
@@ -388,6 +450,8 @@ class Emitter:
             if (px, py) in done:
                 continue          # hidden pin stacked on a visible one
             done.add((px, py))
+            if rnd((px, py)) in self.anchors:
+                continue          # drawn sheet: a wire or symbol already lands on this pin
             if net is None:
                 self.text(f'(no_connect (at {fmt(px)} {fmt(py)}) (uuid {q(uid(self.s.name, "nc", ref, a["number"]))}))')
                 continue
@@ -399,9 +463,62 @@ class Emitter:
             else:
                 self.label(net, ex, ey, int(a["out"]))
 
+    def drawn_wires(self):
+        """Split wires wherever another wire end, pin or mark lands on them; return segments."""
+        s = self.s
+        pins = set()
+        for p, X, Y, *_ in s.placed:
+            for a in p.geom():
+                pins.add(rnd((X + a["sx"], Y + a["sy"])))
+        marks = {pt for _, pt, _, _ in s.marks}
+        pts = pins | marks | {e for w in s.wires for e in w}
+
+        def inside(pt, a, b):
+            if a[0] == b[0] == pt[0]:
+                return min(a[1], b[1]) < pt[1] < max(a[1], b[1])
+            if a[1] == b[1] == pt[1]:
+                return min(a[0], b[0]) < pt[0] < max(a[0], b[0])
+            return False
+
+        segs = []
+        for a, b in s.wires:
+            if a[0] != b[0] and a[1] != b[1]:
+                raise ValueError(f"{s.name}: wire {a}-{b} is not horizontal or vertical")
+            chain = sorted([a, b] + [pt for pt in pts if inside(pt, a, b)],
+                           key=lambda pt: abs(pt[0] - a[0]) + abs(pt[1] - a[1]))
+            segs += [(u, w) for u, w in zip(chain, chain[1:]) if u != w]
+        deg = defaultdict(int)
+        for u, w in segs:
+            deg[u] += 1
+            deg[w] += 1
+        for pt in pins | marks:
+            if pt in deg:
+                deg[pt] += 1
+        return segs, [pt for pt, d in deg.items() if d >= 3]
+
     def render(self, root_uuid, sheet_uuid, page_title):
         s = self.s
         layout(s)
+        self.anchors = set()
+        if s.drawn:
+            segs, junctions = self.drawn_wires()
+            self.anchors = {e for w in segs for e in w} | {pt for _, pt, _, _ in s.marks}
+            for (x1, y1), (x2, y2) in segs:
+                self.wire(x1, y1, x2, y2)
+            for x, y in junctions:
+                self.text(f'(junction (at {fmt(x)} {fmt(y)}) (diameter 0) (color 0 0 0 0) '
+                          f'(uuid {q(uid(s.name, "j", x, y))}))')
+            for kind, (x, y), net, ang in s.marks:
+                if kind == "gnd":
+                    self.power("GND", x, y, 270)
+                elif kind == "3v3":
+                    self.power("+3V3", x, y, 90)
+                elif kind == "label":
+                    self.label(net, x, y, ang)
+                elif kind == "flag":
+                    self.pwr += 1
+                    self.symbol("power:PWR_FLAG", f"#FLG{s.name}{self.pwr:03d}".replace("_", ""), "PWR_FLAG",
+                                x, y, 0, ["1"], hide_ref=True)
         for i, n in enumerate([s.title] + s.notes):
             size = 2.5 if i == 0 else 1.6
             self.text(f'(text {q(n)} (exclude_from_sim no) (at 20 {fmt(18 + i * 6)} 0) '
@@ -470,42 +587,42 @@ def fmt_r(v):
     return rails.fmt_r(v).replace("R", "")
 
 
-def R(sh, value, a, b, fp="R0603", **f):
+def R(sh, value, a, b, fp="R0603", at=None, rot=90, **f):
     v = fmt_r(value) if isinstance(value, (int, float)) else value
-    return sh.add("Device:R", "R", v, FP[fp], {1: a, 2: b}, rot=90, fields=f)
+    return sh.add("Device:R", "R", v, FP[fp], {1: a, 2: b}, rot=rot, fields=f, at=at)
 
 
-def C(sh, value, a, b, fp="C0603", volt=None, **f):
+def C(sh, value, a, b, fp="C0603", volt=None, at=None, rot=90, **f):
     v = rails.fmt_c(value) if isinstance(value, (int, float)) else value
     if volt:
         v += f"/{volt}V"
-    return sh.add("Device:C", "C", v, FP[fp], {1: a, 2: b}, rot=90, fields=f)
+    return sh.add("Device:C", "C", v, FP[fp], {1: a, 2: b}, rot=rot, fields=f, at=at)
 
 
-def CP(sh, value, plus, minus, fp="CP10", **f):
-    return sh.add("Device:C_Polarized", "C", value, FP[fp], {1: plus, 2: minus}, rot=90, fields=f)
+def CP(sh, value, plus, minus, fp="CP10", at=None, rot=90, **f):
+    return sh.add("Device:C_Polarized", "C", value, FP[fp], {1: plus, 2: minus}, rot=rot, fields=f, at=at)
 
 
-def DZ(sh, value, k, a, fp="SMB", **f):
-    return sh.add("Device:D_Zener", "D", value, FP[fp], {1: k, 2: a}, fields=f)
+def DZ(sh, value, k, a, fp="SMB", at=None, rot=0, **f):
+    return sh.add("Device:D_Zener", "D", value, FP[fp], {1: k, 2: a}, fields=f, at=at, rot=rot)
 
 
 def DS(sh, value, k, a, fp="SMA", **f):
     return sh.add("Device:D_Schottky", "D", value, FP[fp], {1: k, 2: a}, fields=f)
 
 
-def LED(sh, color, k, a):
-    return sh.add("Device:LED", "D", color, FP["LED"], {1: k, 2: a})
+def LED(sh, color, k, a, at=None, rot=0):
+    return sh.add("Device:LED", "D", color, FP["LED"], {1: k, 2: a}, at=at, rot=rot)
 
 
-def TP(sh, net):
-    return sh.add("Connector:TestPoint", "TP", net.split(":")[-1], FP["TP"], {1: net})
+def TP(sh, net, at=None):
+    return sh.add("Connector:TestPoint", "TP", net.split(":")[-1], FP["TP"], {1: net}, at=at)
 
 
-def FET(sh, part, g, d, s):
+def FET(sh, part, g, d, s, at=None):
     fp = FP["D2PAK"] if part == "IPB042N10N3G" else FP["DPAK"]
     lcsc = rails.FETS[part][1]
-    return sh.add("PowerBoard_rev3:Q_NMOS_GDS", "Q", part, fp, {1: g, 2: d, 3: s}, fields={"LCSC": lcsc})
+    return sh.add("PowerBoard_rev3:Q_NMOS_GDS", "Q", part, fp, {1: g, 2: d, 3: s}, fields={"LCSC": lcsc}, at=at)
 
 
 def CONN2(sh, value, fp, p1, p2):
@@ -555,6 +672,13 @@ def sheet_power_in():
 
 
 def sheet_switch(r):
+    """One eFuse, drawn like a hand-made sheet.
+
+    Power flows left to right along two rails: VIN -> shunt -> drain rail -> FETs -> output
+    rail. The TPS48111 sits below; its supply and sense pins reach up to the rails, its
+    gate drive goes right to the FETs, control comes in from the left, and the
+    setting parts hang below it.
+    """
     v = rails.rail_values(r)
     n = RAILNET[r["name"]]
     vin, out = VIN[r["name"]], OUT[r["name"]]
@@ -567,71 +691,197 @@ def sheet_switch(r):
              f"(trip {v['i_oc']:.1f} A after {v['c_tmr'] * v['k_tmr'] * 1e3:.0f} ms, latch-off; "
              + (f"short-circuit {v['i_sc']:.0f} A)." if v["r_iscp"] else "short-circuit trip disabled)."),
              f"Power-on default: {'ON (INP delayed by RC after INP_G)' if on else 'OFF'}. "
-             "MMBT3904 must sit against the main FET (remote temperature sense).",
+             "Q_T (MMBT3904) must sit against the main FET: remote temperature sense.",
              "Kelvin-route CS+ / CS- / ISCP from the R_SNS pads. Place C_ISCP right at the pins."]
     if r["name"] == "42V-D":
         notes.append("E-STOP: ESTOP_KILL (from the latch in the io sheet) pulls EN/UVLO low through Q_EN.")
-    sh = Sheet(f"sw_{n.lower()}", title, notes)
+    sh = Sheet(f"sw_{n.lower()}", title, notes, drawn=True)
+    W, M = sh.wire, sh.mark
+    gnd = lambda pt: M("gnd", pt)
+    v33 = lambda pt: M("3v3", pt)
+    lab = lambda net, pt, ang: M("label", pt, net, ang)
+
+    X, Y = 119.38, 172.72                  # TPS48111 centre
+    yR, yO, yQ, yG = 96.52, 127.0, 111.76, 121.92   # VIN/drain rails, output rail, FETs, gate bus
     en = "L:EN"
-    sh.add("PowerBoard_rev3:TPS48111-Q1", "U", "TPS48111-Q1", CUSTOM_FP_TPS,
-           {20: vin, 18: "L:CSP", 17: "L:DRN", 19: "L:ISCP" if v["r_iscp"] else "L:DRN", 1: en,
-            3: f"INP_{n}", 2: f"INPG_{n}", 10: "L:DIODE", 6: "GND",
-            12: "L:BST", 15: "L:PU", 14: "L:GATE", 13: out, 11: "L:GPRE",
-            5: f"FLT_{n}", 4: f"FLT_{n}", 7: f"IMON_{n}", 8: "L:IWRN", 9: "L:TMR"},
-           fields={"LCSC": "C17558994"})
+    U = sh.add("PowerBoard_rev3:TPS48111-Q1", "U", "TPS48111-Q1", CUSTOM_FP_TPS,
+               {20: vin, 18: "L:CSP", 17: "L:DRN", 19: "L:ISCP" if v["r_iscp"] else "L:DRN", 1: en,
+                3: f"INP_{n}", 2: f"INPG_{n}", 10: "L:DIODE", 6: "GND",
+                12: "L:BST", 15: "L:PU", 14: "L:GATE", 13: out, 11: "L:GPRE",
+                5: f"FLT_{n}", 4: f"FLT_{n}", 7: f"IMON_{n}", 8: "L:IWRN", 9: "L:TMR"},
+               fields={"LCSC": "C17558994"}, at=(X, Y))
+    P = lambda num: PIN(U, num)
+
+    # --- power path: VIN rail, shunt, drain rail
     shunt_lcsc = {0.5e-3: "C154666", 1e-3: "C154668", 2e-3: "C160590", 5e-3: "C185817"}[r["r_sns"]]
-    R(sh, f"{r['r_sns'] * 1e3:g}m 2512", vin, "L:DRN", fp="R2512", LCSC=shunt_lcsc)
-    R(sh, v["r_set"], vin, "L:CSP")
+    rs = R(sh, f"{r['r_sns'] * 1e3:g}m 2512", vin, "L:DRN", fp="R2512", at=(124.46, yR), LCSC=shunt_lcsc)
+    lab(vin, (22.86, yR), 180)
+    W((22.86, yR), PIN(rs, 1))
+
+    # --- top pins up to the rails
+    vs, iscp, csp, csn = P(20), P(19), P(18), P(17)
+    rset = R(sh, v["r_set"], vin, "L:CSP", at=(csp[0], 111.76), rot=0)
+    W((csp[0], yR), PIN(rset, 1))
+    W(PIN(rset, 2), csp)
+    W((csn[0], yR), csn)
     if v["r_iscp"]:
-        R(sh, v["r_iscp"], vin, "L:ISCP")
-        C(sh, 1e-9, "L:ISCP", "L:DRN")
-    C(sh, 100e-9, vin, "GND", volt=100)
-    c_vs = C(sh, 1e-6, vin, "GND", fp="C1206", volt=100)
-    r_top = rails.nearest(10e3 * (UVLO_ON[r["name"]] / 1.18 - 1), rails.E96)
-    R(sh, r_top, vin, en)
-    R(sh, 10e3, en, "GND")
-    if r["name"] == "42V-D":
-        sh.add("Transistor_FET:2N7002", "Q", "2N7002", FP["SOT23"], {1: "ESTOP_KILL", 2: "GND", 3: en})
-    if on:
-        R(sh, 1e6, "+3V3", f"INP_{n}")
-        C(sh, 1e-6, f"INP_{n}", "GND")
-        R(sh, 100e3, "+3V3", f"INPG_{n}")
+        risc = R(sh, v["r_iscp"], vin, "L:ISCP", at=(iscp[0], 111.76), rot=0)
+        W((iscp[0], yR), PIN(risc, 1))
+        W(PIN(risc, 2), iscp)
+        cis = C(sh, 1e-9, "L:ISCP", "L:DRN", at=(124.46, 134.62))
+        W((iscp[0], 134.62), PIN(cis, 1))
+        W(PIN(cis, 2), (csn[0], 134.62))
     else:
-        R(sh, 100e3, f"INP_{n}", "GND")
-        R(sh, 100e3, f"INPG_{n}", "GND")
-    R(sh, 10e3, "+3V3", f"FLT_{n}")
-    R(sh, v["r_imon"], f"IMON_{n}", "GND")
-    C(sh, 10e-9, f"IMON_{n}", "GND")
-    R(sh, v["r_iwrn"], "L:IWRN", "GND")
-    C(sh, v["c_tmr"], "L:TMR", "GND", fp="C1206", volt=10)
-    R(sh, v["r_tmr"], "L:TMR", "GND")
-    sh.add("Transistor_BJT:MMBT3904", "Q", "MMBT3904", FP["SOT23"], {1: "L:DIODE", 2: "GND", 3: "L:DIODE"})
-    R(sh, 10, "L:PU", "L:GATE")
-    C(sh, v["c_bst"], "L:BST", out, fp="C0805", volt=25)
-    for i in range(v["n"]):
-        R(sh, 2.2, "L:GATE", f"L:G{i + 1}")
-        FET(sh, r["fet"], f"L:G{i + 1}", "L:DRN", out)
-    FET(sh, r["fet"], "L:GPRE", "L:DRN", out)
-    R(sh, 330, "L:GPRE", "L:CG")
-    C(sh, v["c_g"], "L:CG", "GND", volt=50)
-    if r["name"] in TVS_IN:
-        DZ(sh, TVS_IN[r["name"]], vin, "GND")
-        for _ in range(2):
-            CP(sh, f"47uF/{CBULK_V[r['name']]}V", vin, "GND", fp="CP8")
-        rt = 100e3
-        R(sh, rt, vin, f"VSNS_IN_{n}")
-        R(sh, divider_bottom(rt, r["v"] * 1.25), f"VSNS_IN_{n}", "GND")
-        C(sh, 10e-9, f"VSNS_IN_{n}", "GND")
+        W(iscp, (iscp[0], 134.62), (csn[0], 134.62))
+    W((vs[0], yR), vs)
+    c1 = C(sh, 100e-9, vin, "GND", volt=100, at=(91.44, 128.27), rot=0)
+    c2 = C(sh, 1e-6, vin, "GND", fp="C1206", volt=100, at=(76.2, 128.27), rot=0)
+    W(PIN(c2, 1), (vs[0], 124.46))
+    gnd(PIN(c1, 2))
+    gnd(PIN(c2, 2))
+
+    # --- EN/UVLO divider (and the E-STOP kill FET on the drive group)
+    r_top = rails.nearest(10e3 * (UVLO_ON[r["name"]] / 1.18 - 1), rails.E96)
+    ret = R(sh, r_top, vin, en, at=(66.04, 128.27), rot=0)
+    reb = R(sh, 10e3, en, "GND", at=(66.04, 146.05), rot=0)
+    W((66.04, yR), PIN(ret, 1))
+    W(PIN(ret, 2), PIN(reb, 1))
+    gnd(PIN(reb, 2))
+    enp = P(1)
+    W(enp, (73.66, enp[1]), (73.66, 139.7), (66.04, 139.7))
+    if r["name"] == "42V-D":
+        qe = sh.add("Transistor_FET:2N7002", "Q", "2N7002", FP["SOT23"], {1: "ESTOP_KILL", 2: "GND", 3: en},
+                    at=(53.34, 144.78))
+        W(PIN(qe, 3), (66.04, 139.7))
+        gnd(PIN(qe, 2))
+        W(PIN(qe, 1), (43.18, 144.78))
+        lab("ESTOP_KILL", (43.18, 144.78), 180)
+
+    # --- control inputs from the left, with their power-on defaults
+    inp, inpg, flti, fltt = P(3), P(2), P(5), P(4)
+    for pin_, net in ((inp, f"INP_{n}"), (inpg, f"INPG_{n}"), (flti, f"FLT_{n}")):
+        W(pin_, (45.72, pin_[1]))
+        lab(net, (45.72, pin_[1]), 180)
+    W(fltt, (86.36, fltt[1]), (86.36, flti[1]))
+    if on:
+        ri = R(sh, 1e6, "+3V3", f"INP_{n}", at=(60.96, inp[1] - 3.81), rot=0)
+        v33(PIN(ri, 1))
+        ci = C(sh, 1e-6, f"INP_{n}", "GND", at=(68.58, inp[1] + 3.81), rot=0)
+        gnd(PIN(ci, 2))
+        rg = R(sh, 100e3, "+3V3", f"INPG_{n}", at=(60.96, inpg[1] - 3.81), rot=0)
+        v33(PIN(rg, 1))
+    else:
+        ri = R(sh, 100e3, f"INP_{n}", "GND", at=(60.96, inp[1] + 3.81), rot=0)
+        gnd(PIN(ri, 2))
+        rg = R(sh, 100e3, f"INPG_{n}", "GND", at=(60.96, inpg[1] + 3.81), rot=0)
+        gnd(PIN(rg, 2))
+    rf = R(sh, 10e3, "+3V3", f"FLT_{n}", at=(76.2, flti[1] - 3.81), rot=0)
+    v33(PIN(rf, 1))
+    TP(sh, f"FLT_{n}", at=(71.12, flti[1]))
+
+    # --- gate drive to the right
+    pu, pd, bst, src, g = P(15), P(14), P(12), P(13), P(11)
+    cb = C(sh, v["c_bst"], "L:BST", out, fp="C0805", volt=25, at=(152.4, (bst[1] + src[1]) / 2), rot=0)
+    W(bst, PIN(cb, 1))
+    W(src, (165.1, src[1]), (165.1, yO))
+    rpu = R(sh, 10, "L:PU", "L:GATE", at=(154.94, pu[1]))
+    W(pu, PIN(rpu, 1))
+    W(PIN(rpu, 2), (160.02, pu[1]))
+    W(pd, (160.02, pd[1]), (160.02, yG))
+    TP(sh, "L:GATE", at=(162.56, yG))
+
+    # --- main FETs between the drain rail and the output rail, gate bus below them
+    xs = [182.88 + 33.02 * k for k in range(v["n"])]
+    for k, xq in enumerate(xs):
+        q_ = FET(sh, r["fet"], f"L:G{k + 1}", "L:DRN", out, at=(xq, yQ))
+        rgk = R(sh, 2.2, "L:GATE", f"L:G{k + 1}", at=(xq - 11.43, yQ))
+        W(PIN(rgk, 2), PIN(q_, 1))
+        W(PIN(rgk, 1), (PIN(rgk, 1)[0], yG))
+        W(PIN(q_, 2), (PIN(q_, 2)[0], yR))
+        W(PIN(q_, 3), (PIN(q_, 3)[0], yO))
+    W((160.02, yG), (xs[-1] - 15.24, yG))
+
+    # --- pre-charge FET, gate slewed by R_g + C_g from the G pin
+    xp = xs[-1] + 33.02
+    qp = FET(sh, r["fet"], "L:GPRE", "L:DRN", out, at=(xp, yQ))
+    W(PIN(qp, 2), (PIN(qp, 2)[0], yR))
+    W(PIN(qp, 3), (PIN(qp, 3)[0], yO))
+    W(g, (xp - 10.16, g[1]), (xp - 10.16, yQ), PIN(qp, 1))
+    rgp = R(sh, 330, "L:GPRE", "L:CG", at=(185.42, g[1] + 3.81), rot=0)
+    cgp = C(sh, v["c_g"], "L:CG", "GND", volt=50, at=(185.42, g[1] + 15.24), rot=0)
+    W(PIN(rgp, 2), PIN(cgp, 1))
+    gnd(PIN(cgp, 2))
+    W(PIN(rs, 2), (PIN(qp, 2)[0], yR))
+
+    # --- output rail: voltage sense, indicator, test point, label
+    xe = 302.26
+    W((165.1, yO), (xe, yO))
+    lab(out, (xe, yO), 0)
     if r["name"] != "54V":       # the 54 V output voltage is measured after the boost
-        R(sh, 100e3, out, f"VSNS_OUT_{n}")
-        R(sh, divider_bottom(100e3, r["v"] * 1.15), f"VSNS_OUT_{n}", "GND")
-        C(sh, 10e-9, f"VSNS_OUT_{n}", "GND")
+        xd = 271.78
+        rvt = R(sh, 100e3, out, f"VSNS_OUT_{n}", at=(xd, 134.62), rot=0)
+        rvb = R(sh, divider_bottom(100e3, r["v"] * 1.15), f"VSNS_OUT_{n}", "GND", at=(xd, 152.4), rot=0)
+        W((xd, yO), PIN(rvt, 1))
+        W(PIN(rvt, 2), PIN(rvb, 1))
+        gnd(PIN(rvb, 2))
+        W((xd, 143.51), (xd - 5.08, 143.51))
+        lab(f"VSNS_OUT_{n}", (xd - 5.08, 143.51), 180)
+        cv = C(sh, 10e-9, f"VSNS_OUT_{n}", "GND", at=(xd + 5.08, 149.86), rot=0)
+        W((xd, 146.05), PIN(cv, 1))
+        gnd(PIN(cv, 2))
     r_led = rails.nearest((r["v"] - 2.0) / 2e-3, rails.E96)
-    R(sh, r_led, out, "L:LED", fp="R1206" if r["v"] > 20 else "R0603")
-    LED(sh, "green", "GND", "L:LED")
-    for net in (out, f"IMON_{n}", f"FLT_{n}", "L:GATE"):
-        TP(sh, net)
-    sh.flag(out)
+    rl = R(sh, r_led, out, "L:LED", fp="R1206" if r["v"] > 20 else "R0603", at=(289.56, 134.62), rot=0)
+    led = LED(sh, "green", "GND", "L:LED", at=(289.56, 146.05), rot=90)
+    W((289.56, yO), PIN(rl, 1))
+    W(PIN(rl, 2), PIN(led, 2))
+    gnd(PIN(led, 1))
+    M("flag", (261.62, yO))
+    TP(sh, out, at=(297.18, yO))
+
+    # --- settings below the driver
+    gp, dp, ip, wp, tp_ = P(6), P(10), P(7), P(8), P(9)
+    W(gp, (gp[0], gp[1] + 2.54))
+    gnd((gp[0], gp[1] + 2.54))
+    qt = sh.add("Transistor_BJT:MMBT3904", "Q", "MMBT3904", FP["SOT23"], {1: "L:DIODE", 2: "GND", 3: "L:DIODE"},
+                at=(101.6, 220.98))
+    W(dp, (dp[0], 208.28), (PIN(qt, 1)[0], 208.28), PIN(qt, 1))
+    W(PIN(qt, 3), (PIN(qt, 3)[0], 208.28))
+    gnd(PIN(qt, 2))
+    W(ip, (ip[0], 215.9), (175.26, 215.9))
+    lab(f"IMON_{n}", (175.26, 215.9), 0)
+    rim = R(sh, v["r_imon"], f"IMON_{n}", "GND", at=(ip[0], 219.71), rot=0)
+    cim = C(sh, 10e-9, f"IMON_{n}", "GND", at=(ip[0] + 7.62, 219.71), rot=0)
+    gnd(PIN(rim, 2))
+    gnd(PIN(cim, 2))
+    TP(sh, f"IMON_{n}", at=(162.56, 215.9))
+    riw = R(sh, v["r_iwrn"], "L:IWRN", "GND", at=(wp[0], 205.74), rot=0)
+    W(wp, PIN(riw, 1))
+    gnd(PIN(riw, 2))
+    W(tp_, (tp_[0], 200.66), (tp_[0] + 7.62, 200.66))
+    rtm = R(sh, v["r_tmr"], "L:TMR", "GND", at=(tp_[0], 204.47), rot=0)
+    ctm = C(sh, v["c_tmr"], "L:TMR", "GND", fp="C1206", volt=10, at=(tp_[0] + 7.62, 204.47), rot=0)
+    gnd(PIN(ctm, 2))
+    gnd(PIN(rtm, 2))
+
+    # --- converter rails: input TVS, bulk capacitance, input voltage sense
+    if r["name"] in TVS_IN:
+        tvs = DZ(sh, TVS_IN[r["name"]], vin, "GND", at=(30.48, 104.14), rot=270)
+        W((30.48, yR), PIN(tvs, 1))
+        gnd(PIN(tvs, 2))
+        for x in (38.1, 45.72):
+            cp = CP(sh, f"47uF/{CBULK_V[r['name']]}V", vin, "GND", fp="CP8", at=(x, 104.14), rot=0)
+            W((x, yR), PIN(cp, 1))
+            gnd(PIN(cp, 2))
+        rit = R(sh, 100e3, vin, f"VSNS_IN_{n}", at=(53.34, 110.49), rot=0)
+        rib = R(sh, divider_bottom(100e3, r["v"] * 1.25), f"VSNS_IN_{n}", "GND", at=(53.34, 134.62), rot=0)
+        W((53.34, yR), PIN(rit, 1))
+        W(PIN(rit, 2), PIN(rib, 1))
+        gnd(PIN(rib, 2))
+        W((53.34, 124.46), (48.26, 124.46))
+        lab(f"VSNS_IN_{n}", (48.26, 124.46), 180)
+        cvi = C(sh, 10e-9, f"VSNS_IN_{n}", "GND", at=(58.42, 130.81), rot=0)
+        W((53.34, 127.0), PIN(cvi, 1))
+        gnd(PIN(cvi, 2))
     return sh
 
 

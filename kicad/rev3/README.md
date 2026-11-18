@@ -30,8 +30,15 @@ Result at generation time:
 - Netlist check passes.
 - ERC is clean at every severity.
 
-Every pin has a short stub and a net label instead of wires drawn between parts. That is
-less pretty than a hand-drawn sheet, but it is correct by construction and easy to verify.
+There are two drawing styles:
+- **Drawn** (the six eFuse sheets, `sw_*`): parts sit at chosen positions and real wires
+  connect them, laid out like a hand-drawn sheet.
+  - Power flows left to right along the rails, with the driver below.
+  - Labels appear only where a signal leaves the sheet.
+- **Labelled** (the other sheets, for now): every pin has a short stub and a net label.
+
+Both styles go through the same netlist check, so a wire landing where it shouldn't is
+caught before anyone opens KiCad.
 
 **Once you start editing in KiCad, these files are the source of truth.** Re-running
 `build.py` overwrites them. The generator is a bootstrap, not a build step.
