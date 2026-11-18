@@ -4,7 +4,9 @@
 Run `python3 rails.py > rails.md` after changing anything here.
 
 Architecture (decided 2026-11-18): one eFuse per rail (TPS48111-Q1 + external FETs +
-shunt), plus one resettable PTC per 24/15/12/5 V output connector. Every eFuse value is
+shunt), plus one resettable PTC per 24/12/5 V output connector. The 15 V rail was dropped,
+and a 54 V supply for the Zyxel XMG-105HP PoE switch was added: an eFuse on the battery bus
+feeding an on-board LM5122 boost converter. Every eFuse value is
 computed from the TPS4811-Q1 datasheet (SLUSEE5E) equation cited next to it.
 
 Values marked ASSUMED are guesses until the real loads are known.
@@ -72,20 +74,27 @@ PTCS = {
 RAILS = [
     dict(name="42V", v=42.0, design=40.0, i_oc=60.0, t_oc=0.5, i_sc=150.0,
          r_sns=0.5e-3, fet="IPT015N10N5", c_out=470e-6, n_out=8, conn="XT90",
-         i_inrush=2.0, ptc=None, src="battery bus",
+         i_inrush=2.0, ptc=None, src="battery bus", default_on=True,
          note="Motor peaks: the 60 A / 0.5 s trip must sit above the drive's acceleration profile."),
     dict(name="24V", v=24.0, design=12.5, i_oc=13.75, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="BSC040N10NS5", c_out=470e-6, n_out=8, conn="Deans T",
-         i_inrush=2.0, ptc="SMD2920P300TF/33", src="300 W converter"),
-    dict(name="15V", v=15.0, design=10.0, i_oc=11.0, t_oc=0.5, i_sc=None,
-         r_sns=2e-3, fet="BSC010N04LS", c_out=470e-6, n_out=8, conn="XT60",
-         i_inrush=2.0, ptc="SMD2920P300TF/33", src="150 W converter"),
+         i_inrush=2.0, ptc="SMD2920P300TF/33", src="300 W converter", default_on=False),
     dict(name="12V", v=12.0, design=12.5, i_oc=13.75, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="BSC010N04LS", c_out=470e-6, n_out=7, conn="XT60",
-         i_inrush=2.0, ptc="SMD2920P300TF/16", src="150 W converter"),
+         i_inrush=2.0, ptc="SMD2920P300TF/16", src="150 W converter", default_on=True,
+         note="Feeds the Jetson AGX Orin, so it defaults ON in hardware."),
     dict(name="5V", v=5.0, design=15.0, i_oc=16.5, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="BSC010N04LS", c_out=220e-6, n_out=11, conn="XT30",
-         i_inrush=2.0, ptc="SMD1812P300TF", src="150 W converter, XT30-limited"),
+         i_inrush=2.0, ptc="SMD1812P300TF", src="150 W converter, XT30-limited",
+         default_on=False),
+    dict(name="54V", v=42.0, design=4.0, i_oc=5.0, t_oc=0.5, i_sc=20.0,
+         r_sns=5e-3, fet="BSC040N10NS5", c_out=600e-6, n_out=1, conn="Zyxel XMG-105HP supply",
+         i_inrush=1.0, ptc=None, src="battery bus, then the LM5122 boost to 54 V",
+         default_on=True,
+         note="The eFuse sits on the boost's 42 V input. It switches the boost and is its "
+              "short-circuit protection, because a boost cannot block current from input to output. "
+              "Defaults ON on the assumption that the Zyxel is the rover's network switch. "
+              "C_LOAD includes the boost's output side and the Zyxel's input: ASSUMED 600 uF."),
 ]
 
 
@@ -116,6 +125,7 @@ def design_rail(r):
     rds, _, fet_desc = FETS[r["fet"]]
     return [
         ("Feeds", f"{r['n_out']} x {r['conn']}, from {r['src']}"),
+        ("Power-on default", "**ON** (hardware pull-ups)" if r["default_on"] else "OFF"),
         ("Design current", f"{r['design']:g} A"),
         ("Main FET", f"{r['fet']} ({fet_desc}), {r['design'] ** 2 * rds:.2f} W at design current"),
         ("Pre-charge FET", f"{r['fet']} (same part)"),
@@ -131,6 +141,54 @@ def design_rail(r):
                                   f"{fmt_c(c_load)} load) - check its SOA"),
         ("C_BST", f">= 10 x C_g = {fmt_c(10 * c_g)}, plus Qg(main + pre-charge) / 1 V"),
     ]
+
+
+BOOST = dict(vin_min=30.0, vin_max=42.0, vout=54.0, pout=100.0, eff=0.95, fsw=400e3,
+             inductor=("TMPA1265SP-220MN-D", 22e-6, 10.0, 0.031, "C357119"),
+             fet="BSC040N10NS5", c_cer=2.2e-6, n_cer=6, cer_derate=0.45, c_bulk=100e-6)
+
+
+def design_boost(b):
+    """54 V supply for the Zyxel XMG-105HP. LM5122 datasheet SNVS954H."""
+    name, L, isat, dcr, code = b["inductor"]
+    d_max = 1 - b["vin_min"] * b["eff"] / b["vout"]
+    d_min = 1 - b["vin_max"] * b["eff"] / b["vout"]
+    i_in = b["pout"] / (b["vin_min"] * b["eff"])
+    ripple = b["vin_min"] * d_max / (b["fsw"] * L)
+    i_pk = i_in + ripple / 2
+    # Eq. 4: RT = 9e9 / fSW
+    rt = nearest(9e9 / b["fsw"], E96)
+    # cycle-by-cycle limit: V_CS-TH1 = 65.5 / 75 / 87.5 mV (min / typ / max)
+    r_s = nearest(0.0655 / (1.4 * i_pk), E12)
+    lim = [v / r_s for v in (0.0655, 0.075, 0.0875)]
+    # V_OUT = 1.2 V * (1 + R_top / R_bot)
+    r_bot = 4.99e3
+    r_top = nearest(r_bot * (b["vout"] / 1.2 - 1), E96)
+    vout = 1.2 * (1 + r_top / r_bot)
+    c_eff = b["n_cer"] * b["c_cer"] * b["cer_derate"]
+    i_out = b["pout"] / b["vout"]
+    v_ripple = i_out * d_max / (b["fsw"] * c_eff)
+    rows = [
+        ("Controller", "LM5122 (JLC C77241), synchronous boost, 65 V in (75 V abs max on VIN/CSP/CSN), 105 V switch node"),
+        ("Operating point", f"{b['vin_min']:g}-{b['vin_max']:g} V in -> {b['vout']:g} V, {b['pout']:g} W "
+                            f"({i_out:.2f} A); the XMG-105HP draws 90 W at most, 70 W of it PoE"),
+        ("Duty cycle", f"{d_min:.2f} - {d_max:.2f} (below 50 %, so slope compensation is not critical)"),
+        ("Switching frequency", f"{b['fsw'] / 1e3:.0f} kHz, RT = {fmt_r(rt)}"),
+        ("Inductor", f"{name} ({code}), {L * 1e6:g} uH, Isat {isat:g} A, DCR {dcr * 1e3:g} mOhm, "
+                     f"{i_in ** 2 * dcr:.2f} W"),
+        ("Input current", f"{i_in:.2f} A average at {b['vin_min']:g} V, ripple {ripple:.2f} A p-p, peak {i_pk:.2f} A"),
+        ("Current sense R_S", f"{r_s * 1e3:g} mOhm -> cycle-by-cycle limit {lim[0]:.1f} / {lim[1]:.1f} / "
+                              f"{lim[2]:.1f} A (min / typ / max), below Isat"),
+        ("FETs", f"{b['fet']} for both low and high side (100 V)"),
+        ("Feedback", f"R_top {fmt_r(r_top)} / R_bot {fmt_r(r_bot)} -> {vout:.2f} V"),
+        ("Output capacitors", f"{b['n_cer']} x {fmt_c(b['c_cer'])} 100 V X7R 1210 (~{fmt_c(c_eff)} effective at "
+                              f"{b['vout']:g} V) + {fmt_c(b['c_bulk'])} / 80 V bulk; ripple ~{v_ripple * 1e3:.0f} mV"),
+        ("Output TVS", "SMBJ58A: standoff 58 V, above the 57 V PoE maximum"),
+        ("Over-voltage", "No OVP in the LM5122. Firmware reads VOUT 54V and opens the input eFuse "
+                         "above 57 V; the TVS covers fast transients"),
+        ("Output connector", "A type used for nothing else on the board, so a 54 V plug cannot reach a 5 / 12 / 24 V device"),
+    ]
+    return rows
 
 
 def main():
@@ -152,6 +210,12 @@ def main():
     for r in RAILS:
         if r.get("note"):
             w(f"- **{r['name']}:** {r['note']}")
+    w("")
+
+    w("## 54 V boost for the Zyxel XMG-105HP\n")
+    w("| | |\n|---|---|")
+    for k, v in design_boost(BOOST):
+        w(f"| {k} | {v} |")
     w("")
 
     w("## Per-output PTCs\n")
@@ -187,9 +251,10 @@ def main():
         w(f"| {p} | {s} | {d} |")
     w("")
     adc = ([f"IMON {r['name']}" for r in RAILS] + [f"VOUT {r['name']}" for r in RAILS]
-           + [f"VIN {r['name']}" for r in RAILS if r["name"] != "42V"]
+           + [f"VIN {r['name']}" for r in RAILS if r["name"] not in ("42V", "54V")]
            + ["board NTC", "aux 5 V"])
-    w("Two TLA2528s (0x10, 0x11). The 42 V bus input voltage comes from the INA228.\n")
+    w("Two TLA2528s (0x10, 0x11). The 42 V bus voltage, which is also the input of the 42 V "
+      "group and the 54 V boost, comes from the INA228. VOUT 54V is the boost output.\n")
     w("| ADC | Input |\n|---|---|")
     for i, s in enumerate(adc):
         w(f"| 0x{0x10 + i // 8:02X}.AIN{i % 8} | {s} |")

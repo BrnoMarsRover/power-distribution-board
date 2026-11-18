@@ -35,6 +35,12 @@ JLC = {
     "PTC 33 V 3 A": "C2943634",  # SMD2920P300TF/33
     "PTC 16 V 3 A": "C167318",   # SMD2920P300TF/16
     "PTC 8 V 3 A": "C21004",     # SMD1812P300TF
+    "LM5122": "C77241",          # LM5122MHX/NOPB boost controller for the 54 V supply
+    "inductor 22 uH 10 A": "C357119",  # TMPA1265SP-220MN-D
+    "shunt 5 mOhm": "C185817",
+    "shunt 10 mOhm": "C163051",
+    "2.2 uF 100 V 1210": "C55151",
+    "SMBJ58A": "C151910",
     "shunt 2 mOhm": "C160590",
     "shunt 0.5 mOhm": "C154666",
     "MMBT3904": "C20526",      # FET temperature sense
@@ -44,6 +50,8 @@ ESTIMATES = {                  # USD each; not from JLC
     "blade holder": 0.71,      # Keystone 3568, DigiKey at 100 pcs
     "blade fuse 32 V": 0.25,
     "blade fuse 58 V": 0.80,
+    "100 uF 80 V bulk": 0.30,  # electrolytic, ESTIMATE
+    "54 V connector": 0.50,    # unique type, ESTIMATE
 }
 
 # One entry per building block: (part, quantity).
@@ -63,9 +71,14 @@ BLOCKS = {
                                  ("passive", 16)],
     "24V rail eFuse (chosen)": [("TPS48111", 1), ("BSC040N10NS5", 2), ("shunt 2 mOhm", 1),
                                 ("passive", 16)],
-    "15/12/5V rail eFuse (chosen)": [("TPS48111", 1), ("BSC010N04LS", 2), ("shunt 2 mOhm", 1),
+    "12/5V rail eFuse (chosen)": [("TPS48111", 1), ("BSC010N04LS", 2), ("shunt 2 mOhm", 1),
                                      ("passive", 16)],
-    "PTC 24/15V output": [("PTC 33 V 3 A", 1)],
+    "PTC 24V output": [("PTC 33 V 3 A", 1)],
+    "54V supply eFuse": [("TPS48111", 1), ("BSC040N10NS5", 2), ("shunt 5 mOhm", 1),
+                         ("passive", 16)],
+    "54V boost (LM5122)": [("LM5122", 1), ("BSC040N10NS5", 2), ("inductor 22 uH 10 A", 1),
+                           ("shunt 10 mOhm", 1), ("2.2 uF 100 V 1210", 10), ("100 uF 80 V bulk", 1),
+                           ("SMBJ58A", 1), ("54 V connector", 1), ("passive", 15)],
     "PTC 12V output": [("PTC 16 V 3 A", 1)],
     "PTC 5V output": [("PTC 8 V 3 A", 1)],
     "I/O expander": [("TCA9535", 1)],
@@ -73,10 +86,11 @@ BLOCKS = {
 }
 
 OPTIONS = [
-    ("C", "**Chosen 2026-11-18:** an eFuse per rail (with current monitor), a PTC per 24/15/12/5 V output",
-     {"42V group eFuse (chosen)": 1, "24V rail eFuse (chosen)": 1, "15/12/5V rail eFuse (chosen)": 3,
-      "PTC 24/15V output": 16, "PTC 12V output": 7, "PTC 5V output": 11,
-      "I/O expander": 1, "ADC": 2}),
+    ("C", "**Chosen 2026-11-18:** an eFuse per rail (with current monitor), a PTC per 24/12/5 V output, "
+          "no 15 V rail, plus the on-board 54 V boost for the Zyxel switch",
+     {"42V group eFuse (chosen)": 1, "24V rail eFuse (chosen)": 1, "12/5V rail eFuse (chosen)": 2,
+      "PTC 24V output": 8, "PTC 12V output": 7, "PTC 5V output": 11,
+      "54V supply eFuse": 1, "54V boost (LM5122)": 1, "I/O expander": 1, "ADC": 2}),
     ("A", "Per-output everywhere, TPS25982 on all 15 XT60 outputs (as specced)",
      {"42V channel": 8, "24V channel": 8, "heavy channel (TPS25982)": 15,
       "light channel (TPS259470)": 11, "I/O expander": 6, "ADC": 7}),
@@ -137,6 +151,8 @@ def main():
     for key, desc, _ in OPTIONS:
         out.append(f"| **{key}** | {desc} | ${costs[key]:.0f} | {costs[key] - costs['B']:+.0f} |")
 
+    out += ["", "Options A to B0 are the 2026-11-18 comparison. They still assume the old rail set "
+            "(15 V rail, no 54 V supply) and are kept as the record behind choosing C."]
     out += ["", "## Per building block\n", "| Block | Cost each |", "|---|---|"]
     ref = OPTIONS[0][2]
     for block, items in BLOCKS.items():

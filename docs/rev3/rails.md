@@ -6,23 +6,44 @@ One TPS48111-Q1 eFuse per rail, with a resettable PTC on each 24 / 15 / 12 / 5 V
 
 ## eFuse values per rail
 
-| | 42V | 24V | 15V | 12V | 5V |
+| | 42V | 24V | 12V | 5V | 54V |
 |---|---|---|---|---|---|
-| Feeds | 8 x XT90, from battery bus | 8 x Deans T, from 300 W converter | 8 x XT60, from 150 W converter | 7 x XT60, from 150 W converter | 11 x XT30, from 150 W converter, XT30-limited |
-| Design current | 40 A | 12.5 A | 10 A | 12.5 A | 15 A |
-| Main FET | IPT015N10N5 (100 V, TOLL), 2.40 W at design current | BSC040N10NS5 (100 V, 5x6), 0.62 W at design current | BSC010N04LS (40 V, 5x6), 0.10 W at design current | BSC010N04LS (40 V, 5x6), 0.16 W at design current | BSC010N04LS (40 V, 5x6), 0.23 W at design current |
-| Pre-charge FET | IPT015N10N5 (same part) | BSC040N10NS5 (same part) | BSC010N04LS (same part) | BSC010N04LS (same part) | BSC010N04LS (same part) |
-| R_SNS | 0.5 mOhm, 0.80 W at design current, 30 mV at trip | 2 mOhm, 0.31 W at design current, 28 mV at trip | 2 mOhm, 0.20 W at design current, 22 mV at trip | 2 mOhm, 0.31 W at design current, 28 mV at trip | 2 mOhm, 0.45 W at design current, 33 mV at trip |
+| Feeds | 8 x XT90, from battery bus | 8 x Deans T, from 300 W converter | 7 x XT60, from 150 W converter | 11 x XT30, from 150 W converter, XT30-limited | 1 x Zyxel XMG-105HP supply, from battery bus, then the LM5122 boost to 54 V |
+| Power-on default | **ON** (hardware pull-ups) | OFF | **ON** (hardware pull-ups) | OFF | **ON** (hardware pull-ups) |
+| Design current | 40 A | 12.5 A | 12.5 A | 15 A | 4 A |
+| Main FET | IPT015N10N5 (100 V, TOLL), 2.40 W at design current | BSC040N10NS5 (100 V, 5x6), 0.62 W at design current | BSC010N04LS (40 V, 5x6), 0.16 W at design current | BSC010N04LS (40 V, 5x6), 0.23 W at design current | BSC040N10NS5 (100 V, 5x6), 0.06 W at design current |
+| Pre-charge FET | IPT015N10N5 (same part) | BSC040N10NS5 (same part) | BSC010N04LS (same part) | BSC010N04LS (same part) | BSC040N10NS5 (same part) |
+| R_SNS | 0.5 mOhm, 0.80 W at design current, 30 mV at trip | 2 mOhm, 0.31 W at design current, 28 mV at trip | 2 mOhm, 0.31 W at design current, 28 mV at trip | 2 mOhm, 0.45 W at design current, 33 mV at trip | 5 mOhm, 0.08 W at design current, 25 mV at trip |
 | R_SET | 100R | 100R | 100R | 100R | 100R |
-| R_IWRN | 39.2k -> trips at 60.7 A | 43.2k -> trips at 13.8 A | 53.6k -> trips at 11.1 A | 43.2k -> trips at 13.8 A | 35.7k -> trips at 16.7 A |
+| R_IWRN | 39.2k -> trips at 60.7 A | 43.2k -> trips at 13.8 A | 43.2k -> trips at 13.8 A | 35.7k -> trips at 16.7 A | 47.5k -> trips at 5.0 A |
 | C_TMR (R_TMR 100k, latch-off) | 33uF -> 522 ms | 33uF -> 522 ms | 33uF -> 522 ms | 33uF -> 522 ms | 33uF -> 522 ms |
-| R_ISCP | 4.32k -> 149 A in 1.2 us | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes |
-| R_IMON | 8.87k -> 40 mV/A, 3.0 V at 76 A | 9.76k -> 176 mV/A, 3.0 V at 17 A | 12.1k -> 218 mV/A, 3.0 V at 14 A | 9.76k -> 176 mV/A, 3.0 V at 17 A | 8.06k -> 145 mV/A, 3.0 V at 21 A |
-| C_g / R_g (pre-charge slew) | 180nF / 330R -> 2.1 A for 76 ms | 180nF / 330R -> 2.1 A for 43 ms | 180nF / 330R -> 2.1 A for 27 ms | 150nF / 330R -> 2.2 A for 18 ms | 120nF / 330R -> 2.0 A for 6 ms |
-| Pre-charge FET stress | 3.32 J, 88 W peak (ASSUMED 3.76mF load) - check its SOA | 1.08 J, 50 W peak (ASSUMED 3.76mF load) - check its SOA | 0.42 J, 31 W peak (ASSUMED 3.76mF load) - check its SOA | 0.24 J, 26 W peak (ASSUMED 3.29mF load) - check its SOA | 0.03 J, 10 W peak (ASSUMED 2.42mF load) - check its SOA |
-| C_BST | >= 10 x C_g = 1.8uF, plus Qg(main + pre-charge) / 1 V | >= 10 x C_g = 1.8uF, plus Qg(main + pre-charge) / 1 V | >= 10 x C_g = 1.8uF, plus Qg(main + pre-charge) / 1 V | >= 10 x C_g = 1.5uF, plus Qg(main + pre-charge) / 1 V | >= 10 x C_g = 1.2uF, plus Qg(main + pre-charge) / 1 V |
+| R_ISCP | 4.32k -> 149 A in 1.2 us | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | 5.9k -> 20 A in 1.2 us |
+| R_IMON | 8.87k -> 40 mV/A, 3.0 V at 76 A | 9.76k -> 176 mV/A, 3.0 V at 17 A | 9.76k -> 176 mV/A, 3.0 V at 17 A | 8.06k -> 145 mV/A, 3.0 V at 21 A | 10.7k -> 482 mV/A, 3.0 V at 6 A |
+| C_g / R_g (pre-charge slew) | 180nF / 330R -> 2.1 A for 76 ms | 180nF / 330R -> 2.1 A for 43 ms | 150nF / 330R -> 2.2 A for 18 ms | 120nF / 330R -> 2.0 A for 6 ms | 56nF / 330R -> 1.1 A for 24 ms |
+| Pre-charge FET stress | 3.32 J, 88 W peak (ASSUMED 3.76mF load) - check its SOA | 1.08 J, 50 W peak (ASSUMED 3.76mF load) - check its SOA | 0.24 J, 26 W peak (ASSUMED 3.29mF load) - check its SOA | 0.03 J, 10 W peak (ASSUMED 2.42mF load) - check its SOA | 0.53 J, 45 W peak (ASSUMED 600uF load) - check its SOA |
+| C_BST | >= 10 x C_g = 1.8uF, plus Qg(main + pre-charge) / 1 V | >= 10 x C_g = 1.8uF, plus Qg(main + pre-charge) / 1 V | >= 10 x C_g = 1.5uF, plus Qg(main + pre-charge) / 1 V | >= 10 x C_g = 1.2uF, plus Qg(main + pre-charge) / 1 V | >= 10 x C_g = 560nF, plus Qg(main + pre-charge) / 1 V |
 
 - **42V:** Motor peaks: the 60 A / 0.5 s trip must sit above the drive's acceleration profile.
+- **12V:** Feeds the Jetson AGX Orin, so it defaults ON in hardware.
+- **54V:** The eFuse sits on the boost's 42 V input. It switches the boost and is its short-circuit protection, because a boost cannot block current from input to output. Defaults ON on the assumption that the Zyxel is the rover's network switch. C_LOAD includes the boost's output side and the Zyxel's input: ASSUMED 600 uF.
+
+## 54 V boost for the Zyxel XMG-105HP
+
+| | |
+|---|---|
+| Controller | LM5122 (JLC C77241), synchronous boost, 65 V in (75 V abs max on VIN/CSP/CSN), 105 V switch node |
+| Operating point | 30-42 V in -> 54 V, 100 W (1.85 A); the XMG-105HP draws 90 W at most, 70 W of it PoE |
+| Duty cycle | 0.26 - 0.47 (below 50 %, so slope compensation is not critical) |
+| Switching frequency | 400 kHz, RT = 22.6k |
+| Inductor | TMPA1265SP-220MN-D (C357119), 22 uH, Isat 10 A, DCR 31 mOhm, 0.38 W |
+| Input current | 3.51 A average at 30 V, ripple 1.61 A p-p, peak 4.31 A |
+| Current sense R_S | 10 mOhm -> cycle-by-cycle limit 6.5 / 7.5 / 8.8 A (min / typ / max), below Isat |
+| FETs | BSC040N10NS5 for both low and high side (100 V) |
+| Feedback | R_top 221k / R_bot 4.99k -> 54.35 V |
+| Output capacitors | 6 x 2.2uF 100 V X7R 1210 (~5.94uF effective at 54 V) + 100uF / 80 V bulk; ripple ~368 mV |
+| Output TVS | SMBJ58A: standoff 58 V, above the 57 V PoE maximum |
+| Over-voltage | No OVP in the LM5122. Firmware reads VOUT 54V and opens the input eFuse above 57 V; the TVS covers fast transients |
+| Output connector | A type used for nothing else on the board, so a 54 V plug cannot reach a 5 / 12 / 24 V device |
 
 ## Per-output PTCs
 
@@ -31,7 +52,6 @@ A PTC protects the cable to one device from an overload too small to trip the ra
 | Rail | Outputs | PTC (JLC #) | V max | Hold / trip | Drop at hold | Cable at least |
 |---|---|---|---|---|---|---|
 | 24V | 8 x Deans T | SMD2920P300TF/33 (C2943634, 2920) | 33 V | 3 / 6 A | >= 36 mV | 0.5 mm2 / AWG 20 |
-| 15V | 8 x XT60 | SMD2920P300TF/33 (C2943634, 2920) | 33 V | 3 / 6 A | >= 36 mV | 0.5 mm2 / AWG 20 |
 | 12V | 7 x XT60 | SMD2920P300TF/16 (C167318, 2920) | 16 V | 3 / 6 A | >= 36 mV | 0.5 mm2 / AWG 20 |
 | 5V | 11 x XT30 | SMD1812P300TF (C21004, 1812) | 8 V | 3 / 5 A | >= 30 mV | 0.5 mm2 / AWG 20 |
 
@@ -45,38 +65,37 @@ One TCA9535 (0x20) holds every control line, so outputs keep their state while t
 |---|---|---|
 | P00 | INP 42V | out |
 | P01 | INP 24V | out |
-| P02 | INP 15V | out |
-| P03 | INP 12V | out |
-| P04 | INP 5V | out |
+| P02 | INP 12V | out |
+| P03 | INP 5V | out |
+| P04 | INP 54V | out |
 | P05 | INP_G 42V | out |
 | P06 | INP_G 24V | out |
-| P07 | INP_G 15V | out |
-| P10 | INP_G 12V | out |
-| P11 | INP_G 5V | out |
+| P07 | INP_G 12V | out |
+| P10 | INP_G 5V | out |
+| P11 | INP_G 54V | out |
 | P12 | FLT 42V | in (FLT_I + FLT_T wire-OR) |
 | P13 | FLT 24V | in (FLT_I + FLT_T wire-OR) |
-| P14 | FLT 15V | in (FLT_I + FLT_T wire-OR) |
-| P15 | FLT 12V | in (FLT_I + FLT_T wire-OR) |
-| P16 | FLT 5V | in (FLT_I + FLT_T wire-OR) |
+| P14 | FLT 12V | in (FLT_I + FLT_T wire-OR) |
+| P15 | FLT 5V | in (FLT_I + FLT_T wire-OR) |
+| P16 | FLT 54V | in (FLT_I + FLT_T wire-OR) |
 | P17 | spare |  |
 
-Two TLA2528s (0x10, 0x11). The 42 V bus input voltage comes from the INA228.
+Two TLA2528s (0x10, 0x11). The 42 V bus voltage, which is also the input of the 42 V group and the 54 V boost, comes from the INA228. VOUT 54V is the boost output.
 
 | ADC | Input |
 |---|---|
 | 0x10.AIN0 | IMON 42V |
 | 0x10.AIN1 | IMON 24V |
-| 0x10.AIN2 | IMON 15V |
-| 0x10.AIN3 | IMON 12V |
-| 0x10.AIN4 | IMON 5V |
+| 0x10.AIN2 | IMON 12V |
+| 0x10.AIN3 | IMON 5V |
+| 0x10.AIN4 | IMON 54V |
 | 0x10.AIN5 | VOUT 42V |
 | 0x10.AIN6 | VOUT 24V |
-| 0x10.AIN7 | VOUT 15V |
-| 0x11.AIN0 | VOUT 12V |
-| 0x11.AIN1 | VOUT 5V |
+| 0x10.AIN7 | VOUT 12V |
+| 0x11.AIN0 | VOUT 5V |
+| 0x11.AIN1 | VOUT 54V |
 | 0x11.AIN2 | VIN 24V |
-| 0x11.AIN3 | VIN 15V |
-| 0x11.AIN4 | VIN 12V |
-| 0x11.AIN5 | VIN 5V |
-| 0x11.AIN6 | board NTC |
-| 0x11.AIN7 | aux 5 V |
+| 0x11.AIN3 | VIN 12V |
+| 0x11.AIN4 | VIN 5V |
+| 0x11.AIN5 | board NTC |
+| 0x11.AIN6 | aux 5 V |
