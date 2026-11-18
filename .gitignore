@@ -12,3 +12,6 @@ __pycache__/
 /ros2/**/build/
 /ros2/**/install/
 /ros2/**/log/
+
+# rev3 schematic generator scratch output (netlist, ERC report, review PDF)
+/kicad/rev3/gen/out/

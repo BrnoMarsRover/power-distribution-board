@@ -35,6 +35,14 @@ def nearest(value, series):
                key=lambda c: abs(c - value))
 
 
+def ceil_e(value, series):
+    """Smallest series value >= value (for minimums like a bootstrap capacitor)."""
+    decade = 10 ** math.floor(math.log10(value))
+    for s in [x * decade for x in series] + [series[0] * decade * 10]:
+        if s >= value * 0.999:
+            return s
+
+
 def fmt_r(ohms):
     for unit, scale in (("M", 1e6), ("k", 1e3)):
         if ohms >= scale:
@@ -54,6 +62,8 @@ R_SET = 100.0            # TPS4811 characterisation value
 I_TMR = 82e-6            # TMR pull-up current
 R_TMR = 100e3            # across C_TMR -> latch-off mode (section 8.3.3.2)
 I_G = 100e-6             # pre-charge gate pull-up current, typical (72-140 uA)
+
+FET_QG = {"IPB042N10N3G": 117e-9, "FDD86102": 19e-9}   # total gate charge at 10 V
 
 # FETs: name, R_DS(on) max at 10 V in ohms, JLC part, description. Leaded packages only.
 FETS = {
@@ -76,16 +86,18 @@ PTCS = {
 #   c_out, n_out: ASSUMED capacitance per output, and the output count
 RAILS = [
     dict(name="42V-D", v=42.0, design=30.0, i_oc=50.0, t_oc=0.5, i_sc=150.0,
-         r_sns=0.5e-3, fet="IPB042N10N3G", n_main=2, c_out=470e-6, n_out=5, conn="XT90 (drives)",
+         r_sns=0.5e-3, fet="IPB042N10N3G", n_main=2, c_out=940e-6, n_out=4, conn="XT90 (drives)",
          i_inrush=2.0, ptc=None, src="battery bus", default_on=False,
-         note="EPOS4 drive group. The 50 A / 0.5 s trip must sit above the drives' acceleration "
+         note="EPOS4 drive group: two EPOS4 50/5 per connector, two connectors in use and two "
+              "spare (ASSUMED 470 uF per EPOS4). The 50 A / 0.5 s trip must sit above the drives' acceleration "
               "peaks. The E-STOP loop feeds this driver's EN/UVLO, so opening it cuts motor power "
               "in hardware without touching the Orin. Defaults OFF: the drives are useless without "
               "a controller."),
-    dict(name="42V-C", v=42.0, design=25.0, i_oc=27.5, t_oc=0.5, i_sc=100.0,
-         r_sns=1e-3, fet="IPB042N10N3G", n_main=2, c_out=470e-6, n_out=3, conn="XT90 (converters)",
+    dict(name="42V-C", v=42.0, design=30.0, i_oc=33.0, t_oc=0.5, i_sc=100.0,
+         r_sns=1e-3, fet="IPB042N10N3G", n_main=2, c_out=470e-6, n_out=4, conn="XT90 (converters)",
          i_inrush=2.0, ptc=None, src="battery bus", default_on=True,
-         note="Converter-feed group: 24 V 300 W + 12 V 150 W + 5 V 150 W is about 22 A at 30 V. "
+         note="Converter-feed group: three feeds plus one spare. 24 V 300 W + 12 V 150 W + 5 V 150 W "
+              "is about 22 A at 30 V; the 30 A design leaves room for a converter on the spare. "
               "Defaults ON, because the 12 V converter powers the Orin."),
     dict(name="24V", v=24.0, design=12.5, i_oc=13.75, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=8, conn="Deans T",
@@ -109,50 +121,62 @@ RAILS = [
 ]
 
 
-def design_rail(r):
-    v_wrn = r["i_oc"] * r["r_sns"]
+def rail_values(r):
+    """Numeric component values for one rail eFuse (TPS4811-Q1 equations, SLUSEE5E)."""
+    v = dict(r_set=R_SET, r_sns=r["r_sns"], n=r["n_main"])
+    v["v_wrn"] = r["i_oc"] * r["r_sns"]
     # Eq. 6: R_IWRN = 11.9 * R_SET / V_SNS(WRN)
-    r_iwrn = nearest(11.9 * R_SET / v_wrn, E96)
-    i_oc = 11.9 * R_SET / r_iwrn / r["r_sns"]
+    v["r_iwrn"] = nearest(11.9 * R_SET / v["v_wrn"], E96)
+    v["i_oc"] = 11.9 * R_SET / v["r_iwrn"] / r["r_sns"]
     # Eq. 10 (latch-off, R_TMR across C_TMR): C_TMR = t_OC / (R_TMR * ln(1 / (1 - 1.2 / (R_TMR * I_TMR))))
-    k = R_TMR * math.log(1 / (1 - 1.2 / (R_TMR * I_TMR)))
-    c_tmr = nearest(r["t_oc"] / k, E12)
+    v["k_tmr"] = R_TMR * math.log(1 / (1 - 1.2 / (R_TMR * I_TMR)))
+    v["c_tmr"] = nearest(r["t_oc"] / v["k_tmr"], E12)
+    v["r_tmr"] = R_TMR
+    # Eq. 11: R_ISCP = I_SC * R_SNS / 15.6 uA - 464; None = ISCP tied to CS- (disabled)
     if r["i_sc"]:
-        # Eq. 11: R_ISCP = I_SC * R_SNS / 15.6 uA - 464
-        r_iscp = nearest(r["i_sc"] * r["r_sns"] / 15.6e-6 - 464, E96)
-        iscp = f"{fmt_r(r_iscp)} -> {(r_iscp + 464) * 15.6e-6 / r['r_sns']:.0f} A in 1.2 us"
+        v["r_iscp"] = nearest(r["i_sc"] * r["r_sns"] / 15.6e-6 - 464, E96)
+        v["i_sc"] = (v["r_iscp"] + 464) * 15.6e-6 / r["r_sns"]
     else:
-        iscp = "ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes"
+        v["r_iscp"] = v["i_sc"] = None
     # Eq. 12/13: V_IMON = V_SNS * 0.9 * R_IMON / R_SET, full scale at 1.25 x I_OC
-    i_fs = 1.25 * i_oc
-    r_imon = nearest(ADC_FULL_SCALE_V * R_SET / (0.9 * i_fs * r["r_sns"]), E96)
-    mv_per_a = 0.9 * r_imon / R_SET * r["r_sns"] * 1e3
+    v["i_fs"] = 1.25 * v["i_oc"]
+    v["r_imon"] = nearest(ADC_FULL_SCALE_V * R_SET / (0.9 * v["i_fs"] * r["r_sns"]), E96)
+    v["mv_per_a"] = 0.9 * v["r_imon"] / R_SET * r["r_sns"] * 1e3
     # Eq. 5: pre-charge gate slew, C_g = C_LOAD * I_G / I_INRUSH
-    c_load = r["c_out"] * r["n_out"]
-    c_g = nearest(c_load * I_G / r["i_inrush"], E12)
-    i_inrush = c_load * I_G / c_g
-    t_ramp = c_load * r["v"] / i_inrush
-    energy = 0.5 * c_load * r["v"] ** 2
-    rds, _, fet_desc = FETS[r["fet"]]
-    n = r["n_main"]
+    v["c_load"] = r["c_out"] * r["n_out"]
+    v["c_g"] = nearest(v["c_load"] * I_G / r["i_inrush"], E12)
+    v["i_inrush"] = v["c_load"] * I_G / v["c_g"]
+    v["t_ramp"] = v["c_load"] * r["v"] / v["i_inrush"]
+    v["energy"] = 0.5 * v["c_load"] * r["v"] ** 2
+    v["rds"], v["fet_lcsc"], v["fet_desc"] = FETS[r["fet"]]
+    # Eq. 4/20: C_BST > Qg(total) / 1 V + 10 x C_g
+    v["c_bst"] = ceil_e(FET_QG[r["fet"]] * (r["n_main"] + 1) / 1.0 + 10 * v["c_g"], E12)
+    return v
+
+
+def design_rail(r):
+    v = rail_values(r)
+    n = v["n"]
+    iscp = (f"{fmt_r(v['r_iscp'])} -> {v['i_sc']:.0f} A in 1.2 us" if v["r_iscp"]
+            else "ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes")
     return [
         ("Feeds", f"{r['n_out']} x {r['conn']}, from {r['src']}"),
         ("Power-on default", "**ON** (hardware pull-ups)" if r["default_on"] else "OFF"),
         ("Design current", f"{r['design']:g} A"),
-        ("Main FET", f"{n} x {r['fet']} ({fet_desc}){' in parallel' if n > 1 else ''}, "
-                     f"{r['design'] ** 2 * rds / n:.2f} W total at design current"),
+        ("Main FET", f"{n} x {r['fet']} ({v['fet_desc']}){' in parallel' if n > 1 else ''}, "
+                     f"{r['design'] ** 2 * v['rds'] / n:.2f} W total at design current"),
         ("Pre-charge FET", f"{r['fet']} (same part)"),
         ("R_SNS", f"{r['r_sns'] * 1e3:g} mOhm, {r['design'] ** 2 * r['r_sns']:.2f} W at design current, "
-                  f"{v_wrn * 1e3:.0f} mV at trip"),
+                  f"{v['v_wrn'] * 1e3:.0f} mV at trip"),
         ("R_SET", fmt_r(R_SET)),
-        ("R_IWRN", f"{fmt_r(r_iwrn)} -> trips at {i_oc:.1f} A"),
-        ("C_TMR (R_TMR 100k, latch-off)", f"{fmt_c(c_tmr)} -> {c_tmr * k * 1e3:.0f} ms"),
+        ("R_IWRN", f"{fmt_r(v['r_iwrn'])} -> trips at {v['i_oc']:.1f} A"),
+        ("C_TMR (R_TMR 100k, latch-off)", f"{fmt_c(v['c_tmr'])} -> {v['c_tmr'] * v['k_tmr'] * 1e3:.0f} ms"),
         ("R_ISCP", iscp),
-        ("R_IMON", f"{fmt_r(r_imon)} -> {mv_per_a:.0f} mV/A, {ADC_FULL_SCALE_V:g} V at {i_fs:.0f} A"),
-        ("C_g / R_g (pre-charge slew)", f"{fmt_c(c_g)} / 330R -> {i_inrush:.1f} A for {t_ramp * 1e3:.0f} ms"),
-        ("Pre-charge FET stress", f"{energy:.2f} J, {r['v'] * i_inrush:.0f} W peak (ASSUMED "
-                                  f"{fmt_c(c_load)} load) - check its SOA"),
-        ("C_BST", f">= 10 x C_g = {fmt_c(10 * c_g)}, plus Qg(main + pre-charge) / 1 V"),
+        ("R_IMON", f"{fmt_r(v['r_imon'])} -> {v['mv_per_a']:.0f} mV/A, {ADC_FULL_SCALE_V:g} V at {v['i_fs']:.0f} A"),
+        ("C_g / R_g (pre-charge slew)", f"{fmt_c(v['c_g'])} / 330R -> {v['i_inrush']:.1f} A for {v['t_ramp'] * 1e3:.0f} ms"),
+        ("Pre-charge FET stress", f"{v['energy']:.2f} J, {r['v'] * v['i_inrush']:.0f} W peak (ASSUMED "
+                                  f"{fmt_c(v['c_load'])} load) - check its SOA"),
+        ("C_BST", f"{fmt_c(v['c_bst'])} (>= Qg(main + pre-charge) / 1 V + 10 x C_g)"),
     ]
 
 

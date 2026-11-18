@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "filename": "PowerBoard_rev3.kicad_pro",
+    "version": 3
+  },
+  "sheets": [
+    [
+      "516ab0ea-2d5a-54c1-908c-ca4e966c6d14",
+      "Root"
+    ],
+    [
+      "9e11462f-5137-5894-a3ed-fbdfe3cafb63",
+      "Battery input, bus protection and battery monitor"
+    ],
+    [
+      "5276bed9-282c-5133-a909-670f1f800c18",
+      "42 V drive group eFuse (4 x XT90, EPOS4)"
+    ],
+    [
+      "51cc0ad9-0002-5479-8064-e81411f6b82b",
+      "42 V converter-feed group eFuse (4 x XT90)"
+    ],
+    [
+      "ad3e9c8f-2c78-5227-b829-cbd4bc4ef282",
+      "24 V rail eFuse"
+    ],
+    [
+      "bf43b19e-8cc6-5a33-a460-fa19c93c4f59",
+      "12 V rail eFuse (feeds the Orin)"
+    ],
+    [
+      "4034b0c1-70ba-5e0e-ab11-01410c703ee1",
+      "5 V rail eFuse"
+    ],
+    [
+      "63aa7a47-427f-5849-b294-7eba9b598769",
+      "54 V supply eFuse (input of the LM5122 boost)"
+    ],
+    [
+      "fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb",
+      "Rail inputs, output connectors and per-output PTCs"
+    ],
+    [
+      "94cf5cf1-594f-5283-9734-ae337d60eb5f",
+      "54 V boost for the Zyxel XMG-105HP (LM5122)"
+    ],
+    [
+      "fbd1cb5a-880c-5dbb-8b6e-d3abaa615900",
+      "Always-on aux supply: 42 V -> 5.3 V -> 3.3 V"
+    ],
+    [
+      "0f4c8e4d-36f6-5e6f-a801-0296a18d8e21",
+      "ESP32-S3-WROOM-1U, USB, host UART, LEDs"
+    ],
+    [
+      "084a4302-8a15-5394-bf69-acacc701e44b",
+      "CAN bus to the EPOS4 drives (TCAN1044AV)"
+    ],
+    [
+      "a49d71e0-df6f-5957-a2f8-e887a3c1578b",
+      "Switch control (TCA9535), measurement (ADC128D818 x2), E-STO"
+    ]
+  ]
+}
