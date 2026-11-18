@@ -424,8 +424,14 @@ job.
   - VIO 1.8–5.5 V, so it runs directly on 3.3 V logic.
   - ±58 V bus-fault protection, which matters when a CAN wire can touch 42 V.
   - CAN FD capable up to 8 Mbit/s; the EPOS4 runs classic CANopen at ≤ 1 Mbit/s.
-- **Board hardware:** split 120 Ω termination on a solder jumper, an ESD diode, and two
-  connectors for daisy-chaining.
+- **Board hardware:**
+  - Split 120 Ω termination on solder jumpers.
+  - Two Molex CLIK-Mate 4-pin connectors for daisy-chaining, matching the EPOS4 50/5 X11 / X12
+    pinout (1 CAN_H, 2 CAN_L, 3 GND, 4 shield), so maxon's CAN-CAN cable (520858) plugs in
+    directly.
+  - The EPOS4 terminates with DIP switch SW1 position 7.
+  - There is no external TVS: the TCAN1044AV's ±58 V bus-fault rating covers a CAN wire
+    touching 42 V, where a 24 V TVS would conduct.
 - **Safety:**
   - The ESP32 produces a CANopen heartbeat, and each EPOS4 is configured to consume it.
   - The gamepad link is watched as well.
@@ -578,7 +584,7 @@ layout.
 | D16 | ~~Zyxel supply~~ | **Decided:** 54 V; the Zyxel is the main network switch and defaults ON |
 | D17 | ~~54 V connector~~ | **Decided:** JST-XH 2-pin |
 | D18 | ~~XT90 split~~ | **Decided:** 4 drives (two EPOS4 each) / 4 converter feeds |
-| D19 | CAN connector type, to match the EPOS4 harness | JST-GH 4-pin placeholder in the schematic |
+| D19 | ~~CAN connector~~ | **Decided:** Molex CLIK-Mate 4p, the same as the EPOS4 50/5's X11 / X12 (1 CAN_H, 2 CAN_L, 3 GND, 4 shield). Board header 502585-0470, so maxon's CAN-CAN cable 520858 fits directly. |
 | —   | ~~Architecture~~ | **Decided:** an eFuse per rail plus a PTC per output (section 12) |
 | —   | ~~Stackup~~ | **Decided:** 4 layers |
 | —   | ~~Host link~~ | **Decided:** direct UART; USB-C kept for flashing and debug |
@@ -592,8 +598,7 @@ layout.
 2. Work through the review checklist in `kicad/rev3/README.md`.
    - The biggest items are the LM5122 compensation (TI calculator) and the pre-charge FET
      SOA check.
-   - The rest: inductor and electrolytic footprints, connector polarity, and the CAN
-     connector (D19).
+   - The rest: inductor and electrolytic footprints, and connector polarity.
 3. Settle D12 (real load capacitance), which feeds the pre-charge values in `rails.py`.
 4. Lay out the board (4 layers, hand-solder rules in 8.1), then write the bring-up plan
    and the ESP32 firmware.
@@ -647,6 +652,7 @@ and the smallest board area of any option that protects each output.
 - Espressif ESP32-S3-WROOM-1/1U datasheet: https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf
 - Bluepad32 supported gamepads: https://bluepad32.readthedocs.io/en/latest/supported_gamepads/
 - maxon EPOS4 feature chart: https://www.maxongroup.com/medias/sys_master/root/8934669025310/EPOS4-Feature-Chart-En.pdf
+- maxon EPOS4 50/5 Hardware Reference (2023-07), CAN section 3.3.11: https://www.maxongroup.com.cn/medias/sys_master/root/9157360680990/EPOS4-50-5-Hardware-Reference-En.pdf
 - NVIDIA Jetson AGX Orin Developer Kit hardware layout: https://docs.nvidia.com/jetson/agx-orin-devkit/user-guide/hardware_layout.html
 - Littelfuse ATO (32 V DC): https://littelfuse.com/products/fuses/automotive-aftermarket-products/blade-fuses/ato.aspx
 - JLCPCB parts prices and PTC ratings: queried live by `cost.py` and recorded in `rails.py`

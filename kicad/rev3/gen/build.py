@@ -455,6 +455,7 @@ FP = dict(
     XH2="Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical",
     PH2="Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical",
     GH4="Connector_JST:JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical",
+    CLIK4="Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal",
     USBC="Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12",
     BTN="Button_Switch_SMD:SW_SPST_TL3342",
     ESP="RF_Module:ESP32-S3-WROOM-1U",
@@ -787,8 +788,8 @@ def sheet_mcu():
     R(sh, 5.1e3, "L:CC2", "GND")
     sh.add("Power_Protection:USBLC6-2SC6", "U", "USBLC6-2SC6", FP["SOT23"].replace("SOT-23", "SOT-23-6"),
            {1: "USB_DP", 6: "USB_DP", 3: "USB_DN", 4: "USB_DN", 5: "VBUS_USB", 2: "GND"})
-    sh.add("Connector_Generic:Conn_01x04", "J", "JST-GH 4p (host UART to Orin)", FP["GH4"],
-           {1: "L:TX_C", 2: "L:RX_C", 3: "GND", 4: "L:SP_C"})
+    sh.add("Connector_Generic_MountingPin:Conn_01x04_MountingPin", "J", "JST-GH 4p (host UART to Orin)",
+           FP["GH4"], {1: "L:TX_C", 2: "L:RX_C", 3: "GND", 4: "L:SP_C", "MP": "GND"})
     R(sh, 100, "UART_TX", "L:TX_C")
     R(sh, 100, "L:RX_C", "UART_RX")
     R(sh, 100, "UART_SP", "L:SP_C")
@@ -812,7 +813,10 @@ def sheet_can():
     sh = Sheet("can", "CAN bus to the EPOS4 drives (TCAN1044AV)", [
         "Bus pins survive +-58 V faults internally. No external TVS: a 24 V CAN TVS would conduct if a CAN wire touched 42 V.",
         "Split termination enabled by closing both solder jumpers (only at a bus end).",
-        "Connector type to match the EPOS4 CAN harness (JST-GH 4p placeholder: CANH, CANL, GND, NC)."])
+        "Connectors match the EPOS4 50/5 X11 / X12: Molex CLIK-Mate 4p (1 CAN_H, 2 CAN_L, 3 GND, 4 shield), "
+        "so maxon's CAN-CAN cable 520858 plugs straight in. Board header 502585-0470 mates with plug 502578-0400.",
+        "Terminate both bus ends only: here with the jumpers if the board is an end, on the last EPOS4 with "
+        "DIP switch SW1 position 7 (120 ohm). Source: EPOS4 50/5 Hardware Reference 2023-07, section 3.3.11."])
     sh.add("PowerBoard_rev3:TCAN1044AV", "U", "TCAN1044AVDRQ1", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
            {1: "CAN_TXD", 4: "CAN_RXD", 8: "CAN_STB", 3: "+5V_LOGIC", 5: "+3V3",
             7: "CANH", 6: "CANL", 2: "GND"}, fields={"LCSC": "C3234993"})
@@ -826,8 +830,9 @@ def sheet_can():
     R(sh, 60.4, "L:TMID", "L:TL", fp="R0805")
     C(sh, 4.7e-9, "L:TMID", "GND", volt=50)
     for i in (1, 2):
-        sh.add("Connector_Generic:Conn_01x04", "J", f"CAN {i} (JST-GH 4p)", FP["GH4"],
-               {1: "CANH", 2: "CANL", 3: "GND", 4: None})
+        sh.add("Connector_Generic_MountingPin:Conn_01x04_MountingPin", "J",
+               f"CAN {i} (Molex CLIK-Mate 502585-0470)", FP["CLIK4"],
+               {1: "CANH", 2: "CANL", 3: "GND", 4: "GND", "MP": "GND"})
     return sh
 
 

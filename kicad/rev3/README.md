@@ -48,7 +48,7 @@ less pretty than a hand-drawn sheet, but it is correct by construction and easy 
 | `boost54` | LM5122 boost, 30–42 V to 54 V, 100 W |
 | `aux_power` | LMR38010 (42 V to 5.3 V), the diode-OR with USB VBUS, and the AP7361C 3.3 V LDO |
 | `mcu` | ESP32-S3-WROOM-1U, USB-C with ESD, host UART on JST-GH, buttons, LEDs, NTC |
-| `can` | TCAN1044AV, split termination on solder jumpers, two CAN connectors |
+| `can` | TCAN1044AV, split termination on solder jumpers, two Molex CLIK-Mate 4p CAN connectors matching the EPOS4 50/5 (X11 / X12) |
 | `io` | TCA9535 (switch control), 2 × ADC128D818, E-STOP latch (74LVC1G74) |
 
 ## Custom parts
@@ -76,7 +76,6 @@ These are the things the generator could not settle on its own:
 - [ ] **Connector footprints.** XT90 and Deans: check the M and F pin geometry against the
   Amass drawings. For every power connector, check that footprint pin 1 is the housing's
   + side.
-- [ ] **CAN connector.** Match it to the EPOS4 harness. JST-GH 4p is a placeholder.
 - [ ] **Electrolytic sizes.** 100 µF / 100 V and 100 µF / 80 V parts may need a larger
   footprint than `CP_Elec_10x10.5`.
 - [ ] **Hand-solder holes.** Add a 1–1.5 mm plated hole through the exposed pads of the
