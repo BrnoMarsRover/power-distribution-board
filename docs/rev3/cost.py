@@ -31,6 +31,10 @@ JLC = {
     "BSC040N10NS5": "C534334", # 100 V 4 mOhm FET, 5x6
     "CSD19534Q5A": "C114200",  # 100 V FET for pre-charge, 5x6
     "BSC010N04LS": "C501508",  # 40 V 1 mOhm FET for rail switches
+    "IPT015N10N5": "C108964",  # 100 V 1.5 mOhm FET, TOLL, for the 42 V group
+    "PTC 33 V 3 A": "C2943634",  # SMD2920P300TF/33
+    "PTC 16 V 3 A": "C167318",   # SMD2920P300TF/16
+    "PTC 8 V 3 A": "C21004",     # SMD1812P300TF
     "shunt 2 mOhm": "C160590",
     "shunt 0.5 mOhm": "C154666",
     "MMBT3904": "C20526",      # FET temperature sense
@@ -55,11 +59,24 @@ BLOCKS = {
                           ("passive", 12)],
     "fused output <=24 V": [("blade holder", 1), ("blade fuse 32 V", 1)],
     "fused output 42 V": [("blade holder", 1), ("blade fuse 58 V", 1)],
+    "42V group eFuse (chosen)": [("TPS48111", 1), ("IPT015N10N5", 2), ("shunt 0.5 mOhm", 1),
+                                 ("passive", 16)],
+    "24V rail eFuse (chosen)": [("TPS48111", 1), ("BSC040N10NS5", 2), ("shunt 2 mOhm", 1),
+                                ("passive", 16)],
+    "15/12/5V rail eFuse (chosen)": [("TPS48111", 1), ("BSC010N04LS", 2), ("shunt 2 mOhm", 1),
+                                     ("passive", 16)],
+    "PTC 24/15V output": [("PTC 33 V 3 A", 1)],
+    "PTC 12V output": [("PTC 16 V 3 A", 1)],
+    "PTC 5V output": [("PTC 8 V 3 A", 1)],
     "I/O expander": [("TCA9535", 1)],
     "ADC": [("TLA2528", 1)],
 }
 
 OPTIONS = [
+    ("C", "**Chosen 2026-11-18:** an eFuse per rail (with current monitor), a PTC per 24/15/12/5 V output",
+     {"42V group eFuse (chosen)": 1, "24V rail eFuse (chosen)": 1, "15/12/5V rail eFuse (chosen)": 3,
+      "PTC 24/15V output": 16, "PTC 12V output": 7, "PTC 5V output": 11,
+      "I/O expander": 1, "ADC": 2}),
     ("A", "Per-output everywhere, TPS25982 on all 15 XT60 outputs (as specced)",
      {"42V channel": 8, "24V channel": 8, "heavy channel (TPS25982)": 15,
       "light channel (TPS259470)": 11, "I/O expander": 6, "ADC": 7}),
