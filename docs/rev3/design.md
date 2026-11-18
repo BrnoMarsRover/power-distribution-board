@@ -112,7 +112,7 @@ Design rules for rev3, one per lesson:
 ```
  BATTERY 10S 30-42 V  (pack fuse + BMS live in the harness)
    |
-   XT90 in -> TVS -> bulk C -> 4-terminal shunt -> INA228 (V, I, Ah, Wh)
+   XT90 in -> TVS -> bulk C -> 4-terminal shunt -> INA238 (V, I, P; Ah, Wh in firmware)
                                    |
                          42 V BUS (always live)
    +-------------+-------------------+-------------------+-------------+
@@ -128,7 +128,7 @@ Design rules for rev3, one per lesson:
    |
  ESP32-S3-WROOM-1U --I2C--> TCA9535      (INP / INP_G for all six switches)
    |   |   |   |            ADC128D818 x2 (switch currents, in/out voltages)
-   |   |   |   |            INA228       (battery)
+   |   |   |   |            INA238       (battery)
    |   |   |   +-- TWAI -- TCAN1044AV -- CAN -- EPOS4 50/5 x n
    |   |   +------ UART1 (3.3 V) -- Jetson AGX Orin (JSON line protocol v2)
    |   +---------- USB-C -- flashing / debug console / fallback host link
@@ -148,13 +148,20 @@ All values per rail are in [`rails.md`](rails.md).
   board. Standard ATO blades are rated 32 V DC and are not suitable on this bus.
 - **TVS:** SMCJ45A-class (1500 W) at the connector *(candidate)*.
 - **Bulk capacitance:** ≥ 200 µF, 100 V, low ESR, at the input.
-- **Battery monitor:** 0.5 mΩ 4-terminal shunt (≥ 3 W) with an **INA228**. The INA228 is
-  rated 85 V, has a 20-bit ADC and accumulates charge and energy on chip. This gives real
-  coulomb counting instead of the OCV-curve estimate.
+- **Battery monitor:** 0.5 mΩ 4-terminal shunt (≥ 3 W) with an **INA238** (85 V,
+  VSSOP-10, 0x40). This is the part rev2 used, and the team has stock. It is pin-compatible
+  with the INA228.
+  - It has a 16-bit ADC and no on-chip charge or energy accumulators. The ESP32 reads
+    current and power continuously and integrates Ah and Wh in firmware. This still gives
+    real coulomb counting instead of the OCV-curve estimate, but the count is lost if the
+    ESP32 resets, so save it to flash periodically.
+  - Use ADCRANGE = 0 (±163.84 mV): 10 mA per LSB and ±327 A full scale with the
+    0.5 mΩ shunt. ADCRANGE = 1 gives 2.5 mA per LSB but clips at ±82 A, which the drive
+    group's 50 A trip plus the converter group can exceed.
 - **Charging through the board:** both pack connectors land on the board (power XT90 and
   the pack's charge port), plus a charger input.
   - Charger + enters on the bus side of the shunt and leaves through the pack charge port
-    on the battery side. The INA228 therefore counts charging while the rover runs: it
+    on the battery side. The INA238 therefore counts charging while the rover runs: it
     sees the net battery current, charger output minus rover load.
   - Charger − (CHG_N) is not board GND. It runs straight to the charge port's − (C−), so
     a split-port BMS keeps its charge FET in the path. On a common-port pack, C− and P−
@@ -348,14 +355,14 @@ job.
 - **Speed:** 12 ms per channel, so a full sweep runs at about 10 Hz. That is fast enough
   for telemetry and for watching a pre-charge ramp.
 - **Board temperature (NTC) and the aux 5 V rail** go to ESP32 ADC1 pins (GPIO1, GPIO2).
-- **42 V bus voltage** comes from the INA228.
+- **42 V bus voltage** comes from the INA238.
 - **One I2C bus** at 400 kHz carries all four devices:
 
 | Device  | Count | Addresses |
 |---------|-------|-----------|
 | ADC128D818 | 2  | 0x1D, 0x1E (A0 / A1 tri-level straps) |
 | TCA9535 | 1     | 0x20 |
-| INA228  | 1     | 0x40 |
+| INA238  | 1     | 0x40 |
 
 ### 5.4 E-STOP (decided: hardware cut of the drive group)
 
@@ -472,7 +479,7 @@ layout.
 | I2C SDA / SCL | 4 / 5 |
 | Board NTC, aux 5 V sense (ADC1) | 1, 2 |
 | FLT inputs: 42V-D, 42V-C, 24V, 12V, 5V, 54V | 6, 7, 8, 9, 16, 38 |
-| INA228 ALERT | 10 |
+| INA238 ALERT | 10 |
 | CAN TX / RX | 11 / 12 |
 | CAN transceiver standby | 13 |
 | E-STOP sense | 14 |
@@ -492,7 +499,7 @@ layout.
   group switch and set to 5.3 V.
 - **5 V logic node:** a Schottky diode-OR of the 5.3 V buck and USB VBUS. It feeds the CAN
   transceiver's VCC and a 1 A, 3.3 V LDO (SOT-223) that supplies the ESP32, expander, ADCs
-  and INA228.
+  and INA238.
 - **Budget:** under 0.5 A at 5 V.
   - ESP32-S3 with BLE: roughly 100–150 mA, with peaks (more if Wi-Fi is used).
   - CAN transceiver: tens of mA when dominant.
@@ -540,7 +547,7 @@ layout.
 ### 8.1 Hand soldering (decided)
 
 - **Leaded packages only:** no QFN, DFN, SON, WQFN or TOLL.
-- **Finest pitch:** the TPS48111-Q1 (VSSOP-19) and INA228 (VSSOP-10) at 0.5 mm. That is
+- **Finest pitch:** the TPS48111-Q1 (VSSOP-19) and INA238 (VSSOP-10) at 0.5 mm. That is
   the same skill rev2's INA238 needed: drag-solder with flux and a fine tip.
 - **Exposed pads** on the LMR38010, the LM5122 and the ESP32 module's ground pad: put a
   1–1.5 mm plated hole in the middle of the land, so the pad can be soldered from the
@@ -656,7 +663,7 @@ and the smallest board area of any option that protects each output.
 - TI TCA9535 datasheet: https://www.ti.com/lit/ds/symlink/tca9535.pdf
 - TI LMR38010 datasheet, SNVSC73: https://www.ti.com/lit/ds/symlink/lmr38010.pdf
 - TI TCAN1044AV-Q1: https://www.ti.com/product/TCAN1044AV-Q1
-- TI INA228: https://www.ti.com/product/INA228
+- TI INA238: https://www.ti.com/product/INA238
 - TI LM5122 datasheet, SNVS954H: https://www.ti.com/lit/ds/symlink/lm5122.pdf
 - Zyxel XMG-105HP datasheet: https://static.us.zyxel.com/pdf/2024/switch/ds_XMG-105HP.pdf
 - Zyxel XMG-100 series user's guide (PoE port voltages): https://download.zyxel.com/XMG-105HP/user_guide/XMG-105HP_V1.00_Ed4.pdf

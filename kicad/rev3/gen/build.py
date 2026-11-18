@@ -193,8 +193,8 @@ CUSTOM = {
         footprint="Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm",
         datasheet=TI + "lmr38010.pdf", desc="80 V 1 A synchronous buck, HSOIC-8 (DDA)"),
     # Sense inputs on top, 7.62 apart, so the Kelvin lines drop straight down from a 2-pin shunt.
-    "INA228": pinned_symbol(
-        "INA228", 10.16, 10.16, [
+    "INA238": pinned_symbol(
+        "INA238", 10.16, 10.16, [
             ("10", "IN+", "input", -7.62, 12.7, 270), ("9", "IN-", "input", 0, 12.7, 270),
             ("8", "VBUS", "input", 7.62, 12.7, 270), ("6", "VS", "power_in", -12.7, 2.54, 0),
             ("3", "~{ALERT}", "open_collector", 12.7, 2.54, 180), ("4", "SDA", "bidirectional", 12.7, 0, 180),
@@ -202,7 +202,7 @@ CUSTOM = {
             ("7", "GND", "power_in", -5.08, -12.7, 90), ("2", "A0", "input", 0, -12.7, 90),
             ("1", "A1", "input", 5.08, -12.7, 90)],
         footprint="Package_SO:TSSOP-10_3x3mm_P0.5mm",
-        datasheet=TI + "ina228.pdf", desc="85 V 20-bit power / energy / charge monitor, I2C, VSSOP-10"),
+        datasheet=TI + "ina238.pdf", desc="85 V 16-bit power monitor, I2C, VSSOP-10 (pin-compatible with INA228)"),
     "TCAN1044AV": pinned_symbol(
         "TCAN1044AV", 10.16, 10.16, [
             ("1", "TXD", "input", -12.7, 2.54, 0), ("4", "RXD", "output", -12.7, 0, 0),
@@ -730,10 +730,10 @@ def divider_bottom(top, v_full, v_adc=2.4):
 def sheet_power_in():
     sh = Sheet("power_in", "Battery input, bus protection and battery monitor", [
         "Battery 10S 30-42 V. The pack fuse (58 V rated) and BMS live in the harness, not on this board.",
-        "R_SHUNT: Kelvin-route the INA228 sense lines from the shunt pads.",
+        "R_SHUNT: Kelvin-route the INA238 sense lines from the shunt pads.",
         "Charging: charger + enters on the bus side of the shunt and leaves through the pack's charge port,",
-        "so the INA228 counts it (net of the rover's own load). Charger - is NOT board GND: CHG_N goes straight to the pack's C-.",
-        "INA228 at 0x40 (A0 = A1 = GND): bus voltage, current, charge (Ah) and energy (Wh)."], drawn=True, paper="A4")
+        "so the INA238 counts it (net of the rover's own load). Charger - is NOT board GND: CHG_N goes straight to the pack's C-.",
+        "INA238 at 0x40 (A0 = A1 = GND): bus voltage, current, power. Charge (Ah) and energy (Wh) are integrated in ESP32 firmware."], drawn=True, paper="A4")
     W, gnd, v33, lab = marks(sh)
     Y = 99.06                                      # VBAT rail, then BUS42 after the shunt
 
@@ -751,7 +751,7 @@ def sheet_power_in():
     for x in (106.68, 121.92, 137.16, 152.4):
         hang(sh, C(sh, 2.2e-6, "VBAT", "GND", fp="C1210", volt=100, rot=0), (x, Y))
 
-    # shunt with Kelvin taps and the input filter of the INA228
+    # shunt with Kelvin taps and the input filter of the INA238
     rs = R(sh, "0.5m 2512", "VBAT", "BUS42", fp="R2512", LCSC="C154666")
     at_pin(rs, 1, (172.72, Y))
     W(PIN(jb, 1), PIN(rs, 1))
@@ -759,9 +759,9 @@ def sheet_power_in():
     rn = hang(sh, R(sh, 10, "BUS42", "L:INA_N", rot=0), PIN(rs, 2), gap=7.62, gnd=False)
     cf = C(sh, 100e-9, "L:INA_P", "L:INA_N")
     at_pin(cf, 1, (172.72, 119.38))
-    U = sh.add("PowerBoard_rev3:INA228", "U", "INA228", "Package_SO:TSSOP-10_3x3mm_P0.5mm",
+    U = sh.add("PowerBoard_rev3:INA238", "U", "INA238", "Package_SO:TSSOP-10_3x3mm_P0.5mm",
                {1: "GND", 2: "GND", 3: "INA_ALERT", 4: "I2C_SDA", 5: "I2C_SCL", 6: "+3V3", 7: "GND",
-                8: "BUS42", 9: "L:INA_N", 10: "L:INA_P"}, fields={"LCSC": "C2887910"})
+                8: "BUS42", 9: "L:INA_N", 10: "L:INA_P"}, fields={"LCSC": "C2868250"})
     at_pin(U, 10, (172.72, 127.0))
     P = lambda n: PIN(U, n)
     W(PIN(rp, 2), P(10))

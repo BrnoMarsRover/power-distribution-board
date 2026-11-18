@@ -303,7 +303,7 @@ def main():
               or "converter," in r["src"]])
     w(f"Two ADC128D818s (TSSOP-16, internal 2.56 V reference) at {', '.join(f'0x{a:02X}' for a in ADC_ADDRS)}. "
       "Each converts 12 ms per channel, so a full sweep runs at about 10 Hz. The 42 V bus voltage, "
-      "the input of both 42 V groups and the 54 V boost, comes from the INA228. VOUT 54V is the "
+      "the input of both 42 V groups and the 54 V boost, comes from the INA238. VOUT 54V is the "
       "boost output. Board NTC and aux 5 V go to ESP32 ADC1 pins (GPIO1, GPIO2).\n")
     w("| ADC | Input |\n|---|---|")
     for i, sname in enumerate(adc):

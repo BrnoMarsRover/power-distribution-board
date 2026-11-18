@@ -930,7 +930,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "PowerBoard_rev3:INA228"
+		(symbol "PowerBoard_rev3:INA238"
 			(pin_names
 				(offset 1.016)
 			)
@@ -950,7 +950,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "INA228"
+			(property "Value" "INA238"
 				(at 11.43 -11.43 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -972,7 +972,7 @@
 					)
 				)
 			)
-			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/ina228.pdf"
+			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/ina238.pdf"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -983,7 +983,7 @@
 					)
 				)
 			)
-			(property "Description" "85 V 20-bit power / energy / charge monitor, I2C, VSSOP-10"
+			(property "Description" "85 V 16-bit power monitor, I2C, VSSOP-10 (pin-compatible with INA228)"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -994,7 +994,7 @@
 					)
 				)
 			)
-			(symbol "INA228_0_1"
+			(symbol "INA238_0_1"
 				(rectangle
 					(start -10.16 10.16)
 					(end 10.16 -10.16)
@@ -1007,7 +1007,7 @@
 					)
 				)
 			)
-			(symbol "INA228_1_1"
+			(symbol "INA238_1_1"
 				(pin input line
 					(at 5.08 -12.7 90)
 					(length 2.54)
@@ -1583,7 +1583,7 @@
 		)
 		(uuid "3a8cb046-1542-5db2-b6f3-17eff788c8f1")
 	)
-	(text "INA228 at 0x40 (A0 = A1 = GND): bus voltage, current, charge (Ah) and energy (Wh)."
+	(text "INA238 at 0x40 (A0 = A1 = GND): bus voltage, current, power. Charge (Ah) and energy (Wh) are integrated in ESP32 firmware."
 		(exclude_from_sim no)
 		(at 20 48 0)
 		(effects
@@ -1606,7 +1606,7 @@
 		)
 		(uuid "64a3f18c-3e47-57b4-9959-bdbe63b0d72f")
 	)
-	(text "so the INA228 counts it (net of the rover's own load). Charger - is NOT board GND: CHG_N goes straight to the pack's C-."
+	(text "so the INA238 counts it (net of the rover's own load). Charger - is NOT board GND: CHG_N goes straight to the pack's C-."
 		(exclude_from_sim no)
 		(at 20 42 0)
 		(effects
@@ -1617,7 +1617,7 @@
 		)
 		(uuid "cb96326c-ecdd-5354-86d1-5dca72a7cd90")
 	)
-	(text "R_SHUNT: Kelvin-route the INA228 sense lines from the shunt pads."
+	(text "R_SHUNT: Kelvin-route the INA238 sense lines from the shunt pads."
 		(exclude_from_sim no)
 		(at 20 30 0)
 		(effects
@@ -4566,7 +4566,7 @@
 		)
 	)
 	(symbol
-		(lib_id "PowerBoard_rev3:INA228")
+		(lib_id "PowerBoard_rev3:INA238")
 		(at 180.34 116.84 0)
 		(unit 1)
 		(body_style 1)
@@ -4587,7 +4587,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "INA228"
+		(property "Value" "INA238"
 			(at 191.77 128.27 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4631,7 +4631,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C2887910"
+		(property "LCSC" "C2868250"
 			(at 180.34 116.84 0)
 			(hide yes)
 			(show_name no)
