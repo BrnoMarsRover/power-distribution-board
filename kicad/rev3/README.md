@@ -49,7 +49,7 @@ crosses CANL without a junction on its way to the second connector.
 `gen/board_rules.py` sets up the PCB side for JLCPCB's standard 4-layer process, with
 nothing that adds a surcharge:
 - **Stackup:** 1.6 mm, JLC04161H-7628, 1 oz outer / 0.5 oz inner, HASL lead-free.
-- **Limits:** 0.127 mm tracks and clearance, vias of 0.3 mm drill and 0.6 mm pad, 1.0 mm
+- **Limits:** 0.25 mm minimum track, 0.127 mm clearance, vias of 0.3 mm drill and 0.6 mm pad, 1.0 mm
   silkscreen text.
 - **Netclasses** for the 42 V, 54 V and rail nets, and a 0.5 mm clearance on the outer
   layers around 42 / 54 V pours.

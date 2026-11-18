@@ -543,7 +543,8 @@ layout.
 
   | Rule | Value | JLC limit (standard price) |
   |------|-------|----------------------------|
-  | Track / clearance | ≥ 0.127 mm (5 mil) | 0.09 mm; 3.0–3.5 mil adds 20 % |
+  | Track width | ≥ 0.25 mm (sturdy for hand rework; still fits 0.5 mm-pitch pins) | 0.09 mm; 3.0–3.5 mil adds 20 % |
+  | Clearance | ≥ 0.127 mm (5 mil) | 0.09 mm |
   | Via | ≥ 0.3 mm drill, ≥ 0.6 mm pad | drills under 0.3 mm cost extra |
   | Annular ring (vias, PTH) | ≥ 0.15 mm | 0.15 mm absolute minimum |
   | Hole to copper | via 0.25 mm, PTH 0.28 mm, NPTH 0.2 mm | 0.2 / 0.28 / 0.2 mm |

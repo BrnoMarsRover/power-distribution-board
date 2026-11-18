@@ -26,14 +26,14 @@ KICAD_CLI = ["flatpak", "run", "--command=kicad-cli", "org.kicad.KiCad"]
 
 # ---------------------------------------------------------------- JLC standard process
 # What costs extra on a 4-layer order, and the margin taken here:
-#   trace/space 3.0-3.5 mil (+20 %)       -> 0.127 mm (5 mil) minimum
+#   trace/space 3.0-3.5 mil (+20 %)       -> 0.25 mm tracks, 0.127 mm (5 mil) clearance
 #   via hole < 0.3 mm                      -> 0.3 mm minimum drill
 #   2 oz copper, non-1.6 mm thickness      -> 1 oz outer, 0.5 oz inner, 1.6 mm
 #   filled / capped vias (via-in-pad)      -> vias tented only, never in pads
 RULES = {
     "min_clearance": 0.127,             # JLC 0.09 at 1 oz
-    "min_track_width": 0.127,           # JLC 0.09; 0.076-0.089 is the surcharged band
-    "min_connection": 0.127,
+    "min_track_width": 0.25,            # team choice: robust for hand rework (JLC 0.09)
+    "min_connection": 0.25,
     "min_via_diameter": 0.6,            # 0.3 drill + 2 x 0.15 annular
     "min_via_annular_width": 0.15,      # JLC absolute minimum for multilayer PTH
     "min_through_hole_diameter": 0.3,   # below 0.3 mm is charged extra
@@ -54,7 +54,7 @@ RULES = {
     "use_height_for_length_calcs": True,
 }
 
-TRACK_WIDTHS = [0.0, 0.2, 0.3, 0.5, 1.0, 1.5, 2.0, 3.0]          # 0.0 = netclass width
+TRACK_WIDTHS = [0.0, 0.25, 0.3, 0.5, 1.0, 1.5, 2.0, 3.0]          # 0.0 = netclass width
 VIAS = [(0.0, 0.0), (0.6, 0.3), (0.8, 0.4), (1.0, 0.6)]          # (diameter, drill)
 
 # ---------------------------------------------------------------- netclasses
@@ -64,7 +64,7 @@ VIAS = [(0.0, 0.0), (0.6, 0.3), (0.8, 0.4), (1.0, 0.6)]          # (diameter, dr
 # pass DRC; the extra 0.5 mm for 42 / 54 V copper is a custom rule on pours and wide tracks.
 CLASSES = [
     # name, track, clearance, via (dia, drill), colour, patterns
-    ("Default", 0.2, 0.2, (0.6, 0.3), "rgba(0, 0, 0, 0.000)", []),
+    ("Default", 0.25, 0.2, (0.6, 0.3), "rgba(0, 0, 0, 0.000)", []),
     ("HV_Bus", 3.0, 0.2, (1.0, 0.6), "rgb(255, 0, 0)",
      ["VBAT", "BUS42", "OUT42D", "OUT42C", "/42 V*/DRN"]),
     ("HV_Power", 1.5, 0.2, (1.0, 0.6), "rgb(255, 120, 0)",
