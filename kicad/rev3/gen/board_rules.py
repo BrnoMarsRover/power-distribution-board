@@ -40,7 +40,7 @@ RULES = {
     "min_hole_clearance": 0.25,         # JLC via hole to track 0.2
     "min_hole_to_hole": 0.25,           # JLC via-to-via 0.2 (pads: 0.45, see .kicad_dru)
     "min_copper_edge_clearance": 0.3,   # JLC 0.2 to a routed edge
-    "min_silk_clearance": 0.0,
+    "min_silk_clearance": 0.15,         # keep silkscreen off pads (JLC clips it anyway)
     "min_text_height": 1.0,             # JLC silk text 1.0 mm
     "min_text_thickness": 0.15,         # JLC silk line 0.15 mm
     "solder_mask_min_width": 0.1,       # JLC green mask dam 0.1 mm
@@ -53,6 +53,20 @@ RULES = {
     "max_error": 0.005,
     "use_height_for_length_calcs": True,
 }
+
+# Checks that should stop a board from going out, not just warn.
+SEVERITIES = {
+    "courtyards_overlap": "error", "missing_courtyard": "error", "pth_inside_courtyard": "error",
+    "npth_inside_courtyard": "error", "silk_over_copper": "error", "silk_edge_clearance": "error",
+    "silk_overlap": "warning", "text_height": "error", "text_thickness": "error",
+    "solder_mask_bridge": "error", "starved_thermal": "error", "footprint_type_mismatch": "error",
+    "lib_footprint_mismatch": "warning", "lib_footprint_issues": "warning",
+    "isolated_copper": "warning", "track_dangling": "warning", "via_dangling": "warning",
+    "unconnected_items": "error", "schematic_parity": "error",
+}
+
+# Board name and revision, for silkscreen and fab-layer text (${BOARD} ${REV}).
+TEXT_VARIABLES = {"BOARD": "BMR PowerBoard", "REV": "3.0", "FAB": "JLCPCB 4L 1.6mm 1oz/0.5oz HASL-LF"}
 
 TRACK_WIDTHS = [0.0, 0.25, 0.3, 0.5, 1.0, 1.5, 2.0, 3.0]          # 0.0 = netclass width
 VIAS = [(0.0, 0.0), (0.6, 0.3), (0.8, 0.4), (1.0, 0.6)]          # (diameter, drill)
@@ -105,6 +119,21 @@ DRU = """(version 1)
   (layer "?.Silkscreen")
   (constraint text_height (min 1.0mm))
   (constraint text_thickness (min 0.15mm)))
+
+# ---- hand soldering ---------------------------------------------------------------
+# Rules later in the file win, so the general pad rule comes first.
+(rule "Hand soldering: 0.5 mm between courtyards (room for the iron)"
+  (constraint courtyard_clearance (min 0.5mm)))
+
+(rule "Hand soldering: pads in pours get thermal reliefs"
+  (constraint zone_connection thermal_reliefs)
+  (constraint thermal_relief_gap (opt 0.5mm))
+  (constraint thermal_spoke_width (opt 0.5mm))
+  (condition "A.Type == 'Pad'"))
+
+(rule "Hand soldering: power pads connect solid"
+  (constraint zone_connection solid)
+  (condition "A.Type == 'Pad' && (A.Library_Link == 'Connector_AMASS:*' || A.Library_Link == 'PowerBoard_rev3:XT90*' || A.Library_Link == 'PowerBoard_rev3:DEANS*' || A.Library_Link == 'Package_TO_SOT_SMD:TO-263*' || A.Library_Link == 'Package_TO_SOT_SMD:TO-252*' || A.Library_Link == 'Fuse:*' || A.Library_Link == 'Resistor_SMD:R_2512*' || A.Library_Link == 'Inductor_SMD:*')"))
 
 (rule "JLC: no blind, buried or micro vias"
   (constraint disallow buried_via micro_via))
@@ -207,6 +236,10 @@ def update_project():
                      "silk_text_thickness": 0.15, "copper_line_width": 0.2,
                      "copper_text_size_h": 1.5, "copper_text_size_v": 1.5, "copper_text_thickness": 0.3,
                      "board_outline_line_width": 0.1, "courtyard_line_width": 0.05})
+    ds["rule_severities"] = {**ds.get("rule_severities", {}), **SEVERITIES}
+    ds["teardrop_options"] = [{"td_onpthpad": True, "td_onroundshapesonly": False, "td_onsmdpad": True,
+                               "td_ontrackend": False, "td_onvia": True}]
+    d["text_variables"] = {**d.get("text_variables", {}), **TEXT_VARIABLES}
     classes, patterns = [], []
     for i, (name, track, clr, (vd, vdr), colour, pats) in enumerate(CLASSES):
         classes.append({"name": name, "track_width": track, "clearance": clr,

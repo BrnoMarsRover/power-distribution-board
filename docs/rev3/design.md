@@ -566,6 +566,19 @@ layout.
   - **42 / 54 V pours and tracks ≥ 1 mm get 0.5 mm on the outer layers.** This is close
     to the IPC 0.6 mm figure for bare copper.
   - **Power-class tracks must be ≥ 0.5 mm.**
+  - **Hand-soldering rules:**
+    - Courtyards keep ≥ 0.5 mm apart, so the iron fits between parts.
+    - Pads in pours get thermal reliefs (0.5 mm gap, 0.5 mm spokes).
+    - Power connectors, D2PAK/DPAK tabs, PTCs, 2512 shunts and inductors connect solid.
+    - Teardrops are on for pads and vias.
+  - **Clean board:** silkscreen keeps 0.15 mm off pads. Courtyard overlaps, missing
+    courtyards, silkscreen on copper, mask bridges and schematic mismatches are DRC
+    errors, not warnings.
+  - **Traceable:** the project defines `${BOARD}`, `${REV}` and `${FAB}` for silkscreen
+    and fab-layer text.
+  - **Order number:** put the text `JLCJLCJLCJLC` on the silkscreen where JLC should
+    print its order number, and choose "Specify a location" when ordering. Otherwise
+    JLC places it wherever it likes.
 
 - **Current capacity with free copper weights** (IPC-2221, 20 °C rise, one layer):
 

@@ -27,6 +27,21 @@
   (constraint text_height (min 1.0mm))
   (constraint text_thickness (min 0.15mm)))
 
+# ---- hand soldering ---------------------------------------------------------------
+# Rules later in the file win, so the general pad rule comes first.
+(rule "Hand soldering: 0.5 mm between courtyards (room for the iron)"
+  (constraint courtyard_clearance (min 0.5mm)))
+
+(rule "Hand soldering: pads in pours get thermal reliefs"
+  (constraint zone_connection thermal_reliefs)
+  (constraint thermal_relief_gap (opt 0.5mm))
+  (constraint thermal_spoke_width (opt 0.5mm))
+  (condition "A.Type == 'Pad'"))
+
+(rule "Hand soldering: power pads connect solid"
+  (constraint zone_connection solid)
+  (condition "A.Type == 'Pad' && (A.Library_Link == 'Connector_AMASS:*' || A.Library_Link == 'PowerBoard_rev3:XT90*' || A.Library_Link == 'PowerBoard_rev3:DEANS*' || A.Library_Link == 'Package_TO_SOT_SMD:TO-263*' || A.Library_Link == 'Package_TO_SOT_SMD:TO-252*' || A.Library_Link == 'Fuse:*' || A.Library_Link == 'Resistor_SMD:R_2512*' || A.Library_Link == 'Inductor_SMD:*')"))
+
 (rule "JLC: no blind, buried or micro vias"
   (constraint disallow buried_via micro_via))
 

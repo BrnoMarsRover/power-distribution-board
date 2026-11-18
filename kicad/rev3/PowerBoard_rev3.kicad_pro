@@ -76,7 +76,7 @@
         "min_hole_clearance": 0.25,
         "min_hole_to_hole": 0.25,
         "min_copper_edge_clearance": 0.3,
-        "min_silk_clearance": 0.0,
+        "min_silk_clearance": 0.15,
         "min_text_height": 1.0,
         "min_text_thickness": 0.15,
         "solder_mask_min_width": 0.1,
@@ -135,7 +135,37 @@
         "copper_text_thickness": 0.3,
         "board_outline_line_width": 0.1,
         "courtyard_line_width": 0.05
-      }
+      },
+      "rule_severities": {
+        "courtyards_overlap": "error",
+        "missing_courtyard": "error",
+        "pth_inside_courtyard": "error",
+        "npth_inside_courtyard": "error",
+        "silk_over_copper": "error",
+        "silk_edge_clearance": "error",
+        "silk_overlap": "warning",
+        "text_height": "error",
+        "text_thickness": "error",
+        "solder_mask_bridge": "error",
+        "starved_thermal": "error",
+        "footprint_type_mismatch": "error",
+        "lib_footprint_mismatch": "warning",
+        "lib_footprint_issues": "warning",
+        "isolated_copper": "warning",
+        "track_dangling": "warning",
+        "via_dangling": "warning",
+        "unconnected_items": "error",
+        "schematic_parity": "error"
+      },
+      "teardrop_options": [
+        {
+          "td_onpthpad": true,
+          "td_onroundshapesonly": false,
+          "td_onsmdpad": true,
+          "td_ontrackend": false,
+          "td_onvia": true
+        }
+      ]
     }
   },
   "net_settings": {
@@ -360,5 +390,10 @@
         "pattern": "GND"
       }
     ]
+  },
+  "text_variables": {
+    "BOARD": "BMR PowerBoard",
+    "REV": "3.0",
+    "FAB": "JLCPCB 4L 1.6mm 1oz/0.5oz HASL-LF"
   }
 }
