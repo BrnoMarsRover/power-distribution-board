@@ -41,6 +41,10 @@ JLC = {
     "shunt 10 mOhm": "C163051",
     "2.2 uF 100 V 1210": "C55151",
     "SMBJ58A": "C151910",
+    "IPB042N10N3G": "C69300",   # 100 V 4.2 mOhm D2PAK: every switch FET (hand-solderable)
+    "FDD86102": "C47711",       # 100 V 24 mOhm DPAK, Qg 19 nC: boost FETs
+    "ADC128D818": "C139062",    # 8-ch 12-bit I2C ADC, TSSOP-16
+    "shunt 1 mOhm": "C154668",
     "shunt 2 mOhm": "C160590",
     "shunt 0.5 mOhm": "C154666",
     "MMBT3904": "C20526",      # FET temperature sense
@@ -67,16 +71,18 @@ BLOCKS = {
                           ("passive", 12)],
     "fused output <=24 V": [("blade holder", 1), ("blade fuse 32 V", 1)],
     "fused output 42 V": [("blade holder", 1), ("blade fuse 58 V", 1)],
-    "42V group eFuse (chosen)": [("TPS48111", 1), ("IPT015N10N5", 2), ("shunt 0.5 mOhm", 1),
-                                 ("passive", 16)],
-    "24V rail eFuse (chosen)": [("TPS48111", 1), ("BSC040N10NS5", 2), ("shunt 2 mOhm", 1),
-                                ("passive", 16)],
-    "12/5V rail eFuse (chosen)": [("TPS48111", 1), ("BSC010N04LS", 2), ("shunt 2 mOhm", 1),
-                                     ("passive", 16)],
+    # chosen design, hand-solderable: 2 parallel main FETs + 1 pre-charge on each 42 V group
+    "42V drive group eFuse": [("TPS48111", 1), ("IPB042N10N3G", 3), ("shunt 0.5 mOhm", 1),
+                              ("passive", 16)],
+    "42V converter group eFuse": [("TPS48111", 1), ("IPB042N10N3G", 3), ("shunt 1 mOhm", 1),
+                                  ("passive", 16)],
+    "24/12/5V rail eFuse": [("TPS48111", 1), ("IPB042N10N3G", 2), ("shunt 2 mOhm", 1),
+                            ("passive", 16)],
+    "ADC (ADC128D818)": [("ADC128D818", 1)],
     "PTC 24V output": [("PTC 33 V 3 A", 1)],
-    "54V supply eFuse": [("TPS48111", 1), ("BSC040N10NS5", 2), ("shunt 5 mOhm", 1),
+    "54V supply eFuse": [("TPS48111", 1), ("IPB042N10N3G", 2), ("shunt 5 mOhm", 1),
                          ("passive", 16)],
-    "54V boost (LM5122)": [("LM5122", 1), ("BSC040N10NS5", 2), ("inductor 22 uH 10 A", 1),
+    "54V boost (LM5122)": [("LM5122", 1), ("FDD86102", 2), ("inductor 22 uH 10 A", 1),
                            ("shunt 10 mOhm", 1), ("2.2 uF 100 V 1210", 10), ("100 uF 80 V bulk", 1),
                            ("SMBJ58A", 1), ("54 V connector", 1), ("passive", 15)],
     "PTC 12V output": [("PTC 16 V 3 A", 1)],
@@ -86,11 +92,12 @@ BLOCKS = {
 }
 
 OPTIONS = [
-    ("C", "**Chosen 2026-11-18:** an eFuse per rail (with current monitor), a PTC per 24/12/5 V output, "
-          "no 15 V rail, plus the on-board 54 V boost for the Zyxel switch",
-     {"42V group eFuse (chosen)": 1, "24V rail eFuse (chosen)": 1, "12/5V rail eFuse (chosen)": 2,
+    ("C", "**Chosen 2026-11-18:** an eFuse per rail with current monitor (two on 42 V: drives and "
+          "converter feeds), a PTC per 24/12/5 V output, no 15 V rail, the 54 V boost for the Zyxel, "
+          "all leaded for hand soldering",
+     {"42V drive group eFuse": 1, "42V converter group eFuse": 1, "24/12/5V rail eFuse": 3,
       "PTC 24V output": 8, "PTC 12V output": 7, "PTC 5V output": 11,
-      "54V supply eFuse": 1, "54V boost (LM5122)": 1, "I/O expander": 1, "ADC": 2}),
+      "54V supply eFuse": 1, "54V boost (LM5122)": 1, "I/O expander": 1, "ADC (ADC128D818)": 2}),
     ("A", "Per-output everywhere, TPS25982 on all 15 XT60 outputs (as specced)",
      {"42V channel": 8, "24V channel": 8, "heavy channel (TPS25982)": 15,
       "light channel (TPS259470)": 11, "I/O expander": 6, "ADC": 7}),
