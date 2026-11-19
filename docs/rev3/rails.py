@@ -97,7 +97,7 @@ RAILS = [
               "Defaults OFF: the drives are useless without a controller."),
     dict(name="42V-C", v=42.0, design=30.0, i_oc=30.0, t_oc=0.5, i_sc=100.0,
          r_sns=1e-3, fet="IPB042N10N3G", n_main=2, c_out=470e-6, n_out=4, conn="XT90 (converters)",
-         i_inrush=0.4, ptc=None, src="battery bus", default_on=True, rc_inp=(330e3, 10e-6),
+         i_inrush=0.4, ptc=None, src="battery bus", default_on=True,
          note="Converter-feed group: three feeds plus one spare. 24 V 300 W + 12 V 150 W + 5 V 150 W "
               "is about 22 A at 30 V; the 30 A design leaves room for a converter on the spare. "
               "Defaults ON, because the 12 V converter powers the Orin."),
@@ -106,7 +106,7 @@ RAILS = [
          i_inrush=1.0, ptc="SMD2920P300TF/33", src="300 W converter", default_on=False),
     dict(name="12V", v=12.0, design=12.5, i_oc=13.75, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=7, conn="XT60",
-         i_inrush=2.0, ptc="SMD2920P300TF/16", src="150 W converter", default_on=True, rc_inpg=(390e3, 22e-6), rc_inp=(430e3, 47e-6),
+         i_inrush=2.0, ptc="SMD2920P300TF/16", src="150 W converter", default_on=True,
          note="Feeds the Jetson AGX Orin, so it defaults ON in hardware."),
     dict(name="5V", v=5.0, design=15.0, i_oc=16.5, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=220e-6, n_out=11, conn="XT30",
@@ -115,7 +115,7 @@ RAILS = [
     dict(name="54V", v=42.0, design=4.0, i_oc=5.0, t_oc=0.5, i_sc=20.0,
          r_sns=3e-3, fet="IPB042N10N3G", n_main=1, c_out=600e-6, n_out=1, conn="Zyxel XMG-105HP supply",
          i_inrush=0.4, ptc=None, src="battery bus, then the LM5122 boost to 54 V",
-         default_on=True, rc_inp=(330e3, 10e-6),
+         default_on=True,
          note="The eFuse sits on the boost's 42 V input. It switches the boost and is its "
               "short-circuit protection, because a boost cannot block current from input to output. "
               "Defaults ON: the Zyxel is the rover's main network switch. "
@@ -123,22 +123,10 @@ RAILS = [
 ]
 
 
-# Hardware power-on defaults: an RC from +3V3 delays INP (and INP_G where needed). INP / INP_G
-# switch between 1.6 and 2.0 V (V(INP_H)); the timing caps are X5R/X7R, taken as +10 % / -30 %
-# with DC bias. So a delay lands anywhere in 0.46 ... 1.03 x RC.
-V_LOGIC, V_INP_H = 3.3, (1.6, 2.0)
-C_TOL = (0.70, 1.10)
-I_BST_MIN, V_BST_UVLOR_MAX = 80e-6, 8.1
-
-
-def delay_window(rc):
-    """(earliest, latest) seconds after +3V3 rises at which an RC-pulled INP / INP_G goes high."""
-    if not rc:
-        return 0.0, 0.0
-    tau = rc[0] * rc[1]
-    lo = tau * C_TOL[0] * 0.99 * math.log(V_LOGIC / (V_LOGIC - V_INP_H[0]))
-    hi = tau * C_TOL[1] * 1.01 * math.log(V_LOGIC / (V_LOGIC - V_INP_H[1]))
-    return lo, hi
+# Power-on: every eFuse comes up OFF in hardware (pull-downs on INP / INP_G). "default_on" rails are
+# switched on by the ESP32 at boot, in order, each step confirmed on VSNS_OUT. The bootstrap cap
+# sets the earliest moment a gate driver can act.
+I_BST_TYP, V_BST_UVLOR_TYP = 100e-6, 7.6
 
 
 def rail_values(r):
@@ -171,12 +159,7 @@ def rail_values(r):
     v["rds"], v["fet_lcsc"], v["fet_desc"] = FETS[r["fet"]]
     # Eq. 4/20: C_BST > Qg(total) / 1 V + 10 x C_g
     v["c_bst"] = ceil_e(FET_QG[r["fet"]] * (r["n_main"] + 1) / 1.0 + 10 * v["c_g"], E6)
-    # power-on: gate driver ready (worst case), pre-charge done (worst case: I_G 72 uA and twice
-    # the assumed load capacitance), and the RC windows of INP_G and INP
-    v["t_bst"] = v["c_bst"] * 1.2 * V_BST_UVLOR_MAX / I_BST_MIN
-    v["t_ramp_worst"] = v["t_ramp"] * (100 / 72) * 2
-    v["t_inpg"] = delay_window(r.get("rc_inpg"))
-    v["t_inp"] = delay_window(r.get("rc_inp"))
+    v["t_bst"] = v["c_bst"] * V_BST_UVLOR_TYP / I_BST_TYP      # typical: gate driver ready after EN
     return v
 
 
@@ -187,7 +170,7 @@ def design_rail(r):
             else "ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes")
     return [
         ("Feeds", f"{r['n_out']} x {r['conn']}, from {r['src']}"),
-        ("Power-on default", "**ON** (hardware pull-ups)" if r["default_on"] else "OFF"),
+        ("Power-on default", "OFF in hardware; **ESP32 turns it on at boot**" if r["default_on"] else "OFF"),
         ("Design current", f"{r['design']:g} A"),
         ("Main FET", f"{n} x {r['fet']} ({v['fet_desc']}){' in parallel' if n > 1 else ''}, "
                      f"{r['design'] ** 2 * v['rds'] / n:.2f} W total at design current"),
@@ -209,13 +192,9 @@ def design_rail(r):
 
 def power_on_text(r, v):
     if not r["default_on"]:
-        return "OFF until the ESP32 sequences it"
-    g, i = v["t_inpg"], v["t_inp"]
-    ready = max(g[1], v["t_bst"]) + v["t_ramp_worst"]
-    gtxt = "at once" if g == (0.0, 0.0) else f"{g[0]:.1f}-{g[1]:.1f} s ({fmt_r(r['rc_inpg'][0])} / {fmt_c(r['rc_inpg'][1])})"
-    ok = "OK" if i[0] > ready else "**TOO EARLY**"
-    return (f"INP_G {gtxt}; INP {i[0]:.1f}-{i[1]:.1f} s ({fmt_r(r['rc_inp'][0])} / {fmt_c(r['rc_inp'][1])}); "
-            f"pre-charge done by {ready:.1f} s worst case: {ok}")
+        return "OFF until the PC asks"
+    return (f"ON at boot (ESP32): driver ready ~{v['t_bst']:.2f} s after EN, "
+            f"pre-charge ~{v['t_ramp'] * 1e3:.0f} ms, then INP once VSNS_OUT reaches the input")
 
 
 BOOST = dict(vin_min=30.0, vin_max=42.0, vout=54.0, pout=100.0, eff=0.95, fsw=400e3,
@@ -296,23 +275,22 @@ def main():
             w(f"- **{r['name']}:** {r['note']}")
     w("")
 
-    w("## Power-on sequence (hardware defaults)\n")
-    w("Without firmware, RC delays from +3V3 bring the default-ON rails up in order: the converter "
-      "group fully on, then the 12 V rail (Orin) starts its own pre-charge, then its main FETs. "
-      "The 54 V supply only needs its own pre-charge to finish first. Each step's earliest time must "
-      "come after the previous step's latest. The ESP32 can take over sooner, using VSNS_OUT to "
-      "confirm each pre-charge, once it has booted.\n")
+    w("## Power-on sequence (ESP32)\n")
+    w("Every eFuse powers up OFF (pull-downs on INP and INP_G). The ESP32 runs from the always-on aux "
+      "supply, boots in about 0.3-0.5 s and brings the boot rails up in order, moving on as soon as "
+      "VSNS_OUT shows that a step has finished:\n")
     vals = {r["name"]: rail_values(r) for r in RAILS}
-    chain = [("42V-C main FETs (INP)", vals["42V-C"]["t_inp"]),
-             ("12V pre-charge (INP_G)", vals["12V"]["t_inpg"]),
-             ("12V main FETs (INP)", vals["12V"]["t_inp"])]
-    w("| Step | Earliest | Latest | After the previous step? |\n|---|---|---|---|")
-    prev = None
-    for name, (lo, hi) in chain:
-        okc = "" if prev is None else ("yes" if lo > prev else "**NO**")
-        w(f"| {name} | {lo:.1f} s | {hi:.1f} s | {okc} |")
-        prev = hi
+    w("| Step | Typical |\n|---|---|")
+    w("| ESP32 boots, reads every VSNS_OUT and FLT | 0.3-0.5 s |")
+    for name in ("42V-C", "12V", "54V"):
+        vv = vals[name]
+        w(f"| {name}: INP_G on; driver ready after ~{vv['t_bst']:.2f} s; pre-charge ~{vv['t_ramp'] * 1e3:.0f} ms; "
+          f"INP on once VSNS_OUT is within 5 % of the input; INP_G off | |")
+    w("| Orin powered | about 1-1.5 s after the battery connects |")
     w("")
+    w("The 12 V eFuse starts only once the converter group is fully on, so its pre-charge never draws "
+      "through the converter group's pre-charge FET. If a step does not finish in its window (pre-charge "
+      "slower than 4x the expected time, or FLT asserts), firmware leaves that rail off and reports it.\n")
 
     w("## 54 V boost for the Zyxel XMG-105HP\n")
     w("| | |\n|---|---|")

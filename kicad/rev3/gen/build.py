@@ -860,7 +860,7 @@ def sheet_switch(r):
     notes = [f"TPS48111-Q1 + {v['n']} x {r['fet']} main + 1 pre-charge. Values from docs/rev3/rails.md "
              f"(trip {v['i_oc']:.1f} A after {v['c_tmr'] * v['k_tmr'] * 1e3:.0f} ms, latch-off; "
              + (f"short-circuit {v['i_sc']:.0f} A)." if v["r_iscp"] else "short-circuit trip disabled)."),
-             f"Power-on default: {'ON, RC-sequenced (rails.md, power-on sequence)' if on else 'OFF'}. "
+             f"Power-on: OFF in hardware{'; the ESP32 turns it on at boot (rails.md, power-on sequence)' if on else ''}. "
              "Q_T (MMBT3904) must sit against the main FET: remote temperature sense.",
              "Kelvin-route CS+ / CS- / ISCP from the R_SNS pads. Place C_ISCP right at the pins."]
     if r["name"] == "42V-D":
@@ -877,8 +877,7 @@ def sheet_switch(r):
     en = "L:EN"
     U = sh.add("PowerBoard_rev3:TPS48111-Q1", "U", "TPS48111-Q1", CUSTOM_FP_TPS,
                {20: "L:VS", 18: "L:CSP", 17: "L:SNSN", 19: "L:ISCP" if v["r_iscp"] else "L:SNSN", 1: en,
-                3: "L:INP" if r.get("rc_inp") else f"INP_{n}", 2: "L:INPG" if r.get("rc_inpg") else f"INPG_{n}",
-                10: "L:DIODE", 6: "GND",
+                3: f"INP_{n}", 2: f"INPG_{n}", 10: "L:DIODE", 6: "GND",
                 12: "L:BST", 15: "L:PU", 14: "L:GATE", 13: out, 11: "L:GPRE",
                 5: f"FLT_{n}", 4: f"FLT_{n}", 7: f"IMON_{n}", 8: "L:IWRN", 9: "L:TMR"},
                fields={"MPN": "TPS48111LQDGXRQ1"}, at=(X, Y))
@@ -933,37 +932,16 @@ def sheet_switch(r):
         W(PIN(qe, 1), (43.18, 144.78))
         lab("MOTOR_KILL", (43.18, 144.78), 180)
 
-    # --- control inputs from the left, with their power-on defaults. A default-ON input is an RC
-    # from +3V3 (see rails.md, power-on sequence); the expander reaches it through 1k, so it can
-    # override the RC without driving the timing cap directly.
+    # --- control inputs from the left. Every eFuse powers up OFF (pull-downs); the ESP32 sequences
+    # the boot rails through the expander.
     inp, inpg, flti, fltt = P(3), P(2), P(5), P(4)
-    for pin_, net, rc in ((inp, f"INP_{n}", r.get("rc_inp")), (inpg, f"INPG_{n}", r.get("rc_inpg"))):
+    for pin_, net in ((inp, f"INP_{n}"), (inpg, f"INPG_{n}")):
         y = pin_[1]
-        if rc:
-            node = "L:INP" if pin_ is inp else "L:INPG"
-            lab(net, (30.48, y), 180)
-            rser = R(sh, 1e3, net, node)
-            at_pin(rser, 1, (35.56, y))
-            W((30.48, y), PIN(rser, 1))
-            W(PIN(rser, 2), pin_)
-            TP(sh, node, at=(50.8, y))
-            cfp, cv = (("C1210", 10) if rc[1] > 30e-6 else ("C1206", 10 if rc[1] > 15e-6 else 16))
-            # pull-up above, cap hanging below; INP_G's cap stays left of the short FLT stub
-            xu, xc = (60.96, 68.58) if pin_ is inp else (60.96, 55.88)
-            ru = R(sh, rc[0], "+3V3", node, at=(xu, y - 3.81), rot=0)
-            ct = C(sh, rc[1], node, "GND", fp=cfp, volt=cv, at=(xc, y + 3.81), rot=0)
-            gnd(PIN(ct, 2))
-            v33(PIN(ru, 1))
-        else:
-            W(pin_, (45.72, y))
-            lab(net, (45.72, y), 180)
-            TP(sh, net, at=(50.8, y))
-            if on:              # INP_G with no delay: straight pull-up, pre-charge starts at once
-                ru = R(sh, 100e3, "+3V3", net, at=(60.96, y - 3.81), rot=0)
-                v33(PIN(ru, 1))
-            else:
-                rd = R(sh, 100e3, net, "GND", at=(60.96, y + 3.81), rot=0)
-                gnd(PIN(rd, 2))
+        W(pin_, (45.72, y))
+        lab(net, (45.72, y), 180)
+        TP(sh, net, at=(50.8, y))
+        rd = R(sh, 100e3, net, "GND", at=(60.96, y + 3.81), rot=0)
+        gnd(PIN(rd, 2))
     # FLT_I / FLT_T are open-drain, wire-ORed; their pull-up sits on the mcu sheet by the ESP32 input
     W(flti, (73.66, flti[1]))
     lab(f"FLT_{n}", (73.66, flti[1]), 180)

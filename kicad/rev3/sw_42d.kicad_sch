@@ -2366,7 +2366,7 @@
 		)
 		(uuid "647e7503-3270-5c88-99ae-c851f72b97af")
 	)
-	(text "Power-on default: OFF. Q_T (MMBT3904) must sit against the main FET: remote temperature sense."
+	(text "Power-on: OFF in hardware. Q_T (MMBT3904) must sit against the main FET: remote temperature sense."
 		(exclude_from_sim no)
 		(at 20 30 0)
 		(effects
