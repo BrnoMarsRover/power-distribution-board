@@ -828,6 +828,172 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Jumper:Jumper_2_Open"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "JP"
+				(at 0 2.794 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Jumper_2_Open"
+				(at 0 -2.286 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Jumper, 2-pole, open"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "Jumper SPST"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Jumper* TestPoint*2Pads* TestPoint*Bridge*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Jumper_2_Open_0_0"
+				(circle
+					(center -2.032 0)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.032 0)
+					(radius 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Jumper_2_Open_0_1"
+				(arc
+					(start -1.524 1.27)
+					(mid 0 1.778)
+					(end 1.524 1.27)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Jumper_2_Open_1_1"
+				(pin passive line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "PowerBoard_rev3:Q_NMOS_GDS"
 			(pin_numbers
 				(hide yes)
@@ -2449,12 +2615,6 @@
 		(uuid "3a4015fa-2cb7-5000-82b8-dc35c290c01f")
 	)
 	(junction
-		(at 281.94 127)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3d2951d2-203c-5f0a-a8bb-b3128fa1872a")
-	)
-	(junction
 		(at 317.5 127)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2477,6 +2637,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "4b44610a-3995-5cec-b101-3b837ee549ad")
+	)
+	(junction
+		(at 294.64 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4b57e88b-d867-5e22-b71a-57359a243d60")
 	)
 	(junction
 		(at 104.14 154.94)
@@ -2513,6 +2679,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "80e86888-1959-52e4-b9b3-59cca0a804f8")
+	)
+	(junction
+		(at 271.78 96.52)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "83249b63-e210-510a-9bb0-b119590ee355")
 	)
 	(junction
 		(at 149.86 134.62)
@@ -2585,6 +2757,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d7b795bf-597d-5d5f-b5d8-6b6b787d3546")
+	)
+	(junction
+		(at 302.26 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "dcd65924-43d1-5efc-9efb-8f1fd99a2224")
 	)
 	(junction
 		(at 81.28 162.56)
@@ -2700,16 +2878,6 @@
 	)
 	(wire
 		(pts
-			(xy 281.94 127) (xy 292.1 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0ea6a9ce-385b-5ca5-8883-1a3baf9d7359")
-	)
-	(wire
-		(pts
 			(xy 292.1 127) (xy 292.1 130.81)
 		)
 		(stroke
@@ -2737,6 +2905,16 @@
 			(type default)
 		)
 		(uuid "17ce016c-fc49-5259-999f-a21693ef8eed")
+	)
+	(wire
+		(pts
+			(xy 292.1 127) (xy 294.64 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1968a86c-e331-5900-9555-d936f434d10d")
 	)
 	(wire
 		(pts
@@ -2787,6 +2965,16 @@
 			(type default)
 		)
 		(uuid "210634da-21be-57d6-a81e-d5453765be1f")
+	)
+	(wire
+		(pts
+			(xy 271.78 127) (xy 292.1 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "22668d27-67b0-543e-9209-57e2bb8c1d5b")
 	)
 	(wire
 		(pts
@@ -2880,6 +3068,16 @@
 	)
 	(wire
 		(pts
+			(xy 294.64 96.52) (xy 294.64 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "34783a4b-8594-503f-982d-cdca80c0d27b")
+	)
+	(wire
+		(pts
 			(xy 259.08 185.42) (xy 259.08 111.76)
 		)
 		(stroke
@@ -2887,6 +3085,16 @@
 			(type default)
 		)
 		(uuid "34946497-edfc-5891-b5d3-a85c0eb776fa")
+	)
+	(wire
+		(pts
+			(xy 294.64 114.3) (xy 294.64 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "39fd9c9f-0b99-559f-9878-b979605825a9")
 	)
 	(wire
 		(pts
@@ -2947,16 +3155,6 @@
 			(type default)
 		)
 		(uuid "446d0b4f-0fa0-5b4a-af6f-67dc950f1dbe")
-	)
-	(wire
-		(pts
-			(xy 292.1 127) (xy 309.88 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "46da6374-a94c-5093-a82e-dbf78ad406bf")
 	)
 	(wire
 		(pts
@@ -3040,6 +3238,16 @@
 	)
 	(wire
 		(pts
+			(xy 294.64 127) (xy 302.26 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "58ad4006-2d16-5f0e-aa04-9937a4f88c60")
+	)
+	(wire
+		(pts
 			(xy 129.54 134.62) (xy 140.97 134.62)
 		)
 		(stroke
@@ -3087,16 +3295,6 @@
 			(type default)
 		)
 		(uuid "6b01316d-f00e-5bb7-b4e6-52a818e6bed9")
-	)
-	(wire
-		(pts
-			(xy 271.78 127) (xy 281.94 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "70263525-d4f4-517e-8cc6-2b5177288b86")
 	)
 	(wire
 		(pts
@@ -3430,6 +3628,16 @@
 	)
 	(wire
 		(pts
+			(xy 271.78 96.52) (xy 294.64 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c9cfd993-8bbc-5682-958e-6463583faa6d")
+	)
+	(wire
+		(pts
 			(xy 106.68 193.04) (xy 106.68 190.5)
 		)
 		(stroke
@@ -3557,6 +3765,16 @@
 			(type default)
 		)
 		(uuid "effb9f10-0dfd-5bc8-bf38-a9cb85042be8")
+	)
+	(wire
+		(pts
+			(xy 302.26 127) (xy 309.88 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f0bac874-b6bf-50e9-bc08-2f5e0ebb7dc8")
 	)
 	(wire
 		(pts
@@ -7339,7 +7557,7 @@
 	)
 	(symbol
 		(lib_id "power:PWR_FLAG")
-		(at 281.94 127 0)
+		(at 302.26 127 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7349,7 +7567,7 @@
 		(dnp no)
 		(uuid "a5287876-4f96-51dc-b026-7a2f34d92e51")
 		(property "Reference" "#FLGsw42d012"
-			(at 281.94 125.095 0)
+			(at 302.26 125.095 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7360,7 +7578,7 @@
 			)
 		)
 		(property "Value" "PWR_FLAG"
-			(at 281.94 123.19 0)
+			(at 302.26 123.19 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7370,7 +7588,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 281.94 127 0)
+			(at 302.26 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7381,7 +7599,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 281.94 127 0)
+			(at 302.26 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7392,7 +7610,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 281.94 127 0)
+			(at 302.26 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7488,6 +7706,98 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/5276bed9-282c-5133-a909-670f1f800c18"
 					(reference "R20")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Jumper:Jumper_2_Open")
+		(at 294.64 109.22 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a65f7a06-dd84-576e-98c3-0ee43f74c7d6")
+		(property "Reference" "JP1"
+			(at 297.18 107.95 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "BYPASS (M4 link)"
+			(at 297.18 110.49 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "PowerBoard_rev3:BypassLink_M4_P15.24mm"
+			(at 294.64 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 294.64 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 294.64 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "none: bolt-on copper link"
+			(at 294.64 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ed2d5bac-d812-54b8-b652-af1886867df2")
+		)
+		(pin "2"
+			(uuid "e98fe256-8908-573b-ba9c-afa8c1b575c8")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/5276bed9-282c-5133-a909-670f1f800c18"
+					(reference "JP1")
 					(unit 1)
 				)
 			)

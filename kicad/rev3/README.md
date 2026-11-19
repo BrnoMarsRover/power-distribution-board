@@ -26,7 +26,7 @@ That run does six things:
    intended.
 
 Result at generation time:
-- 502 parts and 280 nets.
+- 508 parts and 280 nets.
 - Netlist check passes.
 - ERC is clean at every severity.
 
@@ -100,6 +100,9 @@ These are the things the generator could not settle on its own:
   1.85 A, 400 kHz and 22 µH.
 - [x] **Pre-charge FET SOA.** Ramps were cut to stay inside the IPB042N10N3G's DC SOA
   (0.4 A at 42 V). See `docs/rev3/design.md` 4.3.
+- [ ] **Bypass-link placement.** Put each eFuse's two bypass holes (M4 on the 42 V groups,
+  M3 elsewhere) where a copper strip can be bolted across with the board in the rover,
+  and silkscreen "BYPASS: no protection, battery off to fit".
 - [ ] **EPOS4 input capacitance.** maxon doesn't publish it. Measure one drive: it sets the
   pre-charge ramp time (470 µF per drive is assumed).
 - [ ] **Brake resistor.** Size the off-board resistor (10 Ω / 100 W assumed) to the

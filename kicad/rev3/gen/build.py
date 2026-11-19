@@ -984,6 +984,18 @@ def sheet_switch(r):
     W(PIN(rs, 4), (PIN(qp, 2)[0], yR))
     lab("L:DRN", (PIN(rs, 4)[0] + 5.08, yR), 0)        # named so board netclasses can find it
 
+    # --- emergency bypass: bolt a copper link (or a heavy wire with ring lugs) across these two holes
+    # to power the output with this eFuse out of the loop. After the shunt, so IMON still reads.
+    big = r["design"] > 20
+    xb = PIN(qp, 2)[0] + 22.86
+    jb = sh.add("Jumper:Jumper_2_Open", "JP", f"BYPASS ({'M4' if big else 'M3'} link)",
+                f"PowerBoard_rev3:BypassLink_{'M4_P15.24mm' if big else 'M3_P12.70mm'}",
+                {1: "L:DRN", 2: out}, rot=270, fields={"MPN": "none: bolt-on copper link"})
+    at_pin(jb, 1, (xb, yR + 7.62))
+    jb.label_at = {"Reference": (2.54, -1.27), "Value": (2.54, 1.27)}
+    W((PIN(qp, 2)[0], yR), (xb, yR), PIN(jb, 1))
+    W(PIN(jb, 2), (xb, yO))
+
     # --- output rail: voltage sense, indicator, test point, label
     xe = 302.26
     W((165.1, yO), (xe, yO))
@@ -1006,7 +1018,7 @@ def sheet_switch(r):
     W((289.56, yO), PIN(rl, 1))
     W(PIN(rl, 2), PIN(led, 2))
     gnd(PIN(led, 1))
-    M("flag", (261.62, yO))
+    M("flag", (281.94, yO))
     TP(sh, out, at=(297.18, yO))
 
     # --- settings below the driver
@@ -1894,6 +1906,8 @@ def write_custom_footprints():
         f'(fill no) (layer "F.CrtYd") {u("crt")})\n' + "\n".join(pads) + '\n)\n')
     (lib / "TI_DGX0019A_VSSOP-19.kicad_mod").write_text(dgx)
     (lib / "R_Bourns_CSS2H-2512_Kelvin.kicad_mod").write_text(css2h_footprint())
+    for size, drill, pad, pitch in (("M4", 4.3, 8.0, 15.24), ("M3", 3.2, 6.0, 12.7)):
+        (lib / f"BypassLink_{size}_P{pitch:.2f}mm.kicad_mod").write_text(bypass_footprint(size, drill, pad, pitch))
     rev2 = REPO / "kicad/ext/SamacSys_Parts.pretty"
     for src, dst in (("XT90", "XT90PB-M"), ("XT90", "XT90PB-F"), ("DEANS-T", "DEANS-T")):
         text = (rev2 / f"{src}.kicad_mod").read_text()
@@ -1936,6 +1950,28 @@ def css2h_footprint():
         f'  (fp_line (start -1.5 1.95) (end 1.5 1.95) (stroke (width 0.12) (type default)) (layer "F.SilkS") {u("silk")})\n'
         f'  (fp_rect (start -3.75 -3.5) (end 3.75 1.95) (stroke (width 0.05) (type default)) (fill no) (layer "F.CrtYd") {u("crt")})\n'
         + "\n".join(out) + "\n)\n")
+
+
+def bypass_footprint(size, drill, pad, pitch):
+    """Two plated holes for an emergency bolt-on link (copper strip or ring-lugged wire)."""
+    name = f"BypassLink_{size}_P{pitch:.2f}mm"
+    u = lambda *k: f'(uuid {q(uid(name, *k))})'
+    h = pad / 2 + 0.5
+    return (
+        f'(footprint "{name}" (version 20241229) (generator "build.py") (layer "F.Cu")\n'
+        f'  (descr "Emergency eFuse bypass: two {size} plated holes, {pitch:g} mm apart, for a bolted copper link '
+        f'or a ring-lugged wire. Not fitted in normal use.")\n'
+        '  (tags "bypass link bolt")\n'
+        f'  (property "Reference" "REF**" (at {fmt(pitch / 2)} {fmt(-h - 1.5)} 0) (layer "F.SilkS") {u("ref")} (effects (font (size 1 1) (thickness 0.15))))\n'
+        f'  (property "Value" "{name}" (at {fmt(pitch / 2)} {fmt(h + 1.5)} 0) (layer "F.Fab") {u("val")} (effects (font (size 1 1) (thickness 0.15))))\n'
+        f'  (property "Datasheet" "" (at 0 0 0) (layer "F.Fab") (hide yes) {u("ds")} (effects (font (size 1.27 1.27))))\n'
+        f'  (property "Description" "eFuse bypass link" (at 0 0 0) (layer "F.Fab") (hide yes) {u("desc")} (effects (font (size 1.27 1.27))))\n'
+        '  (attr through_hole)\n'
+        f'  (fp_text user "BYPASS" (at {fmt(pitch / 2)} 0 0) (layer "F.SilkS") {u("txt")} (effects (font (size 1 1) (thickness 0.15))))\n'
+        f'  (fp_rect (start {fmt(-h)} {fmt(-h)}) (end {fmt(pitch + h)} {fmt(h)}) (stroke (width 0.05) (type default)) (fill no) (layer "F.CrtYd") {u("crt")})\n'
+        f'  (pad "1" thru_hole circle (at 0 0) (size {pad} {pad}) (drill {drill}) (layers "*.Cu" "*.Mask") {u("p1")})\n'
+        f'  (pad "2" thru_hole circle (at {fmt(pitch)} 0) (size {pad} {pad}) (drill {drill}) (layers "*.Cu" "*.Mask") {u("p2")})\n'
+        ')\n')
 
 
 def check_footprints():

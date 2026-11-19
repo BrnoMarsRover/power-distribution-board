@@ -1,0 +1,93 @@
+(footprint "BypassLink_M4_P15.24mm"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Emergency eFuse bypass: two M4 plated holes, 15.24 mm apart, for a bolted copper link or a ring-lugged wire. Not fitted in normal use.")
+	(tags "bypass link bolt")
+	(property "Reference" "REF**"
+		(at 7.62 -6 0)
+		(layer "F.SilkS")
+		(uuid "d3209829-3308-5da8-97b5-9cbdb008cf37")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "BypassLink_M4_P15.24mm"
+		(at 7.62 6 0)
+		(layer "F.Fab")
+		(uuid "01efb005-db60-5d47-95d9-d06f11678212")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c2761091-d2c2-5d87-a251-df5327c14569")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" "eFuse bypass link"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ec4da993-e193-510a-a385-1a4478cb7877")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_rect
+		(start -4.5 -4.5)
+		(end 19.74 4.5)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "796b95c2-5267-5cbb-9584-3f9f766c71c0")
+	)
+	(fp_text user "BYPASS"
+		(at 7.62 0 0)
+		(layer "F.SilkS")
+		(uuid "f722863d-d128-5fca-b9f3-1524e3fe0742")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" thru_hole circle
+		(at 0 0)
+		(size 8 8)
+		(drill 4.3)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "33c05ac7-273e-5878-a97b-953912abed0a")
+	)
+	(pad "2" thru_hole circle
+		(at 15.24 0)
+		(size 8 8)
+		(drill 4.3)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "bab85f49-9871-56f9-b110-8825c7cc24e5")
+	)
+	(embedded_fonts no)
+)

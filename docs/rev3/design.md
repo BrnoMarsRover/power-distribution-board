@@ -242,6 +242,24 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
     drop rails that are already on.
   - **Replaces** a hardware RC chain (1.5–21 s worst case) and, before that, a 1 MΩ / 1 µF
     INP delay that could close the main FETs before pre-charge had finished.
+- **Emergency bypass links (decided 2026-11-19).** Every eFuse has two plated holes, one on
+  its drain rail (after the shunt) and one on its output, for a bolted copper strip or a
+  ring-lugged wire.
+  - **Sizes:** M4 holes 15.24 mm apart on the two 42 V groups (30 A); M3 holes 12.7 mm
+    apart on the 24 / 12 / 5 V rails and the 54 V supply.
+  - **What a link does:** the rail is powered whatever the TPS48111, its FETs or the
+    firmware are doing. The shunt stays in the path, so IMON still reads the current.
+  - **What a link gives up:**
+    - That rail loses its overcurrent and short-circuit protection. Only the pack fuse
+      remains.
+    - It loses its inrush limit: bolting the link on, or plugging a device in, sparks.
+      Fit the link with the battery off.
+    - **On the drive group, the rear motor switch no longer cuts the motors.** The
+      battery E-STOP (BMS soft-start) still does.
+  - **Firmware flags it:** a rail with VSNS_OUT up while INP and INP_G are low is
+    reported as BYPASSED.
+  - The links are only for getting the rover home or debugging a dead switch. Remove them
+    before normal use.
 - **FLT pull-ups** (open-drain FLT_I + FLT_T on each eFuse) sit on the MCU sheet next to the
   ESP32 inputs, which keeps the eFuse sheets' control area clear.
 - **The converter group** feeds about 22 A at 30 V (300 + 150 + 150 W of converters). It is (300 + 150 + 150 W of converters). It is
@@ -779,6 +797,8 @@ layout.
     - Drive group: drop INP_42D on a sustained average above 20 A with EPOS4, about 45 A
       with CubeMars. The hardware trip is 60 A / 1.1 s.
     - Motor switch: the re-enable sequence in section 5.4.
+    - Bypass detection: VSNS_OUT up with INP and INP_G low means a bypass link is fitted;
+      report BYPASSED and stop sequencing that rail.
     - Boot: bring up the converter group, 12 V and 54 V in order (section 4.3). On every
       boot, first read each rail's VSNS_OUT and FLT. A rail the expander still holds on
       from before an ESP32 reset stays on, and nothing gets INP high before its output
