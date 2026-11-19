@@ -8301,7 +8301,7 @@
 				)
 			)
 		)
-		(property "Value" "USB4085-GF-A (flash/debug)"
+		(property "Value" "USB4105-GF-A (flash/debug)"
 			(at 241.3 81.915 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8311,7 +8311,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_USB:USB_C_Receptacle_GCT_USB4085"
+		(property "Footprint" "PowerBoard_rev3:USB_C_Receptacle_GCT_USB4105-GF-A_2oz"
 			(at 241.3 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -8344,7 +8344,7 @@
 				)
 			)
 		)
-		(property "MPN" "USB4085-GF-A"
+		(property "MPN" "USB4105-GF-A"
 			(at 241.3 101.6 0)
 			(hide yes)
 			(show_name no)

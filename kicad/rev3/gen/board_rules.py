@@ -28,14 +28,16 @@ KICAD_CLI = ["flatpak", "run", "--command=kicad-cli", "org.kicad.KiCad"]
 # What costs extra on a 4-layer order, and the margin taken here:
 #   trace/space 3.0-3.5 mil (+20 %)       -> 0.25 mm tracks, 0.127 mm (5 mil) clearance
 #   via hole < 0.3 mm                      -> 0.3 mm minimum drill
-#   2 oz copper, non-1.6 mm thickness      -> 1 oz outer, 0.5 oz inner, 1.6 mm
+#   non-1.6 mm thickness                   -> 1.6 mm
+#   2 oz outer copper is a paid option, CHOSEN 2026-11-19 for the 30-40 A paths (inner stays 0.5 oz).
+#   It raises JLC's limits: trace/space 0.15 mm, annular ring 0.254 mm, solder-mask web 0.2 mm.
 #   filled / capped vias (via-in-pad)      -> vias tented only, never in pads
 RULES = {
-    "min_clearance": 0.127,             # JLC 0.09 at 1 oz
+    "min_clearance": 0.15,              # JLC 0.15 at 2 oz outer
     "min_track_width": 0.25,            # team choice: robust for hand rework (JLC 0.09)
     "min_connection": 0.0,      # off (KiCad default): it flags every pour-to-pad-corner neck; track width covers tracks
-    "min_via_diameter": 0.6,            # 0.3 drill + 2 x 0.15 annular
-    "min_via_annular_width": 0.15,      # JLC absolute minimum for multilayer PTH
+    "min_via_diameter": 0.8,            # 0.3 drill + 2 x 0.25 annular
+    "min_via_annular_width": 0.25,      # JLC 0.254 for 2 oz outer copper
     "min_through_hole_diameter": 0.3,   # below 0.3 mm is charged extra
     "min_hole_clearance": 0.25,         # JLC via hole to track 0.2
     "min_hole_to_hole": 0.25,           # JLC via-to-via 0.2 (pads: 0.45, see .kicad_dru)
@@ -66,10 +68,10 @@ SEVERITIES = {
 }
 
 # Board name and revision, for silkscreen and fab-layer text (${BOARD} ${REV}).
-TEXT_VARIABLES = {"BOARD": "BMR PowerBoard", "REV": "3.0", "FAB": "JLCPCB 4L 1.6mm 1oz/0.5oz HASL-LF"}
+TEXT_VARIABLES = {"BOARD": "BMR PowerBoard", "REV": "3.0", "FAB": "JLCPCB 4L 1.6mm 2oz/0.5oz HASL-LF"}
 
 TRACK_WIDTHS = [0.0, 0.25, 0.3, 0.5, 1.0, 1.5, 2.0, 3.0]          # 0.0 = netclass width
-VIAS = [(0.0, 0.0), (0.6, 0.3), (0.8, 0.4), (1.0, 0.6)]          # (diameter, drill)
+VIAS = [(0.0, 0.0), (0.9, 0.4), (1.0, 0.45), (1.2, 0.6)]         # (diameter, drill); rings >= 0.25 mm for 2 oz
 
 # ---------------------------------------------------------------- netclasses
 # Widths are routing defaults. Rails above ~5 A belong in pours on several layers (see
@@ -78,25 +80,25 @@ VIAS = [(0.0, 0.0), (0.6, 0.3), (0.8, 0.4), (1.0, 0.6)]          # (diameter, dr
 # pass DRC; the extra 0.5 mm for 42 / 54 V copper is a custom rule on pours and wide tracks.
 CLASSES = [
     # name, track, clearance, via (dia, drill), colour, patterns
-    ("Default", 0.25, 0.2, (0.6, 0.3), "rgba(0, 0, 0, 0.000)", []),
-    ("HV_Bus", 3.0, 0.2, (1.0, 0.6), "rgb(255, 0, 0)",
+    ("Default", 0.25, 0.2, (0.9, 0.4), "rgba(0, 0, 0, 0.000)", []),
+    ("HV_Bus", 3.0, 0.2, (1.2, 0.6), "rgb(255, 0, 0)",
      ["VBAT", "BUS42", "OUT42D", "OUT42C", "/42 V*/DRN", "/Brake*/BRK_SW"]),
-    ("HV_Power", 1.5, 0.2, (1.0, 0.6), "rgb(255, 120, 0)",
+    ("HV_Power", 1.5, 0.2, (1.2, 0.6), "rgb(255, 120, 0)",
      ["SW54_OUT", "OUT54", "/54 V*/DRN", "/54 V boost*/LIN", "/54 V boost*/SW"]),
-    ("Power", 1.0, 0.2, (1.0, 0.6), "rgb(0, 160, 255)",
+    ("Power", 1.0, 0.2, (1.2, 0.6), "rgb(0, 160, 255)",
      ["VIN24", "VIN12", "VIN5", "OUT24", "OUT12", "OUT5", "/24 V*/DRN", "/12 V*/DRN",
       "/5 V*/DRN", "/Rail inputs*/O*", "*/CHG_N"]),
-    ("Supply", 0.4, 0.2, (0.6, 0.3), "rgb(0, 200, 0)",
+    ("Supply", 0.4, 0.2, (0.9, 0.4), "rgb(0, 200, 0)",
      ["+3V3", "+5V_LOGIC", "+5V3_AUX", "VBUS_USB"]),
-    ("GND", 0.5, 0.2, (0.6, 0.3), "rgb(120, 120, 120)", ["GND"]),
+    ("GND", 0.5, 0.2, (0.9, 0.4), "rgb(120, 120, 120)", ["GND"]),
 ]
 
 DRU = """(version 1)
 # JLCPCB standard 4-layer process: limits KiCad's board setup has no field for.
 # Sources: jlcpcb.com/capabilities/pcb-capabilities, checked 2026-11-19.
 
-(rule "JLC: plated pad annular ring >= 0.15 mm"
-  (constraint annular_width (min 0.15mm))
+(rule "JLC: plated pad annular ring >= 0.25 mm (2 oz outer)"
+  (constraint annular_width (min 0.25mm))
   (condition "A.Type == 'Pad' && A.isPlated()"))
 
 (rule "JLC: plated pad hole to copper >= 0.28 mm"
@@ -121,10 +123,10 @@ DRU = """(version 1)
   (constraint text_thickness (min 0.15mm)))
 
 # ---- fine-pitch footprints ----------------------------------------------------------
-# Their own pads sit 0.15 mm apart, under the 0.2 mm class clearance but inside JLC's 0.127 mm.
-(rule "Fine pitch: pad to pad inside VSSOP-8 / USB4085 at JLC minimum"
-  (constraint clearance (min 0.127mm))
-  (condition "A.Type == 'Pad' && B.Type == 'Pad' && (A.Library_Link == 'Package_SO:VSSOP-8_2.3x2mm_P0.5mm' || A.Library_Link == 'Connector_USB:USB_C_Receptacle_GCT_USB4085') && A.Library_Link == B.Library_Link"))
+# Their own pads sit 0.15 mm apart, under the 0.2 mm class clearance and exactly at JLC's 0.15 mm for 2 oz.
+(rule "Fine pitch: pad to pad inside VSSOP-8 at JLC minimum"
+  (constraint clearance (min 0.15mm))
+  (condition "A.Type == 'Pad' && B.Type == 'Pad' && A.Library_Link == 'Package_SO:VSSOP-8_2.3x2mm_P0.5mm' && A.Library_Link == B.Library_Link"))
 
 # ---- hand soldering ---------------------------------------------------------------
 # Rules later in the file win, so the general pad rule comes first.
@@ -169,13 +171,13 @@ STACKUP = """\t\t(stackup
 \t\t\t(layer "F.SilkS" (type "Top Silk Screen") (color "White"))
 \t\t\t(layer "F.Paste" (type "Top Solder Paste"))
 \t\t\t(layer "F.Mask" (type "Top Solder Mask") (color "Green") (thickness 0.01))
-\t\t\t(layer "F.Cu" (type "copper") (thickness 0.035))
+\t\t\t(layer "F.Cu" (type "copper") (thickness 0.07))
 \t\t\t(layer "dielectric 1" (type "prepreg") (thickness 0.2104) (material "7628") (epsilon_r 4.4) (loss_tangent 0.02))
 \t\t\t(layer "In1.Cu" (type "copper") (thickness 0.0152))
 \t\t\t(layer "dielectric 2" (type "core") (thickness 1.065) (material "FR4") (epsilon_r 4.6) (loss_tangent 0.02))
 \t\t\t(layer "In2.Cu" (type "copper") (thickness 0.0152))
 \t\t\t(layer "dielectric 3" (type "prepreg") (thickness 0.2104) (material "7628") (epsilon_r 4.4) (loss_tangent 0.02))
-\t\t\t(layer "B.Cu" (type "copper") (thickness 0.035))
+\t\t\t(layer "B.Cu" (type "copper") (thickness 0.07))
 \t\t\t(layer "B.Mask" (type "Bottom Solder Mask") (color "Green") (thickness 0.01))
 \t\t\t(layer "B.Paste" (type "Bottom Solder Paste"))
 \t\t\t(layer "B.SilkS" (type "Bottom Silk Screen") (color "White"))
@@ -212,7 +214,7 @@ def board_text():
 \t\t(title "Power board rev3")
 \t\t(rev "3.0")
 \t\t(company "Brno Mars Rover")
-\t\t(comment 1 "JLCPCB standard 4-layer: 1.6 mm, JLC04161H-7628, 1 oz outer / 0.5 oz inner, HASL lead-free")
+\t\t(comment 1 "JLCPCB standard 4-layer: 1.6 mm, JLC04161H-7628, 2 oz outer / 0.5 oz inner, HASL lead-free")
 \t)
 \t(layers
 {layers}

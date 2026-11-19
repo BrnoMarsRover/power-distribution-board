@@ -11613,7 +11613,7 @@
 				)
 			)
 		)
-		(property "Value" "JST-PH 2p motor switch"
+		(property "Value" "B2B-XH-A(LF)(SN) (motor switch)"
 			(at 35.56 200.66 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11623,7 +11623,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical"
+		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
 			(at 35.56 195.58 0)
 			(hide yes)
 			(show_name no)
@@ -11656,7 +11656,7 @@
 				)
 			)
 		)
-		(property "MPN" "B2B-PH-K-S(LF)(SN)"
+		(property "MPN" "B2B-XH-A(LF)(SN)"
 			(at 35.56 195.58 0)
 			(hide yes)
 			(show_name no)

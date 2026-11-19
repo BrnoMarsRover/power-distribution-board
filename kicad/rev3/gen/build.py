@@ -676,11 +676,10 @@ FP = dict(
     PTCR300="PowerBoard_rev3:Fuse_Bourns_MF-R300_P5.08mm",
     DEANS="PowerBoard_rev3:DEANS-T",
     XH2="Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical",
-    PH2="Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical",
     XH4="Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical",
     GH4="Connector_JST:JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical",
     CLIK4="Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal",
-    USBC="Connector_USB:USB_C_Receptacle_GCT_USB4085",
+    USBC="PowerBoard_rev3:USB_C_Receptacle_GCT_USB4105-GF-A_2oz",
     BTN="Button_Switch_SMD:SW_SPST_TL3342",
     ESP="PowerBoard_rev3:ESP32-S3-WROOM-1U_HandSolder",
     SSOP8="Package_SO:SSOP-8_2.95x2.8mm_P0.65mm",
@@ -1645,10 +1644,10 @@ def sheet_mcu():
     lab("AUX5_SNS", (93.98, ya), 0)
 
     # --- USB-C: VBUS out to the logic OR, CC pull-downs, D-/D+ through the ESD array
-    J = sh.add("Connector:USB_C_Receptacle_USB2.0_16P", "J", "USB4085-GF-A (flash/debug)", FP["USBC"],
+    J = sh.add("Connector:USB_C_Receptacle_USB2.0_16P", "J", "USB4105-GF-A (flash/debug)", FP["USBC"],
                {"A1": "GND", "A4": "VBUS_USB", "A5": "L:CC1", "B5": "L:CC2", "A6": "L:DP_C", "B6": "L:DP_C",
                 "A7": "L:DN_C", "B7": "L:DN_C", "A8": None, "B8": None, "SH": "GND"}, at=(241.3, 101.6),
-               fields={"MPN": "USB4085-GF-A"})
+               fields={"MPN": "USB4105-GF-A"})
     Pj = lambda n: PIN(J, n)
     xu = Pj("A4")[0]
     W(Pj("A4"), (320.04, Pj("A4")[1]))
@@ -1891,10 +1890,10 @@ def sheet_io():
     W(Q(5), (180.34, Q(5)[1]))
     TP(sh, "L:LATCH_Q", at=(180.34, Q(5)[1]))
 
-    # --- motor-switch loop: +3V3 -> 1k -> switch (closed = run) -> 10k to GND; filtered into MOTOR_OK and the CLR RC
+    # --- motor-switch loop (JST-XH like the other harness headers; 2 oz rules out PH): +3V3 -> 1k -> switch (closed = run) -> 10k to GND; filtered into MOTOR_OK and the CLR RC
     yl = 198.12
-    j = CONN2(sh, "JST-PH 2p motor switch", "PH2", "L:ESRC", "L:ELOOP", mirror=True)
-    j.fields["MPN"] = "B2B-PH-K-S(LF)(SN)"
+    j = CONN2(sh, "B2B-XH-A(LF)(SN) (motor switch)", "XH2", "L:ESRC", "L:ELOOP", mirror=True)
+    j.fields["MPN"] = "B2B-XH-A(LF)(SN)"
     at_pin(j, 2, (40.64, yl))
     W(PIN(j, 1), (48.26, PIN(j, 1)[1]))
     rsrc = R(sh, 1e3, "+3V3", "L:ESRC", rot=0)

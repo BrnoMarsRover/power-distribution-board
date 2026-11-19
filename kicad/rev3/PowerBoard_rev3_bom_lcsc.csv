@@ -9,8 +9,7 @@ Quantity,Manufacturer Part,Manufacturer,Comment,Designator,Footprint
 1,APT2012SYCK,Kingbright,yellow,D19,LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder
 1,AP7361C-33ER-13,Diodes Incorporated,AP7361C-33ER,U12,SOT-223-3_TabPin2
 1,AQY282S,Panasonic,AQY282S,U22,SO-4_4.4x4.3mm_P2.54mm
-1,B2B-PH-K-S(LF)(SN),JST,JST-PH 2p motor switch,J36,JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical
-2,B2B-XH-A(LF)(SN),JST,"B2B-XH-A(LF)(SN) (54 V to Zyxel),B2B-XH-A(LF)(SN) (BMS soft-start via E-STOP)","J13,J38",JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical
+3,B2B-XH-A(LF)(SN),JST,"B2B-XH-A(LF)(SN) (54 V to Zyxel),B2B-XH-A(LF)(SN) (BMS soft-start via E-STOP),B2B-XH-A(LF)(SN) (motor switch)","J13,J36,J38",JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical
 2,B4B-XH-A(LF)(SN),JST,"B4B-XH-A(LF)(SN) (host UART to Orin),B4B-XH-A(LF)(SN) (power button, 2-pole)","J33,J37",JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical
 1,BAS21-7-F,Diodes Incorporated,BAS21,D13,SOT-23
 17,C0603C104K5RACTU,KEMET,"100nF,100nF/16V,100nF/25V","C7,C8,C77,C79,C100,C103,C105,C107-C109,C111-C115,C117,C119",C_0603_1608Metric_Pad1.08x0.95mm_HandSolder
@@ -122,7 +121,7 @@ Quantity,Manufacturer Part,Manufacturer,Comment,Designator,Footprint
 2,TL3342F160QG,E-Switch,"BOOT,RESET","SW1,SW2",SW_SPST_TL3342
 1,TLV1805DBVR,Texas Instruments,TLV1805DBVR,U8,SOT-23-6
 6,TPS48111LQDGXRQ1,Texas Instruments,TPS48111-Q1,U2-U7,TI_DGX0019A_VSSOP-19
-1,USB4085-GF-A,GCT,USB4085-GF-A (flash/debug),J32,USB_C_Receptacle_GCT_USB4085
+1,USB4105-GF-A,GCT,USB4105-GF-A (flash/debug),J32,USB_C_Receptacle_GCT_USB4105-GF-A_2oz
 2,USBLC6-2SC6,STMicroelectronics,USBLC6-2SC6,"U14,U15",SOT-23-6
 1,WSL2512R0100FEA,Vishay,10m 2512,R121,R_2512_6332Metric_Pad1.40x3.35mm_HandSolder
 6,XT30UPB-F,AMASS,XT30UPB-F,J26-J31,AMASS_XT30UPB-F_1x02_P5.0mm_Vertical

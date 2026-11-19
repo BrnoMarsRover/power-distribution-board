@@ -572,7 +572,7 @@ job.
   - **Rear-panel motor switch:** cuts all motor power through this board's drive-group
     eFuse. It replaces EPOS4 STO as the motor cut, so the same wiring works whichever
     drives are fitted.
-- **The cut:** the switch loop (JST-PH 2-pin, closed = motors allowed, so a broken wire
+- **The cut:** the switch loop (JST-XH 2-pin, closed = motors allowed, so a broken wire
   means off) clears a 74LVC1G74 latch (SN74LVC1G74DCUT). Its /Q output (MOTOR_KILL) pulls the drive
   TPS48111's EN/UVLO low through Q_EN.
   - Low EN puts the TPS48111 into shutdown, and it actively turns the main and pre-charge
@@ -708,9 +708,19 @@ job.
 
 **USB-C (kept):**
 - USB 2.0 full speed, USBLC6-2SC6 ESD array (flow-through), 5.1 kΩ CC pull-downs.
-- **Receptacle: GCT USB4085-GF-A** (Mouser), a through-hole USB 2.0 Type-C part, replacing
-  the HRO TYPE-C-31-M-12 from JLC's catalogue. Its through-hole pins make it far easier to
-  hand-solder, and KiCad's footprint has the same pad names.
+- **Receptacle: GCT USB4105-GF-A** (Mouser, LCSC), a USB 2.0 Type-C part with SMD signal
+  pads and through-hole shell legs.
+  - It replaced the through-hole USB4085-GF-A when the board went to 2 oz outer copper:
+    the USB4085's 0.85 mm-pitch pins can only have a 0.15 mm annular ring, and JLC needs
+    0.254 mm at 2 oz.
+  - The footprint is KiCad's USB4105 one with the shell-leg pads widened to 1.15 mm (ring
+    0.275 mm): `PowerBoard_rev3:USB_C_Receptacle_GCT_USB4105-GF-A_2oz`, made by
+    `fix_footprints.py`. Pad names match the USB4085, so the schematic is unchanged.
+  - The four corner signal pads are 0.05 mm shorter on the side facing the plastic
+    locating pegs, which keeps them 0.24 mm off the peg holes (JLC 0.2 mm).
+  - **Placement:** the receptacle's front face sits on the board edge (the footprint's
+    "PCB Edge" line). A plug's overmold is larger than the receptacle and reaches below
+    the board surface, so a face set back from the edge would stop the plug short.
 - **Uses:** flashing and JTAG debugging through the S3's built-in USB-Serial/JTAG, and a
   fallback host link carrying the same protocol over CDC.
 - **VBUS** feeds only the logic node, through a diode, for bench flashing (section 7). It
@@ -838,33 +848,36 @@ layout.
   - The 54 V boost needs about 25 × 35 mm, with the inductor as its tallest part.
   - The target is about 120 × 140 mm, against 150 × 150 mm, to be confirmed after
     placement.
-- **Stackup (decided 2026-11-19): JLCPCB standard 4-layer, nothing that adds a surcharge.**
-  - 1.6 mm, JLC04161H-7628, 1 oz outer and 0.5 oz inner copper, HASL lead-free, green
+- **Stackup (decided 2026-11-19, revised the same day): JLCPCB 4-layer with 2 oz outer copper.**
+  - 1.6 mm, JLC04161H-7628, **2 oz outer** and 0.5 oz inner copper, HASL lead-free, green
     mask, tented vias.
-  - This replaces the earlier 2 oz / 1 oz plan, because 2 oz copper is a paid option.
+  - 2 oz outer copper is the one paid option. It halves the width the 30–40 A paths need
+    (table below), which the 150 × 150 mm outline cannot otherwise give them.
+  - Still 4 layers: a 6-layer board would add only thin inner copper. Blind and buried vias
+    are paid extras with nothing to gain here.
 
   | Layer | Copper | Use |
   |-------|--------|-----|
-  | L1 | 1 oz | Components; high-current pours |
+  | L1 | 2 oz | Components; high-current pours |
   | L2 | 0.5 oz | Solid GND plane: unbroken, the return reference for I2C and the IMON lines |
-  | L3 | 0.5 oz | Rail pours (24 / 12 / 5 V, 54 V); slow signals |
-  | L4 | 1 oz | 42 V bus and GND return pours that parallel L1; few components |
+  | L3 | 0.5 oz | 42 V bus and output planes under the L1 pours; rail backbones (24 / 12 / 5 V, 54 V); slow signals |
+  | L4 | 2 oz | GND fill and return; logic and the aux supplies' SMD parts |
 
 - **Board rules:** `kicad/rev3/gen/board_rules.py` writes them into the project and the
-  board, with every limit taken from JLC's standard process.
+  board, with every limit taken from JLC's process for 2 oz outer copper.
 
-  | Rule | Value | JLC limit (standard price) |
-  |------|-------|----------------------------|
-  | Track width | ≥ 0.25 mm (sturdy for hand rework; still fits 0.5 mm-pitch pins) | 0.09 mm; 3.0–3.5 mil adds 20 % |
-  | Clearance | ≥ 0.127 mm (5 mil) | 0.09 mm |
-  | Via | ≥ 0.3 mm drill, ≥ 0.6 mm pad | drills under 0.3 mm cost extra |
-  | Annular ring (vias, PTH) | ≥ 0.15 mm | 0.15 mm absolute minimum |
+  | Rule | Value | JLC limit (2 oz outer) |
+  |------|-------|------------------------|
+  | Track width | ≥ 0.25 mm (sturdy for hand rework; still fits 0.5 mm-pitch pins) | 0.15 mm |
+  | Clearance | ≥ 0.15 mm (fine-pitch pads only; classes use 0.2 mm) | 0.15 mm |
+  | Via | 0.9 / 0.4 mm (signals), 1.0 / 0.45 mm (power arrays), 1.2 / 0.6 mm (power classes) | drills under 0.3 mm cost extra |
+  | Annular ring (vias, PTH) | ≥ 0.25 mm | 0.254 mm |
   | Hole to copper | via 0.25 mm, PTH 0.28 mm, NPTH 0.2 mm | 0.2 / 0.28 / 0.2 mm |
   | Hole to hole | vias 0.25 mm, pads 0.45 mm | 0.2 / 0.45 mm |
   | NPTH | ≥ 0.5 mm | 0.5 mm |
   | Copper to board edge | ≥ 0.3 mm | 0.2 mm |
   | Silkscreen | text ≥ 1.0 mm, lines ≥ 0.15 mm | 1.0 / 0.15 mm |
-  | Solder mask dam | ≥ 0.1 mm | 0.1 mm (green) |
+  | Solder mask dam | ≥ 0.1 mm; fine-pitch ICs get one opening over the pad row | 0.2 mm at 2 oz |
   | Blind, buried, micro vias, via-in-pad fill | not allowed | paid options |
 
   - **Netclasses:**
@@ -889,7 +902,7 @@ layout.
   - **Rule-file gotcha:** KiCad ignores the whole `.kicad_dru` without any warning if one
     constraint is malformed. `(constraint min_resolved_spokes (min 1))` did exactly that;
     the bare number `1` works. Check a rule change against a known violation, for
-    example the USB-C fine-pitch clearance.
+    example the VSSOP-8 fine-pitch clearance.
   - **Clean board:** silkscreen keeps 0.15 mm off pads. Courtyard overlaps, missing
     courtyards, silkscreen on copper, mask bridges and schematic mismatches are DRC
     errors, not warnings.
@@ -898,23 +911,24 @@ layout.
   - **Order number:** none on the board. When ordering, choose "Remove order number"
     (free on standard orders at the time of writing; check the quote).
 
-- **Current capacity with free copper weights** (IPC-2221, 20 °C rise, one layer):
+- **Current capacity** (IPC-2221, 20 °C rise, one layer; conservative for wide pours):
 
-  | Current | 1 oz outer | 0.5 oz inner |
-  |---------|-----------|--------------|
-  | 3 A (one PTC output) | 0.9 mm | 4.7 mm |
-  | 6.5 A (boost inductor) | 2.6 mm | 13.6 mm |
-  | 15 A (5 V rail) | 8.3 mm | 43 mm |
-  | 20 A (half of the 42 V input) | 12.3 mm | 64 mm |
+  | Current | 2 oz outer (chosen) | 1 oz outer | 0.5 oz inner |
+  |---------|---------------------|-----------|--------------|
+  | 3 A (one PTC output) | 0.4 mm | 0.9 mm | 4.7 mm |
+  | 6.5 A (boost inductor) | 1.3 mm | 2.6 mm | 13.6 mm |
+  | 15 A (5 V rail) | 4.1 mm | 8.3 mm | 43 mm |
+  | 20 A (half of the 42 V input) | 6.1 mm | 12.3 mm | 64 mm |
+  | 30 A (drive group) | 10.7 mm | 21.5 mm | 112 mm |
 
-  - The inner 0.5 oz layers carry little current, so the heavy paths live on L1 and L4.
-    The 42 V input (40 A) and the drive group (30 A) need pours of about 12 mm and 8 mm
-    on each of L1 and L4, stitched with via arrays (budget roughly 1 A per 0.3 mm via).
-  - **Solder-reinforced strips** cost nothing: leave the mask open (F.Mask / B.Mask) along
-    the 42 V bus, drive-group and GND return pours. When assembling, flood them with
-    solder or lay a 1.5 mm² copper wire in the solder. That makes up for the missing
-    2 oz copper on the paths that need it.
-  - 1 oz inner copper may also be free at JLC; check the quote before relying on it.
+  - The inner 0.5 oz layers carry little current, so the heavy paths live on L1. L3 copper
+    under them adds a little and spreads heat; via arrays tie the two only where current
+    changes layer (budget roughly 1 A per 0.45 mm via).
+  - The 42 V output strips are 7.4–7.7 mm wide on L1. At the full 30 A that is about a
+    35 °C rise on L1 alone, only at the top of the strip: each XT90 takes its share on the
+    way down, and the L3 plane runs in parallel.
+  - **Solder-reinforced strips** remain a free extra if the 42 V strips run hot in testing:
+    leave the mask open along them and flood with solder. Not planned for now.
 - **Pads:** power-connector pads connect solid, with no thermal spokes.
 - **Repeated switches:** all six switches share one hierarchical KiCad sheet, instanced
   six times with different values.
@@ -1071,9 +1085,10 @@ layout.
 - **D2PAK and DPAK on large pours** need a high-power iron (≥ 80 W) or preheating, because
   the pours sink a lot of heat.
 - **Passives:** 0603 minimum, 0805 where space allows.
-- **USB-C:** the GCT USB4085-GF-A has through-hole pins, so the usual hardest joint on
-  the board is now an easy one. A micro-B remains a fallback,
-  since USB is only for flashing and debug.
+- **USB-C:** the GCT USB4105-GF-A has 0.5 mm-pitch SMD signal pads. Tack the four
+  shell legs first so the part cannot move, then drag-solder the pad row with flux and
+  check for bridges under a magnifier. USB is only for flashing and debug; if it fails,
+  the ESP32 can still be flashed through the UART0 test pads (TXD0 / RXD0) with BOOT held.
 - **Test points everywhere, for bring-up and debugging** (83 on the board):
   - **Every eFuse:** VOUT, IMON, FLT, GATE, INP, INP_G and EN/UVLO, plus VIN on the
     24 / 12 / 5 V rails.
@@ -1160,7 +1175,7 @@ layout.
 | D18 | ~~XT90 split~~ | **Decided:** 4 drives (two EPOS4 each) / 4 converter feeds |
 | D19 | ~~CAN connector~~ | **Decided:** Molex CLIK-Mate 4p, the same as the EPOS4 50/5's X11 / X12 (1 CAN_H, 2 CAN_L, 3 GND, 4 shield). Board header 502585-0470, so maxon's CAN-CAN cable 520858 fits directly. |
 | —   | ~~Architecture~~ | **Decided:** an eFuse per rail plus a PTC per output (section 12) |
-| —   | ~~Stackup~~ | **Decided:** 4 layers |
+| —   | ~~Stackup~~ | **Decided:** 4 layers, 2 oz outer / 0.5 oz inner copper (section 8) |
 | —   | ~~Host link~~ | **Decided:** direct UART; USB-C kept for flashing and debug |
 
 ---

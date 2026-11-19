@@ -131,7 +131,8 @@ def place(FP):
 # ---------------------------------------------------------------- copper
 F, B, IN1, IN2 = pcbnew.F_Cu, pcbnew.B_Cu, pcbnew.In1_Cu, pcbnew.In2_Cu
 OUT_RADIUS = 2.5                      # output strips turn into their connector columns: a wider inside fillet
-VIA_D, VIA_DRILL = 0.9, 0.45
+VIA_D, VIA_DRILL = 1.0, 0.45            # 2 oz outer copper: annular ring >= 0.254 mm (JLC)
+ESC_D, ESC_DRILL = 0.9, 0.4             # escape vias for gates, Kelvin pairs and LEDs
 
 
 def copper(b):
@@ -218,9 +219,9 @@ def copper(b):
         track("VBAT", [(px, py), (px, py - 2.2)], 1.4, B)
     # input shunt Kelvin pair -> vias for the INA228 on the bottom
     k2, k3 = _pxy(FP["R1"], "2"), _pxy(FP["R1"], "3")
-    via(pnet("R1", "2"), 34.0, 27.9, 0.6, 0.3)
+    via(pnet("R1", "2"), 34.0, 27.9, ESC_D, ESC_DRILL)
     track(pnet("R1", "2"), [k2, (34.0, k2[1]), (34.0, 27.9)], 0.25)
-    via(pnet("R1", "3"), 34.0, 31.7, 0.6, 0.3)
+    via(pnet("R1", "3"), 34.0, 31.7, ESC_D, ESC_DRILL)
     track(pnet("R1", "3"), [k3, (34.0, k3[1]), (34.0, 31.7)], 0.25)
 
     # -------------------------------------------- the two switch blocks
@@ -245,21 +246,21 @@ def copper(b):
             cx = FET_CX + dx
             gate = pnet(ref, "1")
             gx, gy = _pxy(FP[ref], "1")
-            via(gate, cx - 10.85, gy, 0.8, 0.4)
+            via(gate, cx - 10.85, gy, ESC_D, ESC_DRILL)
             track(gate, [(cx - 9.95 + 0.3, gy), (cx - 10.85, gy)], 0.6)
         # block shunt Kelvin pair -> vias; on the bottom they run to the TPS48111 CS+ / CS-
         sh = FP[blk["shunt"]]
         (k2x, k2y), (k3x, k3y) = _pxy(sh, "2"), _pxy(sh, "3")
         vx = SHUNT_X + dx + 2.7
-        via(pnet(blk["shunt"], "2"), vx, 34.0, 0.6, 0.3)
+        via(pnet(blk["shunt"], "2"), vx, 34.0, ESC_D, ESC_DRILL)
         track(pnet(blk["shunt"], "2"), [(k2x, k2y), (vx, k2y), (vx, 34.0)], 0.25)
-        via(pnet(blk["shunt"], "3"), vx, 38.9, 0.6, 0.3)
+        via(pnet(blk["shunt"], "3"), vx, 38.9, ESC_D, ESC_DRILL)
         track(pnet(blk["shunt"], "3"), [(k3x, k3y), (vx, k3y), (vx, 38.9)], 0.25)
         # status LED inside the DRN area: both pads escape to the bottom
         led = FP[blk["led"]]
         for num in ("1", "2"):
             lx, ly = _pxy(led, num)
-            via(pnet(blk["led"], num), lx + 1.7, ly, 0.6, 0.3)
+            via(pnet(blk["led"], num), lx + 1.7, ly, ESC_D, ESC_DRILL)
             track(pnet(blk["led"], num), [(lx, ly), (lx + 1.7, ly)], 0.4)
 
     # -------------------------------------------- brake: switch node patch, FET source to GND
@@ -273,7 +274,7 @@ def copper(b):
                 via("GND", vx, vy)
     gate = pnet("Q22", "1")
     gx, gy = _pxy(FP["Q22"], "1")
-    via(gate, gx - 3.2, gy, 0.8, 0.4)
+    via(gate, gx - 3.2, gy, ESC_D, ESC_DRILL)
     track(gate, [(gx - 2.0, gy), (gx - 3.2, gy)], 0.6)
 
     # FET source vias down to the L3 OUT plane: a row between the gate and source leads, three rows below

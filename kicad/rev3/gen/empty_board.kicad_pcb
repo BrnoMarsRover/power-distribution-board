@@ -11,7 +11,7 @@
 		(title "Power board rev3")
 		(rev "3.0")
 		(company "Brno Mars Rover")
-		(comment 1 "JLCPCB standard 4-layer: 1.6 mm, JLC04161H-7628, 1 oz outer / 0.5 oz inner, HASL lead-free")
+		(comment 1 "JLCPCB standard 4-layer: 1.6 mm, JLC04161H-7628, 2 oz outer / 0.5 oz inner, HASL lead-free")
 	)
 	(layers
 		(0 "F.Cu" signal)
@@ -53,7 +53,7 @@
 			)
 			(layer "F.Cu"
 				(type "copper")
-				(thickness 0.035)
+				(thickness 0.07)
 			)
 			(layer "dielectric 1"
 				(type "prepreg")
@@ -86,7 +86,7 @@
 			)
 			(layer "B.Cu"
 				(type "copper")
-				(thickness 0.035)
+				(thickness 0.07)
 			)
 			(layer "B.Mask"
 				(type "Bottom Solder Mask")

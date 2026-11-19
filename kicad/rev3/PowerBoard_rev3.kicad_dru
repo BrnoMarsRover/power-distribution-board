@@ -2,8 +2,8 @@
 # JLCPCB standard 4-layer process: limits KiCad's board setup has no field for.
 # Sources: jlcpcb.com/capabilities/pcb-capabilities, checked 2026-11-19.
 
-(rule "JLC: plated pad annular ring >= 0.15 mm"
-  (constraint annular_width (min 0.15mm))
+(rule "JLC: plated pad annular ring >= 0.25 mm (2 oz outer)"
+  (constraint annular_width (min 0.25mm))
   (condition "A.Type == 'Pad' && A.isPlated()"))
 
 (rule "JLC: plated pad hole to copper >= 0.28 mm"
@@ -28,10 +28,10 @@
   (constraint text_thickness (min 0.15mm)))
 
 # ---- fine-pitch footprints ----------------------------------------------------------
-# Their own pads sit 0.15 mm apart, under the 0.2 mm class clearance but inside JLC's 0.127 mm.
-(rule "Fine pitch: pad to pad inside VSSOP-8 / USB4085 at JLC minimum"
-  (constraint clearance (min 0.127mm))
-  (condition "A.Type == 'Pad' && B.Type == 'Pad' && (A.Library_Link == 'Package_SO:VSSOP-8_2.3x2mm_P0.5mm' || A.Library_Link == 'Connector_USB:USB_C_Receptacle_GCT_USB4085') && A.Library_Link == B.Library_Link"))
+# Their own pads sit 0.15 mm apart, under the 0.2 mm class clearance and exactly at JLC's 0.15 mm for 2 oz.
+(rule "Fine pitch: pad to pad inside VSSOP-8 at JLC minimum"
+  (constraint clearance (min 0.15mm))
+  (condition "A.Type == 'Pad' && B.Type == 'Pad' && A.Library_Link == 'Package_SO:VSSOP-8_2.3x2mm_P0.5mm' && A.Library_Link == B.Library_Link"))
 
 # ---- hand soldering ---------------------------------------------------------------
 # Rules later in the file win, so the general pad rule comes first.

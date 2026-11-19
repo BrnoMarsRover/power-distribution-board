@@ -345,10 +345,14 @@ l, t, r, bt = box(esp)
 put("U13", 149.4 - (r - l), 61.6, orient=lambda f: None)
 
 # under the ESP32: USB-C on the edge (opening outwards), RESET and BOOT beside it
+# The receptacle's front face (the footprint's "PCB Edge" line) sits on the board edge, so the plug's
+# overmold seats against the receptacle instead of the board; the courtyard pokes 0.5 mm past the edge.
 opening(FP["J32"], (1, 0))
 l, t, r, bt = box(FP["J32"])
-put("J32", 149.4 - (r - l), 82.4, orient=lambda f: None)
-x = 149.4 - (r - l) - 0.7
+face = max(TOMM(g.GetStart().x) - X0 for g in FP["J32"].GraphicalItems()
+           if g.GetLayer() == pcbnew.Dwgs_User and isinstance(g, pcbnew.PCB_SHAPE) and g.GetShape() == pcbnew.SHAPE_T_SEGMENT)
+put("J32", W - (face - l), 82.4, orient=lambda f: None)
+x = W - (face - l) - 0.7
 for ref in ("SW1", "SW2"):                   # stood upright so both fit beside the USB-C
     fp = FP[ref]
     set_side(fp, False)

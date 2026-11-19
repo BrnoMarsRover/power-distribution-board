@@ -8,7 +8,7 @@
 	(property "Reference" "REF**"
 		(at 2.54 -2.8 0)
 		(layer "F.SilkS")
-		(uuid "853238cc-bd05-4173-a3bf-0b5a29e1038f")
+		(uuid "40b1bcd5-d2d0-4f25-9147-8f19208c22a4")
 		(effects
 			(font
 				(size 1 1)
@@ -19,7 +19,7 @@
 	(property "Value" "MF-R300"
 		(at 2.54 2.8 0)
 		(layer "F.Fab")
-		(uuid "290d090b-62d8-4fe3-8068-fd2c6b4ef950")
+		(uuid "621dfec4-179c-42ef-8fe7-5ab5ae9bbf5a")
 		(effects
 			(font
 				(size 1 1)
@@ -31,7 +31,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "e5582ac9-a1ae-4336-b17d-e79148783f67")
+		(uuid "a3365322-6e40-471d-8fad-8ee5d14346c9")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -42,7 +42,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "200e0543-3b91-4eaf-bed2-0adcb47ad52f")
+		(uuid "9d0f4f8b-da9f-4ea9-8f70-19b7e72946d0")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -60,7 +60,7 @@
 		)
 		(fill no)
 		(layer "F.SilkS")
-		(uuid "24681840-ed17-4a49-af27-9a0348f23b2c")
+		(uuid "fb48b37e-f300-44c3-bfbc-0e8c7302700f")
 	)
 	(fp_rect
 		(start -3.86 -1.9)
@@ -71,7 +71,7 @@
 		)
 		(fill no)
 		(layer "F.CrtYd")
-		(uuid "79b9e7aa-db3e-4384-831e-95969a134b2f")
+		(uuid "2fd1686c-eff3-4796-881c-9ee6266b6d7a")
 	)
 	(fp_rect
 		(start -3.46 -1.5)
@@ -82,7 +82,7 @@
 		)
 		(fill no)
 		(layer "F.Fab")
-		(uuid "4bd80500-0dea-40d6-8c3c-d7a8d42cc4d3")
+		(uuid "055ce08d-1fb8-4b67-9fe2-f0e251c30f37")
 	)
 	(pad "1" thru_hole circle
 		(at 0 0)
@@ -90,7 +90,7 @@
 		(drill 1.1)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "c352bce1-7935-40f1-b0b7-cc1e6eb06abd")
+		(uuid "c305bd3d-71e7-4a59-aaa0-9bb3d2ace3fe")
 	)
 	(pad "2" thru_hole circle
 		(at 5.08 0)
@@ -98,7 +98,7 @@
 		(drill 1.1)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "23163b58-303b-4350-8eac-395397da9f0b")
+		(uuid "d5779695-785a-4a49-8cbd-0b4ab7d1ad0e")
 	)
 	(embedded_fonts no)
 	(model "${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D7.5mm_W2.5mm_P5.00mm.step"
