@@ -209,7 +209,7 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
 | Switch | FETs | Shunt | Over-current trip | Short-circuit trip |
 |--------|------|-------|-------------------|--------------------|
 | 42 V drives (4 × XT90), 30 A design | 2 × IPB042N10N3G in parallel + 1 pre-charge | 0.5 mΩ | 60 A for 1.1 s (firmware: 20 A sustained) | 150 A |
-| 42 V converter feeds (4 × XT90), 30 A | 2 × IPB042N10N3G in parallel + 1 pre-charge | 1 mΩ | 33 A | 100 A |
+| 42 V converter feeds (4 × XT90), 30 A | 2 × IPB042N10N3G in parallel + 1 pre-charge | 1 mΩ | 30 A for 0.5 s | 100 A |
 | 24 V (8 × Deans T), 12.5 A | IPB042N10N3G main + pre-charge | 2 mΩ | 13.8 A | off |
 | 12 V (7 × XT60), 12.5 A | IPB042N10N3G main + pre-charge | 2 mΩ | 13.8 A | off |
 | 5 V (11 × XT30), 15 A | IPB042N10N3G main + pre-charge | 2 mΩ | 16.7 A | off |
@@ -218,7 +218,36 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
 - **42 V groups, one direction:** the parallel FETs all point the same way, not
   back-to-back, so regenerative braking and back-driven motors always have a path back to
   the battery through the body diodes.
-- **The converter group** feeds about 22 A at 30 V (300 + 150 + 150 W of converters). It is
+- **Converter-group trip: 30 A** (30 mV across 1 mΩ, inside TI's characterized 10–30 mV).
+  That is 1.36× the 22 A the three converters draw flat-out at 30 V.
+- **Power-on sequence without firmware (decided 2026-11-19: hardware chain with long RCs).**
+  - The default-ON rails start in a fixed order, so every pre-charge finishes before its
+    main FETs close, and nothing downstream draws current through a pre-charge FET.
+  - The converter group goes fully on first. The 12 V rail (Orin) then starts its own
+    pre-charge, then its main FETs. The 54 V supply only needs its own pre-charge first.
+  - Each delay is an RC from +3V3 into INP (and INP_G on the 12 V rail). INP / INP_G
+    switch at 1.6–2.0 V, and the timing caps are taken as +10 / −30 % with DC bias, so a
+    delay lands anywhere in 0.46–1.03 × RC. Each step's earliest time comes after the
+    previous step's latest (table in `rails.md`):
+
+    | Step | Earliest | Latest |
+    |---|---|---|
+    | Converter group main FETs (INP, 330 k / 10 µF) | 1.5 s | 3.4 s |
+    | 12 V pre-charge (INP_G, 390 k / 22 µF) | 3.9 s | 8.9 s |
+    | 12 V main FETs (INP, 430 k / 47 µF) | 9.3 s | 20.9 s |
+    | 54 V main FETs (INP, 330 k / 10 µF), independent of the chain | 1.5 s | 3.4 s |
+
+  - Without firmware the Orin therefore gets power 9–21 s after the battery connects. The
+    ESP32 boots in under a second and normally takes over sooner: it drives INP / INP_G
+    through the expander and checks VSNS_OUT before each step.
+  - The expander reaches each RC node through 1 kΩ, so it can override the delay without
+    driving the 10–47 µF timing caps directly.
+  - **Before this change:** INP followed after about 0.9 s through 1 MΩ / 1 µF. That could
+    close the main FETs before pre-charge had finished (the bootstrap alone takes up to
+    0.8 s), which would likely trip the 100 A short-circuit detector at every power-up.
+- **FLT pull-ups** (open-drain FLT_I + FLT_T on each eFuse) sit on the MCU sheet next to the
+  ESP32 inputs, which keeps the eFuse sheets' control area clear.
+- **The converter group** feeds about 22 A at 30 V (300 + 150 + 150 W of converters). It is (300 + 150 + 150 W of converters). It is
   sized for 30 A, so the spare feed can carry another converter.
   Splitting it from the drives means a motor surge can no longer trip the Orin's supply.
 - **42 V short-circuit trips stay on,** because the battery can deliver hundreds of amps.
@@ -340,6 +369,29 @@ job.
   This is the accepted cost of sharing a switch per rail.
 
 ### 4.6 Rail inputs
+
+- **Converters (candidates 2026-11-19, AMPUL IP68 potted step-down modules):**
+
+  | Rail | Module | Input range | Output | No-load current |
+  |---|---|---|---|---|
+  | 12 V | AM3290 | 20–120 V | 12 V 10 A, 120 W | ≤ 48 mA |
+  | 24 V | AM9032 | **35–60 V** | 24 V 10 A, 240 W | ≤ 60 mA |
+  | 5 V | AM5942 | **35–60 V** | 5 V 15 A, 75 W | ≤ 50 mA |
+
+  - **Pre-charge is fine with them:** none has an enable pin, but their no-load draw totals
+    about 0.16 A. That stays inside the pre-charge FET's SOA while they wake up during the
+    converter group's ramp, as long as the downstream rails stay off, which the power-on
+    sequence guarantees.
+  - **OPEN: the 24 V and 5 V modules need at least 35 V.**
+    - A 10S pack spends its last stretch below that: 3.5 V per cell is roughly its last
+      10–20 %.
+    - Drive current also sags the bus. 60 A through about 0.1 Ω of pack and wiring is
+      about 6 V, so the 24 V and 5 V rails could brown out during acceleration at mid
+      charge.
+    - The 12 V module (20–120 V) is fine.
+    - Look for 24 V and 5 V modules that run down to about 25 V, or feed the 5 V
+      converter from the 12 V rail instead.
+  - The earlier 5 V candidate (AM1436) takes only 10–30 V and cannot sit on the 42 V group.
 
 - **Input connector:** male on the board, because the converter is the source. The 5 V
   input stays an XT30 (decided), rated about 15 A continuous.

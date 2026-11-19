@@ -152,8 +152,8 @@ CUSTOM = {
         "TPS48111-Q1", 25.4, 22.86, [
             ("20", "VS", "power_in", -20.32, 25.4, 270), ("19", "ISCP", "input", -10.16, 25.4, 270),
             ("18", "CS+", "input", 0, 25.4, 270), ("17", "CS-", "input", 10.16, 25.4, 270),
-            ("1", "EN/UVLO", "input", -27.94, 17.78, 0), ("3", "INP", "input", -27.94, 7.62, 0),
-            ("2", "INP_G", "input", -27.94, -5.08, 0), ("5", "FLT_I", "open_collector", -27.94, -17.78, 0),
+            ("1", "EN/UVLO", "input", -27.94, 17.78, 0), ("3", "INP", "input", -27.94, 10.16, 0),
+            ("2", "INP_G", "input", -27.94, -7.62, 0), ("5", "FLT_I", "open_collector", -27.94, -17.78, 0),
             ("4", "FLT_T", "open_collector", -27.94, -20.32, 0),
             ("15", "PU", "output", 27.94, 17.78, 180), ("14", "PD", "output", 27.94, 12.7, 180),
             ("12", "BST", "passive", 27.94, 5.08, 180), ("13", "SRC", "passive", 27.94, -2.54, 180),
@@ -860,7 +860,7 @@ def sheet_switch(r):
     notes = [f"TPS48111-Q1 + {v['n']} x {r['fet']} main + 1 pre-charge. Values from docs/rev3/rails.md "
              f"(trip {v['i_oc']:.1f} A after {v['c_tmr'] * v['k_tmr'] * 1e3:.0f} ms, latch-off; "
              + (f"short-circuit {v['i_sc']:.0f} A)." if v["r_iscp"] else "short-circuit trip disabled)."),
-             f"Power-on default: {'ON (INP delayed by RC after INP_G)' if on else 'OFF'}. "
+             f"Power-on default: {'ON, RC-sequenced (rails.md, power-on sequence)' if on else 'OFF'}. "
              "Q_T (MMBT3904) must sit against the main FET: remote temperature sense.",
              "Kelvin-route CS+ / CS- / ISCP from the R_SNS pads. Place C_ISCP right at the pins."]
     if r["name"] == "42V-D":
@@ -877,7 +877,8 @@ def sheet_switch(r):
     en = "L:EN"
     U = sh.add("PowerBoard_rev3:TPS48111-Q1", "U", "TPS48111-Q1", CUSTOM_FP_TPS,
                {20: "L:VS", 18: "L:CSP", 17: "L:SNSN", 19: "L:ISCP" if v["r_iscp"] else "L:SNSN", 1: en,
-                3: f"INP_{n}", 2: f"INPG_{n}", 10: "L:DIODE", 6: "GND",
+                3: "L:INP" if r.get("rc_inp") else f"INP_{n}", 2: "L:INPG" if r.get("rc_inpg") else f"INPG_{n}",
+                10: "L:DIODE", 6: "GND",
                 12: "L:BST", 15: "L:PU", 14: "L:GATE", 13: out, 11: "L:GPRE",
                 5: f"FLT_{n}", 4: f"FLT_{n}", 7: f"IMON_{n}", 8: "L:IWRN", 9: "L:TMR"},
                fields={"MPN": "TPS48111LQDGXRQ1"}, at=(X, Y))
@@ -932,29 +933,42 @@ def sheet_switch(r):
         W(PIN(qe, 1), (43.18, 144.78))
         lab("MOTOR_KILL", (43.18, 144.78), 180)
 
-    # --- control inputs from the left, with their power-on defaults
+    # --- control inputs from the left, with their power-on defaults. A default-ON input is an RC
+    # from +3V3 (see rails.md, power-on sequence); the expander reaches it through 1k, so it can
+    # override the RC without driving the timing cap directly.
     inp, inpg, flti, fltt = P(3), P(2), P(5), P(4)
-    for pin_, net in ((inp, f"INP_{n}"), (inpg, f"INPG_{n}"), (flti, f"FLT_{n}")):
-        W(pin_, (45.72, pin_[1]))
-        lab(net, (45.72, pin_[1]), 180)
-    TP(sh, f"INP_{n}", at=(50.8, inp[1]))
-    TP(sh, f"INPG_{n}", at=(50.8, inpg[1]))
+    for pin_, net, rc in ((inp, f"INP_{n}", r.get("rc_inp")), (inpg, f"INPG_{n}", r.get("rc_inpg"))):
+        y = pin_[1]
+        if rc:
+            node = "L:INP" if pin_ is inp else "L:INPG"
+            lab(net, (30.48, y), 180)
+            rser = R(sh, 1e3, net, node)
+            at_pin(rser, 1, (35.56, y))
+            W((30.48, y), PIN(rser, 1))
+            W(PIN(rser, 2), pin_)
+            TP(sh, node, at=(50.8, y))
+            cfp, cv = (("C1210", 10) if rc[1] > 30e-6 else ("C1206", 10 if rc[1] > 15e-6 else 16))
+            # pull-up above, cap hanging below; INP_G's cap stays left of the short FLT stub
+            xu, xc = (60.96, 68.58) if pin_ is inp else (60.96, 55.88)
+            ru = R(sh, rc[0], "+3V3", node, at=(xu, y - 3.81), rot=0)
+            ct = C(sh, rc[1], node, "GND", fp=cfp, volt=cv, at=(xc, y + 3.81), rot=0)
+            gnd(PIN(ct, 2))
+            v33(PIN(ru, 1))
+        else:
+            W(pin_, (45.72, y))
+            lab(net, (45.72, y), 180)
+            TP(sh, net, at=(50.8, y))
+            if on:              # INP_G with no delay: straight pull-up, pre-charge starts at once
+                ru = R(sh, 100e3, "+3V3", net, at=(60.96, y - 3.81), rot=0)
+                v33(PIN(ru, 1))
+            else:
+                rd = R(sh, 100e3, net, "GND", at=(60.96, y + 3.81), rot=0)
+                gnd(PIN(rd, 2))
+    # FLT_I / FLT_T are open-drain, wire-ORed; their pull-up sits on the mcu sheet by the ESP32 input
+    W(flti, (73.66, flti[1]))
+    lab(f"FLT_{n}", (73.66, flti[1]), 180)
     W(fltt, (86.36, fltt[1]), (86.36, flti[1]))
-    if on:
-        ri = R(sh, 1e6, "+3V3", f"INP_{n}", at=(60.96, inp[1] - 3.81), rot=0)
-        v33(PIN(ri, 1))
-        ci = C(sh, 1e-6, f"INP_{n}", "GND", at=(68.58, inp[1] + 3.81), rot=0)
-        gnd(PIN(ci, 2))
-        rg = R(sh, 100e3, "+3V3", f"INPG_{n}", at=(60.96, inpg[1] - 3.81), rot=0)
-        v33(PIN(rg, 1))
-    else:
-        ri = R(sh, 100e3, f"INP_{n}", "GND", at=(60.96, inp[1] + 3.81), rot=0)
-        gnd(PIN(ri, 2))
-        rg = R(sh, 100e3, f"INPG_{n}", "GND", at=(60.96, inpg[1] + 3.81), rot=0)
-        gnd(PIN(rg, 2))
-    rf = R(sh, 10e3, "+3V3", f"FLT_{n}", at=(76.2, flti[1] - 3.81), rot=0)
-    v33(PIN(rf, 1))
-    TP(sh, f"FLT_{n}", at=(71.12, flti[1]))
+    TP(sh, f"FLT_{n}", at=(81.28, flti[1]))
 
     # --- gate drive to the right
     pu, pd, bst, src, g = P(15), P(14), P(12), P(13), P(11)
@@ -1573,6 +1587,15 @@ def sheet_mcu():
     W(PIN(rsp, 1), (xg - 2.54, yt + 7.62), PIN(gh, 4))
     W(PIN(rsp, 2), (xg - 2.54, yt + 22.86), (xg - 12.7, yt + 22.86))
     lab("UART_SP", (xg - 12.7, yt + 22.86), 180)
+
+    # --- pull-ups for the six eFuse fault lines (open-drain FLT_I + FLT_T on each eFuse sheet)
+    for i, rn in enumerate(("42D", "42C", "24", "12", "5", "54")):
+        x = 142.24 + 10.16 * i
+        rfl = R(sh, 10e3, "+3V3", f"FLT_{rn}", rot=0)
+        at_pin(rfl, 1, (x, 205.74))
+        v33(PIN(rfl, 1))
+        W(PIN(rfl, 2), (x, 218.44))
+        lab(f"FLT_{rn}", (x, 218.44), 270)
 
     # --- test points for the buses and control lines
     tp_panel(sh, ["I2C_SDA", "I2C_SCL", "INA_ALERT", "UART_TX", "UART_RX", "UART_SP",

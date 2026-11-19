@@ -13,20 +13,31 @@ One TPS48111-Q1 eFuse per rail (two for the 42 V outputs), with a resettable PTC
 | Design current | 30 A | 30 A | 12.5 A | 12.5 A | 15 A | 4 A |
 | Main FET | 2 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC) in parallel, 1.89 W total at design current | 2 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC) in parallel, 1.89 W total at design current | 1 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC), 0.66 W total at design current | 1 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC), 0.66 W total at design current | 1 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC), 0.94 W total at design current | 1 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC), 0.07 W total at design current |
 | Pre-charge FET | IPB042N10N3G (same part) | IPB042N10N3G (same part) | IPB042N10N3G (same part) | IPB042N10N3G (same part) | IPB042N10N3G (same part) | IPB042N10N3G (same part) |
-| R_SNS | 0.5 mOhm, 0.45 W at design current, 30 mV at trip | 1 mOhm, 0.90 W at design current, 33 mV at trip | 2 mOhm, 0.31 W at design current, 28 mV at trip | 2 mOhm, 0.31 W at design current, 28 mV at trip | 2 mOhm, 0.45 W at design current, 33 mV at trip | 3 mOhm, 0.05 W at design current, 15 mV at trip |
+| R_SNS | 0.5 mOhm, 0.45 W at design current, 30 mV at trip | 1 mOhm, 0.90 W at design current, 30 mV at trip | 2 mOhm, 0.31 W at design current, 28 mV at trip | 2 mOhm, 0.31 W at design current, 28 mV at trip | 2 mOhm, 0.45 W at design current, 33 mV at trip | 3 mOhm, 0.05 W at design current, 15 mV at trip |
 | R_SET | 100R | 100R | 100R | 100R | 100R | 100R |
-| R_IWRN | 39.2k -> trips at 60.7 A | 35.7k -> trips at 33.3 A | 43.2k -> trips at 13.8 A | 43.2k -> trips at 13.8 A | 35.7k -> trips at 16.7 A | 78.7k -> trips at 5.0 A |
+| R_IWRN | 39.2k -> trips at 60.7 A | 39.2k -> trips at 30.4 A | 43.2k -> trips at 13.8 A | 43.2k -> trips at 13.8 A | 35.7k -> trips at 16.7 A | 78.7k -> trips at 5.0 A |
 | C_TMR (R_TMR 100k, latch-off) | 68uF -> 1076 ms | 33uF -> 522 ms | 33uF -> 522 ms | 33uF -> 522 ms | 33uF -> 522 ms | 33uF -> 522 ms |
 | R_ISCP | 4.32k -> 149 A in 1.2 us | 5.9k -> 99 A in 1.2 us | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | 3.4k -> 20 A in 1.2 us |
-| R_IMON | 6.98k -> 31 mV/A, 2.4 V at 76 A | 6.34k -> 57 mV/A, 2.4 V at 42 A | 7.68k -> 138 mV/A, 2.4 V at 17 A | 7.68k -> 138 mV/A, 2.4 V at 17 A | 6.34k -> 114 mV/A, 2.4 V at 21 A | 14k -> 378 mV/A, 2.4 V at 6 A |
+| R_IMON | 6.98k -> 31 mV/A, 2.4 V at 76 A | 6.98k -> 63 mV/A, 2.4 V at 38 A | 7.68k -> 138 mV/A, 2.4 V at 17 A | 7.68k -> 138 mV/A, 2.4 V at 17 A | 6.34k -> 114 mV/A, 2.4 V at 21 A | 14k -> 378 mV/A, 2.4 V at 6 A |
 | C_g / R_g (pre-charge slew) | 1uF / 330R -> 0.4 A for 420 ms | 470nF / 330R -> 0.4 A for 197 ms | 390nF / 330R -> 1.0 A for 94 ms | 150nF / 330R -> 2.2 A for 18 ms | 120nF / 330R -> 2.0 A for 6 ms | 150nF / 330R -> 0.4 A for 63 ms |
 | Pre-charge FET stress | 3.32 J, 16 W peak (ASSUMED 3.76mF load) - check its SOA | 1.66 J, 17 W peak (ASSUMED 1.88mF load) - check its SOA | 1.08 J, 23 W peak (ASSUMED 3.76mF load) - check its SOA | 0.24 J, 26 W peak (ASSUMED 3.29mF load) - check its SOA | 0.03 J, 10 W peak (ASSUMED 2.42mF load) - check its SOA | 0.53 J, 17 W peak (ASSUMED 600uF load) - check its SOA |
 | C_BST | 15uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 6.8uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 4.7uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 2.2uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 1.5uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 2.2uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) |
+| Power-on timing | OFF until the ESP32 sequences it | INP_G at once; INP 1.5-3.4 s (330k / 10uF); pre-charge done by 1.4 s worst case: OK | OFF until the ESP32 sequences it | INP_G 3.9-8.9 s (390k / 22uF); INP 9.3-20.9 s (430k / 47uF); pre-charge done by 8.9 s worst case: OK | OFF until the ESP32 sequences it | INP_G at once; INP 1.5-3.4 s (330k / 10uF); pre-charge done by 0.4 s worst case: OK |
 
 - **42V-D:** Drive group: EPOS4 50/5 (two per connector, two connectors in use, two spare; ASSUMED 470 uF per drive) or CubeMars AK10-9 V3.0 actuators. The 60 A / 1.1 s trip sits above four EPOS4s accelerating (15 A each); CubeMars actuators (31.9 A peak) need a configured current limit. The rear-panel motor switch feeds this driver's EN/UVLO through the latch, so opening it cuts motor power in hardware without touching the Orin. Defaults OFF: the drives are useless without a controller.
 - **42V-C:** Converter-feed group: three feeds plus one spare. 24 V 300 W + 12 V 150 W + 5 V 150 W is about 22 A at 30 V; the 30 A design leaves room for a converter on the spare. Defaults ON, because the 12 V converter powers the Orin.
 - **12V:** Feeds the Jetson AGX Orin, so it defaults ON in hardware.
 - **54V:** The eFuse sits on the boost's 42 V input. It switches the boost and is its short-circuit protection, because a boost cannot block current from input to output. Defaults ON: the Zyxel is the rover's main network switch. C_LOAD includes the boost's output side and the Zyxel's input: ASSUMED 600 uF.
+
+## Power-on sequence (hardware defaults)
+
+Without firmware, RC delays from +3V3 bring the default-ON rails up in order: the converter group fully on, then the 12 V rail (Orin) starts its own pre-charge, then its main FETs. The 54 V supply only needs its own pre-charge to finish first. Each step's earliest time must come after the previous step's latest. The ESP32 can take over sooner, using VSNS_OUT to confirm each pre-charge, once it has booted.
+
+| Step | Earliest | Latest | After the previous step? |
+|---|---|---|---|
+| 42V-C main FETs (INP) | 1.5 s | 3.4 s |  |
+| 12V pre-charge (INP_G) | 3.9 s | 8.9 s | yes |
+| 12V main FETs (INP) | 9.3 s | 20.9 s | yes |
 
 ## 54 V boost for the Zyxel XMG-105HP
 
