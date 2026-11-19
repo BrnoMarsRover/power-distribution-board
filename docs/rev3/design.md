@@ -946,6 +946,24 @@ layout.
   1. `gen/pcb_import.py` — imports the footprints, linked to the schematic.
   2. `gen/pcb_place.py --overwrite-placement` — this floorplan.
   3. `gen/pcb_silk.py` — the silkscreen.
+  4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after
+     "Update footprints from library", which resets the board-side model replacements.
+- **3D models:** KiCad 10 ships no model for several of its own footprints, and the custom
+  footprints had none.
+  - Connectors use rev2's STEP files from `kicad/ext`, placed as on rev2's board: XT90,
+    Deans T (the female body stands in for the male, as on rev2) and XT30.
+  - Stand-ins:
+
+    | Part | Stand-in |
+    |---|---|
+    | CSS2H shunts | 2512 body |
+    | VSSOP-19 | stretched MSOP-16 |
+    | MF-R300 | disc body |
+    | ESP32-S3-WROOM-1U | WROOM-32U, the same outline |
+    | CLIK-Mate | stretched PicoBlade |
+    | 2920 PTCs | scaled 2816 |
+
+  - Bare pads, test points, holes and wire bridges have no body.
 
   After that, the schematic is edited in KiCad and changes reach the board with
   Update PCB from Schematic (F8).

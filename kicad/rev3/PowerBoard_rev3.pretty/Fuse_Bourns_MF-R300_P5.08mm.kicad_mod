@@ -8,7 +8,7 @@
 	(property "Reference" "REF**"
 		(at 2.54 -2.8 0)
 		(layer "F.SilkS")
-		(uuid "290e3b74-14c9-5ca2-89b8-1aaff637c66f")
+		(uuid "924f1bc3-8184-4213-9f1a-7af2fbd901ef")
 		(effects
 			(font
 				(size 1 1)
@@ -19,7 +19,7 @@
 	(property "Value" "MF-R300"
 		(at 2.54 2.8 0)
 		(layer "F.Fab")
-		(uuid "e440b04d-de51-5a9a-b801-438bec98c654")
+		(uuid "adb451e5-40c1-4a58-9301-54b92ce8d8b9")
 		(effects
 			(font
 				(size 1 1)
@@ -31,7 +31,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "af9c9687-2ec2-5d15-a49c-0a538964d199")
+		(uuid "fd4adb11-8b0f-4361-9168-e8dfd40d9a67")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -42,7 +42,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "5319e858-5293-521e-9e29-006e1a17b3e4")
+		(uuid "f994f763-0793-4605-b3fe-07b8477af0cd")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -60,7 +60,7 @@
 		)
 		(fill no)
 		(layer "F.SilkS")
-		(uuid "250ba4ab-996f-587b-ba93-1f35318f36b5")
+		(uuid "510a3b9b-0a3d-42d7-ac88-88f47afda92b")
 	)
 	(fp_rect
 		(start -3.86 -1.9)
@@ -71,7 +71,7 @@
 		)
 		(fill no)
 		(layer "F.CrtYd")
-		(uuid "e7d6d8d5-e14d-5642-8a2e-a7293fa55d44")
+		(uuid "cd819480-83e6-4881-bd0a-4b60eeaa426f")
 	)
 	(fp_rect
 		(start -3.46 -1.5)
@@ -82,7 +82,7 @@
 		)
 		(fill no)
 		(layer "F.Fab")
-		(uuid "2bc7ab9c-be7a-531a-8da8-b3bd59d0d698")
+		(uuid "26eea99d-293f-4839-a409-362fcfaa2436")
 	)
 	(pad "1" thru_hole circle
 		(at 0 0)
@@ -90,7 +90,7 @@
 		(drill 1.1)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "b46b3dcc-4934-5caa-a050-40d5c5d05f60")
+		(uuid "92fea4b1-0298-4031-a759-32d1d1c5209f")
 	)
 	(pad "2" thru_hole circle
 		(at 5.08 0)
@@ -98,7 +98,18 @@
 		(drill 1.1)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "eee5c87d-1bca-504e-9c89-a1765f86ae80")
+		(uuid "2539a19d-1b53-441b-9f49-545966aa70e1")
 	)
 	(embedded_fonts no)
+	(model "${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D7.5mm_W2.5mm_P5.00mm.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1.016 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
 )

@@ -332,6 +332,17 @@
 			(uuid "07a788a6-3c95-4fd3-954d-ba4cded6cdda")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/XT90PB-F.stp"
+			(offset
+				(xyz 26 5 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz -90 0 180)
+			)
+		)
 	)
 	(footprint "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
 		(layer "F.Cu")
@@ -981,6 +992,17 @@
 			(uuid "65f83609-5df0-4a2d-813b-1c8f462bd9e0")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/T-Plug female - W.S Deans Co. Est. 1957.step"
+			(offset
+				(xyz -0.7 0 11)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 90 180 90)
+			)
+		)
 	)
 	(footprint "Capacitor_THT:CP_Radial_D12.5mm_P5.00mm"
 		(layer "F.Cu")
@@ -3670,6 +3692,17 @@
 			(uuid "1793bfd2-4d64-4ecc-bb3e-a48076178bd6")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/XT90PB-F.stp"
+			(offset
+				(xyz 26 5 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz -90 0 180)
+			)
+		)
 	)
 	(footprint "TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm"
 		(layer "F.Cu")
@@ -4196,12 +4229,12 @@
 			(uuid "19c24f73-716f-4a41-b84c-9b25f2af0a10")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2816_7142Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.049295775 1.297619048 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -4361,6 +4394,17 @@
 			(uuid "46aab4d3-667f-4b65-8fee-8da2afebe8b8")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2512_6332Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "PowerBoard_rev3:XT90PB-F"
 		(layer "F.Cu")
@@ -4535,6 +4579,17 @@
 			(uuid "ee330aae-c27f-44d7-b5b2-18adc9d9106c")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/XT90PB-F.stp"
+			(offset
+				(xyz 26 5 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz -90 0 180)
+			)
+		)
 	)
 	(footprint "TestPoint:TestPoint_Pad_D1.5mm"
 		(layer "F.Cu")
@@ -6488,9 +6543,9 @@
 			(uuid "de975926-0d93-4f09-bdde-1b2c89288c73")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_AMASS.3dshapes/AMASS_XT30UPB-F_1x02_P5.0mm_Vertical.step"
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/Amass_XT30UPB-F.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 2.5 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
@@ -10887,6 +10942,17 @@
 			(uuid "1a3bd838-fb85-4659-824e-afce61bc93da")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2512_6332Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
 		(layer "F.Cu")
@@ -11037,12 +11103,12 @@
 			(uuid "4eb243c9-64e9-4491-adc4-17d4dd1dd54b")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2816_7142Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.049295775 1.297619048 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -11518,12 +11584,12 @@
 			(uuid "b02b8b7c-955e-45d9-b2f2-64705306386b")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2816_7142Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.049295775 1.297619048 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -14151,12 +14217,12 @@
 			(uuid "93fc9356-ac9d-434a-9649-edb7122d1bc6")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_Molex.3dshapes/Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal.step"
+		(model "${KICAD10_3DMODEL_DIR}/Connector_Molex.3dshapes/Molex_PicoBlade_53261-0471_1x04-1MP_P1.25mm_Horizontal.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.2 1 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -17433,9 +17499,9 @@
 			(uuid "bdb9c9de-4b31-42b0-95e7-b5b6f9c26a12")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_AMASS.3dshapes/AMASS_XT30UPB-F_1x02_P5.0mm_Vertical.step"
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/Amass_XT30UPB-F.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 2.5 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
@@ -17564,6 +17630,17 @@
 			(uuid "eaec95e4-22be-43c5-b2d3-27d43a41bd92")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D7.5mm_W2.5mm_P5.00mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1.016 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
 		(layer "F.Cu")
@@ -18349,6 +18426,17 @@
 			(uuid "bd5f7371-8ab7-4472-b558-c25e4e482280")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/T-Plug female - W.S Deans Co. Est. 1957.step"
+			(offset
+				(xyz -0.7 0 11)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 90 180 90)
+			)
+		)
 	)
 	(footprint "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
 		(layer "F.Cu")
@@ -18654,9 +18742,9 @@
 			(uuid "e5eaf1fc-61c4-45ed-9eb8-652e3847d9dd")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_AMASS.3dshapes/AMASS_XT30UPB-F_1x02_P5.0mm_Vertical.step"
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/Amass_XT30UPB-F.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 2.5 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
@@ -20005,12 +20093,12 @@
 			(uuid "9b7cf176-831f-49d7-ac55-ab9bdd12c1b3")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2816_7142Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.049295775 1.297619048 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -20210,6 +20298,17 @@
 			(uuid "250f0d2c-d575-4c56-a591-ee96bc3c738f")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/T-Plug female - W.S Deans Co. Est. 1957.step"
+			(offset
+				(xyz -0.7 0 11)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 90 180 90)
+			)
+		)
 	)
 	(footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 		(layer "F.Cu")
@@ -21529,12 +21628,12 @@
 			(uuid "cd2fc0ba-f6d4-4688-a471-d69db977b527")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2816_7142Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.049295775 1.297619048 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -24730,6 +24829,17 @@
 			(uuid "e3033f8b-fd18-466b-af66-b66ccf0e239d")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/T-Plug female - W.S Deans Co. Est. 1957.step"
+			(offset
+				(xyz -0.7 0 11)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 90 180 90)
+			)
+		)
 	)
 	(footprint "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
 		(layer "F.Cu")
@@ -30311,6 +30421,17 @@
 			(uuid "f5776fdc-9b08-4f1e-89ed-ff761870c31d")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2512_6332Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
 		(layer "F.Cu")
@@ -30461,12 +30582,12 @@
 			(uuid "516b9ef9-7d6a-4afe-9caa-da2155590917")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2816_7142Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.049295775 1.297619048 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -31909,6 +32030,17 @@
 			(uuid "1149f176-cb80-4f41-a769-80401dbe5746")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D7.5mm_W2.5mm_P5.00mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1.016 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
 		(layer "F.Cu")
@@ -34197,6 +34329,17 @@
 			(uuid "5d70a9c5-eb95-4b67-a6c6-741de05da1f4")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D7.5mm_W2.5mm_P5.00mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1.016 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
 		(layer "F.Cu")
@@ -35073,6 +35216,17 @@
 			(uuid "ae84b8cd-3036-4e92-9a45-66f354e39b62")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/T-Plug female - W.S Deans Co. Est. 1957.step"
+			(offset
+				(xyz -0.7 0 11)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 90 180 90)
+			)
+		)
 	)
 	(footprint "PowerBoard_rev3:R_Bourns_CSS2H-2512_Kelvin"
 		(layer "F.Cu")
@@ -35227,6 +35381,17 @@
 			(uuid "6625e4db-ad4a-4b3e-a882-1d90e0b9f1cf")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2512_6332Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 		(layer "F.Cu")
@@ -35792,6 +35957,17 @@
 			(uuid "c39f7659-0d22-4d8e-b976-edc24f3d3c61")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/T-Plug female - W.S Deans Co. Est. 1957.step"
+			(offset
+				(xyz -0.7 0 11)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 90 180 90)
+			)
+		)
 	)
 	(footprint "Diode_SMD:D_SMB"
 		(layer "F.Cu")
@@ -36886,12 +37062,12 @@
 			(uuid "3fb54ad0-2584-4272-9320-93e2329f1333")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2816_7142Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.049295775 1.297619048 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -38064,9 +38240,9 @@
 			(uuid "833ad9e2-4509-435d-aaf5-97ab9f2ac135")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_AMASS.3dshapes/AMASS_XT30UPB-F_1x02_P5.0mm_Vertical.step"
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/Amass_XT30UPB-F.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 2.5 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
@@ -38195,6 +38371,17 @@
 			(uuid "3d64d566-f889-4fc6-8abc-b050bd483eba")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D7.5mm_W2.5mm_P5.00mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1.016 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 		(layer "F.Cu")
@@ -38870,6 +39057,17 @@
 			(uuid "acd74cf3-b0d4-4b0f-b50c-2862ab502845")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/XT90PB-F.stp"
+			(offset
+				(xyz 26 5 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz -90 0 180)
+			)
+		)
 	)
 	(footprint "TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm"
 		(layer "F.Cu")
@@ -39303,6 +39501,17 @@
 			(uuid "305e6f48-c947-4612-bd89-66e4f8ff629a")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2512_6332Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Capacitor_THT:CP_Radial_D12.5mm_P5.00mm"
 		(layer "F.Cu")
@@ -42262,12 +42471,12 @@
 			(uuid "c90554f1-3ab1-4b8a-93da-d1a8711b4667")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2816_7142Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.049295775 1.297619048 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -43732,7 +43941,7 @@
 			(uuid "626ecef0-3205-4db8-8aa9-142618eef795")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm.step"
+		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.81mm.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -45069,9 +45278,9 @@
 			(uuid "2b169e77-1474-4b79-a8d9-9f404b95bc93")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_AMASS.3dshapes/AMASS_XT30UPB-M_1x02_P5.0mm_Vertical.step"
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/Amass_XT30UPB-M.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 2.5 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
@@ -45552,12 +45761,12 @@
 			(uuid "c77bd8aa-9406-4aac-9f2f-781596d8bf78")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2816_7142Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.049295775 1.297619048 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -46793,6 +47002,17 @@
 			(uuid "ed34d85f-3ae3-429b-bd12-25824901331c")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D7.5mm_W2.5mm_P5.00mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1.016 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "PowerBoard_rev3:XT90PB-M"
 		(layer "F.Cu")
@@ -46967,6 +47187,17 @@
 			(uuid "f0fb3428-8254-442d-b0bb-89d60d4b167e")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/XT90PB-M.stp"
+			(offset
+				(xyz 5 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 180)
+			)
+		)
 	)
 	(footprint "Package_TO_SOT_SMD:TO-263-2"
 		(layer "F.Cu")
@@ -48961,7 +49192,7 @@
 			(uuid "5d915408-f6e1-4e25-8ea1-92923d784cc2")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/HTSSOP-20-1EP_4.4x6.5mm_P0.65mm_EP3.4x6.5mm_Mask2.96x2.96mm.step"
+		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/HTSSOP-20-1EP_4.4x6.5mm_P0.65mm_EP3.4x6.5mm.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -51393,12 +51624,12 @@
 			(uuid "300cf05c-5686-4973-af52-2cd01b6aab56")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2816_7142Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.049295775 1.297619048 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -52100,6 +52331,17 @@
 			(uuid "905e77e3-544b-439e-be43-c6e8e8f86f8e")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2512_6332Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "PowerBoard_rev3:R_Bourns_CSS2H-2512_Kelvin"
 		(layer "F.Cu")
@@ -52254,6 +52496,17 @@
 			(uuid "0edf451e-bf7c-4fe6-9ae0-007d48359146")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2512_6332Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
 		(layer "F.Cu")
@@ -54115,9 +54368,9 @@
 			(uuid "ba8ab3cf-0cb9-4452-b580-e2ff1bef4afe")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_AMASS.3dshapes/AMASS_XT30UPB-F_1x02_P5.0mm_Vertical.step"
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/Amass_XT30UPB-F.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 2.5 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
@@ -54617,6 +54870,17 @@
 			(uuid "b82a7c20-8512-468c-aae7-ca7ebc1cd363")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D7.5mm_W2.5mm_P5.00mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1.016 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "LED_SMD:LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder"
 		(layer "F.Cu")
@@ -55182,6 +55446,17 @@
 			(uuid "3c2ee563-ba2f-47a1-8325-dfe5aad6142f")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/T-Plug female - W.S Deans Co. Est. 1957.step"
+			(offset
+				(xyz -0.7 0 11)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 90 180 90)
+			)
+		)
 	)
 	(footprint "TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm"
 		(layer "F.Cu")
@@ -55522,6 +55797,17 @@
 			(uuid "eaff263c-6c7f-4b5b-bbd8-0a057328371b")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/XT90PB-F.stp"
+			(offset
+				(xyz 26 5 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz -90 0 180)
+			)
+		)
 	)
 	(footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 		(layer "F.Cu")
@@ -56463,12 +56749,12 @@
 			(uuid "21e5a581-f2b6-400b-a5ad-9289512e0df8")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_Molex.3dshapes/Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal.step"
+		(model "${KICAD10_3DMODEL_DIR}/Connector_Molex.3dshapes/Molex_PicoBlade_53261-0471_1x04-1MP_P1.25mm_Horizontal.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.2 1 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -58320,12 +58606,12 @@
 			(uuid "b01e68fa-613d-4aa7-9d27-34ea231b69ac")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2816_7142Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.049295775 1.297619048 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -58936,12 +59222,12 @@
 			(uuid "ed4ad048-462c-4af9-8d21-34f50427d4d3")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_2920_7451Metric.step"
+		(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2816_7142Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
 			(scale
-				(xyz 1 1 1)
+				(xyz 1.049295775 1.297619048 1)
 			)
 			(rotate
 				(xyz 0 0 0)
@@ -59252,9 +59538,9 @@
 			(uuid "258af600-cb3e-488c-8b9a-9711939f137f")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_AMASS.3dshapes/AMASS_XT30UPB-F_1x02_P5.0mm_Vertical.step"
+		(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/Amass_XT30UPB-F.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 2.5 0 0)
 			)
 			(scale
 				(xyz 1 1 1)
@@ -69235,6 +69521,17 @@
 			(uuid "c228cff8-751f-4bbf-8e9c-f6fdbb46ab2b")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/MSOP-16_3x4.039mm_P0.5mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1.262688784 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Package_TO_SOT_SMD:SOT-23"
 		(layer "B.Cu")
@@ -72297,6 +72594,17 @@
 			(uuid "91f4b13f-845b-447a-b0a6-bbaf0926feca")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/MSOP-16_3x4.039mm_P0.5mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1.262688784 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 		(layer "B.Cu")
@@ -93730,6 +94038,17 @@
 			(uuid "5dd1542f-b009-4ab4-87f0-d886e392c662")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/MSOP-16_3x4.039mm_P0.5mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1.262688784 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "B.Cu")
@@ -99861,6 +100180,17 @@
 			(uuid "a9323d65-4158-48f8-9ff4-0aacde534941")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/MSOP-16_3x4.039mm_P0.5mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1.262688784 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 		(layer "B.Cu")
@@ -107240,6 +107570,17 @@
 			(uuid "ecda6022-d0c2-47a8-95bf-71b4e2bf6cba")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/MSOP-16_3x4.039mm_P0.5mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1.262688784 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
 		(layer "B.Cu")
@@ -108067,7 +108408,7 @@
 			(uuid "389d0c46-9c24-4cbe-a2d0-a1959b5f85e9")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-S3-WROOM-1U.step"
+		(model "${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-WROOM-32U.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -112952,6 +113293,17 @@
 			(uuid "d7f7ae0a-87fa-41d0-93f0-0af8dfad7342")
 		)
 		(embedded_fonts no)
+		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/MSOP-16_3x4.039mm_P0.5mm.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1.262688784 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
 		(layer "B.Cu")
