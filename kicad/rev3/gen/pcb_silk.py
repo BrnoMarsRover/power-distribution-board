@@ -169,13 +169,13 @@ for f in b.GetFootprints():
 
 # ---------------------------------------------------------------- output columns: header with polarity
 OBST = {False: obstacles(False), True: obstacles(True)}
-COLS = [("42V DRIVE  40A", 2.0, 24.0), ("42V CONVERTERS", 27.0, 49.0), ("24V OUT 3A EACH", 51.5, 76.0),
-        ("12V OUT 3A EACH", 77.0, 101.0), ("5V OUT 3A EACH", 104.0, 122.0)]
+COLS = [("42V DRIVE  40A", 2.0, 24.0), ("42V CONVERTERS", 27.0, 49.0), ("24V OUT 3A EACH", 51.5, 75.6),
+        ("12V OUT 3A EACH", 77.0, 103.2), ("5V OUT 3A EACH", 104.5, 122.5)]
 for name, x0, x1 in COLS:
     text("+", x0 + 0.8, 73.3, h=1.6, bold=True)
     text("-", x1 - 0.8, 73.3, h=1.6, bold=True)
     text(name, (x0 + x1) / 2, 73.3, h=1.15, bold=True)
-for x in (25.5, 50.5, 76.65, 102.5, 123.0):                 # dividers between the columns
+for x in (25.5, 50.5, 76.1, 103.65, 123.0):                 # dividers between the columns
     line(x, 72.0, x, 134.0)
 bx = bbox("J4")
 text("BRAKE RESISTOR", (bx[0] + bx[2]) / 2, bx[1] - 1.4, h=1.0, bold=True)

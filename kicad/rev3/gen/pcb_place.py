@@ -31,8 +31,8 @@ GAP = 0.6                                    # between packed parts (courtyard r
 GAP_BOTTOM = 1.0                             # the bottom has room: a little air for labels and rework
 
 # column x ranges (board mm) and the rows
-COL = {"42D": (2.0, 24.0), "42C": (27.0, 49.0), "24": (52.0, 74.0), "12": (77.0, 101.0),
-       "5": (104.0, 122.0), "54": (124.0, 149.0)}
+COL = {"42D": (2.0, 24.0), "42C": (27.0, 49.0), "24": (52.0, 76.0), "12": (77.0, 103.3),
+       "5": (104.5, 122.5), "54": (124.0, 149.0)}         # 24 / 12 V: laid out by power_rails.py
 Y_IN, Y_OUT = 1.0, 75.0                      # tops of the inputs row and of the output columns
 ROW = 10.2                                   # output pitch for 24 / 12 / 5 V (upright 2920 PTCs need 10.1)
 Y_CTRL = 137.4                               # control-connector strip along the bottom edge
@@ -308,9 +308,9 @@ ZONES = {
     "USB": ((123.5, 82, 149, 94), (123.5, 78, 149, 100)),
     "42 V drive group": ((1.5, 35.5, 25.5, 71.5), (1.5, 35.5, 25.5, 71.5)),
     "42 V converter-feed": ((25.5, 35.5, 50.5, 71.5), (25.5, 35.5, 50.5, 71.5)),
-    "24 V rail eFuse": ((51, 12, 75.5, 71.5), (51, 12, 75.5, 71.5)),
-    "12 V rail eFuse": ((75.5, 12, 102.5, 71.5), (75.5, 12, 102.5, 71.5)),
-    "5 V rail eFuse": ((102.5, 10, 123.5, 71.5), (102.5, 10, 123.5, 71.5)),
+    "24 V rail eFuse": ((51, 12, 76.0, 71.5), (51, 12, 76.0, 71.5)),
+    "12 V rail eFuse": ((76.5, 12, 103.3, 71.5), (76.5, 12, 103.3, 71.5)),
+    "5 V rail eFuse": ((104.0, 10, 123.5, 71.5), (104.0, 10, 123.5, 71.5)),
     "54 V supply eFuse": ((123.5, 36, 149, 61.5), (123.5, 36, 149, 61.5)),
     "54 V boost": ((123.5, 120.6, 149, 149), (123.5, 36, 149, 149)),
     "Brake chopper": ((1.5, 121.5, 26, 149), (1.5, 121.5, 26, 149)),

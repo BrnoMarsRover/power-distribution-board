@@ -1034,9 +1034,10 @@ layout.
      - **Planes:** L2 is a solid GND plane; L4 has a GND fill.
      - The earlier automatic pours (`pcb_pours.py`, convex hulls around each net's pads) were
        removed: their shapes ignored the current flow and blocked the gate and sense routing.
-  2c. `gen/power_rails.py` (copper also run by `pcb_power42.py`) — the 24 V block, designed by hand in the
-     42 V blocks' pattern (2026-11-19). One entry per rail in `RAILS`; 12 V and 5 V still use the generic
-     column code until they get theirs.
+  2c. `gen/power_rails.py` (copper also run by `pcb_power42.py`) — the 24 V and 12 V blocks, designed by
+     hand in the 42 V blocks' pattern (2026-11-19). One entry per rail in `RAILS` (column edges and part
+     references); the geometry is shared. 5 V still uses the generic column code until it gets its entry.
+     The 24 V path is described below; 12 V is the same with VIN12 / OUT12, J6 and XT60s.
      - **Current path:** 24 V IN Deans + → VIN24 area (both bulk caps, the TVS) → R41 upright on the
        VIN24 / DRN boundary → DRN area (pre-charge FET Q11 on top, main FET Q10 below, LED, bridge pad 1)
        → source leads → 7.7 mm OUT24 strip on the left → full-width OUT24 area under the logo.
@@ -1045,7 +1046,10 @@ layout.
      - **Output column:** the PTCs lie flat. Each rail pad sits inside a 6.5 mm OUT24 strip that runs
        down the column under the PTC bodies; each PTC's other pad opens straight into its connector's
        + pin on the same row (strip → PTC → connector, left to right). Upright PTCs would leave only
-       about 3 mm for the strip. The connectors moved 2 mm right to make room.
+       about 3 mm for the strip. PTC and connector courtyards sit 0.8 mm apart.
+     - **Column widths:** 24 V copper 50.8–76.0 mm, 12 V 76.5–103.2 mm (XT60s are 1.9 mm wider than
+       Deans). The 5 V column moved 0.5 mm right to 104.5–122.5 mm; its hand layout will need about
+       3 mm more, taken from the 54 V area.
      - **Ground:** the TVS ground pad shares an L1 patch with the input's − pin. The outputs' − pins
        reach the L2 plane and the L4 fill through their plated holes.
      - **L3:** an OUT24 copy under the switch and the full-width area, stitched to L1 at the FET

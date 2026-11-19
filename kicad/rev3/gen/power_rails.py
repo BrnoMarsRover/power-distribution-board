@@ -28,12 +28,14 @@ LED_Y = 30.0
 TVS_Y, CAP_Y = 14.5, 16.0           # low enough to leave the input's + / - marks their spot
 GND_BOT = 16.2                      # ground patch bottom (input - pin, TVS ground pad)
 BRIDGE_Y = 42.6                     # bridge pad 1 (DRN); pad 2 sits 5.08 mm lower, in the OUT area
-CONN_GAP = 1.2                      # PTC courtyard to connector courtyard
+CONN_GAP = 0.8                      # PTC courtyard to connector courtyard (a rail may set its own conn_gap)
 
 # per rail: column copper edges (xl, xr) and the parts; fets = (pre-charge, main)
 RAILS = {
     "24": dict(xl=50.8, xr=76.0, vin="VIN24", out="OUT24", j_in="J5", tvs="D5", caps=("C37", "C36"),
                shunt="R41", fets=("Q11", "Q10"), bridge="JP3", led="D4"),
+    "12": dict(xl=76.5, xr=103.2, vin="VIN12", out="OUT12", j_in="J6", tvs="D7", caps=("C48", "C47"),
+               shunt="R59", fets=("Q14", "Q13"), bridge="JP4", led="D6"),
 }
 
 
@@ -85,7 +87,7 @@ def _conn_left(FP, r):
     j, f, rail, other, plus, minus = outputs(FP, r)[0]
     ptc = FP[f]
     _flat(ptc, _geo(r)["ptc_x"], 100.0, rail, other)
-    return _box(ptc)[2] + CONN_GAP
+    return _box(ptc)[2] + r.get("conn_gap", CONN_GAP)
 
 
 def place(FP):
