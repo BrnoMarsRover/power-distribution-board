@@ -26,7 +26,7 @@ That run does six things:
    intended.
 
 Result at generation time:
-- 508 parts and 280 nets.
+- 513 parts and 282 nets.
 - Netlist check passes.
 - ERC is clean at every severity.
 
@@ -95,9 +95,9 @@ it never touches a layout. The values and the reasons for them are in
 
 These are the things the generator could not settle on its own:
 
-- [ ] **LM5122 compensation.** R_SLOPE, R_COMP, C_COMP and C_HF are starting values from
-  the datasheet example. Run TI's LM5122 quickstart calculator with 30–42 V in, 54 V,
-  1.85 A, 400 kHz and 22 µH.
+- [ ] **LM5122 loop.** R_SLOPE and the COMP–FB Type 2 network are computed in `rails.py`
+  (crossover 8–11 kHz). Confirm on the bench with a load step from 0.2 to 1.8 A: the
+  response should be damped, with no ringing.
 - [x] **Pre-charge FET SOA.** Ramps were cut to stay inside the IPB042N10N3G's DC SOA
   (0.4 A at 42 V). See `docs/rev3/design.md` 4.3.
 - [ ] **Bypass-link placement.** Put each eFuse's two bypass holes (M4 on the 42 V groups,
@@ -107,8 +107,7 @@ These are the things the generator could not settle on its own:
   pre-charge ramp time (470 µF per drive is assumed).
 - [ ] **Brake resistor.** Size the off-board resistor (10 Ω / 100 W assumed) to the
   rover's braking energy.
-- [ ] **Boost inductor footprint.** `L_12x12mm_H6mm` is a placeholder. Match it to the
-  TMPA1265SP-220MN-D (13.5 × 12.6 mm).
+- [x] **Boost inductor footprint.** Coilcraft MSS1583-223MED on KiCad's `L_Coilcraft_MSS1583-XXX`.
 - [ ] **Aux buck parts.** Confirm that the LMR38010SDDAR variant has the RT/SYNC pin, and
   pick the actual 33 µH / 1.5 A inductor for its footprint.
 - [ ] **Connector footprints.** XT90 and Deans: check the M and F pin geometry against the

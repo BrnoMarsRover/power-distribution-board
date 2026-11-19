@@ -47,17 +47,21 @@ The 12 V eFuse starts only once the converter group is fully on, so its pre-char
 
 | | |
 |---|---|
-| Controller | LM5122 (JLC C77241), synchronous boost, 65 V in (75 V abs max on VIN/CSP/CSN), 105 V switch node |
+| Controller | LM5122MHX/NOPB, synchronous boost, 65 V in (75 V abs max on VIN/CSP/CSN), 105 V switch node; MODE grounded = diode emulation, so no reverse current into the battery |
 | Operating point | 30-42 V in -> 54 V, 100 W (1.85 A); the XMG-105HP draws 90 W at most, 70 W of it PoE |
 | Duty cycle | 0.26 - 0.47 (below 50 %, so slope compensation is not critical) |
 | Switching frequency | 400 kHz, RT = 22.6k |
-| Inductor | TMPA1265SP-220MN-D (C357119), 22 uH, Isat 10 A, DCR 31 mOhm, 0.38 W |
+| Inductor | MSS1583-223MED (Coilcraft), 22 uH, Isat 10.4 A (above the 8.75 A max current limit), DCR 26 mOhm, 0.32 W |
 | Input current | 3.51 A average at 30 V, ripple 1.61 A p-p, peak 4.31 A |
 | Current sense R_S | 10 mOhm -> cycle-by-cycle limit 6.5 / 7.5 / 8.8 A (min / typ / max), below Isat |
 | FETs | FDD86102 (100 V, DPAK, Qg 19 nC) for both low and high side. Low gate charge matters: the LM5122 drives both gates from its internal VCC regulator, fed from VIN. That is 11 mA, or 0.47 W in the LM5122 at 42 V in. A D2PAK (117 nC) would burn about 3 W. |
 | Feedback | R_top 221k / R_bot 4.99k -> 54.35 V |
-| Output capacitors | 6 x 2.2uF 100 V X7R 1210 (~5.94uF effective at 54 V) + 100uF / 80 V bulk; ripple ~368 mV |
-| Output TVS | SMBJ58A: standoff 58 V, above the 57 V PoE maximum |
+| Output capacitors | 6 x 2.2uF 100 V X7R 1210 (~5.94uF effective at 54 V) + 2 x 100uF / 100 V EEU-FC2A101; ripple ~368 mV |
+| Slope compensation | R_SLOPE 80.6k -> K = 0.85 at 30 V, 1.07 at 42 V (target >= 0.82; minimum R_SLOPE 9.23k) |
+| Loop compensation (COMP to FB) | R_COMP 205k + C_COMP 15nF in series, C_HF 82pF across. Crossover 7.9-11.1 kHz; RHP zero 65 kHz at 30 V; zero on the load pole (52 Hz), HF pole on the bulk-cap ESR zero (8.8 kHz). Confirm with a load-step test. |
+| Output TVS | SMBJ58A-13-F: standoff 58 V, above the 57 V PoE maximum; clamps at 93.6 V, under the 105 V switch node and the FETs' 100 V |
+| Bootstrap diode | BAS21 (200 V): it blocks VOUT plus switching ringing, more than a 75-100 V 1N4148W should see |
+| Enable | UVLO is held low by Q_BEN until firmware clears BOOST_DIS (expander P15), after the 54 V eFuse is fully on. The boost never runs off its eFuse's pre-charge FET |
 | Over-voltage | No OVP in the LM5122. Firmware reads VOUT 54V and opens the input eFuse above 57 V; the TVS covers fast transients |
 | Output connector | A type used for nothing else on the board, so a 54 V plug cannot reach a 5 / 12 / 24 V device |
 
@@ -124,4 +128,4 @@ Two ADC128D818s (TSSOP-16, internal 2.56 V reference) at 0x1D, 0x1E. Each conver
 | 0x1E.IN4 | VIN 24V |
 | 0x1E.IN5 | VIN 12V |
 | 0x1E.IN6 | VIN 5V |
-| 0x1E.IN7 | spare |
+| 0x1E.IN7 | VIN 54V boost (the 54 V eFuse's output, VSNS_SW54) |

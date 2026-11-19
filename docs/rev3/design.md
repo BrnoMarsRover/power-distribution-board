@@ -232,8 +232,8 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
     1. INP_G on.
     2. Wait for the pre-charge: VSNS_OUT within 5 % of the input.
     3. INP on, then INP_G off.
-  - The 54 V eFuse has no output sense of its own (VSNS_OUT_54 reads the boost output),
-    so it uses a timed wait of about 4× its 63 ms ramp. See the boost review.
+  - The 54 V eFuse confirms its pre-charge on VSNS_SW54. Once its main FETs are on,
+    firmware clears BOOST_DIS and the boost soft-starts (about 12 ms) to 54 V.
   - The 12 V rail starts only once the converter group is fully on, so nothing downstream
     draws current through the converter group's pre-charge FET.
   - A step that does not finish in about 4× its expected time, or an asserted FLT, leaves
@@ -347,10 +347,30 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
 
 | | |
 |---|---|
-| Controller | LM5122: 65 V operating input (75 V absolute max), 105 V switch node, $1.30–1.85 at JLC depending on quantity |
+| Controller | LM5122MHX/NOPB: 65 V operating input (75 V absolute max), 105 V switch node. MODE grounded = diode emulation, so no reverse current into the battery |
 | Operating point | 30–42 V in, 54.35 V out, 100 W design, 400 kHz, duty 0.26–0.47 |
-| Power stage | 22 µH / 10 A inductor (TMPA1265SP-220MN-D); 2 × FDD86102 (100 V, 24 mΩ, DPAK, 19 nC gate charge); 10 mΩ current sense, cycle-by-cycle limit 6.5–8.8 A |
-| Output | 6 × 2.2 µF 100 V ceramic + 100 µF / 80 V bulk, SMBJ58A TVS |
+| Power stage | Coilcraft MSS1583-223MED, 22 µH, Isat 10.4 A, above the 8.75 A maximum current limit; 2 × FDD86102 (100 V, 24 mΩ, DPAK, 19 nC gate charge); 10 mΩ WSL2512 current sense, cycle-by-cycle limit 6.5–8.8 A |
+| Output | 6 × 2.2 µF 100 V ceramic + 2 × 100 µF / 100 V Panasonic EEU-FC2A101 (the same part as the battery input), SMBJ58A-13-F TVS clamping at 93.6 V, under the 105 V switch node and the FETs' 100 V |
+| Loop | R_SLOPE 80.6 k (K = 0.85–1.07). Type 2 network **between COMP and FB**: 205 k + 15 nF in series, 82 pF across. Crossover 8–11 kHz, RHP zero 65 kHz at 30 V in. Computed in `rails.py`; confirm with a load-step test |
+| Bootstrap | BAS21 (200 V), because it blocks VOUT plus ringing |
+
+- **Review fixes (2026-11-19):**
+  - The compensation network was drawn from COMP to GND, which suits a transconductance
+    amplifier. The LM5122's error amplifier is a voltage-output op-amp, and TI connects
+    the network between COMP and FB. As drawn the loop was effectively uncompensated.
+  - The 1N4148W bootstrap diode (75–100 V) became a 200 V BAS21.
+  - The 80 V bulk caps became 100 V parts.
+  - The TMPA1265SP inductor (not at TME or Mouser) became the Coilcraft MSS1583-223MED,
+    which also has a KiCad footprint.
+- **Enable (BOOST_DIS):** Q_BEN holds the LM5122's UVLO pin low, which is shutdown, while
+  BOOST_DIS is high. A 100 k pull-up and the expander's power-up state keep it high, so
+  the boost is off until firmware clears it on expander P15.
+  - Without it, the LM5122 would start at 27 V partway through its eFuse's pre-charge
+    ramp, and its load current would flow through the pre-charge FET.
+  - Firmware enables the boost only once the 54 V eFuse's main FETs are on; the boost then
+    soft-starts in about 12 ms.
+- **The 54 V eFuse now senses its own output:** VSNS_SW54 on ADC 0x1E IN7, the spare
+  channel. VSNS_OUT_54 still reads the boost output.
 
 - **The input eFuse matters.** A boost has a direct path from input to output through the
   inductor and the high-side FET's body diode, so it cannot switch itself off or survive a

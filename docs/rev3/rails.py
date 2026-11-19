@@ -200,8 +200,39 @@ def power_on_text(r, v):
 
 
 BOOST = dict(vin_min=30.0, vin_max=42.0, vout=54.0, pout=100.0, eff=0.95, fsw=400e3,
-             inductor=("TMPA1265SP-220MN-D", 22e-6, 10.0, 0.031, "C357119"),
-             fet="FDD86102", qg_at_vcc=14e-9, c_cer=2.2e-6, n_cer=6, cer_derate=0.45, c_bulk=100e-6)
+             inductor=("MSS1583-223MED", 22e-6, 10.4, 0.026, "Coilcraft"),
+             fet="FDD86102", qg_at_vcc=14e-9, c_cer=2.2e-6, n_cer=6, cer_derate=0.45,
+             c_bulk=100e-6, n_bulk=2, esr_bulk=0.18,     # EEU-FC2A101: 0.18 ohm impedance at 100 kHz
+             a_s=10, k_slope=0.85, f_cross=8e3)
+
+
+def boost_values(b):
+    """LM5122 loop values (SNVS954H eq. 5-10, 16-18). Current mode, Type 2 network between COMP and FB."""
+    L, rs = b["inductor"][1], 0.01
+    v = {}
+    v["r_top"] = nearest(4.99e3 * (b["vout"] / 1.2 - 1), E96)
+    v["vout"] = 1.2 * (1 + v["r_top"] / 4.99e3)
+    d_lo = b["vin_min"] / v["vout"]                        # D' at minimum input
+    d_hi = b["vin_max"] / v["vout"]
+    # slope: R_SLOPE = L * 6e9 / ((K * VOUT - VIN_min) * RS * A_S), then K back over the input range
+    v["r_slope"] = nearest(L * 6e9 / ((b["k_slope"] * v["vout"] - b["vin_min"]) * rs * b["a_s"]), E96)
+    k = lambda vin: (1 + L * 6e9 / (vin * rs * b["a_s"] * v["r_slope"])) * vin / v["vout"]
+    v["k_lo"], v["k_hi"] = k(b["vin_min"]), k(b["vin_max"])
+    v["r_slope_min"] = 5.7e9 / b["fsw"] * (1.2 - b["vin_min"] / v["vout"])
+    # power stage at full load
+    r_load = v["vout"] ** 2 / b["pout"]
+    c_out = b["n_cer"] * b["c_cer"] * b["cer_derate"] + b["n_bulk"] * b["c_bulk"]
+    v["c_out"] = c_out
+    v["f_rhp"] = r_load * d_lo ** 2 / (2 * math.pi * L)
+    v["f_load"] = 2 / (2 * math.pi * r_load * c_out)
+    v["f_esr"] = 1 / (2 * math.pi * (b["esr_bulk"] / b["n_bulk"]) * (b["n_bulk"] * b["c_bulk"]))
+    # eq. 18: f_cross = R_COMP * D' / (pi * RS * R_FB2 * A_S * C_OUT); D' smallest at VIN_min
+    v["r_comp"] = nearest(b["f_cross"] * math.pi * rs * v["r_top"] * b["a_s"] * c_out / d_lo, E96)
+    v["c_comp"] = nearest(1 / (2 * math.pi * v["r_comp"] * v["f_load"]), E12)        # zero on the load pole
+    v["c_hf"] = nearest(1 / (2 * math.pi * v["r_comp"] * v["f_esr"]), E12)            # pole on the ESR zero
+    fc = lambda dp: v["r_comp"] * dp / (math.pi * rs * v["r_top"] * b["a_s"] * c_out)
+    v["fc_lo"], v["fc_hi"] = fc(d_lo), fc(d_hi)
+    return v
 
 
 def design_boost(b):
@@ -218,19 +249,21 @@ def design_boost(b):
     r_s = nearest(0.0655 / (1.4 * i_pk), E12)
     lim = [v / r_s for v in (0.0655, 0.075, 0.0875)]
     # V_OUT = 1.2 V * (1 + R_top / R_bot)
+    bv = boost_values(b)
     r_bot = 4.99e3
-    r_top = nearest(r_bot * (b["vout"] / 1.2 - 1), E96)
-    vout = 1.2 * (1 + r_top / r_bot)
+    r_top, vout = bv["r_top"], bv["vout"]
     c_eff = b["n_cer"] * b["c_cer"] * b["cer_derate"]
     i_out = b["pout"] / b["vout"]
     v_ripple = i_out * d_max / (b["fsw"] * c_eff)
     rows = [
-        ("Controller", "LM5122 (JLC C77241), synchronous boost, 65 V in (75 V abs max on VIN/CSP/CSN), 105 V switch node"),
+        ("Controller", "LM5122MHX/NOPB, synchronous boost, 65 V in (75 V abs max on VIN/CSP/CSN), 105 V switch node; "
+                       "MODE grounded = diode emulation, so no reverse current into the battery"),
         ("Operating point", f"{b['vin_min']:g}-{b['vin_max']:g} V in -> {b['vout']:g} V, {b['pout']:g} W "
                             f"({i_out:.2f} A); the XMG-105HP draws 90 W at most, 70 W of it PoE"),
         ("Duty cycle", f"{d_min:.2f} - {d_max:.2f} (below 50 %, so slope compensation is not critical)"),
         ("Switching frequency", f"{b['fsw'] / 1e3:.0f} kHz, RT = {fmt_r(rt)}"),
-        ("Inductor", f"{name} ({code}), {L * 1e6:g} uH, Isat {isat:g} A, DCR {dcr * 1e3:g} mOhm, "
+        ("Inductor", f"{name} ({code}), {L * 1e6:g} uH, Isat {isat:g} A (above the {0.0875 / 0.01:.2f} A max "
+                     f"current limit), DCR {dcr * 1e3:g} mOhm, "
                      f"{i_in ** 2 * dcr:.2f} W"),
         ("Input current", f"{i_in:.2f} A average at {b['vin_min']:g} V, ripple {ripple:.2f} A p-p, peak {i_pk:.2f} A"),
         ("Current sense R_S", f"{r_s * 1e3:g} mOhm -> cycle-by-cycle limit {lim[0]:.1f} / {lim[1]:.1f} / "
@@ -242,8 +275,22 @@ def design_boost(b):
                  f"A D2PAK (117 nC) would burn about 3 W."),
         ("Feedback", f"R_top {fmt_r(r_top)} / R_bot {fmt_r(r_bot)} -> {vout:.2f} V"),
         ("Output capacitors", f"{b['n_cer']} x {fmt_c(b['c_cer'])} 100 V X7R 1210 (~{fmt_c(c_eff)} effective at "
-                              f"{b['vout']:g} V) + {fmt_c(b['c_bulk'])} / 80 V bulk; ripple ~{v_ripple * 1e3:.0f} mV"),
-        ("Output TVS", "SMBJ58A: standoff 58 V, above the 57 V PoE maximum"),
+                              f"{b['vout']:g} V) + {b['n_bulk']} x {fmt_c(b['c_bulk'])} / 100 V EEU-FC2A101; "
+                              f"ripple ~{v_ripple * 1e3:.0f} mV"),
+        ("Slope compensation", f"R_SLOPE {fmt_r(bv['r_slope'])} -> K = {bv['k_lo']:.2f} at {b['vin_min']:g} V, "
+                               f"{bv['k_hi']:.2f} at {b['vin_max']:g} V (target >= 0.82; minimum R_SLOPE "
+                               f"{fmt_r(bv['r_slope_min'])})"),
+        ("Loop compensation (COMP to FB)", f"R_COMP {fmt_r(bv['r_comp'])} + C_COMP {fmt_c(bv['c_comp'])} in series, "
+                                           f"C_HF {fmt_c(bv['c_hf'])} across. Crossover {bv['fc_lo'] / 1e3:.1f}-"
+                                           f"{bv['fc_hi'] / 1e3:.1f} kHz; RHP zero {bv['f_rhp'] / 1e3:.0f} kHz at "
+                                           f"{b['vin_min']:g} V; zero on the load pole ({bv['f_load']:.0f} Hz), "
+                                           f"HF pole on the bulk-cap ESR zero ({bv['f_esr'] / 1e3:.1f} kHz). "
+                                           "Confirm with a load-step test."),
+        ("Output TVS", "SMBJ58A-13-F: standoff 58 V, above the 57 V PoE maximum; clamps at 93.6 V, under the "
+                       "105 V switch node and the FETs' 100 V"),
+        ("Bootstrap diode", "BAS21 (200 V): it blocks VOUT plus switching ringing, more than a 75-100 V 1N4148W should see"),
+        ("Enable", "UVLO is held low by Q_BEN until firmware clears BOOST_DIS (expander P15), after the 54 V eFuse "
+                   "is fully on. The boost never runs off its eFuse's pre-charge FET"),
         ("Over-voltage", "No OVP in the LM5122. Firmware reads VOUT 54V and opens the input eFuse "
                          "above 57 V; the TVS covers fast transients"),
         ("Output connector", "A type used for nothing else on the board, so a 54 V plug cannot reach a 5 / 12 / 24 V device"),
@@ -336,7 +383,7 @@ def main():
     w("")
     adc = ([f"IMON {r['name']}" for r in RAILS] + [f"VOUT {r['name']}" for r in RAILS]
            + [f"VIN {r['name']}" for r in RAILS if r["src"].endswith("converter")
-              or "converter," in r["src"]])
+              or "converter," in r["src"]] + ["VIN 54V boost (the 54 V eFuse's output, VSNS_SW54)"])
     w(f"Two ADC128D818s (TSSOP-16, internal 2.56 V reference) at {', '.join(f'0x{a:02X}' for a in ADC_ADDRS)}. "
       "Each converts 12 ms per channel, so a full sweep runs at about 10 Hz. The 42 V bus voltage, "
       "the input of both 42 V groups and the 54 V boost, comes from the INA228. VOUT 54V is the "

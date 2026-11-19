@@ -1001,16 +1001,17 @@ def sheet_switch(r):
     xe = 302.26
     W((165.1, yO), (xe, yO))
     lab(out, (xe, yO), 0)
-    if r["name"] != "54V":       # the 54 V output voltage is measured after the boost
+    if True:     # on the 54 V eFuse this is its own output (the boost input); VSNS_OUT_54 is the boost output
+        vsn = "VSNS_SW54" if r["name"] == "54V" else f"VSNS_OUT_{n}"
         xd = 271.78
-        rvt = R(sh, 100e3, out, f"VSNS_OUT_{n}", at=(xd, 134.62), rot=0)
-        rvb = R(sh, divider_bottom(100e3, r["v"] * 1.15), f"VSNS_OUT_{n}", "GND", at=(xd, 152.4), rot=0)
+        rvt = R(sh, 100e3, out, vsn, at=(xd, 134.62), rot=0)
+        rvb = R(sh, divider_bottom(100e3, r["v"] * 1.15), vsn, "GND", at=(xd, 152.4), rot=0)
         W((xd, yO), PIN(rvt, 1))
         W(PIN(rvt, 2), PIN(rvb, 1))
         gnd(PIN(rvb, 2))
         W((xd, 143.51), (xd - 5.08, 143.51))
-        lab(f"VSNS_OUT_{n}", (xd - 5.08, 143.51), 180)
-        cv = C(sh, 10e-9, f"VSNS_OUT_{n}", "GND", at=(xd + 5.08, 149.86), rot=0)
+        lab(vsn, (xd - 5.08, 143.51), 180)
+        cv = C(sh, 10e-9, vsn, "GND", at=(xd + 5.08, 149.86), rot=0)
         W((xd, 146.05), PIN(cv, 1))
         gnd(PIN(cv, 2))
     r_led = rails.nearest((r["v"] - 2.0) / 2e-3, rails.E96)
@@ -1213,10 +1214,12 @@ def sheet_outputs():
 
 def sheet_boost():
     b = rails.BOOST
+    bv = rails.boost_values(b)
     sh = Sheet("boost54", "54 V boost for the Zyxel XMG-105HP (LM5122)", [
         "30-42 V in (from the 54 V supply eFuse) -> 54.35 V, 100 W, 400 kHz. Values from docs/rev3/rails.md.",
-        "VERIFY before layout: R_SLOPE, R_COMP / C_COMP / C_HF are starting values from the LM5122 datasheet "
-        "example. Run TI's LM5122 quickstart calculator with these operating points.",
+        "R_SLOPE and the Type 2 network between COMP and FB come from the LM5122 equations in rails.py "
+        "(crossover about 8-11 kHz); confirm with a load-step test.",
+        "Q_BEN holds UVLO low until firmware clears BOOST_DIS (expander P15), after the 54 V eFuse is fully on.",
         "Keep the SW node, Q_LS, Q_HS and the output ceramics in one tight loop. EP must be soldered (hand-solder hole)."],
         drawn=True)
     W, gnd, v33, lab = marks(sh)
@@ -1226,12 +1229,12 @@ def sheet_boost():
                {5: "L:VIN_LM", 4: "L:CSP", 3: "L:CSN", 6: "L:UVLO", 10: "L:FB", 11: "L:COMP", 7: "L:SS",
                 8: "L:RT", 12: "L:SLOPE", 14: "L:RES", 13: "GND", 2: "GND",
                 20: "L:BST", 19: "L:HO", 18: "L:SW", 16: "L:LO", 17: "L:VCC", 1: None,
-                9: "GND", 15: "GND", 21: "GND"}, fields={"LCSC": "C77241"}, at=(109.22, 139.7))
+                9: "GND", 15: "GND", 21: "GND"}, fields={"MPN": "LM5122MHX/NOPB"}, at=(109.22, 139.7))
     P = lambda n: PIN(U, n)
 
     # input rail: label, ceramics, current shunt
     lab("SW54_OUT", (25.4, yi), 180)
-    rs = R(sh, "10m 2512", "SW54_OUT", "L:LIN", fp="R2512", LCSC="C163051")
+    rs = R(sh, "10m 2512", "SW54_OUT", "L:LIN", fp="R2512", MPN="WSL2512R0100FEA")
     at_pin(rs, 1, (P(4)[0], yi))
     W((25.4, yi), PIN(rs, 1))
     for x in (40.64, 53.34, 66.04, 78.74):
@@ -1251,8 +1254,8 @@ def sheet_boost():
     W(PIN(rcn, 2), P(3))
 
     # power stage: inductor, SW node with the low-side FET, high-side FET to the output
-    ind = sh.add("Device:L", "L", "22uH 10A", FP["L12"], {1: "L:LIN", 2: "L:SW"}, rot=90,
-                 fields={"LCSC": "C357119", "MPN": "TMPA1265SP-220MN-D"})
+    ind = sh.add("Device:L", "L", "22uH 10.4A", "Inductor_SMD:L_Coilcraft_MSS1583-XXX",
+                 {1: "L:LIN", 2: "L:SW"}, rot=90, fields={"MPN": "MSS1583-223MED"})
     at_pin(ind, 1, (119.38, yi))
     W(PIN(rs, 2), PIN(ind, 1))
     ql = FET(sh, b["fet"], "L:LO", "L:SW", "GND")
@@ -1273,8 +1276,10 @@ def sheet_boost():
     cb = C(sh, 100e-9, "L:SW", "L:BST", volt=25, rot=0)
     at_pin(cb, 2, (134.62, P(20)[1]))
     W(P(20), (137.16, P(20)[1]))
-    db = DS(sh, "1N4148W", "L:BST", "L:VCC", fp="SOD123", rot=270)
-    at_pin(db, 1, (137.16, P(20)[1]))
+    db = sh.add("Diode:BAS21", "D", "BAS21", FP["SOT23"], {3: "L:BST", 1: "L:VCC", 2: None},
+                rot=270, fields={"MPN": "BAS21-7-F"})
+    at_pin(db, 3, (137.16, P(20)[1]))
+    db.label_at = {"Reference": (2.54, -1.27), "Value": (2.54, 1.27)}
     W(P(17), (144.78, P(17)[1]))
     hang(sh, C(sh, 4.7e-6, "L:VCC", "GND", fp="C0805", volt=16, rot=0), (144.78, P(17)[1]))
     sh.add("Connector:TestPoint", "TP", "VCC", FP["TP"], {1: "L:VCC"}, rot=180, at=(132.08, P(17)[1]))
@@ -1289,14 +1294,17 @@ def sheet_boost():
     hang(sh, R(sh, 9.31e3, "L:UVLO", "GND", rot=0), PIN(rut, 2))
     comb = [(7, 43.18, C(sh, 100e-9, "L:SS", "GND", rot=0)),
             (8, 50.8, R(sh, rails.nearest(9e9 / b["fsw"], rails.E96), "L:RT", "GND", rot=0)),
-            (12, 58.42, R(sh, 100e3, "L:SLOPE", "GND", rot=0)),
-            (14, 66.04, C(sh, 470e-9, "L:RES", "GND", rot=0)),
-            (11, 73.66, C(sh, 330e-12, "L:COMP", "GND", rot=0))]
+            (12, 58.42, R(sh, bv["r_slope"], "L:SLOPE", "GND", rot=0)),
+            (14, 66.04, C(sh, 470e-9, "L:RES", "GND", rot=0))]
     for pin_, x, part in comb:
         W(P(pin_), (x, P(pin_)[1]))
         hang(sh, part, (x, P(pin_)[1]), gap=yt - P(pin_)[1])
-    rc = hang(sh, R(sh, 20e3, "L:COMP", "L:CC", rot=0), (81.28, P(11)[1]), gap=yt - P(11)[1], gnd=False)
-    hang(sh, C(sh, 22e-9, "L:CC", "GND", rot=0), PIN(rc, 2))
+    # Type 2 compensation between COMP and FB (the LM5122 error amplifier is a voltage-output op-amp)
+    W(P(11), (73.66, P(11)[1]))
+    chf = hang(sh, C(sh, bv["c_hf"], "L:COMP", "L:FB", rot=0), (73.66, P(11)[1]),
+               gap=yt - P(11)[1], gnd=False)
+    rc = hang(sh, R(sh, bv["r_comp"], "L:COMP", "L:CC", rot=0), (81.28, P(11)[1]), gap=yt - P(11)[1], gnd=False)
+    ccp = hang(sh, C(sh, bv["c_comp"], "L:CC", "L:FB", rot=0), PIN(rc, 2), gnd=False)
 
     # grounds and feedback below the IC
     g = [P(n) for n in (9, 15, 21, 13, 2)]
@@ -1308,6 +1316,8 @@ def sheet_boost():
     gnd((P(21)[0], yb + 2.54))
     yf, xo = 177.8, 160.02
     W(P(10), (P(10)[0], yf))
+    W(PIN(chf, 2), (73.66, yf), (P(10)[0], yf))
+    W(PIN(ccp, 2), (81.28, yf))
     rft = R(sh, 221e3, "OUT54", "L:FB", rot=270)
     at_pin(rft, 2, (P(10)[0] + 5.08, yf))
     W((P(10)[0], yf), PIN(rft, 2))
@@ -1323,8 +1333,8 @@ def sheet_boost():
     for k in range(6):
         hang(sh, C(sh, 2.2e-6, "OUT54", "GND", fp="C1210", volt=100, rot=0), (167.64 + 15.24 * k, yi))
     for x in (259.08, 274.32):
-        hang(sh, CP(sh, "100uF/80V", "OUT54", "GND", rot=0), (x, yi))
-    hang(sh, DZ(sh, "SMBJ58A", "OUT54", "GND", rot=270), (289.56, yi))
+        hang(sh, CP(sh, "100uF/100V", "OUT54", "GND", fp="CPR12", rot=0, MPN="EEU-FC2A101"), (x, yi))
+    hang(sh, DZ(sh, "SMBJ58A", "OUT54", "GND", rot=270, MPN="SMBJ58A-13-F"), (289.56, yi))
     rl = hang(sh, R(sh, 26.1e3, "OUT54", "L:LED", fp="R1206", rot=0), (304.8, yi), gnd=False)
     led = LED(sh, "green", "GND", "L:LED", rot=90)
     at_pin(led, 2, (304.8, PIN(rl, 2)[1] + 2.54))
@@ -1340,6 +1350,18 @@ def sheet_boost():
     lab("VSNS_OUT_54", (xv + 15.24, yn), 0)
     TP(sh, "OUT54", at=(345.44, yi))
     sh.mark("flag", (353.06, yi))
+
+    # enable: Q_BEN shorts UVLO until firmware clears BOOST_DIS (pulled up, so the boost is off at power-up)
+    q_en = sh.add("Transistor_FET:2N7002", "Q", "2N7002", FP["SOT23"], {1: "BOOST_DIS", 2: "GND", 3: "L:UVLO"})
+    at_pin(q_en, 3, (22.86, P(6)[1] + 5.08))
+    W(PIN(rut, 2), (22.86, P(6)[1]), PIN(q_en, 3))
+    gnd(PIN(q_en, 2))
+    W(PIN(q_en, 1), (5.08, PIN(q_en, 1)[1]))
+    lab("BOOST_DIS", (5.08, PIN(q_en, 1)[1]), 180)
+    rpu = R(sh, 100e3, "+3V3", "BOOST_DIS", rot=0)
+    at_pin(rpu, 2, (10.16, PIN(q_en, 1)[1]))
+    v33(PIN(rpu, 1))
+    sh.shift(17.78, 0)
     return sh
 
 
@@ -1682,10 +1704,10 @@ def sheet_can():
 
 
 ADC_MAP = [["IMON_42D", "IMON_42C", "IMON_24", "IMON_12", "IMON_5", "IMON_54", "VSNS_OUT_42D", "VSNS_OUT_42C"],
-           ["VSNS_OUT_24", "VSNS_OUT_12", "VSNS_OUT_5", "VSNS_OUT_54", "VSNS_IN_24", "VSNS_IN_12", "VSNS_IN_5", "GND"]]
+           ["VSNS_OUT_24", "VSNS_OUT_12", "VSNS_OUT_5", "VSNS_OUT_54", "VSNS_IN_24", "VSNS_IN_12", "VSNS_IN_5", "VSNS_SW54"]]
 EXP_MAP = {4: "INP_42D", 5: "INP_42C", 6: "INP_24", 7: "INP_12", 8: "INP_5", 9: "INP_54", 10: "INPG_42D",
            11: "INPG_42C", 13: "INPG_24", 14: "INPG_12", 15: "INPG_5", 16: "INPG_54", 17: "MOTOR_ARM",
-           18: None, 19: None, 20: None}
+           18: "BOOST_DIS", 19: None, 20: None}
 
 
 def sheet_io():
