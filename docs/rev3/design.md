@@ -514,12 +514,17 @@ job.
 
 ### 5.3 Current and voltage measurement
 
-- **Two ADC128D818s** (8-channel, 12-bit, I2C, TSSOP-16, internal 2.56 V reference) read
-  15 of their 16 inputs:
+- **Two ADC128D818s** (8-channel, 12-bit, I2C, TSSOP-16, internal 2.56 V reference) use all
+  16 inputs:
   - 6 switch currents (IMON, scaled to 2.4 V full scale).
   - 6 output voltages. These show when pre-charge is complete and catch a failed FET; for
     the 54 V supply this is the boost output.
   - 3 rail input voltages (24, 12 and 5 V), through dividers.
+  - The 54 V eFuse output (VSNS_SW54), ahead of the boost.
+- **Configuration:** firmware must set mode 1 (Advanced Configuration register 0Bh). The
+  power-on default, mode 0, converts only IN0–IN6 plus temperature, which would drop IN7 on
+  both chips (VSNS_OUT_42C and VSNS_SW54). VREF stays open for the internal reference, and
+  V+ has the 1 µF + 100 nF the datasheet asks for.
 - **Speed:** 12 ms per channel, so a full sweep runs at about 10 Hz. That is fast enough
   for telemetry and for watching a pre-charge ramp.
 - **Board temperature (NTC) and the aux 5 V rail** go to ESP32 ADC1 pins (GPIO1, GPIO2).
@@ -541,11 +546,18 @@ job.
     eFuse. It replaces EPOS4 STO as the motor cut, so the same wiring works whichever
     drives are fitted.
 - **The cut:** the switch loop (JST-PH 2-pin, closed = motors allowed, so a broken wire
-  means off) clears a 74LVC1G74 latch. Its /Q output (MOTOR_KILL) pulls the drive
+  means off) clears a 74LVC1G74 latch (SN74LVC1G74DCUT). Its /Q output (MOTOR_KILL) pulls the drive
   TPS48111's EN/UVLO low through Q_EN.
   - Low EN puts the TPS48111 into shutdown, and it actively turns the main and pre-charge
     FETs off (datasheet section 8.4). This is independent of the firmware.
   - The converter group, and with it the Orin, keeps running.
+- **Clear path:** loop → 1 kΩ / 100 nF filter (MOTOR_OK) → 1 MΩ / 100 nF hold-off, with a
+  Schottky across the 1 MΩ so opening the switch clears in about a millisecond → 74LVC1G17
+  Schmitt buffer → /CLR.
+  - The buffer is needed because the RC edge takes milliseconds, while the flip-flop allows
+    at most 10 ns/V. A slow edge would sit in the input's linear region.
+  - At power-on, the 100 nF is empty and the buffer holds /CLR low for about 100 ms, so the
+    latch always starts off.
 - **No restart when the switch closes:** the latch holds the drive group off until the
   ESP32 clocks it (MOTOR_ARM, expander pin P14).
   - Without the latch, EN coming back with INP still high would switch the main FETs

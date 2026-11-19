@@ -658,6 +658,8 @@ FP = dict(
     BTN="Button_Switch_SMD:SW_SPST_TL3342",
     ESP="RF_Module:ESP32-S3-WROOM-1U",
     SSOP8="Package_SO:SSOP-8_2.95x2.8mm_P0.65mm",
+    VSSOP8="Package_SO:VSSOP-8_2.3x2mm_P0.5mm",
+    SOT23_5="Package_TO_SOT_SMD:SOT-23-5",
     L12="Inductor_SMD:L_12x12mm_H6mm",
     L6="Inductor_SMD:L_6.3x6.3_H3",
     SOT223="Package_TO_SOT_SMD:SOT-223-3_TabPin2",
@@ -1743,7 +1745,9 @@ EXP_MAP = {4: "INP_42D", 5: "INP_42C", 6: "INP_24", 7: "INP_12", 8: "INP_5", 9: 
 def sheet_io():
     sh = Sheet("io", "Switch control (TCA9535), measurement (ADC128D818 x2), motor-switch latch", [
         "TCA9535 at 0x20 holds INP / INP_G for all six switches, so they keep their state across an ESP32 reset.",
-        "ADC128D818 at 0x1D (A1 = A0 = LOW) and 0x1E (A1 = LOW, A0 = MID). Internal 2.56 V reference; 12 ms per channel.",
+        "ADC128D818 at 0x1D (A1 = A0 = LOW) and 0x1E (A1 = LOW, A0 = MID). Internal 2.56 V reference (VREF pin open); "
+        "firmware must select mode 1 (reg 0Bh) or IN7 is not converted. 12 ms per channel.",
+        "The motor-switch RC (1 M x 100 nF hold-off, diode for a fast clear) goes through a Schmitt buffer into /CLR.",
         "Rear-panel motor switch (closed = motors allowed): opening it clears the latch (Q low, /Q high) -> MOTOR_KILL holds "
         "the drive group off.",
         "It stays off after the switch closes until the ESP32 clocks MOTOR_ARM, which it does only after dropping INP and "
@@ -1755,7 +1759,7 @@ def sheet_io():
     exp = {1: None, 2: "GND", 3: "GND", 21: "GND", 22: "I2C_SCL", 23: "I2C_SDA", 24: "+3V3", 12: "GND"}
     exp.update(EXP_MAP)
     X = sh.add("Interface_Expansion:TCA9535PWR", "U", "TCA9535PWR", "Package_SO:TSSOP-24_4.4x7.8mm_P0.65mm",
-               exp, fields={"LCSC": "C130204"}, at=(91.44, 109.22))
+               exp, fields={"MPN": "TCA9535PWR"}, at=(91.44, 109.22))
     P = lambda n: PIN(X, n)
     W(P(24), (P(24)[0], 68.58))
     v33((P(24)[0], 68.58))
@@ -1776,9 +1780,9 @@ def sheet_io():
             lab(net, (129.54, P(n)[1]), 0)
 
     # --- motor-switch latch: MOTOR_ARM clocks it, the switch loop clears it
-    F = sh.add("74xGxx:74AUP1G74", "U", "74LVC1G74DCTR", FP["SSOP8"],
+    F = sh.add("74xGxx:74AUP1G74", "U", "SN74LVC1G74DCUT", FP["VSSOP8"],
                {1: "MOTOR_ARM", 2: "+3V3", 3: "MOTOR_KILL", 4: "GND", 5: "L:LATCH_Q", 6: "L:CLR",
-                7: "+3V3", 8: "+3V3"}, at=(152.4, 175.26))
+                7: "+3V3", 8: "+3V3"}, fields={"MPN": "SN74LVC1G74DCUT"}, at=(152.4, 175.26))
     F.label_at = {"Reference": (5.08, 13.97), "Value": (5.08, 16.51)}
     Q = lambda n: PIN(F, n)
     arm = P(17)
@@ -1803,6 +1807,7 @@ def sheet_io():
     # --- motor-switch loop: +3V3 -> 1k -> switch (closed = run) -> 10k to GND; filtered into MOTOR_OK and the CLR RC
     yl = 198.12
     j = CONN2(sh, "JST-PH 2p motor switch", "PH2", "L:ESRC", "L:ELOOP", mirror=True)
+    j.fields["MPN"] = "B2B-PH-K-S(LF)(SN)"
     at_pin(j, 2, (40.64, yl))
     W(PIN(j, 1), (48.26, PIN(j, 1)[1]))
     rsrc = R(sh, 1e3, "+3V3", "L:ESRC", rot=0)
@@ -1812,16 +1817,24 @@ def sheet_io():
     at_pin(re1, 1, (63.5, yl))
     W(PIN(j, 2), PIN(re1, 1))
     hang(sh, R(sh, 10e3, "L:ELOOP", "GND", rot=0), (55.88, yl))
-    r1m = R(sh, 1e6, "MOTOR_OK", "L:CLR")
+    r1m = R(sh, 1e6, "MOTOR_OK", "L:CLR_RC")
     at_pin(r1m, 1, (83.82, yl))
     W(PIN(re1, 2), PIN(r1m, 1))
     hang(sh, C(sh, 100e-9, "MOTOR_OK", "GND", rot=0), (76.2, yl))
-    dc = DS(sh, "1N5819HW", "MOTOR_OK", "L:CLR", fp="SOD123")
+    dc = DS(sh, "1N5819HW", "MOTOR_OK", "L:CLR_RC", fp="SOD123", MPN="1N5819HW-7-F")
     at_pin(dc, 1, (83.82, 190.5))
     W((78.74, yl), (78.74, 190.5), PIN(dc, 1))
     W(PIN(dc, 2), (96.52, 190.5), (96.52, yl))
-    W(PIN(r1m, 2), (Q(6)[0], yl), Q(6))
-    hang(sh, C(sh, 100e-9, "L:CLR", "GND", rot=0), (101.6, yl))
+    # the 100 ms RC edge is far slower than the flip-flop's 10 ns/V input limit, so a Schmitt buffer squares it
+    sb = sh.add("74xGxx:74LVC1G17", "U", "SN74LVC1G17DBVR", FP["SOT23_5"],
+                {1: None, 2: "L:CLR_RC", 3: "GND", 4: "L:CLR", 5: "+3V3"}, fields={"MPN": "SN74LVC1G17DBVR"})
+    at_pin(sb, 2, (106.68, yl))
+    W(PIN(r1m, 2), PIN(sb, 2))
+    W(PIN(sb, 4), (Q(6)[0], yl), Q(6))
+    gnd(PIN(sb, 3))
+    W(PIN(sb, 5), (PIN(sb, 5)[0], PIN(sb, 5)[1] - 2.54))
+    v33((PIN(sb, 5)[0], PIN(sb, 5)[1] - 2.54))
+    hang(sh, C(sh, 100e-9, "L:CLR_RC", "GND", rot=0), (101.6, yl))
     W((73.66, yl), (73.66, 182.88), (66.04, 182.88))
     lab("MOTOR_OK", (66.04, 182.88), 180)
     TP(sh, "MOTOR_OK", at=(69.85, 182.88))
@@ -1833,7 +1846,7 @@ def sheet_io():
         for k, net in enumerate(chans):
             conns[16 - k] = net
         A = sh.add("Analog_ADC:ADC128D818", "U", "ADC128D818", "Package_SO:TSSOP-16_4.4x5mm_P0.65mm",
-                   conns, fields={"LCSC": "C139062"}, at=(231.14, yc))
+                   conns, fields={"MPN": "ADC128D818CIMTX/NOPB"}, at=(231.14, yc))
         Pa = lambda n: PIN(A, n)
         for k, net in enumerate(chans):
             pt = Pa(16 - k)
@@ -1851,6 +1864,8 @@ def sheet_io():
         v33((vp[0], vp[1] - 10.16))
         W((vp[0], vp[1] - 7.62), (269.24, vp[1] - 7.62))
         hang(sh, C(sh, 100e-9, "+3V3", "GND", rot=0), (269.24, vp[1] - 7.62))
+        W((269.24, vp[1] - 7.62), (276.86, vp[1] - 7.62))            # datasheet: 1 uF || 100 nF on V+
+        hang(sh, C(sh, 1e-6, "+3V3", "GND", volt=16, rot=0), (276.86, vp[1] - 7.62))
         gnd(Pa(4))
         a0, a1 = Pa(7), Pa(8)
         xg = a0[0] - 5.08
