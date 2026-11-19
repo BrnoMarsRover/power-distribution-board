@@ -15,3 +15,6 @@ __pycache__/
 
 # rev3 schematic generator scratch output (netlist, ERC report, review PDF)
 /kicad/rev3/gen/out/
+
+# KiCad 9+ local history (its own git repo, per machine)
+.history/
