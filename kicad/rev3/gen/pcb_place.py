@@ -12,7 +12,12 @@ Under the short XT90 columns: brake-resistor output, aux supply and the control 
 Power parts on top; control and logic on the bottom, under their own power stage. All connectors on top.
 """
 import sys
+from pathlib import Path
+
 import pcbnew
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import power42  # noqa: E402  hand-designed battery input and 42 V blocks
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 if "--overwrite-placement" not in sys.argv:
@@ -237,7 +242,6 @@ for rail, ref in (("24", "J5"), ("12", "J6"), ("5", "J7")):         # converter 
 # ---------------------------------------------------------------- output columns
 for k, j in enumerate(by_net("OUT42D")):
     put(j, COL["42D"][0], Y_OUT + ROW90 * k)
-put("J4", COL["42D"][0], Y_OUT + ROW90 * len(by_net("OUT42D")) + 2.0)    # brake resistor, under the drives
 for k, j in enumerate(by_net("OUT42C")):
     put(j, COL["42C"][0], Y_OUT + ROW90 * k)
 for rail, net_ in (("24", "OUT24"), ("12", "OUT12"), ("5", "OUT5")):
@@ -353,8 +357,15 @@ for ref in ("SW1", "SW2"):                   # stood upright so both fit beside 
     put(ref, x - (r - l), 82.4, orient=lambda f: None)
     x -= (r - l) + 0.7
 
+# battery input, both 42 V blocks and the brake: placed by hand (power42.py), locked, their copper kept clear
+for ref in power42.place(FP):
+    claim(FP[ref])
+    fixed.add(ref)
+placed[False] += power42.KEEP_TOP
+placed[True] += power42.KEEP_BOTTOM
+
 # keep the label spots under the inputs free (battery label, polarity rule, + / - marks)
-for keep in ((8.0, 12.4, 31.0, 18.0), (51.0, 9.6, 123.0, 12.0), (78.0, 140.0, 122.0, 146.0),
+for keep in ((8.0, 12.4, 31.0, 16.3), (51.0, 9.6, 123.0, 12.0), (78.0, 140.0, 122.0, 146.0),
              (1.5, 71.8, 122.5, 74.8)):
     placed[False].append(keep)
 

@@ -1001,21 +1001,24 @@ layout.
      - **Result:** 20 million steps in about 3.5 minutes cut the weighted net length from
        about 16,900 to 8,250 (−51 %). The running total is checked against a full recount
        at the end.
-  2b. `gen/pcb_pours.py` — power pours:
-     - **Layers:** L2 is a solid GND plane; L1 and L4 have a low-priority GND fill.
-     - **Pour shapes:** every power net gets pours shaped to its power pads (connectors,
-       shunts, FET tabs and leads, TVS diodes, bulk capacitors, PTCs and bridges). Pads
-       more than 18 mm apart form separate pours; the 24 / 12 / 5 V output rails link at
-       50 mm so each FET group and its PTC column are one pour.
-     - **42 V paths:** on L1 and L4, stitched with via arrays (0.9 / 0.45 mm vias on a
-       2.2 mm grid, kept 1 mm from pads so they never cut thermal spokes).
-     - **24 / 12 / 5 V:** on L1, over a continuous L3 backbone, with vias beside every
-       SMD power pad.
-     - **Clearance:** 0.5 mm on the outer layers, 0.3 mm inside (IPC-2221B internal is
-       0.1 mm at 31–100 V). Minimum zone width is 0.5 mm, so there are no slivers.
-     - **What's left:** about 715 unrouted connections, mostly small signals plus ten
-       pour-to-pour links that need a track or a via. The PTC-to-connector links are
-       about 8 mm at 3 A and get tracks too: a pour there swallowed the PTC's input pad.
+  2b. `gen/power42.py` + `gen/pcb_power42.py` — the battery input and both 42 V blocks, designed by hand
+     (placement in `pcb_place.py`, before the packer; copper after the optimizer). The parts are locked,
+     and their copper areas are kept clear on both sides.
+     - **Current path:** battery XT90 + → VBAT area (bulk caps, TVS; input ceramics under it on the
+       bottom) → R1 upright → BUS42 bar across both blocks (L1 + L3, one stitching row at 3.2 mm
+       pitch so the GND planes keep solid webs under it) → block shunt straddling the bar → drain
+       area (FET tabs, bypass-bridge pad 1).
+     - **Then through the FETs:** D2PAK source leads → narrow L1 output strip → about 15 vias per FET
+       → full-width L3 output plane → output column → XT90 + pins, which sit straight below the leads.
+     - **Charger:** its + comes into the bar on L3; CHG_N runs between the two XT60s on L3.
+     - **Brake:** the resistor XT60 has its + under the drive XT90 + pins. The freewheel diode
+       straddles the output strip and the switch-node patch, and the brake FET's source goes to a
+       GND patch with vias.
+     - **Escape vias:** every gate, both Kelvin pairs, the input-shunt Kelvin pair and the LEDs
+       escape through vias whose spots on the bottom are reserved. They are routed on the bottom.
+     - **Planes:** L2 is a solid GND plane; L4 has a GND fill.
+     - The earlier automatic pours (`pcb_pours.py`, convex hulls around each net's pads) were
+       removed: their shapes ignored the current flow and blocked the gate and sense routing.
   3. `gen/pcb_silk.py` — the silkscreen.
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after
      "Update footprints from library", which resets the board-side model replacements.
