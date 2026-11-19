@@ -1901,6 +1901,12 @@
 		(uuid "17cd001d-742b-56db-bc21-6a38b4761df7")
 	)
 	(junction
+		(at 146.05 96.52)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2fe7d901-1c03-54c9-bceb-a89dc2da021b")
+	)
+	(junction
 		(at 129.54 81.28)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2206,6 +2212,16 @@
 	)
 	(wire
 		(pts
+			(xy 146.05 96.52) (xy 152.4 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "88c3c97b-2125-53b5-85e6-7636901a9477")
+	)
+	(wire
+		(pts
 			(xy 66.04 81.28) (xy 66.04 124.46)
 		)
 		(stroke
@@ -2336,16 +2352,6 @@
 	)
 	(wire
 		(pts
-			(xy 144.78 96.52) (xy 152.4 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c5638d12-2c19-57f6-9e53-90d1cd6a1d7b")
-	)
-	(wire
-		(pts
 			(xy 109.22 104.14) (xy 101.6 104.14)
 		)
 		(stroke
@@ -2373,6 +2379,16 @@
 			(type default)
 		)
 		(uuid "da07f95b-3dde-5f9b-9274-c2b54817d145")
+	)
+	(wire
+		(pts
+			(xy 144.78 96.52) (xy 146.05 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dd7b5b36-4b32-56ed-968a-090a35f10f20")
 	)
 	(wire
 		(pts
@@ -2463,6 +2479,16 @@
 			(type default)
 		)
 		(uuid "ffdb9d1e-6556-573f-bdf4-e64372a99404")
+	)
+	(label "BRK_SW"
+		(at 146.05 96.52 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "6f994043-8f7f-59c8-8648-c669f848534d")
 	)
 	(global_label "OUT42D"
 		(shape passive)

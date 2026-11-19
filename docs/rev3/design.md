@@ -335,6 +335,17 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
     otherwise cook the resistor).
   - Resistor: off-board, on a heatsink, sized to the braking power; 10 Ω / 100 W is a
     starting point (4.7 A at 47 V).
+    - Sizing rule: 47.5 V / R must exceed the largest regenerative bus current, or the bus
+      keeps rising until the EPOS4s trip on overvoltage (58 V). That trip is safe but stops
+      the rover. The power rating only has to cover the average, because the chopper runs
+      only while the battery refuses charge.
+    - The on-board path is ready for down to about 4.7 Ω (10 A): the XT60, the
+      IPB042N10N3G (about 0.4 W at 10 A) and the HV_Bus netclass on BRK_SW. The
+      STPS3H100U freewheel diode only carries the cable-inductance current for a few
+      microseconds after each turn-off.
+  - Checked against the TLV1805 datasheet (SNOSD50A): pinout, SHDN low = run, 3.3–40 V
+    supply, 100 mA push-pull gate drive. Power-on reset keeps the output high-Z while the
+    supply comes up, and the 136 k status divider holds the gate low in the meantime.
 
 ### 4.4 54 V supply for the Zyxel XMG-105HP
 
@@ -807,7 +818,7 @@ layout.
   | Blind, buried, micro vias, via-in-pad fill | not allowed | paid options |
 
   - **Netclasses:**
-    - HV_Bus: VBAT, BUS42, the 42 V outputs and their drain rails.
+    - HV_Bus: VBAT, BUS42, the 42 V outputs, their drain rails and the brake switch node (BRK_SW).
     - HV_Power: the 54 V path and the boost's LIN and SW nodes.
     - Power: the 24 / 12 / 5 V rails, every PTC output node and CHG_N.
     - Supply and GND.

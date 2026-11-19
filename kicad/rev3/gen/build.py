@@ -1151,6 +1151,7 @@ def sheet_brake():
     # resistor connector with the freewheel diode across it
     ysw = 96.52
     W(PIN(q, 2), (PIN(q, 2)[0], ysw), (157.48, ysw), (157.48, y0 + 2.54), (162.56, y0 + 2.54))
+    lab("L:BRK_SW", (PIN(q, 2)[0] + 1.27, ysw), 0)    # named so the board netclass can find it
     j = CONN2(sh, "XT60PT-F (brake resistor)", "XT60F", "OUT42D", "L:BRK_SW")
     at_pin(j, 1, (162.56, y0))
     j.label_at = {"Reference": (2.54, 0), "Value": (2.54, 2.54)}

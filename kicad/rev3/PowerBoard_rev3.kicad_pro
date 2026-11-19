@@ -306,6 +306,10 @@
         "pattern": "/42 V*/DRN"
       },
       {
+        "netclass": "HV_Bus",
+        "pattern": "/Brake*/BRK_SW"
+      },
+      {
         "netclass": "HV_Power",
         "pattern": "SW54_OUT"
       },
