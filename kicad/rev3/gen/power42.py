@@ -96,6 +96,17 @@ def _flat(fp, x, y, left_pad, right_pad):
     raise RuntimeError(f"{fp.GetReference()}: no flat orientation")
 
 
+def label_under(bridge):
+    """An upright bypass bridge's BYPASS text: level, centred under pad 2, clear of its outline and the FET tab."""
+    x = _pxy(bridge, "2")[0]
+    outline = max(TOMM(g.GetBoundingBox().GetBottom()) - Y0 for g in bridge.GraphicalItems()
+                  if g.GetLayer() == pcbnew.F_SilkS and not isinstance(g, pcbnew.PCB_TEXT))
+    for t in bridge.GraphicalItems():
+        if isinstance(t, pcbnew.PCB_TEXT) and t.GetText() == "BYPASS":
+            t.SetTextAngleDegrees(0)
+            t.SetPosition(pcbnew.VECTOR2I(MM(X0 + x), MM(Y0 + outline + 0.3 + TOMM(t.GetTextHeight()) / 2)))
+
+
 def place(FP):
     """Position and lock every power part of the section. Returns the refs placed."""
     done = []
@@ -116,6 +127,7 @@ def place(FP):
             done.append(ref)
         _upright(FP[blk["shunt"]], SHUNT_X + dx, SHUNT_Y, "1", "4")
         _upright(FP[blk["bridge"]], BRIDGE_X + dx, BRIDGE_Y, "1", "2")
+        label_under(FP[blk["bridge"]])
         _upright(FP[blk["led"]], LED_X + dx, LED_Y, "1", "2")
         done += [blk["shunt"], blk["bridge"], blk["led"]]
     # brake: resistor XT60 with + under the drive XT90 + pins, freewheel diode straddling, brake FET below

@@ -18,6 +18,7 @@ import pcbnew
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import power42  # noqa: E402  hand-designed battery input and 42 V blocks
+import power_rails  # noqa: E402  hand-designed 24 / 12 / 5 V blocks (the rails it lists)
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 if "--overwrite-placement" not in sys.argv:
@@ -82,9 +83,9 @@ def claim(fp):
     bx = box(fp)
     for side in ((False, True) if through(fp) else (fp.IsFlipped(),)):
         placed[side].append(bx)
-    if not through(fp):                     # a lone through-hole pad (ESP32 solder hole) blocks the other side
+    if not through(fp):                     # a lone hole (ESP32 solder hole, USB-C pegs) blocks the other side
         for p in fp.Pads():
-            if p.GetAttribute() == pcbnew.PAD_ATTRIB_PTH:
+            if p.GetAttribute() in (pcbnew.PAD_ATTRIB_PTH, pcbnew.PAD_ATTRIB_NPTH):   # plated or not
                 bb = p.GetBoundingBox()
                 placed[not fp.IsFlipped()].append((TOMM(bb.GetLeft()) - X0, TOMM(bb.GetTop()) - Y0,
                                                    TOMM(bb.GetRight()) - X0, TOMM(bb.GetBottom()) - Y0))
@@ -234,6 +235,8 @@ put("J1", 8.0, Y_IN)                                                # battery XT
 put("J2", 31.5, Y_IN)                                               # charger XT60
 put("J3", 31.5, Y_IN + 10.5)                                        # pack charge port XT60
 for rail, ref in (("24", "J5"), ("12", "J6"), ("5", "J7")):         # converter returns, above their switch
+    if rail in power_rails.RAILS:
+        continue
     FP[ref].SetOrientationDegrees(0)
     plus_left(FP[ref])
     l, _, r, _ = box(FP[ref])
@@ -245,6 +248,8 @@ for k, j in enumerate(by_net("OUT42D")):
 for k, j in enumerate(by_net("OUT42C")):
     put(j, COL["42C"][0], Y_OUT + ROW90 * k)
 for rail, net_ in (("24", "OUT24"), ("12", "OUT12"), ("5", "OUT5")):
+    if rail in power_rails.RAILS:
+        continue
     x0, x1 = COL[rail]
     for k, j in enumerate(rail_out(net_)):
         y = Y_OUT + ROW * k
@@ -367,6 +372,11 @@ for ref in power42.place(FP):
     fixed.add(ref)
 placed[False] += power42.KEEP_TOP
 placed[True] += power42.KEEP_BOTTOM
+for ref in power_rails.place(FP):            # 24 / 12 / 5 V blocks with their inputs and output columns
+    claim(FP[ref])
+    fixed.add(ref)
+placed[False] += power_rails.KEEP_TOP
+placed[True] += power_rails.KEEP_BOTTOM
 
 # keep the label spots under the inputs free (battery label, polarity rule, + / - marks)
 for keep in ((8.0, 12.4, 31.0, 16.3), (51.0, 9.6, 123.0, 12.0), (78.0, 140.0, 122.0, 146.0),

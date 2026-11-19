@@ -27,6 +27,7 @@ import pcbnew
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import power42  # noqa: E402
+import power_rails  # noqa: E402
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 X0, Y0, W, H = 50.0, 50.0, 150.0, 150.0
@@ -92,9 +93,9 @@ for f in FPS:
     if not movable(f):
         for side in ((False, True) if through(f) else (f.IsFlipped(),)):
             fixed_boxes[side].append((l, t, r, bt))
-        if not through(f):                  # a lone through-hole pad (ESP32 solder hole) blocks the other side
+        if not through(f):                  # a lone hole (ESP32 solder hole, USB-C pegs) blocks the other side
             for pp in f.Pads():
-                if pp.GetAttribute() == pcbnew.PAD_ATTRIB_PTH:
+                if pp.GetAttribute() in (pcbnew.PAD_ATTRIB_PTH, pcbnew.PAD_ATTRIB_NPTH):   # plated or not
                     bb = pp.GetBoundingBox()
                     a, c = mm(pcbnew.VECTOR2I(bb.GetLeft(), bb.GetTop())), mm(pcbnew.VECTOR2I(bb.GetRight(), bb.GetBottom()))
                     fixed_boxes[not f.IsFlipped()].append((a[0], a[1], c[0], c[1]))
@@ -114,9 +115,9 @@ for f in FPS:
 for hx, hy in HOLES:
     for side in (False, True):
         fixed_boxes[side].append((hx - 4, hy - 4, hx + 4, hy + 4))
-for k in KEEP + power42.KEEP_TOP:
+for k in KEEP + power42.KEEP_TOP + power_rails.KEEP_TOP:
     fixed_boxes[False].append(k)
-for k in power42.KEEP_BOTTOM:
+for k in power42.KEEP_BOTTOM + power_rails.KEEP_BOTTOM:
     fixed_boxes[True].append(k)
 
 

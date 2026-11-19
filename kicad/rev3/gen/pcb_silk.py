@@ -169,13 +169,13 @@ for f in b.GetFootprints():
 
 # ---------------------------------------------------------------- output columns: header with polarity
 OBST = {False: obstacles(False), True: obstacles(True)}
-COLS = [("42V DRIVE  40A", 2.0, 24.0), ("42V CONVERTERS", 27.0, 49.0), ("24V OUT 3A EACH", 52.0, 74.0),
+COLS = [("42V DRIVE  40A", 2.0, 24.0), ("42V CONVERTERS", 27.0, 49.0), ("24V OUT 3A EACH", 51.5, 76.0),
         ("12V OUT 3A EACH", 77.0, 101.0), ("5V OUT 3A EACH", 104.0, 122.0)]
 for name, x0, x1 in COLS:
     text("+", x0 + 0.8, 73.3, h=1.6, bold=True)
     text("-", x1 - 0.8, 73.3, h=1.6, bold=True)
     text(name, (x0 + x1) / 2, 73.3, h=1.15, bold=True)
-for x in (25.5, 50.5, 75.5, 102.5, 123.0):                  # dividers between the columns
+for x in (25.5, 50.5, 76.65, 102.5, 123.0):                 # dividers between the columns
     line(x, 72.0, x, 134.0)
 bx = bbox("J4")
 text("BRAKE RESISTOR", (bx[0] + bx[2]) / 2, bx[1] - 1.4, h=1.0, bold=True)
@@ -190,9 +190,9 @@ for ref, label in (("J1", "BATTERY IN 30-42V"), ("J5", "24V IN"), ("J6", "12V IN
         text(label, (x0 + x1) / 2, y1 + 4.3, h=1.2, bold=True)
     else:
         text(label, x0 - 1.0, (y0 + y1) / 2, h=1.3, just=R, bold=True)
-for ref, label in (("J2", "CHARGER"), ("J3", "PACK CHG")):
+for ref, label in (("J2", "CHARGER"), ("J3", "PACK CHG")):   # upright along their own connector, clear of 24 V
     x0, y0, x1, y1 = bbox(ref)
-    text(label, x1 + 1.0, (y0 + y1) / 2, h=1.0, just=L)
+    text(label, x1 + 1.1, (y0 + y1) / 2, h=1.0, angle=90, reach=1.0)
 text("ALL POWER CONNECTORS:  + LEFT   - RIGHT", 100.0, 143.0, h=1.4, bold=True, free=True)
 
 # ---------------------------------------------------------------- 54 V output, control strip

@@ -949,7 +949,8 @@ layout.
   ```
 
   - Every input sits above the switch it feeds, and every switch above its own output
-    column. Each 24 / 12 / 5 V output has its PTC directly to its left.
+    column. Each 24 / 12 / 5 V output has its PTC directly to its left (lying flat on 24 V,
+    see 2c below).
   - Every power connector is the same way round: **+ on the left, − on the right**.
   - USB-C sits on the left edge under the battery input, with its ESD array and CC
     resistors under it on the bottom. The JST headers (power button, BMS soft-start, motor
@@ -1033,6 +1034,24 @@ layout.
      - **Planes:** L2 is a solid GND plane; L4 has a GND fill.
      - The earlier automatic pours (`pcb_pours.py`, convex hulls around each net's pads) were
        removed: their shapes ignored the current flow and blocked the gate and sense routing.
+  2c. `gen/power_rails.py` (copper also run by `pcb_power42.py`) — the 24 V block, designed by hand in the
+     42 V blocks' pattern (2026-11-19). One entry per rail in `RAILS`; 12 V and 5 V still use the generic
+     column code until they get theirs.
+     - **Current path:** 24 V IN Deans + → VIN24 area (both bulk caps, the TVS) → R41 upright on the
+       VIN24 / DRN boundary → DRN area (pre-charge FET Q11 on top, main FET Q10 below, LED, bridge pad 1)
+       → source leads → 7.7 mm OUT24 strip on the left → full-width OUT24 area under the logo.
+     - **Bypass bridge:** pad 2 lands in the L1 OUT24 area, so bypass current stays on 2 oz copper
+       instead of the 0.5 oz inner layer (the 42 V bridges go through L3).
+     - **Output column:** the PTCs lie flat. Each rail pad sits inside a 6.5 mm OUT24 strip that runs
+       down the column under the PTC bodies; each PTC's other pad opens straight into its connector's
+       + pin on the same row (strip → PTC → connector, left to right). Upright PTCs would leave only
+       about 3 mm for the strip. The connectors moved 2 mm right to make room.
+     - **Ground:** the TVS ground pad shares an L1 patch with the input's − pin. The outputs' − pins
+       reach the L2 plane and the L4 fill through their plated holes.
+     - **L3:** an OUT24 copy under the switch and the full-width area, stitched to L1 at the FET
+       sources and down the left edge. Under the output column L3 stays free for signals.
+     - **Escapes:** both gates, the Kelvin pair and the LED go to vias whose bottom spots are reserved,
+       as in the 42 V blocks.
   3. `gen/pcb_silk.py` — the silkscreen.
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after
      "Update footprints from library", which resets the board-side model replacements.
