@@ -90,7 +90,7 @@ One TCA9535 (0x20) holds every INP and INP_G, so the switches keep their state w
 | 16 | FLT 5V (FLT_I + FLT_T wire-OR) |
 | 38 | FLT 54V (FLT_I + FLT_T wire-OR) |
 
-Two ADC128D818s (TSSOP-16, internal 2.56 V reference) at 0x1D, 0x1E. Each converts 12 ms per channel, so a full sweep runs at about 10 Hz. The 42 V bus voltage, the input of both 42 V groups and the 54 V boost, comes from the INA238. VOUT 54V is the boost output. Board NTC and aux 5 V go to ESP32 ADC1 pins (GPIO1, GPIO2).
+Two ADC128D818s (TSSOP-16, internal 2.56 V reference) at 0x1D, 0x1E. Each converts 12 ms per channel, so a full sweep runs at about 10 Hz. The 42 V bus voltage, the input of both 42 V groups and the 54 V boost, comes from the INA228. VOUT 54V is the boost output. Board NTC and aux 5 V go to ESP32 ADC1 pins (GPIO1, GPIO2).
 
 | ADC | Input |
 |---|---|

@@ -66,7 +66,7 @@ it never touches a layout. The values and the reasons for them are in
 
 | Sheet | Contents |
 |-------|----------|
-| `power_in` | Battery XT90 input, SMCJ45A, bulk capacitance, 0.5 mΩ shunt with INA238, charger input XT60 and pack charge-port XT60 (charging flows through the shunt) |
+| `power_in` | Battery XT90 input, SMCJ45A, bulk capacitance, 2 mΩ Kelvin shunt (Bourns CSS2H-2512K) with INA228, charger input XT60 and pack charge-port XT60 (charging flows through the shunt) |
 | `sw_42d`, `sw_42c` | 42 V drive group and converter-feed group eFuses (TPS48111-Q1, 2 + 1 D2PAK). The drive group has the E-STOP kill FET on EN/UVLO. |
 | `sw_24`, `sw_12`, `sw_5` | Rail eFuses, input TVS, bulk capacitance, input and output voltage sense |
 | `sw_54` | eFuse in front of the 54 V boost |
@@ -79,13 +79,14 @@ it never touches a layout. The values and the reasons for them are in
 
 ## Custom parts
 
-- **Symbols:** TPS48111-Q1, LM5122, LMR38010, TCAN1044AV and INA238, with pinouts taken
+- **Symbols:** TPS48111-Q1, LM5122, LMR38010, TCAN1044AV and INA228, with pinouts taken
   from the TI datasheets.
-  - Their pins are arranged for the drawing. For example, the INA238 sense inputs sit on
-    top, 7.62 mm apart, so the Kelvin lines drop straight from the shunt.
+  - Their pins are arranged for the drawing. For example, the INA228 sense inputs sit on
+    top, 5.08 mm apart under the shunt's sense pins, so the Kelvin lines drop straight down.
   - Q_NMOS_GDS covers the D2PAK and DPAK FETs: KiCad 10 dropped its GDS-numbered FET
     symbols.
-- **Footprints:** TI_DGX0019A_VSSOP-19 is drawn from TI's land pattern, with pads
+- **Footprints:** R_Bourns_CSS2H-2512_Kelvin is Bourns' 4-terminal land pattern as a
+  net-tie footprint. TI_DGX0019A_VSSOP-19 is drawn from TI's land pattern, with pads
   lengthened for hand soldering. XT90PB-M, XT90PB-F and DEANS-T are copied from rev2's
   SamacSys library.
 

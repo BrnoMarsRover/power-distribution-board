@@ -193,16 +193,16 @@ CUSTOM = {
         footprint="Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm",
         datasheet=TI + "lmr38010.pdf", desc="80 V 1 A synchronous buck, HSOIC-8 (DDA)"),
     # Sense inputs on top, 7.62 apart, so the Kelvin lines drop straight down from a 2-pin shunt.
-    "INA238": pinned_symbol(
-        "INA238", 10.16, 10.16, [
-            ("10", "IN+", "input", -7.62, 12.7, 270), ("9", "IN-", "input", 0, 12.7, 270),
+    "INA228": pinned_symbol(
+        "INA228", 10.16, 10.16, [
+            ("10", "IN+", "input", -2.54, 12.7, 270), ("9", "IN-", "input", 2.54, 12.7, 270),
             ("8", "VBUS", "input", 7.62, 12.7, 270), ("6", "VS", "power_in", -12.7, 2.54, 0),
             ("3", "~{ALERT}", "open_collector", 12.7, 2.54, 180), ("4", "SDA", "bidirectional", 12.7, 0, 180),
             ("5", "SCL", "input", 12.7, -2.54, 180),
             ("7", "GND", "power_in", -5.08, -12.7, 90), ("2", "A0", "input", 0, -12.7, 90),
             ("1", "A1", "input", 5.08, -12.7, 90)],
         footprint="Package_SO:TSSOP-10_3x3mm_P0.5mm",
-        datasheet=TI + "ina238.pdf", desc="85 V 16-bit power monitor, I2C, VSSOP-10 (pin-compatible with INA228)"),
+        datasheet=TI + "ina228.pdf", desc="85 V 20-bit power / energy / charge monitor, I2C, VSSOP-10 (DGS)"),
     "TCAN1044AV": pinned_symbol(
         "TCAN1044AV", 10.16, 10.16, [
             ("1", "TXD", "input", -12.7, 2.54, 0), ("4", "RXD", "output", -12.7, 0, 0),
@@ -617,6 +617,8 @@ FP = dict(
     C1206="Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder",
     C1210="Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder",
     CP10="Capacitor_SMD:CP_Elec_10x10.5",
+    CPR12="Capacitor_THT:CP_Radial_D12.5mm_P5.00mm",
+    SHUNT2512K="PowerBoard_rev3:R_Bourns_CSS2H-2512_Kelvin",
     CP8="Capacitor_SMD:CP_Elec_8x10.5",
     D2PAK="Package_TO_SOT_SMD:TO-263-2",
     DPAK="Package_TO_SOT_SMD:TO-252-2",
@@ -746,14 +748,15 @@ def divider_bottom(top, v_full, v_adc=2.4):
 def sheet_power_in():
     sh = Sheet("power_in", "Battery input, bus protection and battery monitor", [
         "Battery 10S 30-42 V. The pack fuse (58 V rated) and BMS live in the harness, not on this board.",
-        "R_SHUNT: Kelvin-route the INA238 sense lines from the shunt pads.",
+        "R_SHUNT: Bourns CSS2H-2512K, Kelvin land pattern (net-tie footprint). Route SNS_P / SNS_N as a pair from the fingers.",
         "Charging: charger + enters on the bus side of the shunt and leaves through the pack's charge port,",
-        "so the INA238 counts it (net of the rover's own load). Charger - is NOT board GND: CHG_N goes straight to the pack's C-.",
-        "INA238 at 0x40 (A0 = A1 = GND): bus voltage, current, power. Charge (Ah) and energy (Wh) are integrated in ESP32 firmware."], drawn=True, paper="A4")
+        "so the INA228 counts it (net of the rover's own load). Charger - is NOT board GND: CHG_N goes straight to the pack's C-.",
+        "INA228 at 0x40 (A0 = A1 = GND), ADCRANGE = 0 (+-163.84 mV = +-82 A): bus V, current, power, and on-chip charge / energy."],
+        drawn=True, paper="A4")
     W, gnd, v33, lab = marks(sh)
     Y = 99.06                                      # VBAT rail, then BUS42 after the shunt
 
-    jb = CONN2(sh, "XT90 male (battery in)", "XT90M", "VBAT", "GND", mirror=True)
+    jb = CONN2(sh, "XT90PB-M (battery in)", "XT90M", "VBAT", "GND", mirror=True)
     at_pin(jb, 1, (30.48, Y))
     W(PIN(jb, 2), (35.56, PIN(jb, 2)[1]), (35.56, 116.84))
     gnd((35.56, 116.84))
@@ -762,24 +765,27 @@ def sheet_power_in():
     TP(sh, "VBAT", at=(45.72, Y))
     lab("VBAT", (162.56, Y), 90)
     sh.mark("flag", (53.34, Y))
-    hang(sh, DZ(sh, "SMCJ45A", "VBAT", "GND", fp="SMC", rot=270), (63.5, Y))
+    hang(sh, DZ(sh, "SMCJ45A", "VBAT", "GND", fp="SMC", rot=270, MPN="SMCJ45A (Littelfuse)"), (63.5, Y))
     for x in (76.2, 91.44):
-        hang(sh, CP(sh, "100uF/100V", "VBAT", "GND", rot=0), (x, Y))
+        hang(sh, CP(sh, "100uF/100V", "VBAT", "GND", fp="CPR12", rot=0, MPN="EEU-FC2A101"), (x, Y))
     for x in (106.68, 121.92, 137.16, 152.4):
-        hang(sh, C(sh, 2.2e-6, "VBAT", "GND", fp="C1210", volt=100, rot=0), (x, Y))
+        hang(sh, C(sh, 2.2e-6, "VBAT", "GND", fp="C1210", volt=100, rot=0, MPN="GRM32ER72A225KA35L"), (x, Y))
 
-    # shunt with Kelvin taps and the input filter of the INA238
-    rs = R(sh, "0.5m 2512", "VBAT", "BUS42", fp="R2512", LCSC="C154666")
-    at_pin(rs, 1, (172.72, Y))
+    # 4-terminal shunt (Kelvin land pattern) with the INA228 input filter straight below its sense fingers
+    rs = sh.add("Device:R_Shunt", "R", "2m 5W", FP["SHUNT2512K"],
+                {1: "VBAT", 2: "L:SNS_P", 3: "L:SNS_N", 4: "BUS42"}, rot=90, mirror="x",
+                fields={"MPN": "CSS2H-2512K-2L00F"})
+    at_pin(rs, 1, (171.45, Y))
+    rs.label_at = {"Reference": (-3.81, -5.08), "Value": (-3.81, -2.54)}
     W(PIN(jb, 1), PIN(rs, 1))
-    rp = hang(sh, R(sh, 10, "VBAT", "L:INA_P", rot=0), PIN(rs, 1), gap=7.62, gnd=False)
-    rn = hang(sh, R(sh, 10, "BUS42", "L:INA_N", rot=0), PIN(rs, 2), gap=7.62, gnd=False)
-    cf = C(sh, 100e-9, "L:INA_P", "L:INA_N")
-    at_pin(cf, 1, (172.72, 119.38))
-    U = sh.add("PowerBoard_rev3:INA238", "U", "INA238", "Package_SO:TSSOP-10_3x3mm_P0.5mm",
+    rp = hang(sh, R(sh, 10, "L:SNS_P", "L:INA_P", rot=0), PIN(rs, 2), gap=5.08, gnd=False)
+    rn = hang(sh, R(sh, 10, "L:SNS_N", "L:INA_N", rot=0), PIN(rs, 3), gap=5.08, gnd=False)
+    cf = sh.add("Device:C_Small", "C", "100nF", FP["C0603"], {1: "L:INA_P", 2: "L:INA_N"}, rot=90)
+    at_pin(cf, 1, (PIN(rp, 2)[0], PIN(rp, 2)[1] + 2.54))
+    U = sh.add("PowerBoard_rev3:INA228", "U", "INA228AIDGSR", "Package_SO:TSSOP-10_3x3mm_P0.5mm",
                {1: "GND", 2: "GND", 3: "INA_ALERT", 4: "I2C_SDA", 5: "I2C_SCL", 6: "+3V3", 7: "GND",
-                8: "BUS42", 9: "L:INA_N", 10: "L:INA_P"}, fields={"LCSC": "C2868250"})
-    at_pin(U, 10, (172.72, 127.0))
+                8: "BUS42", 9: "L:INA_N", 10: "L:INA_P"}, fields={"MPN": "INA228AIDGSR"})
+    at_pin(U, 10, (PIN(rp, 2)[0], 127.0))
     P = lambda n: PIN(U, n)
     W(PIN(rp, 2), P(10))
     W(PIN(rn, 2), P(9))
@@ -804,18 +810,18 @@ def sheet_power_in():
     gnd((a0[0], a0[1] + 5.08))
 
     # bus side: test point, flag, charger input, label
-    W(PIN(rs, 2), (254.0, Y))
+    W(PIN(rs, 4), (254.0, Y))
     lab("BUS42", (254.0, Y), 0)
     TP(sh, "BUS42", at=(198.12, Y))
     sh.mark("flag", (205.74, Y))
-    jc = CONN2(sh, "XT60 male (charger in)", "XT60M", "BUS42", "L:CHG_N")
+    jc = CONN2(sh, "XT60PT-M (charger in)", "XT60M", "BUS42", "L:CHG_N")
     at_pin(jc, 1, (243.84, 114.3))
     jc.label_at = {"Reference": (2.54, 0), "Value": (2.54, 2.54)}
     W((238.76, Y), (238.76, 114.3), PIN(jc, 1))
 
     # pack charge port: + on the battery side of the shunt, - back to the charger only
     yc = 170.18
-    jbc = CONN2(sh, "XT60 male (pack charge port)", "XT60M", "VBAT", "L:CHG_N", mirror=True)
+    jbc = CONN2(sh, "XT60PT-M (pack charge port)", "XT60M", "VBAT", "L:CHG_N", mirror=True)
     at_pin(jbc, 1, (30.48, 132.08))
     W(PIN(jbc, 1), (50.8, 132.08), (50.8, Y))
     W(PIN(jbc, 2), (45.72, PIN(jbc, 2)[1]), (45.72, yc), (241.3, yc), (241.3, PIN(jc, 2)[1]), PIN(jc, 2))
@@ -1789,12 +1795,49 @@ def write_custom_footprints():
         f'  (fp_rect (start {fmt(-cx)} {fmt(-cy)}) (end {fmt(cx)} {fmt(cy)}) (stroke (width 0.05) (type default)) '
         f'(fill no) (layer "F.CrtYd") {u("crt")})\n' + "\n".join(pads) + '\n)\n')
     (lib / "TI_DGX0019A_VSSOP-19.kicad_mod").write_text(dgx)
+    (lib / "R_Bourns_CSS2H-2512_Kelvin.kicad_mod").write_text(css2h_footprint())
     rev2 = REPO / "kicad/ext/SamacSys_Parts.pretty"
     for src, dst in (("XT90", "XT90PB-M"), ("XT90", "XT90PB-F"), ("DEANS-T", "DEANS-T")):
         text = (rev2 / f"{src}.kicad_mod").read_text()
         text = re.sub(r'^\((footprint|module) "[^"]*"', rf'(\1 "{dst}"', text, count=1)
         text = re.sub(r'\n\s*\(model [^\n]*(?:\n\s+[^\n]*)*?\n\s*\)', '', text)   # drop rev2 3D paths
         (lib / f"{dst}.kicad_mod").write_text(text)
+
+
+def css2h_footprint():
+    """Bourns CSS2H-2512 on its recommended Kelvin pad layout (datasheet p.2).
+
+    Current pads 1.80 x 3.40 mm, inner edges 3.40 mm apart. A 0.38 mm neck leaves each pad's
+    inner edge at mid-height and turns into a 0.40 mm sense finger that ends 1.5 mm above the
+    pad. Neck and finger are copper of the current pad, so the footprint is a net tie
+    (1-2, 3-4): the sense nets stay separate in the netlist and meet the current path exactly
+    where the resistive element starts.
+    """
+    u = lambda *k: f'(uuid {q(uid("css2h", *k))})'
+    out = []
+    for side, cur, sns in ((-1, "1", "2"), (1, "4", "3")):
+        px = side * (1.70 + 0.90)
+        out.append(f'  (pad "{cur}" smd rect (at {fmt(px)} 0) (size 1.8 3.4) (layers "F.Cu" "F.Paste" "F.Mask") {u("pad", cur)})')
+        fx = side * 0.51
+        out.append(f'  (pad "{sns}" smd rect (at {fmt(fx)} -2.94) (size 0.4 0.6) (layers "F.Cu") {u("pad", sns)})')
+        pts = [(-1.70, -0.19), (-0.71, -0.19), (-0.71, -3.24), (-0.31, -3.24), (-0.31, 0.19), (-1.70, 0.19)]
+        xy = " ".join(f"(xy {fmt(side * -x if side > 0 else x)} {fmt(y)})" for x, y in pts)
+        out.append(f'  (fp_poly (pts {xy}) (stroke (width 0) (type solid)) (fill yes) (layer "F.Cu") {u("tie", cur)})')
+    return (
+        '(footprint "R_Bourns_CSS2H-2512_Kelvin" (version 20241229) (generator "build.py") (layer "F.Cu")\n'
+        '  (descr "Bourns CSS2H-2512 current sense resistor on the recommended 4-terminal (Kelvin) pad layout. '
+        'Pads 1/4 current, 2/3 sense. https://www.bourns.com/docs/product-datasheets/css2h-2512.pdf")\n'
+        '  (tags "shunt kelvin 2512 CSS2H")\n'
+        '  (net_tie_pad_groups "1, 2" "3, 4")\n'
+        f'  (property "Reference" "REF**" (at 0 3.0 0) (layer "F.SilkS") {u("ref")} (effects (font (size 1 1) (thickness 0.15))))\n'
+        f'  (property "Value" "CSS2H-2512" (at 0 4.5 0) (layer "F.Fab") {u("val")} (effects (font (size 1 1) (thickness 0.15))))\n'
+        f'  (property "Datasheet" "https://www.bourns.com/docs/product-datasheets/css2h-2512.pdf" (at 0 0 0) (layer "F.Fab") (hide yes) {u("ds")} (effects (font (size 1.27 1.27))))\n'
+        f'  (property "Description" "Bourns CSS2H-2512 Kelvin" (at 0 0 0) (layer "F.Fab") (hide yes) {u("desc")} (effects (font (size 1.27 1.27))))\n'
+        '  (attr smd)\n'
+        f'  (fp_rect (start -3.175 -1.525) (end 3.175 1.525) (stroke (width 0.1) (type default)) (fill no) (layer "F.Fab") {u("fab")})\n'
+        f'  (fp_line (start -1.5 1.95) (end 1.5 1.95) (stroke (width 0.12) (type default)) (layer "F.SilkS") {u("silk")})\n'
+        f'  (fp_rect (start -3.75 -3.5) (end 3.75 1.95) (stroke (width 0.05) (type default)) (fill no) (layer "F.CrtYd") {u("crt")})\n'
+        + "\n".join(out) + "\n)\n")
 
 
 def check_footprints():

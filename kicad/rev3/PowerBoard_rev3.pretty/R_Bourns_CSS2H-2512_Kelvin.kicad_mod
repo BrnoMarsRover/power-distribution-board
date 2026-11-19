@@ -1,0 +1,136 @@
+(footprint "R_Bourns_CSS2H-2512_Kelvin"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Bourns CSS2H-2512 current sense resistor on the recommended 4-terminal (Kelvin) pad layout. Pads 1/4 current, 2/3 sense. https://www.bourns.com/docs/product-datasheets/css2h-2512.pdf")
+	(tags "shunt kelvin 2512 CSS2H")
+	(property "Reference" "REF**"
+		(at 0 3 0)
+		(layer "F.SilkS")
+		(uuid "f72fc6d3-935c-5449-a796-887ac45b322c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "CSS2H-2512"
+		(at 0 4.5 0)
+		(layer "F.Fab")
+		(uuid "a1395133-3d6b-5b8e-bdd5-3d607bbae5e4")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" "https://www.bourns.com/docs/product-datasheets/css2h-2512.pdf"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9ef7b760-bf48-5241-b812-0728bc73e9ed")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" "Bourns CSS2H-2512 Kelvin"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "34974b8e-d1bf-5a0d-817a-71b20ef44c24")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr smd)
+	(net_tie_pad_groups "1, 2" "3, 4")
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_poly
+		(pts
+			(xy -1.7 -0.19) (xy -0.71 -0.19) (xy -0.71 -3.24) (xy -0.31 -3.24) (xy -0.31 0.19) (xy -1.7 0.19)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.Cu")
+		(uuid "263a9fab-a5f5-518c-93fe-cb9b7495a26e")
+	)
+	(fp_poly
+		(pts
+			(xy 1.7 -0.19) (xy 0.71 -0.19) (xy 0.71 -3.24) (xy 0.31 -3.24) (xy 0.31 0.19) (xy 1.7 0.19)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.Cu")
+		(uuid "8f261ba6-2b72-57de-9b79-e9fe61b8690d")
+	)
+	(fp_line
+		(start -1.5 1.95)
+		(end 1.5 1.95)
+		(stroke
+			(width 0.12)
+			(type default)
+		)
+		(layer "F.SilkS")
+		(uuid "a87534ff-3ba9-5276-9b3d-dffcede8a782")
+	)
+	(fp_rect
+		(start -3.75 -3.5)
+		(end 3.75 1.95)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "0b80b0e2-06f8-5478-a35d-8421e89e6136")
+	)
+	(fp_rect
+		(start -3.175 -1.525)
+		(end 3.175 1.525)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "f491d280-218d-5fbd-bd9a-58638b6617b4")
+	)
+	(pad "1" smd rect
+		(at -2.6 0)
+		(size 1.8 3.4)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "bebcc6dc-47c7-5578-bb5a-d0077498826f")
+	)
+	(pad "2" smd rect
+		(at -0.51 -2.94)
+		(size 0.4 0.6)
+		(layers "F.Cu")
+		(uuid "760203d0-b74c-5291-b0df-0ba3b0fea175")
+	)
+	(pad "3" smd rect
+		(at 0.51 -2.94)
+		(size 0.4 0.6)
+		(layers "F.Cu")
+		(uuid "e311555d-64f5-511c-873c-1db02c79f500")
+	)
+	(pad "4" smd rect
+		(at 2.6 0)
+		(size 1.8 3.4)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "816a9c1d-2e26-555c-8597-7138ddcf5eb3")
+	)
+	(embedded_fonts no)
+)
