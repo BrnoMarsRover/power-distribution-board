@@ -981,6 +981,19 @@ layout.
   0. `gen/rebuild_layout.sh --yes` runs the whole chain below, plus the schematic, BOMs and PDF.
   1. `gen/pcb_import.py` — imports the footprints, linked to the schematic.
   2. `gen/pcb_place.py --overwrite-placement` — this floorplan.
+  2a. `gen/pcb_optimize.py` — simulated annealing over the small parts' positions and
+     90° rotations. Small parts here means passives, small ICs and transistors, SMD diodes,
+     LEDs and signal test pads; connectors, FETs, inductors, PTCs, electrolytics, bridges
+     and the ESP32 stay put, and no part changes side.
+     - **Cost:** net length (half-perimeter), weighted ×4 on switching, gate and
+       Kelvin-sense nets. Each decoupling capacitor is also pulled toward the nearest IC
+       pin on its rail (×3). GND and nets with more than 12 pads are left out.
+     - **Legal at every step:** 0.6 mm between courtyards, through-hole pads block both
+       sides, and parts stay off the holes, the logo spot, the column headers, the label
+       spots and the test-pad label room.
+     - **Result:** 20 million steps in about 3.5 minutes cut the weighted net length from
+       about 16,900 to 8,250 (−51 %). The running total is checked against a full recount
+       at the end.
   3. `gen/pcb_silk.py` — the silkscreen.
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after
      "Update footprints from library", which resets the board-side model replacements.

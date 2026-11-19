@@ -224,12 +224,13 @@ def free_rect(w, h, bottom, prefer):
 
 
 LOGO.SetReference("LOGO")
+LOGO.SetAllowMissingCourtyard(True)
 LOGO.GetField(pcbnew.FIELD_T_REFERENCE).SetVisible(False)
 LOGO.GetField(pcbnew.FIELD_T_VALUE).SetVisible(False)
 b.Add(LOGO)
 lb = to_mm(LOGO.GetBoundingBox(False))
 lw, lh = lb[2] - lb[0], lb[3] - lb[1]
-spot = free_rect(lw, lh + 3.2, False, (2, 120))
+spot = free_rect(lw, lh + 3.2, False, (50, 50))     # pcb_optimize.py keeps this corner free
 if spot:
     LOGO.SetPosition(LOGO.GetPosition() + pcbnew.VECTOR2I(MM(spot[0] - lb[0]), MM(spot[1] - lb[1])))
     TEXTS[False].append(to_mm(LOGO.GetBoundingBox(False)))

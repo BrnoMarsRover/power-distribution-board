@@ -77,6 +77,12 @@ def claim(fp):
     bx = box(fp)
     for side in ((False, True) if through(fp) else (fp.IsFlipped(),)):
         placed[side].append(bx)
+    if not through(fp):                     # a lone through-hole pad (ESP32 solder hole) blocks the other side
+        for p in fp.Pads():
+            if p.GetAttribute() == pcbnew.PAD_ATTRIB_PTH:
+                bb = p.GetBoundingBox()
+                placed[not fp.IsFlipped()].append((TOMM(bb.GetLeft()) - X0, TOMM(bb.GetTop()) - Y0,
+                                                   TOMM(bb.GetRight()) - X0, TOMM(bb.GetBottom()) - Y0))
 
 
 MINUS_PIN1 = ("XT30", "XT60", "DEANS")       # pad 1 is the - side on these footprints (see build.py CONN2)
@@ -267,7 +273,7 @@ def opening(fp, d=(0, 1)):
 
 
 # CAN on the right edge under the ESP32 (plug in from the edge)
-for ref, y in (("J34", 97.5), ("J35", 109.5)):
+for ref, y in (("J34", 94.0), ("J35", 107.3)):
     fp = FP[ref]
     opening(fp, (1, 0))
     l, t, r, bt = box(fp)
@@ -290,20 +296,20 @@ for (x0, y0), refs in JST_ROWS:
 # ---------------------------------------------------------------- zones: (top, bottom) per sheet prefix
 ZONES = {
     "Battery input": ((1.5, 21, 50.5, 35.5), (1.5, 21, 50.5, 35.5)),
-    "USB": ((123.5, 80, 149, 97), (123.5, 78, 149, 100)),
+    "USB": ((123.5, 82, 149, 94), (123.5, 78, 149, 100)),
     "42 V drive group": ((1.5, 35.5, 25.5, 71.5), (1.5, 35.5, 25.5, 71.5)),
     "42 V converter-feed": ((25.5, 35.5, 50.5, 71.5), (25.5, 35.5, 50.5, 71.5)),
     "24 V rail eFuse": ((51, 12, 75.5, 71.5), (51, 12, 75.5, 71.5)),
     "12 V rail eFuse": ((75.5, 12, 102.5, 71.5), (75.5, 12, 102.5, 71.5)),
     "5 V rail eFuse": ((102.5, 10, 123.5, 71.5), (102.5, 10, 123.5, 71.5)),
     "54 V supply eFuse": ((123.5, 36, 149, 61.5), (123.5, 36, 149, 61.5)),
-    "54 V boost": ((123.5, 121, 149, 149), (123.5, 36, 149, 149)),
+    "54 V boost": ((123.5, 120.6, 149, 149), (123.5, 36, 149, 149)),
     "Brake chopper": ((1.5, 121.5, 26, 149), (1.5, 121.5, 26, 149)),
     "Always-on aux": ((26.5, 98, 50.5, 149), (26.5, 98, 50.5, 149)),
     "Rail inputs": ((51, 131, 123.5, 149), (51, 72, 123.5, 149)),
     "ESP32-S3": ((123.5, 62, 149, 97), (123.5, 58, 149, 100)),
     "Switch control": ((78, 131, 123.5, 149), (51, 72, 123.5, 149)),
-    "CAN bus": ((123.5, 96, 140, 121), (123.5, 96, 149, 121)),
+    "CAN bus": ((123.5, 93.5, 139, 120.5), (123.5, 93.5, 149, 121)),
 }
 SUPPLIES = ("54 V boost", "Always-on aux")   # SMD parts on the bottom, the whole switching loop on that side
 POWER_1210 = ("Battery input",)
@@ -332,23 +338,24 @@ esp = FP["U13"]
 set_side(esp, False)
 esp.SetOrientationDegrees(270)
 l, t, r, bt = box(esp)
-put("U13", 149.4 - (r - l), 62.0, orient=lambda f: None)
+put("U13", 149.4 - (r - l), 61.6, orient=lambda f: None)
 
 # under the ESP32: USB-C on the edge (opening outwards), RESET and BOOT beside it
 opening(FP["J32"], (1, 0))
 l, t, r, bt = box(FP["J32"])
-put("J32", 149.4 - (r - l), 84.5, orient=lambda f: None)
-x = 149.4 - (r - l) - 0.8
-for ref in ("SW1", "SW2"):
+put("J32", 149.4 - (r - l), 82.4, orient=lambda f: None)
+x = 149.4 - (r - l) - 0.7
+for ref in ("SW1", "SW2"):                   # stood upright so both fit beside the USB-C
     fp = FP[ref]
     set_side(fp, False)
-    fp.SetOrientationDegrees(0)
+    fp.SetOrientationDegrees(90)
     l, t, r, bt = box(fp)
-    put(ref, x - (r - l), 85.0, orient=lambda f: None)
-    x -= (r - l) + 0.8
+    put(ref, x - (r - l), 82.4, orient=lambda f: None)
+    x -= (r - l) + 0.7
 
 # keep the label spots under the inputs free (battery label, polarity rule, + / - marks)
-for keep in ((8.0, 12.4, 31.0, 18.0), (51.0, 9.6, 123.0, 12.0), (78.0, 140.0, 122.0, 146.0)):
+for keep in ((8.0, 12.4, 31.0, 18.0), (51.0, 9.6, 123.0, 12.0), (78.0, 140.0, 122.0, 146.0),
+             (1.5, 71.8, 122.5, 74.8)):
     placed[False].append(keep)
 
 # the USB connector's helpers (ESD array, CC resistors) sit by the connector, not by the ESP32
