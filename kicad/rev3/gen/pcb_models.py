@@ -49,7 +49,7 @@ REPLACE = {
         (f"{K3D}/Package_SO.3dshapes/SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.81mm.step", (0, 0, 0), (0, 0, 0), (1, 1, 1)),
 }
 MALE_DEANS = LIB_MODELS["DEANS-T"]      # like rev2: the male STEP has no known placement, the female body stands in
-STAND_IN = ("CSS2H (2512 body)", "VSSOP-19 (stretched MSOP-16)", "MF-R300 (disc body)", "ESP32-S3-WROOM-1U (WROOM-32U body)",
+STAND_IN = ("CSS2H (2512 body)", "VSSOP-19 (stretched MSOP-16)", "ESP32-S3-WROOM-1U (WROOM-32U body)",
             "CLIK-Mate (stretched PicoBlade)", "2920 PTC (scaled 2816)")
 
 

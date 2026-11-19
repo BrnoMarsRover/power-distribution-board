@@ -334,6 +334,164 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "PowerBoard_rev3:Conn_01x02_MinusPin1"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 0 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x02_MinusPin1"
+				(at 0 -5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "2-pin power connector: pad 1 = -, pad 2 = + (XT30 / XT60 / Deans T)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Conn_01x02_MinusPin1_1_1"
+				(rectangle
+					(start -1.27 1.27)
+					(end 1.27 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.27 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:GND"
 			(power global)
 			(pin_numbers
@@ -2651,7 +2809,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 256.54 157.48 0)
 		(unit 1)
 		(body_style 1)
@@ -2727,11 +2885,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "fea8b75a-0b42-5170-9a22-3aa02e2470f5")
-		)
 		(pin "2"
 			(uuid "077b1049-8ffd-5eb4-9486-0dfbb9ae6b59")
+		)
+		(pin "1"
+			(uuid "fea8b75a-0b42-5170-9a22-3aa02e2470f5")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -3164,7 +3322,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "MF-R300"
+		(property "Value" "SMD2920B300TF/30"
 			(at 48.26 149.86 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3175,7 +3333,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:Fuse_Bourns_MF-R300_P5.08mm"
+		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
 			(at 52.07 147.32 0)
 			(hide yes)
 			(show_name no)
@@ -3208,7 +3366,7 @@
 				)
 			)
 		)
-		(property "MPN" "MF-R300"
+		(property "MPN" "SMD2920B300TF/30"
 			(at 52.07 147.32 0)
 			(hide yes)
 			(show_name no)
@@ -3348,7 +3506,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "MF-R300"
+		(property "Value" "SMD2920B300TF/30"
 			(at 48.26 180.34 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3359,7 +3517,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:Fuse_Bourns_MF-R300_P5.08mm"
+		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
 			(at 52.07 177.8 0)
 			(hide yes)
 			(show_name no)
@@ -3392,7 +3550,7 @@
 				)
 			)
 		)
-		(property "MPN" "MF-R300"
+		(property "MPN" "SMD2920B300TF/30"
 			(at 52.07 177.8 0)
 			(hide yes)
 			(show_name no)
@@ -3419,7 +3577,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 256.54 147.32 0)
 		(unit 1)
 		(body_style 1)
@@ -3495,11 +3653,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "05b5d4ac-c00e-54c2-9c80-279c3036a1a7")
-		)
 		(pin "2"
 			(uuid "7670e695-384c-55ed-8720-7381046a96b6")
+		)
+		(pin "1"
+			(uuid "05b5d4ac-c00e-54c2-9c80-279c3036a1a7")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -3511,7 +3669,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 167.64 157.48 0)
 		(unit 1)
 		(body_style 1)
@@ -3587,11 +3745,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "e5a345a0-1a94-563c-9fd0-7b9e803d3405")
-		)
 		(pin "2"
 			(uuid "75f996de-1b88-5d48-8a0d-2e95d0f01aca")
+		)
+		(pin "1"
+			(uuid "e5a345a0-1a94-563c-9fd0-7b9e803d3405")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -4187,7 +4345,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 78.74 177.8 0)
 		(unit 1)
 		(body_style 1)
@@ -4263,11 +4421,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "15d53d7f-02c5-5660-9ce9-9405e62c9020")
-		)
 		(pin "2"
 			(uuid "59348053-13c8-5cef-bd71-7f87c671c2bc")
+		)
+		(pin "1"
+			(uuid "15d53d7f-02c5-5660-9ce9-9405e62c9020")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -4377,7 +4535,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "MF-R300"
+		(property "Value" "SMD2920B300TF/30"
 			(at 48.26 170.18 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4388,7 +4546,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:Fuse_Bourns_MF-R300_P5.08mm"
+		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
 			(at 52.07 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -4421,7 +4579,7 @@
 				)
 			)
 		)
-		(property "MPN" "MF-R300"
+		(property "MPN" "SMD2920B300TF/30"
 			(at 52.07 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -4709,7 +4867,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 78.74 137.16 0)
 		(unit 1)
 		(body_style 1)
@@ -4785,11 +4943,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "223f2bd9-0ffe-5fd4-bced-d4258a289147")
-		)
 		(pin "2"
 			(uuid "04f08498-3eea-5e51-a00c-4957a90907e0")
+		)
+		(pin "1"
+			(uuid "223f2bd9-0ffe-5fd4-bced-d4258a289147")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -5109,7 +5267,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 167.64 187.96 0)
 		(unit 1)
 		(body_style 1)
@@ -5185,11 +5343,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "6df655e8-c288-5ec3-8f5f-4af67c9ccb76")
-		)
 		(pin "2"
 			(uuid "14005c58-bc97-5482-b990-07e27909c953")
+		)
+		(pin "1"
+			(uuid "6df655e8-c288-5ec3-8f5f-4af67c9ccb76")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -5201,7 +5359,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 78.74 187.96 0)
 		(unit 1)
 		(body_style 1)
@@ -5277,11 +5435,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "5c2fcf47-5d70-5e25-9fe8-fa9c75395309")
-		)
 		(pin "2"
 			(uuid "2d30ba25-1d1b-51a8-8bb0-b9e55166c492")
+		)
+		(pin "1"
+			(uuid "5c2fcf47-5d70-5e25-9fe8-fa9c75395309")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -5468,7 +5626,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "MF-R300"
+		(property "Value" "SMD2920B300TF/30"
 			(at 48.26 190.5 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5479,7 +5637,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:Fuse_Bourns_MF-R300_P5.08mm"
+		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
 			(at 52.07 187.96 0)
 			(hide yes)
 			(show_name no)
@@ -5512,7 +5670,7 @@
 				)
 			)
 		)
-		(property "MPN" "MF-R300"
+		(property "MPN" "SMD2920B300TF/30"
 			(at 52.07 187.96 0)
 			(hide yes)
 			(show_name no)
@@ -5631,7 +5789,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 167.64 137.16 0)
 		(unit 1)
 		(body_style 1)
@@ -5707,11 +5865,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "d3bd5622-a352-5f56-8bec-4b730c2499ce")
-		)
 		(pin "2"
 			(uuid "834f4455-656b-5bda-a915-635e87b58404")
+		)
+		(pin "1"
+			(uuid "d3bd5622-a352-5f56-8bec-4b730c2499ce")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -5800,7 +5958,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 50.8 71.12 0)
 		(unit 1)
 		(body_style 1)
@@ -5876,11 +6034,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "bd090d10-5647-5a5d-bbdd-1a640335d00c")
-		)
 		(pin "2"
 			(uuid "59e9b77e-a87b-51a9-b600-abc7fa538593")
+		)
+		(pin "1"
+			(uuid "bd090d10-5647-5a5d-bbdd-1a640335d00c")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -6123,7 +6281,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 167.64 177.8 0)
 		(unit 1)
 		(body_style 1)
@@ -6199,11 +6357,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "9f7aed70-3fde-5b46-9365-1828ffc74375")
-		)
 		(pin "2"
 			(uuid "0d190081-2e11-55c9-b789-55d8187260e4")
+		)
+		(pin "1"
+			(uuid "9f7aed70-3fde-5b46-9365-1828ffc74375")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -6215,7 +6373,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 78.74 157.48 0)
 		(unit 1)
 		(body_style 1)
@@ -6291,11 +6449,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "3a5782f7-3364-58be-bb66-14566953ad17")
-		)
 		(pin "2"
 			(uuid "cbfd6433-602d-5357-b20e-2d40559c66ae")
+		)
+		(pin "1"
+			(uuid "3a5782f7-3364-58be-bb66-14566953ad17")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -6307,7 +6465,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 256.54 137.16 0)
 		(unit 1)
 		(body_style 1)
@@ -6383,11 +6541,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "72cb4f9c-6cd2-5da9-8fe8-645db955acae")
-		)
 		(pin "2"
 			(uuid "44acb010-e898-585c-925c-676507532817")
+		)
+		(pin "1"
+			(uuid "72cb4f9c-6cd2-5da9-8fe8-645db955acae")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -6553,7 +6711,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 167.64 167.64 0)
 		(unit 1)
 		(body_style 1)
@@ -6629,11 +6787,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "69092eff-11e3-5f65-ac85-dfb0744f2318")
-		)
 		(pin "2"
 			(uuid "6f96f056-827e-52d0-9ac7-68d3c947ad5e")
+		)
+		(pin "1"
+			(uuid "69092eff-11e3-5f65-ac85-dfb0744f2318")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -6891,7 +7049,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 167.64 147.32 0)
 		(unit 1)
 		(body_style 1)
@@ -6967,11 +7125,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "d263f39f-1d65-5064-b051-c79520918b1c")
-		)
 		(pin "2"
 			(uuid "2bcb6df2-686e-534a-b93e-ec57b900a06c")
+		)
+		(pin "1"
+			(uuid "d263f39f-1d65-5064-b051-c79520918b1c")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -7075,7 +7233,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 78.74 147.32 0)
 		(unit 1)
 		(body_style 1)
@@ -7151,11 +7309,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "bfbaffef-1283-5b36-9a46-8569af35a556")
-		)
 		(pin "2"
 			(uuid "eb80a7e1-731e-5d45-8444-f81dce378079")
+		)
+		(pin "1"
+			(uuid "bfbaffef-1283-5b36-9a46-8569af35a556")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -7167,7 +7325,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 256.54 167.64 0)
 		(unit 1)
 		(body_style 1)
@@ -7243,11 +7401,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "c6369ea2-cf0e-5749-83b3-a1e1f298bd47")
-		)
 		(pin "2"
 			(uuid "e7ac8431-fc45-536f-9605-33f539615e79")
+		)
+		(pin "1"
+			(uuid "c6369ea2-cf0e-5749-83b3-a1e1f298bd47")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -7336,7 +7494,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 256.54 177.8 0)
 		(unit 1)
 		(body_style 1)
@@ -7412,11 +7570,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "b0202e22-804e-5847-8adc-fc4857c19e24")
-		)
 		(pin "2"
 			(uuid "52174bb0-1269-57e3-b35f-b4f4c7a032d0")
+		)
+		(pin "1"
+			(uuid "b0202e22-804e-5847-8adc-fc4857c19e24")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -7520,7 +7678,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 78.74 167.64 0)
 		(unit 1)
 		(body_style 1)
@@ -7596,11 +7754,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "a62591f1-4c9c-536a-a955-f2d7e50043ea")
-		)
 		(pin "2"
 			(uuid "792e981f-f959-5c34-b467-b09015166e7b")
+		)
+		(pin "1"
+			(uuid "a62591f1-4c9c-536a-a955-f2d7e50043ea")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -7612,7 +7770,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 256.54 187.96 0)
 		(unit 1)
 		(body_style 1)
@@ -7688,11 +7846,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "c55778ce-517e-557f-8354-9431fdeadef6")
-		)
 		(pin "2"
 			(uuid "5c2850c7-48e6-5db6-ab34-31c548c899a5")
+		)
+		(pin "1"
+			(uuid "c55778ce-517e-557f-8354-9431fdeadef6")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -7817,7 +7975,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "MF-R300"
+		(property "Value" "SMD2920B300TF/30"
 			(at 48.26 160.02 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7828,7 +7986,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:Fuse_Bourns_MF-R300_P5.08mm"
+		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
 			(at 52.07 157.48 0)
 			(hide yes)
 			(show_name no)
@@ -7861,7 +8019,7 @@
 				)
 			)
 		)
-		(property "MPN" "MF-R300"
+		(property "MPN" "SMD2920B300TF/30"
 			(at 52.07 157.48 0)
 			(hide yes)
 			(show_name no)
@@ -7909,7 +8067,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "MF-R300"
+		(property "Value" "SMD2920B300TF/30"
 			(at 48.26 139.7 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7920,7 +8078,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:Fuse_Bourns_MF-R300_P5.08mm"
+		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
 			(at 52.07 137.16 0)
 			(hide yes)
 			(show_name no)
@@ -7953,7 +8111,7 @@
 				)
 			)
 		)
-		(property "MPN" "MF-R300"
+		(property "MPN" "SMD2920B300TF/30"
 			(at 52.07 137.16 0)
 			(hide yes)
 			(show_name no)
@@ -8057,7 +8215,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 50.8 86.36 0)
 		(unit 1)
 		(body_style 1)
@@ -8133,11 +8291,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "f621f8a2-f824-5cd2-901d-1ca6ce5e1546")
-		)
 		(pin "2"
 			(uuid "568f7786-b7e0-511b-8db4-f129b4844438")
+		)
+		(pin "1"
+			(uuid "f621f8a2-f824-5cd2-901d-1ca6ce5e1546")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -8149,7 +8307,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
+		(lib_id "PowerBoard_rev3:Conn_01x02_MinusPin1")
 		(at 50.8 101.6 0)
 		(unit 1)
 		(body_style 1)
@@ -8225,11 +8383,11 @@
 				)
 			)
 		)
-		(pin "1"
-			(uuid "6c6ef337-4b19-5efe-bbbe-f34be90b6ca1")
-		)
 		(pin "2"
 			(uuid "e550d8b2-18ff-591e-87b4-b890f6acd3b1")
+		)
+		(pin "1"
+			(uuid "6c6ef337-4b19-5efe-bbbe-f34be90b6ca1")
 		)
 		(instances
 			(project "PowerBoard_rev3"

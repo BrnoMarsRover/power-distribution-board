@@ -93,6 +93,7 @@ FETS = {
 # Hold current falls to about 2.5 A at 50 degC and 2.25 A at 60 degC (MF-LSMF derating table).
 PTCS = {
     "MF-R300": (30, 3.0, 6.0, 0.020, "Bourns", "radial THT"),
+    "SMD2920B300TF/30": (30, 3.0, 5.0, 0.012, "YAGEO", "2920"),        # 24 V rail: SMD, 30 V (2026-11-19)
     "MF-LSMF300/16X-2": (16, 3.0, 5.0, 0.015, "Bourns", "2920"),
     "MF-LSMF300X-2": (6, 3.0, 5.0, 0.015, "Bourns", "2920"),
 }
@@ -122,7 +123,7 @@ RAILS = [
               "Defaults ON, because the 12 V converter powers the Orin."),
     dict(name="24V", v=24.0, design=10.0, i_oc=11.0, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=6, conn="Deans T",
-         i_inrush=1.0, ptc="MF-R300", src="300 W converter", default_on=False),
+         i_inrush=1.0, ptc="SMD2920B300TF/30", src="300 W converter", default_on=False),
     dict(name="12V", v=12.0, design=10.0, i_oc=11.0, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=6, conn="XT60",
          i_inrush=2.0, ptc="MF-LSMF300/16X-2", src="150 W converter", default_on=True,

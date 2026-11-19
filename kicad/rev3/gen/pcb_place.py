@@ -25,8 +25,8 @@ GAP = 0.6                                    # between packed parts (courtyard r
 GAP_BOTTOM = 1.0                             # the bottom has room: a little air for labels and rework
 
 # column x ranges (board mm) and the rows
-COL = {"42D": (2.0, 24.0), "42C": (27.0, 49.0), "24": (52.0, 81.0), "12": (84.0, 108.0),
-       "5": (111.0, 129.0), "54": (131.0, 149.0)}
+COL = {"42D": (2.0, 24.0), "42C": (27.0, 49.0), "24": (52.0, 74.0), "12": (77.0, 101.0),
+       "5": (104.0, 122.0), "54": (124.0, 149.0)}
 Y_IN, Y_OUT = 1.0, 75.0                      # tops of the inputs row and of the output columns
 ROW = 10.2                                   # output pitch for 24 / 12 / 5 V (upright 2920 PTCs need 10.1)
 Y_CTRL = 137.4                               # control-connector strip along the bottom edge
@@ -79,13 +79,23 @@ def claim(fp):
         placed[side].append(bx)
 
 
+MINUS_PIN1 = ("XT30", "XT60", "DEANS")       # pad 1 is the - side on these footprints (see build.py CONN2)
+
+
+def plus_minus(fp):
+    """(+ pad number, - pad number) of a 2-pin power connector."""
+    name = fp.GetFPID().GetLibItemName().wx_str().upper()
+    return ("2", "1") if any(k in name for k in MINUS_PIN1) else ("1", "2")
+
+
 def plus_left(fp):
-    """Turn a 2-pin connector so pin 1 (+) is on the left and the pins sit side by side."""
+    """Turn a connector so its + pad is on the left and the pins sit side by side."""
     if pad(fp, "1") is None or pad(fp, "2") is None:
         return
+    pp, pm = plus_minus(fp)
     for deg in (0, 90, 180, 270):
         fp.SetOrientationDegrees(deg)
-        p1, p2 = pad(fp, "1").GetPosition(), pad(fp, "2").GetPosition()
+        p1, p2 = pad(fp, pp).GetPosition(), pad(fp, pm).GetPosition()
         if p1.x < p2.x and abs(p1.y - p2.y) < MM(0.5):
             return
 
@@ -148,7 +158,7 @@ def area(ref):
 
 
 overflow, spilled = [], []
-SPILL = (1, 1, 149, 149)
+SPILL = (1, 13, 149, 149)                    # never into the inputs row
 
 
 def pack(refs, zone, bottom, spill=False):
@@ -196,15 +206,16 @@ rect.SetEnd(pcbnew.VECTOR2I(MM(X0 + W), MM(Y0 + H)))
 
 # ---------------------------------------------------------------- find connectors and PTCs by their nets
 conns = {r: f for r, f in FP.items() if r.startswith("J") and r[1:].isdigit()}
-by_net = lambda n: sorted((j for j, f in conns.items() if net(f, "1") == n and f.GetValue().startswith("XT90PB-F")),
+by_net = lambda n: sorted((j for j, f in conns.items() if net(f, plus_minus(f)[0]) == n and f.GetValue().startswith("XT90PB-F")),
                           key=lambda s: int(s[1:]))
 ptc_of = {}
 for r, f in FP.items():
     if r.startswith("F"):
         a, c = net(f, "1"), net(f, "2")
         for j, jf in conns.items():
-            if net(jf, "1") in (a, c):
-                ptc_of[j] = (r, c if net(jf, "1") == a else a)
+            jp = net(jf, plus_minus(jf)[0])
+            if jp in (a, c):
+                ptc_of[j] = (r, c if jp == a else a)
 rail_out = lambda rail: sorted((j for j, (p, rl) in ptc_of.items() if rl == rail), key=lambda s: int(s[1:]))
 
 # ---------------------------------------------------------------- inputs row
@@ -231,7 +242,7 @@ for rail, net_ in (("24", "OUT24"), ("12", "OUT12"), ("5", "OUT5")):
         l, t, r, bt = box(FP[j])
         cbox = put(j, x1 - (r - l), y)                               # connector flush right in its column
         f = FP[ptc_of[j][0]]
-        upright(f, tall=f.GetValue() != "MF-R300")                   # 2920 stands, the radial MF-R300 lies flat
+        upright(f, tall=True)                                        # every PTC is a 2920 standing upright
         fl, ft, fr, fb = box(f)
         put(ptc_of[j][0], cbox[0] - 1.2 - (fr - fl), (cbox[1] + cbox[3]) / 2 - (fb - ft) / 2, orient=lambda fp: None)
 put("J13", COL["54"][1] - 8.4, 133.5)                                # Zyxel 54 V out, bottom of the 54 V column
@@ -252,32 +263,49 @@ def opening(fp, d=(0, 1)):
     fp.SetOrientationDegrees(best[1])
 
 
-# control strip along the bottom edge, left to right; CAN and USB plug in from the edge
+# CAN on the bottom edge (plugs in from the edge)
 x = 50.5
-for ref, orient in (("J34", opening), ("J35", opening), ("J32", opening), ("J33", plus_left),
-                    ("J37", plus_left), ("J38", plus_left), ("J36", plus_left)):
+for ref in ("J34", "J35"):
     fp = FP[ref]
-    orient(fp)
+    opening(fp, (0, 1))
     l, t, r, bt = box(fp)
     put(ref, x, 149.4 - (bt - t), orient=lambda f: None)
     x += (r - l) + 0.7
 
+# USB-C on the left edge under the battery input, opening outwards
+opening(FP["J32"], (-1, 0))
+put("J32", 0.6, 13.6, orient=lambda f: None)
+
+# JST headers in a block at the top right, a label row above each
+JST_ROWS = (((131.0, 9.4), ("J37",)), ((131.0, 18.6), ("J38", "J36")), ((131.0, 27.8), ("J33",)))
+for (x0, y0), refs in JST_ROWS:
+    widths = []
+    for ref in refs:
+        plus_left(FP[ref])
+        l, t, r, bt = box(FP[ref])
+        widths.append(r - l)
+    x = 149.4 - sum(widths) - 0.8 * (len(refs) - 1)
+    for ref, w in zip(refs, widths):
+        put(ref, x, y0)
+        x += w + 0.8
+
 # ---------------------------------------------------------------- zones: (top, bottom) per sheet prefix
 ZONES = {
-    "Battery input": ((1.5, 21, 50.5, 35.5), (1.5, 21, 50.5, 35.5)),
+    "Battery input": ((11.5, 21, 50.5, 35.5), (11.5, 21, 50.5, 35.5)),
+    "USB": ((11.5, 13, 30, 21), (11.5, 13, 30, 35)),
     "42 V drive group": ((1.5, 35.5, 25.5, 71.5), (1.5, 35.5, 25.5, 71.5)),
     "42 V converter-feed": ((25.5, 35.5, 50.5, 71.5), (25.5, 35.5, 50.5, 71.5)),
-    "24 V rail eFuse": ((51, 12, 82.5, 71.5), (51, 12, 82.5, 71.5)),
-    "12 V rail eFuse": ((82.5, 12, 110, 71.5), (82.5, 12, 110, 71.5)),
-    "5 V rail eFuse": ((110, 10, 130.5, 71.5), (110, 10, 130.5, 71.5)),
-    "54 V supply eFuse": ((130.5, 9, 149, 50), (130.5, 9, 149, 50)),
-    "54 V boost": ((130.5, 50, 149, 133), (130.5, 50, 149, 133)),
+    "24 V rail eFuse": ((51, 12, 75.5, 71.5), (51, 12, 75.5, 71.5)),
+    "12 V rail eFuse": ((75.5, 12, 102.5, 71.5), (75.5, 12, 102.5, 71.5)),
+    "5 V rail eFuse": ((102.5, 10, 123.5, 71.5), (102.5, 10, 123.5, 71.5)),
+    "54 V supply eFuse": ((123.5, 36, 149, 64), (123.5, 36, 149, 64)),
+    "54 V boost": ((123.5, 64, 149, 133), (123.5, 64, 149, 133)),
     "Brake chopper": ((1.5, 121.5, 26, 149), (1.5, 121.5, 26, 149)),
     "Always-on aux": ((26.5, 98, 50.5, 149), (26.5, 98, 50.5, 149)),
-    "Rail inputs": ((51, 131, 130.5, 137), (51, 72, 130.5, 137)),
-    "ESP32-S3": ((26.5, 98, 50.5, 149), (51, 72, 130.5, 137)),
-    "Switch control": ((51, 131, 130.5, 137), (51, 72, 130.5, 137)),
-    "CAN bus": ((51, 131, 130.5, 137), (51, 72, 130.5, 137)),
+    "Rail inputs": ((51, 131, 123.5, 149), (51, 72, 123.5, 149)),
+    "ESP32-S3": ((26.5, 98, 50.5, 149), (51, 72, 123.5, 149)),
+    "Switch control": ((78, 131, 123.5, 149), (51, 72, 123.5, 149)),
+    "CAN bus": ((51, 131, 123.5, 149), (51, 72, 123.5, 149)),
 }
 TOP_ONLY = ("54 V boost", "Always-on aux")                 # switching loops stay on one side
 POWER_1210 = ("Battery input", "54 V boost", "Always-on aux")
@@ -297,11 +325,20 @@ def is_bottom(fp):
     return ref.startswith(("U", "R", "C", "Q", "D", "TH"))
 
 
+# keep the label spots under the inputs free (battery label, polarity rule, + / - marks)
+for keep in ((11.0, 12.4, 31.0, 18.0), (51.0, 9.6, 123.0, 12.0), (78.0, 140.0, 122.0, 146.0)):
+    placed[False].append(keep)
+
+# the USB connector's helpers (ESD array, CC resistors) sit by the connector, not by the ESP32
+usb_nets = {p.GetNetname() for p in FP["J32"].Pads()} - {"GND", ""}
+usb_parts = {r for r, f in FP.items() if r not in fixed and not r.startswith(("TP", "U13"))
+             and any(p.GetNetname() in usb_nets for p in f.Pads())}
+
 groups = {}
 for r, f in FP.items():
     if r in fixed:
         continue
-    key = next((k for k in ZONES if f.GetSheetname().startswith(k)), None)
+    key = "USB" if r in usb_parts else next((k for k in ZONES if f.GetSheetname().startswith(k)), None)
     if key is None:
         overflow.append(r)
         continue

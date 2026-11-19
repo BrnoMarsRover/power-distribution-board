@@ -145,9 +145,11 @@ def bbox(ref):
 
 
 def pins(ref):
-    """x of pad 1 and pad 2 (board mm)."""
+    """x of the + pad and the - pad (board mm). XT30 / XT60 / Deans T have + on pad 2."""
     p = {q.GetNumber(): q.GetPosition() for q in FP[ref].Pads()}
-    return pcbnew.ToMM(p["1"].x) - X0, pcbnew.ToMM(p["2"].x) - X0
+    name = FP[ref].GetFPID().GetLibItemName().wx_str().upper()
+    plus, minus = ("2", "1") if any(k in name for k in ("XT30", "XT60", "DEANS")) else ("1", "2")
+    return pcbnew.ToMM(p[plus].x) - X0, pcbnew.ToMM(p[minus].x) - X0
 
 
 # ---------------------------------------------------------------- references to the fab layers
@@ -165,13 +167,13 @@ for f in b.GetFootprints():
 
 # ---------------------------------------------------------------- output columns: header with polarity
 OBST = {False: obstacles(False), True: obstacles(True)}
-COLS = [("42V DRIVE  40A", 2.0, 24.0), ("42V CONVERTERS", 27.0, 49.0), ("24V OUT  3A EACH", 52.0, 81.0),
-        ("12V OUT  3A EACH", 84.0, 108.0), ("5V OUT  3A EACH", 111.0, 129.0)]
+COLS = [("42V DRIVE  40A", 2.0, 24.0), ("42V CONVERTERS", 27.0, 49.0), ("24V OUT 3A EACH", 52.0, 74.0),
+        ("12V OUT 3A EACH", 77.0, 101.0), ("5V OUT 3A EACH", 104.0, 122.0)]
 for name, x0, x1 in COLS:
     text("+", x0 + 0.8, 73.3, h=1.6, bold=True)
     text("-", x1 - 0.8, 73.3, h=1.6, bold=True)
     text(name, (x0 + x1) / 2, 73.3, h=1.3, bold=True)
-for x in (25.5, 50.5, 82.5, 109.5, 130.0):                  # dividers between the columns
+for x in (25.5, 50.5, 75.5, 102.5, 123.0):                  # dividers between the columns
     line(x, 72.0, x, 134.0)
 bx = bbox("J4")
 text("BRAKE RESISTOR", (bx[0] + bx[2]) / 2, bx[1] - 1.4, h=1.0, bold=True)
@@ -183,13 +185,13 @@ for ref, label in (("J1", "BATTERY IN 30-42V"), ("J5", "24V IN"), ("J6", "12V IN
     text("+", p1, y1 + 1.0, h=1.4, bold=True)
     text("-", p2, y1 + 1.0, h=1.4, bold=True)
     if ref == "J1":
-        text(label, (x0 + x1) / 2, y1 + 2.9, h=1.4, bold=True)
+        text(label, max((x0 + x1) / 2, 21.5), y1 + 3.0, h=1.2, bold=True)
     else:
         text(label, x0 - 1.0, (y0 + y1) / 2, h=1.3, just=R, bold=True)
 for ref, label in (("J2", "CHARGER"), ("J3", "PACK CHG")):
     x0, y0, x1, y1 = bbox(ref)
     text(label, x1 + 1.0, (y0 + y1) / 2, h=1.0, just=L)
-text("ALL CONNECTORS:  + LEFT   - RIGHT", 2.0, 18.6, h=1.0, just=L, bold=True)
+text("ALL POWER CONNECTORS:  + LEFT   - RIGHT", 100.0, 143.0, h=1.4, bold=True, free=True)
 
 # ---------------------------------------------------------------- 54 V output, control strip
 x0, y0, x1, y1 = bbox("J13")

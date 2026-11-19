@@ -144,6 +144,27 @@ def mosfet_symbol():
     return dump(sym, 0)
 
 
+def conn_minus1_symbol():
+    """Conn_01x02 drawn the same way, but the top pin is pad 2 (+) and the bottom pin pad 1 (-).
+    AMASS XT30 / XT60 footprints have pad 1 on the chamfered, negative side, and rev2 wired its
+    Deans T with pad 1 = GND, so these connectors take + on pad 2."""
+    sym = Library.load(SYM_DIR / "Connector_Generic.kicad_sym").flat("Conn_01x02")
+    sym[1] = q("Conn_01x02_MinusPin1")
+    for sub in find(sym, "symbol"):
+        sub[1] = q(unq(sub[1]).replace("Conn_01x02", "Conn_01x02_MinusPin1", 1))
+        for pn in find(sub, "pin"):
+            num, name = find(pn, "number")[0], find(pn, "name")[0]
+            new = {"1": "2", "2": "1"}[unq(num[1])]
+            num[1] = q(new)
+            name[1] = q({"2": "+", "1": "-"}[new])
+    for prop in find(sym, "property"):
+        if unq(prop[1]) == "Value":
+            prop[2] = q("Conn_01x02_MinusPin1")
+        if unq(prop[1]) == "Description":
+            prop[2] = q("2-pin power connector: pad 1 = -, pad 2 = + (XT30 / XT60 / Deans T)")
+    return dump(sym, 0)
+
+
 TI = "https://www.ti.com/lit/ds/symlink/"
 CUSTOM = {
     # Pins placed for the drawn eFuse sheet: supply and sense on top (to the rails),
@@ -222,6 +243,7 @@ CUSTOM = {
         datasheet="https://www.ti.com/lit/ds/symlink/tlv1805.pdf",
         desc="40 V push-pull comparator, 100 mA output (drives a MOSFET gate), SOT-23-6 (DBV)"),
     "Q_NMOS_GDS": mosfet_symbol(),
+    "Conn_01x02_MinusPin1": conn_minus1_symbol(),
 }
 
 
@@ -308,6 +330,7 @@ def rnd(pt):
 
 def PIN(p, num):
     """Absolute sheet position of a placed part's pin."""
+    num = getattr(p, "alias", {}).get(num, num)
     a = next(g for g in p.geom() if g["number"] == str(num))
     return rnd((p.at[0] + a["sx"], p.at[1] + a["sy"]))
 
@@ -731,7 +754,16 @@ def FET(sh, part, g, d, s, at=None, rot=0, mirror=False):
                   rot=rot, mirror=mirror)
 
 
+MINUS_PIN1 = ("XT30F", "XT30M", "XT60F", "XT60M", "DEANS")     # pad 1 is the - side on these
+
+
 def CONN2(sh, value, fp, p1, p2, at=None, rot=0, mirror=False):
+    """2-pin connector; p1 is the + side and is drawn on top. On XT30 / XT60 / Deans T it lands on pad 2."""
+    if fp in MINUS_PIN1:
+        j = sh.add("PowerBoard_rev3:Conn_01x02_MinusPin1", "J", value, FP[fp], {2: p1, 1: p2}, at=at, rot=rot,
+                   mirror=mirror)
+        j.alias = {1: 2, 2: 1, "1": 2, "2": 1}      # callers keep saying 1 = top (+), 2 = bottom
+        return j
     return sh.add("Connector_Generic:Conn_01x02", "J", value, FP[fp], {1: p1, 2: p2}, at=at, rot=rot, mirror=mirror)
 
 
@@ -1264,7 +1296,7 @@ def sheet_outputs():
     column("OUT42D", 116.84, 71.12, [("XT90PB-F", "XT90F")] * n["42V-D"])
     column("OUT42C", 177.8, 71.12, [("XT90PB-F", "XT90F")] * n["42V-C"])
     column("OUT54", 238.76, 71.12, [("B2B-XH-A(LF)(SN) (54 V to Zyxel)", "XH2")])
-    column("OUT24", 45.72, 137.16, [("Deans T female", "DEANS")] * n["24V"], ("MF-R300", "PTCR300"))
+    column("OUT24", 45.72, 137.16, [("Deans T female", "DEANS")] * n["24V"], ("SMD2920B300TF/30", "PTC2920"))
     column("OUT12", 134.62, 137.16, [("XT60PT-F", "XT60F")] * n["12V"], ("MF-LSMF300/16X-2", "PTC2920"))
     column("OUT5", 223.52, 137.16, [("XT30UPB-F", "XT30F")] * n["5V"], ("MF-LSMF300X-2", "PTC2920"))
     return sh

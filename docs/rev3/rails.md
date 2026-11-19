@@ -71,7 +71,7 @@ A PTC protects the cable to one device from an overload too small to trip the ra
 
 | Rail | Outputs | PTC (maker, package) | V max | Hold / trip | Drop at hold | Cable at least |
 |---|---|---|---|---|---|---|
-| 24V | 6 x Deans T | MF-R300 (Bourns, radial THT) | 30 V | 3 / 6 A | >= 60 mV | 0.5 mm2 / AWG 20 |
+| 24V | 6 x Deans T | SMD2920B300TF/30 (YAGEO, 2920) | 30 V | 3 / 5 A | >= 36 mV | 0.5 mm2 / AWG 20 |
 | 12V | 6 x XT60 | MF-LSMF300/16X-2 (Bourns, 2920) | 16 V | 3 / 5 A | >= 45 mV | 0.5 mm2 / AWG 20 |
 | 5V | 6 x XT30 | MF-LSMF300X-2 (Bourns, 2920) | 6 V | 3 / 5 A | >= 45 mV | 0.5 mm2 / AWG 20 |
 
