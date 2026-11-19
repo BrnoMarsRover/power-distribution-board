@@ -2483,7 +2483,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "E-STOP: ESTOP_KILL (from the latch in the io sheet) pulls EN/UVLO low through Q_EN."
+	(text "Motor switch (rear panel): MOTOR_KILL from the latch in the io sheet pulls EN/UVLO low through Q_EN; the main and pre-charge FETs turn off in hardware."
 		(exclude_from_sim no)
 		(at 20 42 0)
 		(effects
@@ -3947,7 +3947,7 @@
 			)
 		)
 	)
-	(global_label "ESTOP_KILL"
+	(global_label "MOTOR_KILL"
 		(shape passive)
 		(at 63.5 144.78 180)
 		(fields_autoplaced yes)
@@ -3957,7 +3957,7 @@
 			)
 			(justify right)
 		)
-		(uuid "9e442167-d621-5137-903a-95f97004bb34")
+		(uuid "70510459-76fc-5833-aa4b-13e01e083bcb")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 63.5 144.78 0)
 			(hide yes)

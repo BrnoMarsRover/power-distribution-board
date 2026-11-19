@@ -864,7 +864,8 @@ def sheet_switch(r):
              "Q_T (MMBT3904) must sit against the main FET: remote temperature sense.",
              "Kelvin-route CS+ / CS- / ISCP from the R_SNS pads. Place C_ISCP right at the pins."]
     if r["name"] == "42V-D":
-        notes.append("E-STOP: ESTOP_KILL (from the latch in the io sheet) pulls EN/UVLO low through Q_EN.")
+        notes.append("Motor switch (rear panel): MOTOR_KILL from the latch in the io sheet pulls EN/UVLO low through Q_EN; "
+                     "the main and pre-charge FETs turn off in hardware.")
     sh = Sheet(f"sw_{n.lower()}", title, notes, drawn=True)
     W, M = sh.wire, sh.mark
     gnd = lambda pt: M("gnd", pt)
@@ -913,7 +914,7 @@ def sheet_switch(r):
     gnd(PIN(c1, 2))
     gnd(PIN(c2, 2))
 
-    # --- EN/UVLO divider (and the E-STOP kill FET on the drive group)
+    # --- EN/UVLO divider (and the motor-switch kill FET on the drive group)
     r_top = rails.nearest(10e3 * (UVLO_ON[r["name"]] / 1.18 - 1), rails.E96)
     ret = R(sh, r_top, vin, en, at=(66.04, 128.27), rot=0)
     reb = R(sh, 10e3, en, "GND", at=(66.04, 146.05), rot=0)
@@ -924,12 +925,12 @@ def sheet_switch(r):
     W(enp, (73.66, enp[1]), (73.66, 139.7), (66.04, 139.7))
     TP(sh, en, at=(83.82, enp[1]))
     if r["name"] == "42V-D":
-        qe = sh.add("Transistor_FET:2N7002", "Q", "2N7002", FP["SOT23"], {1: "ESTOP_KILL", 2: "GND", 3: en},
+        qe = sh.add("Transistor_FET:2N7002", "Q", "2N7002", FP["SOT23"], {1: "MOTOR_KILL", 2: "GND", 3: en},
                     at=(53.34, 144.78))
         W(PIN(qe, 3), (66.04, 139.7))
         gnd(PIN(qe, 2))
         W(PIN(qe, 1), (43.18, 144.78))
-        lab("ESTOP_KILL", (43.18, 144.78), 180)
+        lab("MOTOR_KILL", (43.18, 144.78), 180)
 
     # --- control inputs from the left, with their power-on defaults
     inp, inpg, flti, fltt = P(3), P(2), P(5), P(4)
@@ -1425,7 +1426,7 @@ def sheet_aux():
 ESP_PINS = {"1": "GND", "2": "+3V3", "3": "ESP_EN", "4": "I2C_SDA", "5": "I2C_SCL", "6": "FLT_42D",
             "7": "FLT_42C", "8": "UART_SP", "9": "FLT_5", "10": "UART_TX", "11": "UART_RX", "12": "FLT_24",
             "13": "USB_DN", "14": "USB_DP", "15": None, "16": None, "17": "FLT_12", "18": "INA_ALERT",
-            "19": "CAN_TXD", "20": "CAN_RXD", "21": "CAN_STB", "22": "ESTOP_OK", "23": "LED_1",
+            "19": "CAN_TXD", "20": "CAN_RXD", "21": "CAN_STB", "22": "MOTOR_OK", "23": "LED_1",
             "24": "LED_2", "25": "LED_3", "26": None, "27": "ESP_IO0", "28": None, "29": None, "30": None,
             "31": "FLT_54", "32": "BRAKE_ACT", "33": None, "34": None, "35": None, "36": "L:RXD0",
             "37": "L:TXD0", "38": "AUX5_SNS", "39": "NTC_SNS"}
@@ -1668,16 +1669,18 @@ def sheet_can():
 ADC_MAP = [["IMON_42D", "IMON_42C", "IMON_24", "IMON_12", "IMON_5", "IMON_54", "VSNS_OUT_42D", "VSNS_OUT_42C"],
            ["VSNS_OUT_24", "VSNS_OUT_12", "VSNS_OUT_5", "VSNS_OUT_54", "VSNS_IN_24", "VSNS_IN_12", "VSNS_IN_5", "GND"]]
 EXP_MAP = {4: "INP_42D", 5: "INP_42C", 6: "INP_24", 7: "INP_12", 8: "INP_5", 9: "INP_54", 10: "INPG_42D",
-           11: "INPG_42C", 13: "INPG_24", 14: "INPG_12", 15: "INPG_5", 16: "INPG_54", 17: "ESTOP_ARM",
+           11: "INPG_42C", 13: "INPG_24", 14: "INPG_12", 15: "INPG_5", 16: "INPG_54", 17: "MOTOR_ARM",
            18: None, 19: None, 20: None}
 
 
 def sheet_io():
-    sh = Sheet("io", "Switch control (TCA9535), measurement (ADC128D818 x2), E-STOP latch", [
+    sh = Sheet("io", "Switch control (TCA9535), measurement (ADC128D818 x2), motor-switch latch", [
         "TCA9535 at 0x20 holds INP / INP_G for all six switches, so they keep their state across an ESP32 reset.",
         "ADC128D818 at 0x1D (A1 = A0 = LOW) and 0x1E (A1 = LOW, A0 = MID). Internal 2.56 V reference; 12 ms per channel.",
-        "E-STOP: opening the loop clears the latch (Q low, /Q high) -> ESTOP_KILL holds the drive group off. "
-        "It stays off after the loop closes until the ESP32 clocks ESTOP_ARM. Power-on also starts latched off."],
+        "Rear-panel motor switch (closed = motors allowed): opening it clears the latch (Q low, /Q high) -> MOTOR_KILL holds "
+        "the drive group off.",
+        "It stays off after the switch closes until the ESP32 clocks MOTOR_ARM, which it does only after dropping INP and "
+        "re-running pre-charge. Power-on also starts latched off. The battery E-STOP is separate (BMS soft-start)."],
         drawn=True)
     W, gnd, v33, lab = marks(sh)
 
@@ -1701,21 +1704,21 @@ def sheet_io():
     W(P(21), (xa, P(21)[1]))
     gnd((xa, P(21)[1] + 2.54))
     for n, net in EXP_MAP.items():
-        if net and net != "ESTOP_ARM":
+        if net and net != "MOTOR_ARM":
             W(P(n), (129.54, P(n)[1]))
             lab(net, (129.54, P(n)[1]), 0)
 
-    # --- E-STOP latch: ESTOP_ARM clocks it, the loop clears it
+    # --- motor-switch latch: MOTOR_ARM clocks it, the switch loop clears it
     F = sh.add("74xGxx:74AUP1G74", "U", "74LVC1G74DCTR", FP["SSOP8"],
-               {1: "ESTOP_ARM", 2: "+3V3", 3: "ESTOP_KILL", 4: "GND", 5: "L:LATCH_Q", 6: "L:CLR",
+               {1: "MOTOR_ARM", 2: "+3V3", 3: "MOTOR_KILL", 4: "GND", 5: "L:LATCH_Q", 6: "L:CLR",
                 7: "+3V3", 8: "+3V3"}, at=(152.4, 175.26))
     F.label_at = {"Reference": (5.08, 13.97), "Value": (5.08, 16.51)}
     Q = lambda n: PIN(F, n)
     arm = P(17)
     W(arm, (116.84, arm[1]), (116.84, Q(1)[1]), Q(1))
-    hang(sh, R(sh, 100e3, "ESTOP_ARM", "GND", rot=0), (127.0, Q(1)[1]))
-    TP(sh, "ESTOP_ARM", at=(132.08, Q(1)[1]))
-    TP(sh, "ESTOP_KILL", at=(168.91, Q(3)[1]))
+    hang(sh, R(sh, 100e3, "MOTOR_ARM", "GND", rot=0), (127.0, Q(1)[1]))
+    TP(sh, "MOTOR_ARM", at=(132.08, Q(1)[1]))
+    TP(sh, "MOTOR_KILL", at=(168.91, Q(3)[1]))
     GTP(sh, (40.64, 160.02))
     yb = 157.48                                    # +3V3 bar over the flip-flop
     W(Q(2), (134.62, Q(2)[1]), (134.62, yb), (Q(8)[0], yb), Q(8))
@@ -1726,35 +1729,35 @@ def sheet_io():
     v33((144.78, yb - 2.54))
     gnd(Q(4))
     W(Q(3), (172.72, Q(3)[1]))
-    lab("ESTOP_KILL", (172.72, Q(3)[1]), 0)
+    lab("MOTOR_KILL", (172.72, Q(3)[1]), 0)
     W(Q(5), (180.34, Q(5)[1]))
     TP(sh, "L:LATCH_Q", at=(180.34, Q(5)[1]))
 
-    # --- E-STOP loop: +3V3 -> 1k -> NC contact -> 10k to GND; filtered into ESTOP_OK and the CLR RC
+    # --- motor-switch loop: +3V3 -> 1k -> switch (closed = run) -> 10k to GND; filtered into MOTOR_OK and the CLR RC
     yl = 198.12
-    j = CONN2(sh, "JST-PH 2p E-STOP (NC)", "PH2", "L:ESRC", "L:ELOOP", mirror=True)
+    j = CONN2(sh, "JST-PH 2p motor switch", "PH2", "L:ESRC", "L:ELOOP", mirror=True)
     at_pin(j, 2, (40.64, yl))
     W(PIN(j, 1), (48.26, PIN(j, 1)[1]))
     rsrc = R(sh, 1e3, "+3V3", "L:ESRC", rot=0)
     at_pin(rsrc, 2, (48.26, PIN(j, 1)[1]))
     v33(PIN(rsrc, 1))
-    re1 = R(sh, 1e3, "L:ELOOP", "ESTOP_OK")
+    re1 = R(sh, 1e3, "L:ELOOP", "MOTOR_OK")
     at_pin(re1, 1, (63.5, yl))
     W(PIN(j, 2), PIN(re1, 1))
     hang(sh, R(sh, 10e3, "L:ELOOP", "GND", rot=0), (55.88, yl))
-    r1m = R(sh, 1e6, "ESTOP_OK", "L:CLR")
+    r1m = R(sh, 1e6, "MOTOR_OK", "L:CLR")
     at_pin(r1m, 1, (83.82, yl))
     W(PIN(re1, 2), PIN(r1m, 1))
-    hang(sh, C(sh, 100e-9, "ESTOP_OK", "GND", rot=0), (76.2, yl))
-    dc = DS(sh, "1N5819HW", "ESTOP_OK", "L:CLR", fp="SOD123")
+    hang(sh, C(sh, 100e-9, "MOTOR_OK", "GND", rot=0), (76.2, yl))
+    dc = DS(sh, "1N5819HW", "MOTOR_OK", "L:CLR", fp="SOD123")
     at_pin(dc, 1, (83.82, 190.5))
     W((78.74, yl), (78.74, 190.5), PIN(dc, 1))
     W(PIN(dc, 2), (96.52, 190.5), (96.52, yl))
     W(PIN(r1m, 2), (Q(6)[0], yl), Q(6))
     hang(sh, C(sh, 100e-9, "L:CLR", "GND", rot=0), (101.6, yl))
     W((73.66, yl), (73.66, 182.88), (66.04, 182.88))
-    lab("ESTOP_OK", (66.04, 182.88), 180)
-    TP(sh, "ESTOP_OK", at=(69.85, 182.88))
+    lab("MOTOR_OK", (66.04, 182.88), 180)
+    TP(sh, "MOTOR_OK", at=(69.85, 182.88))
 
     # --- two ADCs: inputs from the left, I2C to the right, decoupling cap clear of the labels
     for i, (chans, yc) in enumerate(zip(ADC_MAP, (106.68, 177.8))):

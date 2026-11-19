@@ -67,7 +67,7 @@ it never touches a layout. The values and the reasons for them are in
 | Sheet | Contents |
 |-------|----------|
 | `power_in` | Battery XT90 input, SMCJ45A, bulk capacitance, 2 mΩ Kelvin shunt (Bourns CSS2H-2512K) with INA228, charger input XT60 and pack charge-port XT60 (charging flows through the shunt) |
-| `sw_42d`, `sw_42c` | 42 V drive group and converter-feed group eFuses (TPS48111-Q1, 2 + 1 D2PAK). The drive group has the E-STOP kill FET on EN/UVLO. |
+| `sw_42d`, `sw_42c` | 42 V drive group and converter-feed group eFuses (TPS48111-Q1, 2 + 1 D2PAK). The drive group has the motor-switch kill FET on EN/UVLO. |
 | `sw_24`, `sw_12`, `sw_5` | Rail eFuses, input TVS, bulk capacitance, input and output voltage sense |
 | `sw_54` | eFuse in front of the 54 V boost |
 | `brake` | Brake chopper on OUT42D: TLV1805 + LM4040 comparator (on 47.5 V, off 45 V), IPB042N10N3G, XT60 to an off-board braking resistor, BRAKE_ACT to the ESP32 |
@@ -76,7 +76,7 @@ it never touches a layout. The values and the reasons for them are in
 | `aux_power` | LMR38010 (42 V to 5.3 V), the diode-OR with USB VBUS, and the AP7361C 3.3 V LDO |
 | `mcu` | ESP32-S3-WROOM-1U, USB-C with ESD, host UART on JST-GH, buttons, LEDs, NTC |
 | `can` | TCAN1044AV, split termination on solder jumpers, two Molex CLIK-Mate 4p CAN connectors matching the EPOS4 50/5 (X11 / X12) |
-| `io` | TCA9535 (switch control), 2 × ADC128D818, E-STOP latch (74LVC1G74) |
+| `io` | TCA9535 (switch control), 2 × ADC128D818, motor-switch latch (74LVC1G74) and the rear-panel switch input |
 
 ## Custom parts
 

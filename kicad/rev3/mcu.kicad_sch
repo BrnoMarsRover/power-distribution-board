@@ -5641,6 +5641,30 @@
 			)
 		)
 	)
+	(global_label "MOTOR_OK"
+		(shape passive)
+		(at 144.78 170.18 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify right)
+		)
+		(uuid "6d15e056-f748-5602-b0db-2a253cd34930")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 144.78 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+	)
 	(global_label "CAN_RXD"
 		(shape passive)
 		(at 144.78 165.1 180)
@@ -6038,30 +6062,6 @@
 		(uuid "b3b6a151-8122-5f8a-89a0-3f5eb055af3a")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 144.78 129.54 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-	)
-	(global_label "ESTOP_OK"
-		(shape passive)
-		(at 144.78 170.18 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify right)
-		)
-		(uuid "c04a657d-c054-5be8-9efc-3f2a88798a09")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 144.78 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

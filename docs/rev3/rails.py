@@ -89,11 +89,12 @@ RAILS = [
     dict(name="42V-D", v=42.0, design=30.0, i_oc=60.0, t_oc=1.0, i_sc=150.0,
          r_sns=0.5e-3, fet="IPB042N10N3G", n_main=2, c_out=940e-6, n_out=4, conn="XT90 (drives)",
          i_inrush=0.4, ptc=None, src="battery bus", default_on=False,
-         note="EPOS4 drive group: two EPOS4 50/5 per connector, two connectors in use and two "
-              "spare (ASSUMED 470 uF per EPOS4). The 50 A / 0.5 s trip must sit above the drives' acceleration "
-              "peaks. The E-STOP loop feeds this driver's EN/UVLO, so opening it cuts motor power "
-              "in hardware without touching the Orin. Defaults OFF: the drives are useless without "
-              "a controller."),
+         note="Drive group: EPOS4 50/5 (two per connector, two connectors in use, two spare; "
+              "ASSUMED 470 uF per drive) or CubeMars AK10-9 V3.0 actuators. The 60 A / 1.1 s trip sits "
+              "above four EPOS4s accelerating (15 A each); CubeMars actuators (31.9 A peak) need a "
+              "configured current limit. The rear-panel motor switch feeds this driver's EN/UVLO "
+              "through the latch, so opening it cuts motor power in hardware without touching the Orin. "
+              "Defaults OFF: the drives are useless without a controller."),
     dict(name="42V-C", v=42.0, design=30.0, i_oc=33.0, t_oc=0.5, i_sc=100.0,
          r_sns=1e-3, fet="IPB042N10N3G", n_main=2, c_out=470e-6, n_out=4, conn="XT90 (converters)",
          i_inrush=0.4, ptc=None, src="battery bus", default_on=True,

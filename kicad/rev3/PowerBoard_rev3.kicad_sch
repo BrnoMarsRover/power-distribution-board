@@ -482,7 +482,7 @@
 			(color 0 0 0 0)
 		)
 		(uuid "a49d71e0-df6f-5957-a2f8-e887a3c1578b")
-		(property "Sheetname" "Switch control (TCA9535), measurement (ADC128D818 x2), E-STO"
+		(property "Sheetname" "Switch control (TCA9535), measurement (ADC128D818 x2), motor"
 			(at 228.12 140.58 0)
 			(show_name no)
 			(do_not_autoplace no)
