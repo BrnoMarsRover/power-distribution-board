@@ -15,6 +15,8 @@ import pcbnew
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 X0, Y0 = 50.0, 50.0
 MM = pcbnew.FromMM
+IO = pcbnew.PCB_IO_KICAD_SEXPR()                  # load library parts before the board (SWIG quirk)
+LOGO = IO.FootprintLoad("kicad/rev3/PowerBoard_rev3.pretty", "BMR_Logo")   # rev2's BMR rover logo, 39 x 13 mm
 b = pcbnew.LoadBoard(BOARD)
 FP = {f.GetReference(): f for f in b.GetFootprints()}
 L, C, R = pcbnew.GR_TEXT_H_ALIGN_LEFT, pcbnew.GR_TEXT_H_ALIGN_CENTER, pcbnew.GR_TEXT_H_ALIGN_RIGHT
@@ -212,10 +214,28 @@ for f in b.GetFootprints():
         text("ON" if f.GetSheetname()[:2] in ("42", "24", "12", "5 ", "54") else f.GetValue().upper(),
              x1 + 0.6, (y0 + y1) / 2, h=1.0, just=L)
 
-# ---------------------------------------------------------------- title, order number (bottom side)
-text("BRNO MARS ROVER  POWER BOARD  ${REV}", 75.0, 4.0, h=2.0, bottom=True, bold=True, free=True)
-text("BYPASS = solder a wire bridge only in an emergency: it removes all protection of that rail",
-     75.0, 8.0, h=1.0, bottom=True, free=True)
+# ---------------------------------------------------------------- logo and title (top), order number (bottom)
+def free_rect(w, h, bottom, prefer):
+    """Top-left corner of the free w x h area nearest to prefer (x, y), 1 mm grid."""
+    allobs = OBST[bottom] + TEXTS[bottom]
+    cands = sorted(((x, y) for x in range(1, int(149 - w)) for y in range(13, int(149 - h))),
+                   key=lambda c: (c[0] - prefer[0]) ** 2 + (c[1] - prefer[1]) ** 2)
+    return next(((x, y) for x, y in cands if clear((x, y, x + w, y + h), bottom, near=allobs)), None)
+
+
+LOGO.SetReference("LOGO")
+LOGO.GetField(pcbnew.FIELD_T_REFERENCE).SetVisible(False)
+LOGO.GetField(pcbnew.FIELD_T_VALUE).SetVisible(False)
+b.Add(LOGO)
+lb = to_mm(LOGO.GetBoundingBox(False))
+lw, lh = lb[2] - lb[0], lb[3] - lb[1]
+spot = free_rect(lw, lh + 3.2, False, (2, 120))
+if spot:
+    LOGO.SetPosition(LOGO.GetPosition() + pcbnew.VECTOR2I(MM(spot[0] - lb[0]), MM(spot[1] - lb[1])))
+    TEXTS[False].append(to_mm(LOGO.GetBoundingBox(False)))
+    text("POWER BOARD  ${REV}", spot[0] + lw / 2, spot[1] + lh + 1.6, h=1.8, bold=True, reach=1.0)
+else:
+    missed.append("BMR logo")
 text("JLCJLCJLCJLC", 75.0, 12.0, h=1.0, bottom=True, free=True)
 
 for v, bottom in tp_labels:                                  # test-pad names last, around the rest

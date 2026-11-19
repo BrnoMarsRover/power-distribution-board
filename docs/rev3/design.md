@@ -923,7 +923,7 @@ layout.
   switches 42V drive + converter eFuses      | 24V    | 12V    | 5V    | MOTOR SW, ORIN UART
   outputs  42V DRIVE (3 XT90)  42V CONV (2)  | 24V ×6 | 12V ×6 | 5V ×6 | 54V eFuse, boost
            BRAKE RESISTOR XT60 · aux supply  | Deans  | XT60   | XT30  | ZYXEL out
-  bottom edge: CAN 1 · CAN 2
+  right edge under the ESP32: CAN 1 · CAN 2       bottom-left: 54V ZYXEL out
   ```
 
   - Every input sits above the switch it feeds, and every switch above its own output
@@ -972,8 +972,8 @@ layout.
   - Every input named with its voltage, + / − under its pins.
   - "ALL CONNECTORS: + LEFT − RIGHT", "BRAKE RESISTOR", "54V ZYXEL".
   - Every control connector named; "ON" beside each rail LED; "BYPASS" on every bridge.
-  - On the bottom: every test pad's net name beside it, the board name and revision, the
-    bypass warning, and the JLC order-number spot.
+  - On the top: rev2's BMR rover logo with "POWER BOARD" and the revision under it.
+  - On the bottom: every test pad's net name beside it and the JLC order-number spot.
   - Reference designators are on the fab (assembly) layers only, to keep the silkscreen
     readable. Hand assembly uses the interactive BOM or the fab drawing.
 - **Tools** (run in order, before any hand placement):

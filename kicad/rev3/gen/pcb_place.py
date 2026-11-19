@@ -245,7 +245,10 @@ for rail, net_ in (("24", "OUT24"), ("12", "OUT12"), ("5", "OUT5")):
         upright(f, tall=True)                                        # every PTC is a 2920 standing upright
         fl, ft, fr, fb = box(f)
         put(ptc_of[j][0], cbox[0] - 1.2 - (fr - fl), (cbox[1] + cbox[3]) / 2 - (fb - ft) / 2, orient=lambda fp: None)
-put("J13", COL["54"][1] - 8.4, 133.5)                                # Zyxel 54 V out, bottom of the 54 V column
+# Zyxel 54 V out: bottom-left, on the board edge under the converter column
+plus_left(FP["J13"])
+l, t, r, bt = box(FP["J13"])
+put("J13", 28.0, 149.4 - (bt - t))
 
 
 def opening(fp, d=(0, 1)):
@@ -263,14 +266,12 @@ def opening(fp, d=(0, 1)):
     fp.SetOrientationDegrees(best[1])
 
 
-# CAN on the bottom edge (plugs in from the edge)
-x = 50.5
-for ref in ("J34", "J35"):
+# CAN on the right edge under the ESP32 (plug in from the edge)
+for ref, y in (("J34", 87.0), ("J35", 101.0)):
     fp = FP[ref]
-    opening(fp, (0, 1))
+    opening(fp, (1, 0))
     l, t, r, bt = box(fp)
-    put(ref, x, 149.4 - (bt - t), orient=lambda f: None)
-    x += (r - l) + 0.7
+    put(ref, 149.4 - (r - l), y, orient=lambda f: None)
 
 # USB-C on the left edge under the battery input, opening outwards
 opening(FP["J32"], (-1, 0))
@@ -299,13 +300,13 @@ ZONES = {
     "12 V rail eFuse": ((75.5, 12, 102.5, 71.5), (75.5, 12, 102.5, 71.5)),
     "5 V rail eFuse": ((102.5, 10, 123.5, 71.5), (102.5, 10, 123.5, 71.5)),
     "54 V supply eFuse": ((123.5, 36, 149, 64), (123.5, 36, 149, 64)),
-    "54 V boost": ((123.5, 88, 149, 133), (123.5, 36, 149, 133)),
+    "54 V boost": ((123.5, 114, 149, 149), (123.5, 36, 149, 149)),
     "Brake chopper": ((1.5, 121.5, 26, 149), (1.5, 121.5, 26, 149)),
     "Always-on aux": ((26.5, 98, 50.5, 149), (26.5, 98, 50.5, 149)),
     "Rail inputs": ((51, 131, 123.5, 149), (51, 72, 123.5, 149)),
     "ESP32-S3": ((123.5, 64, 149, 90), (123.5, 60, 149, 100)),
     "Switch control": ((78, 131, 123.5, 149), (51, 72, 123.5, 149)),
-    "CAN bus": ((51, 131, 123.5, 149), (51, 72, 123.5, 149)),
+    "CAN bus": ((123.5, 84, 140, 114), (123.5, 84, 149, 118)),
 }
 SUPPLIES = ("54 V boost", "Always-on aux")   # SMD parts on the bottom, the whole switching loop on that side
 POWER_1210 = ("Battery input",)
