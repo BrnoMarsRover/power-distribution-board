@@ -17,8 +17,8 @@ One TPS48111-Q1 eFuse per rail (two for the 42 V outputs), with a resettable PTC
 | R_SET | 100R | 100R | 100R | 100R | 100R | 100R |
 | R_IWRN | 39.2k -> trips at 60.7 A | 39.2k -> trips at 30.4 A | 53.6k -> trips at 11.1 A | 53.6k -> trips at 11.1 A | 71.5k -> trips at 16.6 A | 78.7k -> trips at 5.0 A |
 | C_TMR (R_TMR 100k, latch-off) | 68uF -> 1076 ms | 33uF -> 522 ms | 33uF -> 522 ms | 33uF -> 522 ms | 33uF -> 522 ms | 33uF -> 522 ms |
-| R_ISCP | 4.32k -> 149 A in 1.2 us | 5.9k -> 99 A in 1.2 us | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | 3.4k -> 20 A in 1.2 us |
-| R_IMON | 6.98k -> 31 mV/A, 2.4 V at 76 A | 6.98k -> 63 mV/A, 2.4 V at 38 A | 9.53k -> 172 mV/A, 2.4 V at 14 A | 9.53k -> 172 mV/A, 2.4 V at 14 A | 12.7k -> 114 mV/A, 2.4 V at 21 A | 14k -> 378 mV/A, 2.4 V at 6 A |
+| R_ISCP | 4.3k -> 149 A in 1.2 us | 6.2k -> 104 A in 1.2 us | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | 3.3k -> 20 A in 1.2 us |
+| R_IMON | 6.8k -> 31 mV/A, 2.4 V at 76 A | 6.8k -> 61 mV/A, 2.4 V at 38 A | 9.1k -> 164 mV/A, 2.4 V at 14 A | 9.1k -> 164 mV/A, 2.4 V at 14 A | 12k -> 108 mV/A, 2.4 V at 21 A | 13k -> 351 mV/A, 2.4 V at 6 A |
 | C_g / R_g (pre-charge slew) | 1uF / 330R -> 0.4 A for 420 ms | 470nF / 330R -> 0.4 A for 197 ms | 390nF / 330R -> 1.0 A for 94 ms | 150nF / 330R -> 2.2 A for 18 ms | 120nF / 330R -> 2.0 A for 6 ms | 150nF / 330R -> 0.4 A for 63 ms |
 | Pre-charge FET stress | 3.32 J, 16 W peak (ASSUMED 3.76mF load) - check its SOA | 1.66 J, 17 W peak (ASSUMED 1.88mF load) - check its SOA | 1.08 J, 23 W peak (ASSUMED 3.76mF load) - check its SOA | 0.24 J, 26 W peak (ASSUMED 3.29mF load) - check its SOA | 0.03 J, 10 W peak (ASSUMED 2.42mF load) - check its SOA | 0.53 J, 17 W peak (ASSUMED 600uF load) - check its SOA |
 | C_BST | 15uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 6.8uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 4.7uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 2.2uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 1.5uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 2.2uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) |
@@ -50,15 +50,15 @@ The 12 V eFuse starts only once the converter group is fully on, so its pre-char
 | Controller | LM5122MHX/NOPB, synchronous boost, 65 V in (75 V abs max on VIN/CSP/CSN), 105 V switch node; MODE grounded = diode emulation, so no reverse current into the battery |
 | Operating point | 30-42 V in -> 54 V, 100 W (1.85 A); the XMG-105HP draws 90 W at most, 70 W of it PoE |
 | Duty cycle | 0.26 - 0.47 (below 50 %, so slope compensation is not critical) |
-| Switching frequency | 400 kHz, RT = 22.6k |
+| Switching frequency | 400 kHz, RT = 22k |
 | Inductor | MSS1583-223MED (Coilcraft), 22 uH, Isat 10.4 A (above the 8.75 A max current limit), DCR 26 mOhm, 0.32 W |
 | Input current | 3.51 A average at 30 V, ripple 1.61 A p-p, peak 4.31 A |
 | Current sense R_S | 10 mOhm -> cycle-by-cycle limit 6.5 / 7.5 / 8.8 A (min / typ / max), below Isat |
 | FETs | FDD86102 (100 V, DPAK, Qg 19 nC) for both low and high side. Low gate charge matters: the LM5122 drives both gates from its internal VCC regulator, fed from VIN. That is 11 mA, or 0.47 W in the LM5122 at 42 V in. A D2PAK (117 nC) would burn about 3 W. |
 | Feedback | R_top 221k / R_bot 4.99k -> 54.35 V |
 | Output capacitors | 6 x 2.2uF 100 V X7R 1210 (~5.94uF effective at 54 V) + 2 x 100uF / 100 V EEU-FC2A101; ripple ~368 mV |
-| Slope compensation | R_SLOPE 80.6k -> K = 0.85 at 30 V, 1.07 at 42 V (target >= 0.82; minimum R_SLOPE 9.23k) |
-| Loop compensation (COMP to FB) | R_COMP 205k + C_COMP 15nF in series, C_HF 82pF across. Crossover 7.9-11.1 kHz; RHP zero 65 kHz at 30 V; zero on the load pole (52 Hz), HF pole on the bulk-cap ESR zero (8.8 kHz). Confirm with a load-step test. |
+| Slope compensation | R_SLOPE 82k -> K = 0.85 at 30 V, 1.07 at 42 V (target >= 0.82; minimum R_SLOPE 9.23k) |
+| Loop compensation (COMP to FB) | R_COMP 200k + C_COMP 15nF in series, C_HF 82pF across. Crossover 7.7-10.8 kHz; RHP zero 65 kHz at 30 V; zero on the load pole (52 Hz), HF pole on the bulk-cap ESR zero (8.8 kHz). Confirm with a load-step test. |
 | Output TVS | SMBJ58A-13-F: standoff 58 V, above the 57 V PoE maximum; clamps at 93.6 V, under the 105 V switch node and the FETs' 100 V |
 | Bootstrap diode | BAS21 (200 V): it blocks VOUT plus switching ringing, more than a 75-100 V 1N4148W should see |
 | Enable | UVLO is held low by Q_BEN until firmware clears BOOST_DIS (expander P15), after the 54 V eFuse is fully on. The boost never runs off its eFuse's pre-charge FET |

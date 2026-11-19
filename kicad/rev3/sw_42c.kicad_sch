@@ -2229,7 +2229,7 @@
 		)
 		(uuid "61b1e222-017f-5e29-ba42-d348f3fe2830")
 	)
-	(text "TPS48111-Q1 + 2 x IPB042N10N3G main + 1 pre-charge. Values from docs/rev3/rails.md (trip 30.4 A after 522 ms, latch-off; short-circuit 99 A)."
+	(text "TPS48111-Q1 + 2 x IPB042N10N3G main + 1 pre-charge. Values from docs/rev3/rails.md (trip 30.4 A after 522 ms, latch-off; short-circuit 104 A)."
 		(exclude_from_sim no)
 		(at 20 24 0)
 		(effects
@@ -3788,7 +3788,7 @@
 				)
 			)
 		)
-		(property "Value" "5.23k"
+		(property "Value" "5.1k"
 			(at 292.1 152.4 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4253,7 +4253,7 @@
 				)
 			)
 		)
-		(property "Value" "210k"
+		(property "Value" "220k"
 			(at 86.36 128.27 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4580,7 +4580,7 @@
 				)
 			)
 		)
-		(property "Value" "20k"
+		(property "Value" "22k"
 			(at 309.88 134.62 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7453,7 +7453,7 @@
 				)
 			)
 		)
-		(property "Value" "5.9k"
+		(property "Value" "6.2k"
 			(at 129.54 111.76 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8264,7 +8264,7 @@
 				)
 			)
 		)
-		(property "Value" "6.98k"
+		(property "Value" "6.8k"
 			(at 139.7 219.71 90)
 			(show_name no)
 			(do_not_autoplace no)

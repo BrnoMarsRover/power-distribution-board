@@ -26,7 +26,12 @@ E96 = [1.00, 1.02, 1.05, 1.07, 1.10, 1.13, 1.15, 1.18, 1.21, 1.24, 1.27, 1.30, 1
        4.75, 4.87, 4.99, 5.11, 5.23, 5.36, 5.49, 5.62, 5.76, 5.90, 6.04, 6.19, 6.34,
        6.49, 6.65, 6.81, 6.98, 7.15, 7.32, 7.50, 7.68, 7.87, 8.06, 8.25, 8.45, 8.66,
        8.87, 9.09, 9.31, 9.53, 9.76]
+E24 = [1.0, 1.1, 1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.4, 2.7, 3.0, 3.3, 3.6, 3.9, 4.3, 4.7,
+       5.1, 5.6, 6.2, 6.8, 7.5, 8.2, 9.1]
 E12 = [1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2]
+# Value policy (2026-11-19): E96 only where the value sets a threshold or voltage that matters
+# (eFuse trip current, converter feedback dividers, brake comparator, CAN termination).
+# Everything else is E24 (or E6 for LED resistors) to keep the BOM short.
 E6 = [1.0, 1.5, 2.2, 3.3, 4.7, 6.8]
 
 
@@ -34,6 +39,13 @@ def nearest(value, series):
     decade = 10 ** math.floor(math.log10(value))
     return min([s * decade for s in series] + [series[0] * decade * 10],
                key=lambda c: abs(c - value))
+
+
+def floor_e(value, series):
+    """Largest series value <= value (for a full scale that must not be exceeded)."""
+    decade = 10 ** math.floor(math.log10(value))
+    return max(s for s in [x * decade for x in series] + [series[-1] * decade / 10]
+               if s <= value * 1.001)
 
 
 def ceil_e(value, series):
@@ -144,13 +156,13 @@ def rail_values(r):
     v["r_tmr"] = R_TMR
     # Eq. 11: R_ISCP = I_SC * R_SNS / 15.6 uA - 464; None = ISCP tied to CS- (disabled)
     if r["i_sc"]:
-        v["r_iscp"] = nearest(r["i_sc"] * r["r_sns"] / 15.6e-6 - 464, E96)
+        v["r_iscp"] = nearest(r["i_sc"] * r["r_sns"] / 15.6e-6 - 464, E24)
         v["i_sc"] = (v["r_iscp"] + 464) * 15.6e-6 / r["r_sns"]
     else:
         v["r_iscp"] = v["i_sc"] = None
     # Eq. 12/13: V_IMON = V_SNS * 0.9 * R_IMON / R_SET, full scale at 1.25 x I_OC
     v["i_fs"] = 1.25 * v["i_oc"]
-    v["r_imon"] = nearest(ADC_FULL_SCALE_V * R_SET / (0.9 * v["i_fs"] * r["r_sns"]), E96)
+    v["r_imon"] = floor_e(ADC_FULL_SCALE_V * R_SET / (0.9 * v["i_fs"] * r["r_sns"]), E24)
     v["mv_per_a"] = 0.9 * v["r_imon"] / R_SET * r["r_sns"] * 1e3
     # Eq. 5: pre-charge gate slew, C_g = C_LOAD * I_G / I_INRUSH
     v["c_load"] = r["c_out"] * r["n_out"]
@@ -215,7 +227,7 @@ def boost_values(b):
     d_lo = b["vin_min"] / v["vout"]                        # D' at minimum input
     d_hi = b["vin_max"] / v["vout"]
     # slope: R_SLOPE = L * 6e9 / ((K * VOUT - VIN_min) * RS * A_S), then K back over the input range
-    v["r_slope"] = nearest(L * 6e9 / ((b["k_slope"] * v["vout"] - b["vin_min"]) * rs * b["a_s"]), E96)
+    v["r_slope"] = nearest(L * 6e9 / ((b["k_slope"] * v["vout"] - b["vin_min"]) * rs * b["a_s"]), E24)
     k = lambda vin: (1 + L * 6e9 / (vin * rs * b["a_s"] * v["r_slope"])) * vin / v["vout"]
     v["k_lo"], v["k_hi"] = k(b["vin_min"]), k(b["vin_max"])
     v["r_slope_min"] = 5.7e9 / b["fsw"] * (1.2 - b["vin_min"] / v["vout"])
@@ -227,7 +239,7 @@ def boost_values(b):
     v["f_load"] = 2 / (2 * math.pi * r_load * c_out)
     v["f_esr"] = 1 / (2 * math.pi * (b["esr_bulk"] / b["n_bulk"]) * (b["n_bulk"] * b["c_bulk"]))
     # eq. 18: f_cross = R_COMP * D' / (pi * RS * R_FB2 * A_S * C_OUT); D' smallest at VIN_min
-    v["r_comp"] = nearest(b["f_cross"] * math.pi * rs * v["r_top"] * b["a_s"] * c_out / d_lo, E96)
+    v["r_comp"] = nearest(b["f_cross"] * math.pi * rs * v["r_top"] * b["a_s"] * c_out / d_lo, E24)
     v["c_comp"] = nearest(1 / (2 * math.pi * v["r_comp"] * v["f_load"]), E12)        # zero on the load pole
     v["c_hf"] = nearest(1 / (2 * math.pi * v["r_comp"] * v["f_esr"]), E12)            # pole on the ESR zero
     fc = lambda dp: v["r_comp"] * dp / (math.pi * rs * v["r_top"] * b["a_s"] * c_out)
@@ -244,7 +256,7 @@ def design_boost(b):
     ripple = b["vin_min"] * d_max / (b["fsw"] * L)
     i_pk = i_in + ripple / 2
     # Eq. 4: RT = 9e9 / fSW
-    rt = nearest(9e9 / b["fsw"], E96)
+    rt = nearest(9e9 / b["fsw"], E24)
     # cycle-by-cycle limit: V_CS-TH1 = 65.5 / 75 / 87.5 mV (min / typ / max)
     r_s = nearest(0.0655 / (1.4 * i_pk), E12)
     lim = [v / r_s for v in (0.0655, 0.075, 0.0875)]

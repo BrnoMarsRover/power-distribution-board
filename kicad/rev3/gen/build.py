@@ -759,7 +759,7 @@ TVS_IN = {"24V": "SMBJ26A", "12V": "SMBJ13A", "5V": "SMBJ6.0A"}
 
 
 def divider_bottom(top, v_full, v_adc=2.4):
-    return rails.nearest(top * v_adc / (v_full - v_adc), rails.E96)
+    return rails.floor_e(top * v_adc / (v_full - v_adc), rails.E24)     # floor: never above the ADC range
 
 
 def sheet_power_in():
@@ -923,7 +923,7 @@ def sheet_switch(r):
     gnd(PIN(c2, 2))
 
     # --- EN/UVLO divider (and the motor-switch kill FET on the drive group)
-    r_top = rails.nearest(10e3 * (UVLO_ON[r["name"]] / 1.18 - 1), rails.E96)
+    r_top = rails.nearest(10e3 * (UVLO_ON[r["name"]] / 1.18 - 1), rails.E24)
     ret = R(sh, r_top, vin, en, at=(66.04, 128.27), rot=0)
     reb = R(sh, 10e3, en, "GND", at=(66.04, 146.05), rot=0)
     W((66.04, yR), PIN(ret, 1))
@@ -1021,7 +1021,7 @@ def sheet_switch(r):
         cv = C(sh, 10e-9, vsn, "GND", at=(xd + 5.08, 149.86), rot=0)
         W((xd, 146.05), PIN(cv, 1))
         gnd(PIN(cv, 2))
-    r_led = rails.nearest((r["v"] - 2.0) / 2e-3, rails.E96)
+    r_led = rails.nearest((r["v"] - 2.0) / 2e-3, rails.E6)
     rl = R(sh, r_led, out, "L:LED", fp="R1206" if r["v"] > 20 else "R0603", at=(289.56, 134.62), rot=0)
     led = LED(sh, "green", "GND", "L:LED", at=(289.56, 146.05), rot=90)
     W((289.56, yO), PIN(rl, 1))
@@ -1299,9 +1299,9 @@ def sheet_boost():
     at_pin(rut, 2, (35.56, P(6)[1]))
     W((35.56, yi), PIN(rut, 1))
     W(P(6), PIN(rut, 2))
-    hang(sh, R(sh, 9.31e3, "L:UVLO", "GND", rot=0), PIN(rut, 2))
+    hang(sh, R(sh, 9.1e3, "L:UVLO", "GND", rot=0), PIN(rut, 2))
     comb = [(7, 43.18, C(sh, 100e-9, "L:SS", "GND", rot=0)),
-            (8, 50.8, R(sh, rails.nearest(9e9 / b["fsw"], rails.E96), "L:RT", "GND", rot=0)),
+            (8, 50.8, R(sh, rails.nearest(9e9 / b["fsw"], rails.E24), "L:RT", "GND", rot=0)),
             (12, 58.42, R(sh, bv["r_slope"], "L:SLOPE", "GND", rot=0)),
             (14, 66.04, C(sh, 470e-9, "L:RES", "GND", rot=0))]
     for pin_, x, part in comb:
@@ -1343,7 +1343,7 @@ def sheet_boost():
     for x in (259.08, 274.32):
         hang(sh, CP(sh, "100uF/100V", "OUT54", "GND", fp="CPR12", rot=0, MPN="EEU-FC2A101"), (x, yi))
     hang(sh, DZ(sh, "SMBJ58A", "OUT54", "GND", rot=270, MPN="SMBJ58A-13-F"), (289.56, yi))
-    rl = hang(sh, R(sh, 26.1e3, "OUT54", "L:LED", fp="R1206", rot=0), (304.8, yi), gnd=False)
+    rl = hang(sh, R(sh, 22e3, "OUT54", "L:LED", fp="R1206", rot=0), (304.8, yi), gnd=False)
     led = LED(sh, "green", "GND", "L:LED", rot=90)
     at_pin(led, 2, (304.8, PIN(rl, 2)[1] + 2.54))
     W(PIN(rl, 2), PIN(led, 2))
@@ -1393,11 +1393,11 @@ def sheet_aux():
     W((25.4, yr), P(2))
     for x in (35.56, 48.26):
         hang(sh, C(sh, 2.2e-6, "BUS42", "GND", fp="C1210", volt=100, rot=0, MPN="GRM32ER72A225KA35L"), (x, yr))
-    ron = hang(sh, R(sh, 147e3, "BUS42", "L:RON", fp="R1206", rot=0), (78.74, yr), gap=0, gnd=False)
+    ron = hang(sh, R(sh, 150e3, "BUS42", "L:RON", fp="R1206", rot=0), (78.74, yr), gap=0, gnd=False)
     W(P(4), PIN(ron, 2))
     rut = hang(sh, R(sh, 100e3, "BUS42", "L:UVLO", fp="R1206", rot=0), (63.5, yr), gap=P(3)[1] - yr - 7.62, gnd=False)
     W(P(3), PIN(rut, 2))
-    hang(sh, R(sh, 6.49e3, "L:UVLO", "GND", rot=0), PIN(rut, 2))
+    hang(sh, R(sh, 6.8e3, "L:UVLO", "GND", rot=0), PIN(rut, 2))
     W(P(1), (P(1)[0], P(1)[1] + 2.54), (P(9)[0], P(9)[1] + 2.54), P(9))
     W((101.6, P(1)[1] + 2.54), (101.6, P(1)[1] + 5.08))
     gnd((101.6, P(1)[1] + 5.08))

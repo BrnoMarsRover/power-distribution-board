@@ -4985,7 +4985,7 @@
 				)
 			)
 		)
-		(property "Value" "9.53k"
+		(property "Value" "9.1k"
 			(at 292.1 152.4 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6914,7 +6914,7 @@
 				)
 			)
 		)
-		(property "Value" "9.53k"
+		(property "Value" "9.1k"
 			(at 139.7 219.71 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7958,7 +7958,7 @@
 				)
 			)
 		)
-		(property "Value" "8.66k"
+		(property "Value" "8.2k"
 			(at 71.12 134.62 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8537,7 +8537,7 @@
 				)
 			)
 		)
-		(property "Value" "143k"
+		(property "Value" "150k"
 			(at 86.36 128.27 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9007,7 +9007,7 @@
 				)
 			)
 		)
-		(property "Value" "11k"
+		(property "Value" "10k"
 			(at 309.88 134.62 90)
 			(show_name no)
 			(do_not_autoplace no)
