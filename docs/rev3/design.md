@@ -1034,10 +1034,10 @@ layout.
      - **Planes:** L2 is a solid GND plane; L4 has a GND fill.
      - The earlier automatic pours (`pcb_pours.py`, convex hulls around each net's pads) were
        removed: their shapes ignored the current flow and blocked the gate and sense routing.
-  2c. `gen/power_rails.py` (copper also run by `pcb_power42.py`) — the 24 V and 12 V blocks, designed by
+  2c. `gen/power_rails.py` (copper also run by `pcb_power42.py`) — the 24, 12 and 5 V blocks, designed by
      hand in the 42 V blocks' pattern (2026-11-19). One entry per rail in `RAILS` (column edges and part
-     references); the geometry is shared. 5 V still uses the generic column code until it gets its entry.
-     The 24 V path is described below; 12 V is the same with VIN12 / OUT12, J6 and XT60s.
+     references); the geometry is shared. The 24 V path is described below; 12 V is the same with VIN12 /
+     OUT12, J6 and XT60s; 5 V differs as described after it.
      - **Current path:** 24 V IN Deans + → VIN24 area (both bulk caps, the TVS) → R41 upright on the
        VIN24 / DRN boundary → DRN area (pre-charge FET Q11 on top, main FET Q10 below, LED, bridge pad 1)
        → source leads → 7.7 mm OUT24 strip on the left → full-width OUT24 area under the logo.
@@ -1048,8 +1048,23 @@ layout.
        + pin on the same row (strip → PTC → connector, left to right). Upright PTCs would leave only
        about 3 mm for the strip. PTC and connector courtyards sit 0.8 mm apart.
      - **Column widths:** 24 V copper 50.8–76.0 mm, 12 V 76.5–103.2 mm (XT60s are 1.9 mm wider than
-       Deans). The 5 V column moved 0.5 mm right to 104.5–122.5 mm; its hand layout will need about
-       3 mm more, taken from the 54 V area.
+       Deans), 5 V 104.1–125.6 mm.
+     - **5 V is L-shaped.** Its XT30 column is 21.5 mm wide, but the switch needs about 25 mm (the shunt
+       sits beside the pre-charge FET). So the VIN area and the top of the DRN area run full width to
+       130.9 mm, beside the JST block, down to y = 34.6 mm; below that the DRN area, OUT area and outputs
+       stop at 125.6 mm.
+       - The TVS stands upright right of J7, its ground pad in the patch with J7's − pin (there is no room
+         under the pin: the bulk caps take the width).
+       - The bypass bridge stands under the main FET at the column's right edge: pad 1 in a short DRN
+         tongue, pad 2 in the L1 OUT5 area, so bypass current stays on 2 oz copper here too.
+       - The XT30 footprints' own + / − texts moved to the fab layer: they landed on the PTC pads. The
+         column header and the input's marks carry the polarity, as on the Deans and XT60 columns.
+     - **54 V supply eFuse moved** (placement only; its copper comes with the 54 V work): under the JST
+       block, right of the 5 V column, x 126.1–149.4 mm, y 35.1–61 mm. Pre-charge Q20 above main Q19,
+       leads left; R95 (BUS42 in), the LED and the bypass bridge in a column right of the tabs.
+     - **Right column:** the ESP32 moved up 1.6 mm and USB-C, RESET and BOOT up 1 mm, which gives the
+       USB and CAN 1 labels their row. The ESP status LEDs stand in a column left of the module, red /
+       yellow / green from the top, named on their left.
      - **Ground:** the TVS ground pad shares an L1 patch with the input's − pin. The outputs' − pins
        reach the L2 plane and the L4 fill through their plated holes.
      - **L3:** an OUT24 copy under the switch and the full-width area, stitched to L1 at the FET

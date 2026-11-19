@@ -305,20 +305,20 @@ for (x0, y0), refs in JST_ROWS:
 # ---------------------------------------------------------------- zones: (top, bottom) per sheet prefix
 ZONES = {
     "Battery input": ((1.5, 21, 50.5, 35.5), (1.5, 21, 50.5, 35.5)),
-    "USB": ((123.5, 82, 149, 94), (123.5, 78, 149, 100)),
+    "USB": ((126.1, 82, 149, 94), (123.5, 78, 149, 100)),
     "42 V drive group": ((1.5, 35.5, 25.5, 71.5), (1.5, 35.5, 25.5, 71.5)),
     "42 V converter-feed": ((25.5, 35.5, 50.5, 71.5), (25.5, 35.5, 50.5, 71.5)),
     "24 V rail eFuse": ((51, 12, 76.0, 71.5), (51, 12, 76.0, 71.5)),
     "12 V rail eFuse": ((76.5, 12, 103.3, 71.5), (76.5, 12, 103.3, 71.5)),
-    "5 V rail eFuse": ((104.0, 10, 123.5, 71.5), (104.0, 10, 123.5, 71.5)),
-    "54 V supply eFuse": ((123.5, 36, 149, 61.5), (123.5, 36, 149, 61.5)),
-    "54 V boost": ((123.5, 120.6, 149, 149), (123.5, 36, 149, 149)),
+    "5 V rail eFuse": ((104.1, 10, 125.6, 71.5), (104.1, 10, 125.6, 71.5)),
+    "54 V supply eFuse": ((126.1, 35.1, 149.4, 61.1), (126.1, 35.1, 149.4, 61.1)),   # under the JST block
+    "54 V boost": ((126.1, 120.6, 149, 149), (123.5, 36, 149, 149)),
     "Brake chopper": ((1.5, 121.5, 26, 149), (1.5, 121.5, 26, 149)),
     "Always-on aux": ((26.5, 98, 50.5, 149), (26.5, 98, 50.5, 149)),
     "Rail inputs": ((51, 131, 123.5, 149), (51, 72, 123.5, 149)),
-    "ESP32-S3": ((123.5, 62, 149, 97), (123.5, 58, 149, 100)),
+    "ESP32-S3": ((126.1, 62, 149, 97), (123.5, 58, 149, 100)),
     "Switch control": ((78, 131, 123.5, 149), (51, 72, 123.5, 149)),
-    "CAN bus": ((123.5, 93.5, 139, 120.5), (123.5, 93.5, 149, 121)),
+    "CAN bus": ((126.1, 93.5, 139, 120.5), (123.5, 93.5, 149, 121)),
 }
 SUPPLIES = ("54 V boost", "Always-on aux")   # SMD parts on the bottom, the whole switching loop on that side
 POWER_1210 = ("Battery input",)
@@ -347,7 +347,17 @@ esp = FP["U13"]
 set_side(esp, False)
 esp.SetOrientationDegrees(270)
 l, t, r, bt = box(esp)
-put("U13", 149.4 - (r - l), 61.6, orient=lambda f: None)
+put("U13", 149.4 - (r - l), 60.0, orient=lambda f: None)
+# its status LEDs in a column beside it, red / yellow / green from the top, locked so they stay readable
+y = box(esp)[1] + 0.4
+for ref in ("D20", "D19", "D18"):
+    fp = FP[ref]
+    set_side(fp, False)
+    upright(fp, tall=True)
+    fl, ft, fr, fb = box(fp)
+    put(ref, box(esp)[0] - 0.6 - (fr - fl), y, orient=lambda f: None)
+    fp.SetLocked(True)
+    y += fb - ft + 0.6
 
 # under the ESP32: USB-C on the edge (opening outwards), RESET and BOOT beside it
 # The receptacle's front face (the footprint's "PCB Edge" line) sits on the board edge, so the plug's
@@ -356,14 +366,14 @@ opening(FP["J32"], (1, 0))
 l, t, r, bt = box(FP["J32"])
 face = max(TOMM(g.GetStart().x) - X0 for g in FP["J32"].GraphicalItems()
            if g.GetLayer() == pcbnew.Dwgs_User and isinstance(g, pcbnew.PCB_SHAPE) and g.GetShape() == pcbnew.SHAPE_T_SEGMENT)
-put("J32", W - (face - l), 82.4, orient=lambda f: None)
+put("J32", W - (face - l), 81.4, orient=lambda f: None)
 x = W - (face - l) - 0.7
 for ref in ("SW1", "SW2"):                   # stood upright so both fit beside the USB-C
     fp = FP[ref]
     set_side(fp, False)
     fp.SetOrientationDegrees(90)
     l, t, r, bt = box(fp)
-    put(ref, x - (r - l), 82.4, orient=lambda f: None)
+    put(ref, x - (r - l), 81.4, orient=lambda f: None)
     x -= (r - l) + 0.7
 
 # battery input, both 42 V blocks and the brake: placed by hand (power42.py), locked, their copper kept clear
@@ -377,6 +387,27 @@ for ref in power_rails.place(FP):            # 24 / 12 / 5 V blocks with their i
     fixed.add(ref)
 placed[False] += power_rails.KEEP_TOP
 placed[True] += power_rails.KEEP_BOTTOM
+
+# 54 V supply eFuse under the JST block, right of the 5 V column: pre-charge Q20 above main Q19 (leads left),
+# then a column right of their tabs: shunt R95 (BUS42 in at the top), LED, bypass bridge
+x54, y = power_rails.RAILS["5"]["col_r"] + 0.5, 35.1
+for ref in ("Q20", "Q19"):
+    set_side(FP[ref], False)
+    FP[ref].SetOrientationDegrees(0)
+    l, t, r, bt = put(ref, x54, y, orient=lambda f: None)
+    y = bt + 0.6
+x54, y = r + 0.6, 35.1
+for ref, top, bot in (("R95", "1", "4"), ("D10", "1", "2"), ("JP6", "1", "2")):
+    set_side(FP[ref], False)
+    power42._upright(FP[ref], 0.0, 0.0, top, bot)
+    l, t, r, bt = put(ref, x54, y, orient=lambda f: None)
+    y = bt + 0.6
+power42.label_under(FP["JP6"])
+bypass = next(t for t in FP["JP6"].GraphicalItems() if isinstance(t, pcbnew.PCB_TEXT) and t.GetText() == "BYPASS")
+bb = bypass.GetBoundingBox()                 # keep its label spot free of packed parts
+placed[False].append((TOMM(bb.GetLeft()) - X0, TOMM(bb.GetTop()) - Y0, TOMM(bb.GetRight()) - X0, TOMM(bb.GetBottom()) - Y0))
+for ref in ("Q20", "Q19", "R95", "D10", "JP6"):
+    FP[ref].SetLocked(True)
 
 # keep the label spots under the inputs free (battery label, polarity rule, + / - marks)
 for keep in ((8.0, 12.4, 31.0, 16.3), (51.0, 9.6, 123.0, 12.0), (78.0, 140.0, 122.0, 146.0),

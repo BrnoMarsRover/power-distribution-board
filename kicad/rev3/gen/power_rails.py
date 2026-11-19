@@ -12,6 +12,10 @@ Current path, top to bottom (the 42 V blocks' pattern, one block per column):
      pad inside the strip and its other pad opening straight into the connector's + pin on the same row.
 L3 carries a copy of the OUT area under the switch, stitched to L1. GND returns on the L2 plane and the L4
 fill, through the connectors' plated - pins. Gates, Kelvin pairs and the LED escape to the bottom through vias.
+
+5 V is L-shaped: its XT30 column is narrower than the switch needs, so the switch is full width only beside the
+JST block (y < band_bot) and narrows to the column (col_r) below, where the 54 V eFuse sits. Its TVS stands
+beside the input connector, and its bypass bridge stands under the main FET with pad 1 in a short DRN tongue.
 """
 import pcbnew
 
@@ -26,8 +30,8 @@ DRN_BOT, WIDE_TOP, WIDE_BOT = 45.5, 46.3, 73.8    # DRN area bottom; full-width 
 Y_OUT, ROW = 75.0, 10.2             # output connector courtyard tops (same rows as pcb_place.py)
 LED_Y = 30.0
 TVS_Y, CAP_Y = 14.5, 16.0           # low enough to leave the input's + / - marks their spot
-GND_BOT = 16.2                      # ground patch bottom (input - pin, TVS ground pad)
 BRIDGE_Y = 42.6                     # bridge pad 1 (DRN); pad 2 sits 5.08 mm lower, in the OUT area
+TVS_BESIDE_Y = 6.5                  # tvs_beside: upright TVS right of the input, ground pad up in the patch
 CONN_GAP = 0.8                      # PTC courtyard to connector courtyard (a rail may set its own conn_gap)
 
 # per rail: column copper edges (xl, xr) and the parts; fets = (pre-charge, main)
@@ -36,13 +40,23 @@ RAILS = {
                shunt="R41", fets=("Q11", "Q10"), bridge="JP3", led="D4"),
     "12": dict(xl=76.5, xr=103.2, vin="VIN12", out="OUT12", j_in="J6", tvs="D7", caps=("C48", "C47"),
                shunt="R59", fets=("Q14", "Q13"), bridge="JP4", led="D6"),
+    # L-shaped: full switch width (to xr, J38 starts at 131.6) only above band_bot; DRN, OUT and outputs end at col_r
+    "5": dict(xl=104.1, xr=130.9, col_r=125.6, band_bot=34.6, vin="VIN5", out="OUT5", j_in="J7", tvs="D9",
+              caps=("C59", "C58"), shunt="R77", fets=("Q17", "Q16"), bridge="JP5", led="D8",
+              tvs_beside=True, bridge_below=True),
 }
 
 
 def _geo(r):
     """Derived x positions of one block."""
     xl, xr = r["xl"], r["xr"]
+    col_r = r.get("col_r", xr)
+    bx = col_r - 2.2                                # bridge_below: upright under the main FET, right edge
+    by = FET_ROWS[1] + 5.7 + 0.5 + 2.14             # its courtyard clears the FET's
     return dict(
+        col_r=col_r, band_bot=r.get("band_bot", WIDE_BOT),
+        bridge=(bx, by) if r.get("bridge_below") else (xr - 3.1, BRIDGE_Y),
+        tongue=(bx - 2.2, by + 2.1) if r.get("bridge_below") else None,   # DRN tongue: left edge, bottom
         out_r=xl + 7.7, drn_l=xl + 8.5,            # OUT strip / DRN area split at the FET body
         fet_cx=xl + 12.3,                          # D2PAK origin: leads at -7.65, tab centre at +1.5
         shunt_x=xr - 3.8, side_x=xr - 3.1,         # shunt, LED and bridge on the right of the DRN area
@@ -90,6 +104,14 @@ def _conn_left(FP, r):
     return _box(ptc)[2] + r.get("conn_gap", CONN_GAP)
 
 
+def _hide_marks(fp):
+    """XT30 footprints print their own + / -: on these columns they land on the PTC pads and the neighbours.
+    The column header and the input's marks carry the polarity, as on the Deans and XT60 columns."""
+    for t in fp.GraphicalItems():                  # KiCad cannot hide footprint user text: move it to the fab layer
+        if isinstance(t, pcbnew.PCB_TEXT) and t.GetText() in ("+", "-"):
+            t.SetLayer(pcbnew.B_Fab if fp.IsFlipped() else pcbnew.F_Fab)
+
+
 def place(FP):
     """Position and lock the power parts of every rail in RAILS. Returns the refs placed."""
     done = []
@@ -104,6 +126,7 @@ def place(FP):
             _shift(jf, cl - l, Y_OUT + ROW * k - t)
             yc = _pxy(jf, plus)[1]
             _flat(FP[f], g["ptc_x"], yc, rail, other)
+            _hide_marks(jf)
             done += [j, f]
         # input connector, aligned with the outputs
         jin = FP[r["j_in"]]
@@ -112,9 +135,13 @@ def place(FP):
         _flat(jin, 100.0, 100.0, plus, minus)
         l, t, _, _ = _box(jin)
         _shift(jin, cl - l, Y_IN - t)
+        _hide_marks(jin)
         mx, my = _pxy(jin, minus)
-        # TVS under the - pin (its ground pad in the patch), bulk caps on the left, + pin left
-        _flat(FP[r["tvs"]], mx - 1.1, TVS_Y, "1", "2")
+        # TVS under the - pin or beside the connector (its ground pad in the patch), bulk caps on the left
+        if r.get("tvs_beside"):
+            _upright(FP[r["tvs"]], r["xr"] - 2.4, TVS_BESIDE_Y, "2", "1")
+        else:
+            _flat(FP[r["tvs"]], mx - 1.1, TVS_Y, "1", "2")
         for ref, x in zip(r["caps"], (r["xl"] + 2.35, r["xl"] + 10.15)):
             _flat(FP[ref], x, CAP_Y, "1", "2")
         # switch
@@ -123,7 +150,7 @@ def place(FP):
             _at(FP[ref], g["fet_cx"], cy, 0)
         _upright(FP[r["led"]], g["side_x"], LED_Y, "1", "2")
         br = FP[r["bridge"]]
-        _upright(br, g["side_x"], BRIDGE_Y, "1", "2")
+        _upright(br, *g["bridge"], "1", "2")
         label_under(br)
         done += [r["j_in"], r["tvs"], *r["caps"], r["shunt"], *r["fets"], r["led"], r["bridge"]]
     for ref in done:
@@ -143,7 +170,8 @@ def _escapes(r):
 KEEP_TOP, KEEP_BOTTOM = [], []
 for _r in RAILS.values():
     _g = _geo(_r)
-    KEEP_TOP += [(_r["xl"], 0.5, _r["xr"], WIDE_BOT), (_r["xl"], WIDE_BOT, _g["strip_r"], 136.0)]
+    KEEP_TOP += [(_r["xl"], 0.5, _r["xr"], _g["band_bot"]), (_r["xl"], _g["band_bot"], _g["col_r"], WIDE_BOT),
+                 (_r["xl"], WIDE_BOT, _g["strip_r"], 136.0)]
     KEEP_BOTTOM += [(_r["xl"], OUT_TOP, _g["out_r"], WIDE_TOP),           # FET source via fields
                     (_r["xl"], WIDE_TOP, _r["xl"] + 3.7, WIDE_BOT)]       # stitching column
     KEEP_BOTTOM += [(x - 1.0, y - 1.0, x + 1.0, y + 1.0) for x, y in _escapes(_r)]
@@ -225,17 +253,31 @@ def copper(b):
         rows = outputs(FP, r)
         mx = _pxy(FP[r["j_in"]], _pad_on(FP[r["j_in"]], "GND").GetNumber())[0]
         gnd_l = mx - 1.5                                      # ground patch: input - pin and the TVS ground pad
+        gnd_bot = TOMM(_pad(FP[r["tvs"]], "2").GetBoundingBox().GetBottom()) - Y0 + 0.55
+        col_r, band = g["col_r"], g["band_bot"]
         # input: VIN area with a notch for the ground patch
-        zone(vin, F, [(xl, 0.5), (gnd_l - 0.6, 0.5), (gnd_l - 0.6, GND_BOT + 0.5), (xr, GND_BOT + 0.5),
+        zone(vin, F, [(xl, 0.5), (gnd_l - 0.6, 0.5), (gnd_l - 0.6, gnd_bot + 0.5), (xr, gnd_bot + 0.5),
                       (xr, VIN_BOT), (xl, VIN_BOT)], 40, f"{key} VIN")
-        zone("GND", F, rect(gnd_l, 0.5, xr, GND_BOT), 40, f"{key} input GND")
-        # switch: DRN area, OUT strip + full-width OUT area + output strip (L1), OUT copy under the switch (L3)
-        zone(drn, F, rect(g["drn_l"], DRN_TOP, xr, DRN_BOT), 40, f"{key} DRN")
+        zone("GND", F, rect(gnd_l, 0.5, xr, gnd_bot), 40, f"{key} input GND")
+        # switch: DRN area (full width above the band, column width below, tongue for a bridge under the FET),
+        # OUT strip + full-width OUT area + output strip (L1), OUT copy under the switch (L3)
+        drn_pts = [(g["drn_l"], DRN_TOP), (xr, DRN_TOP)]
+        drn_pts += [(xr, band), (col_r, band)] if col_r < xr else []
+        if g["tongue"]:
+            tl, tb = g["tongue"]
+            drn_pts += [(col_r, tb), (tl, tb), (tl, DRN_BOT)]
+        else:
+            drn_pts += [(col_r, DRN_BOT)]
+        zone(drn, F, drn_pts + [(g["drn_l"], DRN_BOT)], 40, f"{key} DRN")
         y_end = _pxy(FP[rows[-1][1]], rows[-1][2])[1] + 3.2
-        zone(out, F, [(xl, OUT_TOP), (g["out_r"], OUT_TOP), (g["out_r"], WIDE_TOP), (xr, WIDE_TOP),
-                      (xr, WIDE_BOT), (g["strip_r"], WIDE_BOT), (g["strip_r"], y_end), (xl, y_end)],
+        out_pts = [(xl, OUT_TOP), (g["out_r"], OUT_TOP), (g["out_r"], WIDE_TOP)]
+        if g["tongue"]:                                   # around the tongue, 0.5 mm off
+            out_pts += [(tl - 0.5, WIDE_TOP), (tl - 0.5, tb + 0.5), (col_r, tb + 0.5)]
+        else:
+            out_pts += [(col_r, WIDE_TOP)]
+        zone(out, F, out_pts + [(col_r, WIDE_BOT), (g["strip_r"], WIDE_BOT), (g["strip_r"], y_end), (xl, y_end)],
              40, f"{key} OUT", radius=OUT_RADIUS)
-        zone(out, IN2, rect(xl, OUT_TOP, xr, WIDE_BOT), 40, f"{key} OUT (L3)", clear=0.3, radius=OUT_RADIUS)
+        zone(out, IN2, rect(xl, OUT_TOP, col_r, WIDE_BOT), 40, f"{key} OUT (L3)", clear=0.3, radius=OUT_RADIUS)
         # each output: PTC output pad -> connector + pin, one patch per row
         for j, f, rail, other, plus, minus in rows:
             p = _pad(FP[f], other).GetBoundingBox()
