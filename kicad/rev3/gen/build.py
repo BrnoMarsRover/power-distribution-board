@@ -664,7 +664,7 @@ FP = dict(
     SOD123="Diode_SMD:D_SOD-123",
     LED="LED_SMD:LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder",
     TP="TestPoint:TestPoint_Pad_D1.5mm",
-    TPLOOP="TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm",
+    TPLOOP="TestPoint:TestPoint_Keystone_5015_Micro_Mini",     # SMD GND clip point: no leads through the board
     PTC2920="Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder",
     PTC1812="Fuse:Fuse_1812_4532Metric_Pad1.30x3.40mm_HandSolder",
     XT90M="PowerBoard_rev3:XT90PB-M", XT90F="PowerBoard_rev3:XT90PB-F",
@@ -781,7 +781,7 @@ def auto_mpn(p):
             raise SystemExit(f"no MPN for {key}: rerun the passive picker")
         return PASSIVE_MPN[key]
     if p.lib_id == "Connector:TestPoint":
-        return "5001" if "Loop" in fp else "none: PCB pad"            # Keystone 5001 black loop, 1.02 mm hole
+        return "5015" if "Keystone_5015" in fp else "none: PCB pad"   # Keystone 5015 SMD clip point
     if p.lib_id.startswith("Jumper:SolderJumper"):
         return "none: PCB solder jumper"
     if p.value in FIXED_MPN:

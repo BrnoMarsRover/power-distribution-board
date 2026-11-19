@@ -126,7 +126,7 @@ def overlaps(a, bx, gap=GAP):
 def label_room(fp):
     """Signal test pads reserve room to their right for their net name (1 mm text)."""
     lib = fp.GetFPID().GetLibItemName().wx_str()
-    if fp.GetReference().startswith("TP") and "Loop" not in lib:
+    if fp.GetReference().startswith("TP") and "Keystone" not in lib:
         return 0.75 * len(fp.GetValue()) + 0.8
     return 0.0
 
@@ -299,24 +299,28 @@ ZONES = {
     "12 V rail eFuse": ((75.5, 12, 102.5, 71.5), (75.5, 12, 102.5, 71.5)),
     "5 V rail eFuse": ((102.5, 10, 123.5, 71.5), (102.5, 10, 123.5, 71.5)),
     "54 V supply eFuse": ((123.5, 36, 149, 64), (123.5, 36, 149, 64)),
-    "54 V boost": ((123.5, 64, 149, 133), (123.5, 64, 149, 133)),
+    "54 V boost": ((123.5, 88, 149, 133), (123.5, 36, 149, 133)),
     "Brake chopper": ((1.5, 121.5, 26, 149), (1.5, 121.5, 26, 149)),
     "Always-on aux": ((26.5, 98, 50.5, 149), (26.5, 98, 50.5, 149)),
     "Rail inputs": ((51, 131, 123.5, 149), (51, 72, 123.5, 149)),
-    "ESP32-S3": ((26.5, 98, 50.5, 149), (51, 72, 123.5, 149)),
+    "ESP32-S3": ((123.5, 64, 149, 90), (123.5, 60, 149, 100)),
     "Switch control": ((78, 131, 123.5, 149), (51, 72, 123.5, 149)),
     "CAN bus": ((51, 131, 123.5, 149), (51, 72, 123.5, 149)),
 }
-TOP_ONLY = ("54 V boost", "Always-on aux")                 # switching loops stay on one side
-POWER_1210 = ("Battery input", "54 V boost", "Always-on aux")
+SUPPLIES = ("54 V boost", "Always-on aux")   # SMD parts on the bottom, the whole switching loop on that side
+POWER_1210 = ("Battery input",)
 
 
 def is_bottom(fp):
     sheet, ref, lib = fp.GetSheetname(), fp.GetReference(), fp.GetFPID().GetLibItemName().wx_str()
-    if sheet.startswith(TOP_ONLY) or ref.startswith(("J", "SW", "JP", "H", "F")):
+    if ref.startswith(("J", "SW", "JP", "H", "F")):
         return False
+    if sheet.startswith(SUPPLIES):                # 5.3 V aux and 54 V boost: SMD down, THT and LEDs up
+        if ref.startswith("TP"):
+            return "Keystone" not in lib
+        return not (through(fp) or "LED" in lib)
     if ref.startswith("TP"):
-        return "Loop" not in lib                 # signal pads sit with their (bottom-side) circuitry
+        return "Keystone" not in lib                 # signal pads sit with their (bottom-side) circuitry
     if "1210" in lib:
         return not sheet.startswith(POWER_1210)  # bootstrap caps go under their controller; bus ceramics stay up
     if any(k in lib for k in ("LED", "2512", "Kelvin", "CP_", "TO-263", "TO-252", "Inductor", "L_",
@@ -324,6 +328,13 @@ def is_bottom(fp):
         return False
     return ref.startswith(("U", "R", "C", "Q", "D", "TH"))
 
+
+# ESP32 on top at the right edge, its u.FL antenna connector pointing out of the board
+esp = FP["U13"]
+set_side(esp, False)
+esp.SetOrientationDegrees(270)
+l, t, r, bt = box(esp)
+put("U13", 149.4 - (r - l), 64.5, orient=lambda f: None)
 
 # keep the label spots under the inputs free (battery label, polarity rule, + / - marks)
 for keep in ((11.0, 12.4, 31.0, 18.0), (51.0, 9.6, 123.0, 12.0), (78.0, 140.0, 122.0, 146.0)):

@@ -1,5 +1,5 @@
 Quantity,Manufacturer Part,Manufacturer,Comment,Designator,Footprint
-6,5001,Keystone,GND,"TP5,TP56,TP60,TP77,TP80,TP83",TestPoint_Loop_D2.50mm_Drill1.0mm
+6,5015,Keystone,GND,"TP5,TP56,TP60,TP77,TP80,TP83",TestPoint_Keystone_5015_Micro_Mini
 1,1N5819HW-7-F,Diodes Incorporated,1N5819HW,D21,D_SOD-123
 2,2N7002LT1G,onsemi,2N7002,"Q1,Q25",SOT-23
 2,502585-0470,Molex,"CAN 1 (Molex CLIK-Mate 502585-0470),CAN 2 (Molex CLIK-Mate 502585-0470)","J34,J35",Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal

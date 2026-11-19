@@ -958,10 +958,13 @@ layout.
 - **Outputs (decided 2026-11-19):**
   - 42 V: 3 drive, 2 converter feeds (one Y-split for the third converter).
   - 24 V, 12 V, 5 V: 6 each, against rev2's 8, 7 and 11.
-- **Sides:** all connectors, power parts, LEDs and bypass bridges on top. Each eFuse's
-  TPS48111 and passives on the bottom, directly under its FETs. ESP32, expander, ADCs, CAN
-  and INA228 on the bottom. The boost and aux buck stay entirely on top, so their switching
-  loops are on one side.
+- **Sides:**
+  - Top: all connectors, the eFuse power parts, LEDs, bypass bridges, the through-hole
+    electrolytics, and the ESP32 module at the right edge with its u.FL antenna connector
+    facing out.
+  - Bottom: each eFuse's TPS48111 and passives, directly under its FETs; the expander,
+    ADCs, CAN and INA228; and every SMD part of the 5.3 V aux supply and the 54 V boost,
+    inductors and FETs included, so each switching loop is complete on one side.
 - **Silkscreen, for people who have never seen the board:**
   - Column headers with the polarity in them ("+ 24V OUT 3A EACH −"), dividers between
     the columns.
@@ -981,8 +984,9 @@ layout.
      "Update footprints from library", which resets the board-side model replacements.
 - **3D models:** KiCad 10 ships no model for several of its own footprints, and the custom
   footprints had none.
-  - Connectors use rev2's STEP files from `kicad/ext`, placed as on rev2's board: XT90,
-    Deans T (the female body stands in for the male, as on rev2) and XT30.
+  - Connectors use rev2's STEP files from `kicad/ext`: XT90, XT30 and Deans T (female on
+    the outputs, male on the 24 V input; the male model's placement was worked out from
+    its STEP coordinates).
   - Stand-ins:
 
     | Part | Stand-in |
@@ -993,7 +997,9 @@ layout.
     | CLIK-Mate | stretched PicoBlade |
     | 2920 PTCs | scaled 2816 |
 
-  - Bare pads, test points, holes and wire bridges have no body.
+  - Bare pads, holes and wire bridges have no body. The GND clip points are Keystone 5015
+    SMD loops (stand-in: scaled 1206 body). The through-hole Keystone 5001 loops were
+    dropped because their legs stick out under the board.
 
   After that, the schematic is edited in KiCad and changes reach the board with
   Update PCB from Schematic (F8).

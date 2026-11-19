@@ -157,7 +157,7 @@ tp_labels = []
 for f in b.GetFootprints():
     ref = f.GetField(pcbnew.FIELD_T_REFERENCE)
     ref.SetLayer(pcbnew.B_Fab if f.IsFlipped() else pcbnew.F_Fab)
-    if f.GetReference().startswith("TP") and "Loop" not in f.GetFPID().GetLibItemName().wx_str():
+    if f.GetReference().startswith("TP") and "Keystone" not in f.GetFPID().GetLibItemName().wx_str():
         v = f.GetField(pcbnew.FIELD_T_VALUE)            # the net name, beside the pad, on its own side
         v.SetLayer(pcbnew.B_SilkS if f.IsFlipped() else pcbnew.F_SilkS)
         v.SetVisible(True)

@@ -5584,7 +5584,7 @@
 				)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm"
+		(property "Footprint" "TestPoint:TestPoint_Keystone_5015_Micro_Mini"
 			(at 66.04 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -5617,7 +5617,7 @@
 				)
 			)
 		)
-		(property "MPN" "5001"
+		(property "MPN" "5015"
 			(at 66.04 101.6 0)
 			(hide yes)
 			(show_name no)

@@ -14,7 +14,7 @@ SRC, DST = HERE / "PowerBoard_rev3_bom.csv", HERE / "PowerBoard_rev3_bom_lcsc.cs
 MFR = [  # MPN prefix -> manufacturer (longest match wins)
     ("RC0603", "YAGEO"), ("RC1206", "YAGEO"), ("ERJ-", "Panasonic"), ("EEU-", "Panasonic"), ("AQY", "Panasonic"),
     ("CL", "Samsung Electro-Mechanics"), ("C0603C", "KEMET"), ("C1206C", "KEMET"), ("C1210C", "KEMET"),
-    ("C3216", "TDK"), ("GRM", "Murata"), ("NCP18", "Murata"), ("5001", "Keystone"),
+    ("C3216", "TDK"), ("GRM", "Murata"), ("NCP18", "Murata"), ("5001", "Keystone"), ("5015", "Keystone"),
     ("B2B-", "JST"), ("B4B-", "JST"), ("BM04B-", "JST"), ("502585", "Molex"), ("XT", "AMASS"),
     ("MMBT3904LT1G", "onsemi"), ("2N7002LT1G", "onsemi"), ("MMSZ", "onsemi"), ("FDD", "onsemi"),
     ("TCAN", "Texas Instruments"), ("TPS", "Texas Instruments"), ("LM", "Texas Instruments"),

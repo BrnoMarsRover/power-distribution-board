@@ -45,12 +45,15 @@ REPLACE = {
                                   (7.45 / 7.1, 5.45 / 4.2, 1)),
     "HTSSOP-20-1EP_4.4x6.5mm_P0.65mm_EP3.4x6.5mm_Mask2.96x2.96mm.step":
         (f"{K3D}/Package_SO.3dshapes/HTSSOP-20-1EP_4.4x6.5mm_P0.65mm_EP3.4x6.5mm.step", (0, 0, 0), (0, 0, 0), (1, 1, 1)),
+    "TestPoint_Keystone_5015_Micro_Mini.step":                       # 3.4 x 1.8 mm SMD clip point
+        (f"{K3D}/Fuse.3dshapes/Fuse_1206_3216Metric.step", (0, 0, 0), (0, 0, 0), (3.43 / 3.2, 1.78 / 1.6, 1.4)),
     "SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm.step":
         (f"{K3D}/Package_SO.3dshapes/SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.81mm.step", (0, 0, 0), (0, 0, 0), (1, 1, 1)),
 }
-MALE_DEANS = LIB_MODELS["DEANS-T"]      # like rev2: the male STEP has no known placement, the female body stands in
+# the male STEP shares the female's axes but sits 7 mm higher in its own frame (measured from its points)
+MALE_DEANS = (f"{EXT}/T-Plug male - W.S Deans Co. Est. 1957.step", (-0.7, 0, 4), (90, 180, 90), (1, 1, 1))
 STAND_IN = ("CSS2H (2512 body)", "VSSOP-19 (stretched MSOP-16)", "ESP32-S3-WROOM-1U (WROOM-32U body)",
-            "CLIK-Mate (stretched PicoBlade)", "2920 PTC (scaled 2816)")
+            "CLIK-Mate (stretched PicoBlade)", "2920 PTC (scaled 2816)", "Keystone 5015 (scaled 1206 body)")
 
 
 def model(spec):
