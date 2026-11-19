@@ -645,8 +645,9 @@ FP = dict(
     XT60M="Connector_AMASS:AMASS_XT60-M_1x02_P7.20mm_Vertical",
     XT60F="Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical",
     SMB_D="Diode_SMD:D_SMB",
-    XT30M="Connector_AMASS:AMASS_XT30U-M_1x02_P5.0mm_Vertical",
-    XT30F="Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical",
+    XT30M="Connector_AMASS:AMASS_XT30UPB-M_1x02_P5.0mm_Vertical",
+    XT30F="Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical",
+    PTCR300="PowerBoard_rev3:Fuse_Bourns_MF-R300_P5.08mm",
     DEANS="PowerBoard_rev3:DEANS-T",
     XH2="Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical",
     PH2="Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical",
@@ -1178,9 +1179,9 @@ def sheet_outputs():
         lab(net, (xb - 5.08, y0 - 5.08), 180)
         for i, ((value, fp), y) in enumerate(zip(rows, ys)):
             if ptc:
-                part, pfp, lcsc = ptc
+                part, pfp = ptc
                 f = sh.add("Device:Polyfuse", "F", part, FP[pfp], {1: net, 2: f"L:O{net[3:]}_{i + 1}"}, rot=90,
-                           fields={"LCSC": lcsc})
+                           fields={"MPN": part})
                 at_pin(f, 1, (xb + 2.54, y))
                 f.label_at = {"Reference": (-3.81, -2.54), "Value": (-3.81, 2.54)}
                 W((xb, y), PIN(f, 1))
@@ -1193,20 +1194,20 @@ def sheet_outputs():
 
     # rail inputs: label on the left, flag, connector
     for i, (net, value, fp) in enumerate((("VIN24", "Deans T male (24 V in)", "DEANS"),
-                                          ("VIN12", "XT60 male (12 V in)", "XT60M"),
-                                          ("VIN5", "XT30 male (5 V in)", "XT30M"))):
+                                          ("VIN12", "XT60PT-M (12 V in)", "XT60M"),
+                                          ("VIN5", "XT30UPB-M (5 V in)", "XT30M"))):
         y = 71.12 + 15.24 * i
         lab(net, (35.56, y), 180)
         W((35.56, y), (45.72, y))
         sh.mark("flag", (40.64, y))
         conn(value, fp, net, (45.72, y))
 
-    column("OUT42D", 116.84, 71.12, [("XT90 female", "XT90F")] * 4)
-    column("OUT42C", 177.8, 71.12, [("XT90 female", "XT90F")] * 4)
-    column("OUT54", 238.76, 71.12, [("JST-XH 2p (54 V to Zyxel XMG-105HP)", "XH2")])
-    column("OUT24", 45.72, 137.16, [("Deans T female", "DEANS")] * 8, ("SMD2920P300TF/33", "PTC2920", "C2943634"))
-    column("OUT12", 134.62, 137.16, [("XT60 female", "XT60F")] * 7, ("SMD2920P300TF/16", "PTC2920", "C167318"))
-    column("OUT5", 223.52, 137.16, [("XT30 female", "XT30F")] * 11, ("SMD1812P300TF", "PTC1812", "C21004"))
+    column("OUT42D", 116.84, 71.12, [("XT90PB-F", "XT90F")] * 4)
+    column("OUT42C", 177.8, 71.12, [("XT90PB-F", "XT90F")] * 4)
+    column("OUT54", 238.76, 71.12, [("B2B-XH-A(LF)(SN) (54 V to Zyxel)", "XH2")])
+    column("OUT24", 45.72, 137.16, [("Deans T female", "DEANS")] * 8, ("MF-R300", "PTCR300"))
+    column("OUT12", 134.62, 137.16, [("XT60PT-F", "XT60F")] * 7, ("MF-LSMF300/16X-2", "PTC2920"))
+    column("OUT5", 223.52, 137.16, [("XT30UPB-F", "XT30F")] * 11, ("MF-LSMF300X-2", "PTC2920"))
     return sh
 
 
@@ -1907,6 +1908,7 @@ def write_custom_footprints():
         f'(fill no) (layer "F.CrtYd") {u("crt")})\n' + "\n".join(pads) + '\n)\n')
     (lib / "TI_DGX0019A_VSSOP-19.kicad_mod").write_text(dgx)
     (lib / "R_Bourns_CSS2H-2512_Kelvin.kicad_mod").write_text(css2h_footprint())
+    (lib / "Fuse_Bourns_MF-R300_P5.08mm.kicad_mod").write_text(mfr300_footprint())
     for size, drill, pad, pitch in (("M4", 4.3, 8.0, 15.24), ("M3", 3.2, 6.0, 12.7)):
         (lib / f"BypassLink_{size}_P{pitch:.2f}mm.kicad_mod").write_text(bypass_footprint(size, drill, pad, pitch))
     rev2 = REPO / "kicad/ext/SamacSys_Parts.pretty"
@@ -1951,6 +1953,28 @@ def css2h_footprint():
         f'  (fp_line (start -1.5 1.95) (end 1.5 1.95) (stroke (width 0.12) (type default)) (layer "F.SilkS") {u("silk")})\n'
         f'  (fp_rect (start -3.75 -3.5) (end 3.75 1.95) (stroke (width 0.05) (type default)) (fill no) (layer "F.CrtYd") {u("crt")})\n'
         + "\n".join(out) + "\n)\n")
+
+
+def mfr300_footprint():
+    """Bourns MF-R300 radial PPTC: 0.81 mm leads, 5.1 mm (5.08) spacing, body 12.0 x 3.0 mm max, 18.3 mm tall."""
+    name = "Fuse_Bourns_MF-R300_P5.08mm"
+    u = lambda *k: f'(uuid {q(uid(name, *k))})'
+    return (
+        f'(footprint "{name}" (version 20241229) (generator "build.py") (layer "F.Cu")\n'
+        '  (descr "Bourns MF-R300 radial PTC resettable fuse, 3.0 A hold, 30 V. Lead spacing 5.1 mm, body 12.0 x 3.0 mm, '
+        'height 18.3 mm. https://www.bourns.com/docs/product-datasheets/mfr.pdf")\n'
+        '  (tags "PTC polyfuse radial MF-R")\n'
+        f'  (property "Reference" "REF**" (at 2.54 -2.8 0) (layer "F.SilkS") {u("ref")} (effects (font (size 1 1) (thickness 0.15))))\n'
+        f'  (property "Value" "MF-R300" (at 2.54 2.8 0) (layer "F.Fab") {u("val")} (effects (font (size 1 1) (thickness 0.15))))\n'
+        f'  (property "Datasheet" "https://www.bourns.com/docs/product-datasheets/mfr.pdf" (at 0 0 0) (layer "F.Fab") (hide yes) {u("ds")} (effects (font (size 1.27 1.27))))\n'
+        f'  (property "Description" "Bourns MF-R300 PPTC" (at 0 0 0) (layer "F.Fab") (hide yes) {u("desc")} (effects (font (size 1.27 1.27))))\n'
+        '  (attr through_hole)\n'
+        f'  (fp_rect (start -3.46 -1.5) (end 8.54 1.5) (stroke (width 0.1) (type default)) (fill no) (layer "F.Fab") {u("fab")})\n'
+        f'  (fp_rect (start -3.58 -1.62) (end 8.66 1.62) (stroke (width 0.12) (type default)) (fill no) (layer "F.SilkS") {u("silk")})\n'
+        f'  (fp_rect (start -3.86 -1.9) (end 8.94 1.9) (stroke (width 0.05) (type default)) (fill no) (layer "F.CrtYd") {u("crt")})\n'
+        f'  (pad "1" thru_hole circle (at 0 0) (size 2.0 2.0) (drill 1.1) (layers "*.Cu" "*.Mask") {u("p1")})\n'
+        f'  (pad "2" thru_hole circle (at 5.08 0) (size 2.0 2.0) (drill 1.1) (layers "*.Cu" "*.Mask") {u("p2")})\n'
+        ')\n')
 
 
 def bypass_footprint(size, drill, pad, pitch):

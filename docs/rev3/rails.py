@@ -73,10 +73,12 @@ FETS = {
 }
 
 # PTCs: name, V max, I hold, I trip, R initial min, JLC part.
+# (V max, I hold, I trip, R min, maker, package) from the Bourns MF-R / MF-LSMF datasheets.
+# Hold current falls to about 2.5 A at 50 degC and 2.25 A at 60 degC (MF-LSMF derating table).
 PTCS = {
-    "SMD1812P300TF": (8, 3.0, 5.0, 0.010, "C21004", "1812"),
-    "SMD2920P300TF/16": (16, 3.0, 6.0, 0.012, "C167318", "2920"),
-    "SMD2920P300TF/33": (33, 3.0, 6.0, 0.012, "C2943634", "2920"),
+    "MF-R300": (30, 3.0, 6.0, 0.020, "Bourns", "radial THT"),
+    "MF-LSMF300/16X-2": (16, 3.0, 5.0, 0.015, "Bourns", "2920"),
+    "MF-LSMF300X-2": (6, 3.0, 5.0, 0.015, "Bourns", "2920"),
 }
 
 # One entry per switched rail.
@@ -103,14 +105,14 @@ RAILS = [
               "Defaults ON, because the 12 V converter powers the Orin."),
     dict(name="24V", v=24.0, design=10.0, i_oc=11.0, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=8, conn="Deans T",
-         i_inrush=1.0, ptc="SMD2920P300TF/33", src="300 W converter", default_on=False),
+         i_inrush=1.0, ptc="MF-R300", src="300 W converter", default_on=False),
     dict(name="12V", v=12.0, design=10.0, i_oc=11.0, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=7, conn="XT60",
-         i_inrush=2.0, ptc="SMD2920P300TF/16", src="150 W converter", default_on=True,
+         i_inrush=2.0, ptc="MF-LSMF300/16X-2", src="150 W converter", default_on=True,
          note="Feeds the Jetson AGX Orin, so it defaults ON in hardware."),
     dict(name="5V", v=5.0, design=15.0, i_oc=16.5, t_oc=0.5, i_sc=None,
          r_sns=1e-3, fet="IPB042N10N3G", n_main=1, c_out=220e-6, n_out=11, conn="XT30",
-         i_inrush=2.0, ptc="SMD1812P300TF", src="150 W converter, XT30-limited",
+         i_inrush=2.0, ptc="MF-LSMF300X-2", src="150 W converter, XT30-limited",
          default_on=False),
     dict(name="54V", v=42.0, design=4.0, i_oc=5.0, t_oc=0.5, i_sc=20.0,
          r_sns=3e-3, fet="IPB042N10N3G", n_main=1, c_out=600e-6, n_out=1, conn="Zyxel XMG-105HP supply",
@@ -302,7 +304,7 @@ def main():
     w("A PTC protects the cable to one device from an overload too small to trip the rail. "
       "Each output's cable must carry the PTC's trip current continuously. Fit a bigger "
       "PTC on any output whose device needs more than the hold current.\n")
-    w("| Rail | Outputs | PTC (JLC #) | V max | Hold / trip | Drop at hold | Cable at least |")
+    w("| Rail | Outputs | PTC (maker, package) | V max | Hold / trip | Drop at hold | Cable at least |")
     w("|---|---|---|---|---|---|---|")
     for r in RAILS:
         if not r["ptc"]:

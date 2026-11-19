@@ -374,13 +374,17 @@ The rail eFuse trips at the whole rail's current. A fault that draws less than t
 as 8 A through a thin sensor lead, needs protecting on its own output. That is the PTC's
 job.
 
-| Rail | PTC | Rated | Hold / trip |
-|------|-----|-------|-------------|
-| 24 V | SMD2920P300TF/33 | 33 V | 3 / 6 A |
-| 12 V | SMD2920P300TF/16 | 16 V | 3 / 6 A |
-| 5 V | SMD1812P300TF | 8 V | 3 / 5 A |
+| Rail | PTC (Bourns, Mouser) | Package | Rated | Hold / trip |
+|------|-----|-----|-------|-------------|
+| 24 V | MF-R300 | radial, through-hole | 30 V | 3 / 6 A |
+| 12 V | MF-LSMF300/16X-2 | 2920 | 16 V | 3 / 5 A |
+| 5 V | MF-LSMF300X-2 | 2920 | 6 V | 3 / 5 A |
 
-- All SMD and all stocked at JLC; about $0.12–0.32 each.
+- **Chosen 2026-11-19 for TME/Mouser sourcing.** No 2920 part reaches 3 A at ≥ 30 V
+  (the 33 V parts stop at 2.6 A), so the 24 V outputs use the radial MF-R300, on its own
+  footprint (`Fuse_Bourns_MF-R300_P5.08mm`).
+- **Hold current derates with temperature:** about 2.5 A at 50 °C and 2.25 A at 60 °C
+  inside the rover (Bourns derating table).
 - **Cable rule:** every device cable must carry the PTC's trip current continuously, so
   0.5 mm² (AWG 20) at least.
 - **Devices that need more than 3 A** get a larger PTC on their output. This is a
@@ -388,10 +392,19 @@ job.
 - **No PTC on the 42 V outputs or the 54 V output:** the 42 V cables are heavy and no SMD
   PTC is rated for 42 V at drive currents, and the 54 V output feeds only one device behind
   its own eFuse.
-- **A hard short on one output** browns out its whole rail for a moment. Either the rail
-  eFuse trips (0.5 s) or the converter current-limits. Firmware retries the rail; by then
-  the PTC on the faulty output is hot and isolates it, and the rest of the rail comes back.
-  This is the accepted cost of sharing a switch per rail.
+- **A hard short on one output** browns out its whole rail for a moment. The converter
+  current-limits (its rating sits just under the rail trip) and the PTC on the faulty
+  output trips within a second or two and isolates it. If the rail eFuse latches first,
+  firmware retries the rail; by then the PTC is hot and holds the short off. This is the
+  accepted cost of sharing a switch per rail.
+- **Output connectors (TME):**
+  - 42 V: AMASS XT90PB-F.
+  - 12 V: XT60PT-F (input XT60PT-M).
+  - 5 V: XT30UPB-F (input XT30UPB-M). The vertical PCB XT30; KiCad's XT30U footprint
+    was a cable part.
+  - 54 V: JST B2B-XH-A(LF)(SN) (Mouser).
+  - **OPEN: the 24 V Deans T** (eight outputs plus the input) is sold by neither TME nor
+    Mouser.
 
 ### 4.6 Rail inputs
 

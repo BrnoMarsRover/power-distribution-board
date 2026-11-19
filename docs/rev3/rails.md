@@ -65,11 +65,11 @@ The 12 V eFuse starts only once the converter group is fully on, so its pre-char
 
 A PTC protects the cable to one device from an overload too small to trip the rail. Each output's cable must carry the PTC's trip current continuously. Fit a bigger PTC on any output whose device needs more than the hold current.
 
-| Rail | Outputs | PTC (JLC #) | V max | Hold / trip | Drop at hold | Cable at least |
+| Rail | Outputs | PTC (maker, package) | V max | Hold / trip | Drop at hold | Cable at least |
 |---|---|---|---|---|---|---|
-| 24V | 8 x Deans T | SMD2920P300TF/33 (C2943634, 2920) | 33 V | 3 / 6 A | >= 36 mV | 0.5 mm2 / AWG 20 |
-| 12V | 7 x XT60 | SMD2920P300TF/16 (C167318, 2920) | 16 V | 3 / 6 A | >= 36 mV | 0.5 mm2 / AWG 20 |
-| 5V | 11 x XT30 | SMD1812P300TF (C21004, 1812) | 8 V | 3 / 5 A | >= 30 mV | 0.5 mm2 / AWG 20 |
+| 24V | 8 x Deans T | MF-R300 (Bourns, radial THT) | 30 V | 3 / 6 A | >= 60 mV | 0.5 mm2 / AWG 20 |
+| 12V | 7 x XT60 | MF-LSMF300/16X-2 (Bourns, 2920) | 16 V | 3 / 5 A | >= 45 mV | 0.5 mm2 / AWG 20 |
+| 5V | 11 x XT30 | MF-LSMF300X-2 (Bourns, 2920) | 6 V | 3 / 5 A | >= 45 mV | 0.5 mm2 / AWG 20 |
 
 The 42 V outputs have no PTC. Their cables are heavy, and no SMD PTC is rated for 42 V at drive currents. Use XT90-S anti-spark plugs on the 42 V devices, so hot-plugging onto the live group cannot trip its short-circuit detector.
 
