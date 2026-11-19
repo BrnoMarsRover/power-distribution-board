@@ -130,6 +130,7 @@ def place(FP):
 
 # ---------------------------------------------------------------- copper
 F, B, IN1, IN2 = pcbnew.F_Cu, pcbnew.B_Cu, pcbnew.In1_Cu, pcbnew.In2_Cu
+OUT_RADIUS = 2.5                      # output strips turn into their connector columns: a wider inside fillet
 VIA_D, VIA_DRILL = 0.9, 0.45
 
 
@@ -139,7 +140,7 @@ def copper(b):
     pnet = lambda ref, num: _pad(FP[ref], num).GetNetname()
     zones, vias, tracks = [], [], []
 
-    def zone(netname, layer, pts, prio, name, clear=0.5):
+    def zone(netname, layer, pts, prio, name, clear=0.5, radius=1.0):
         z = pcbnew.ZONE(b)
         z.SetLayer(layer)
         z.SetNet(net(netname))
@@ -148,6 +149,9 @@ def copper(b):
         z.SetMinThickness(MM(0.5))
         z.SetIslandRemovalMode(pcbnew.ISLAND_REMOVAL_MODE_ALWAYS)
         z.SetZoneName(name)
+        if radius:                    # rounded corners: spreads the current at inside turns, finished look outside
+            z.SetCornerSmoothingType(pcbnew.ZONE_SETTINGS.CORNER_SMOOTHING_FILLET)
+            z.SetCornerRadius(MM(radius))
         o = z.Outline()
         o.NewOutline()
         for x, y in pts:
@@ -232,9 +236,9 @@ def copper(b):
         else:
             out_poly = [(ol, OUT_TOP), (orr, OUT_TOP), (orr, COL_TOP), (col_r, COL_TOP), (col_r, blk["col_bot"]),
                         (ol, blk["col_bot"])]
-        zone(out, F, out_poly, 40, f"{key} OUT")
+        zone(out, F, out_poly, 40, f"{key} OUT", radius=OUT_RADIUS)
         l3 = [(ol, OUT_TOP), (col_r, OUT_TOP)] + out_poly[4:]
-        zone(out, IN2, l3, 40, f"{key} OUT (L3)", clear=0.3)
+        zone(out, IN2, l3, 40, f"{key} OUT (L3)", clear=0.3, radius=OUT_RADIUS)
         zone(drn, F, rect(dl, DRN_TOP, dr, DRN_BOT), 40, f"{key} DRN")
         # FETs: gate escape via at the lead tip
         for ref, cy in zip(blk["fets"], FET_ROWS):
@@ -296,6 +300,6 @@ def copper(b):
 
     # -------------------------------------------- planes: GND on L2, GND fill on L4 (whole board)
     whole = rect(0.5, 0.5, 149.5, 149.5)
-    zone("GND", IN1, whole, 0, "GND plane", clear=0.3)
-    zone("GND", B, whole, 0, "GND fill bottom")
+    zone("GND", IN1, whole, 0, "GND plane", clear=0.3, radius=0)
+    zone("GND", B, whole, 0, "GND fill bottom", radius=0)
     return zones, vias, tracks
