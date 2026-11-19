@@ -3901,10 +3901,6 @@
 		(uuid "1b99c37b-98ab-5637-8c94-c69c300da916")
 	)
 	(no_connect
-		(at 180.34 162.56)
-		(uuid "205fc952-3a0b-5cde-84e9-d042700718f7")
-	)
-	(no_connect
 		(at 180.34 152.4)
 		(uuid "2fd426cc-3647-5592-9f21-a68d104256f4")
 	)
@@ -3915,10 +3911,6 @@
 	(no_connect
 		(at 180.34 170.18)
 		(uuid "352f1cb0-6692-506c-a831-05b61e16f332")
-	)
-	(no_connect
-		(at 180.34 160.02)
-		(uuid "7434474c-cc15-539b-a297-63b21c807696")
 	)
 	(no_connect
 		(at 256.54 114.3)
@@ -4255,6 +4247,16 @@
 			(type default)
 		)
 		(uuid "3eaa64a7-46cc-50fc-85a5-2e3133ba8058")
+	)
+	(wire
+		(pts
+			(xy 180.34 162.56) (xy 185.42 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "457e92dc-bbcf-5a12-802f-86ac0b155b7e")
 	)
 	(wire
 		(pts
@@ -4938,6 +4940,16 @@
 	)
 	(wire
 		(pts
+			(xy 180.34 160.02) (xy 185.42 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d5a4ae6e-56c9-5cba-8951-9d775533aeaf")
+	)
+	(wire
+		(pts
 			(xy 149.86 152.4) (xy 144.78 152.4)
 		)
 		(stroke
@@ -5400,6 +5412,30 @@
 			)
 		)
 	)
+	(global_label "PWR_BTN"
+		(shape passive)
+		(at 185.42 162.56 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "347b7ac7-d4c4-5ebc-9e73-d8e8314c1727")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 162.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
 	(global_label "NTC_SNS"
 		(shape passive)
 		(at 144.78 137.16 180)
@@ -5613,6 +5649,30 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+	)
+	(global_label "PWR_HOLD"
+		(shape passive)
+		(at 185.42 160.02 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "5914889b-edc0-5abe-bb8f-e123b86953f1")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 	)

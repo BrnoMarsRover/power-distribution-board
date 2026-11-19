@@ -654,6 +654,7 @@ FP = dict(
     DEANS="PowerBoard_rev3:DEANS-T",
     XH2="Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical",
     PH2="Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical",
+    XH4="Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical",
     GH4="Connector_JST:JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical",
     CLIK4="Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal",
     USBC="Connector_USB:USB_C_Receptacle_GCT_USB4085",
@@ -756,7 +757,7 @@ def auto_mpn(p):
     first = p.value.split()[0]
     if first.startswith(("XT30", "XT60", "XT90")):
         return first                                                   # AMASS, from TME
-    if first.startswith("B2B-"):
+    if first.startswith(("B2B-", "B4B-")):
         return first                                                   # JST, Mouser
     if p.value.startswith("Deans"):
         return "none: Deans T, bought outside TME / Mouser (sourcing exception)"
@@ -1528,7 +1529,7 @@ ESP_PINS = {"1": "GND", "2": "+3V3", "3": "ESP_EN", "4": "I2C_SDA", "5": "I2C_SC
             "13": "USB_DN", "14": "USB_DP", "15": None, "16": None, "17": "FLT_12", "18": "INA_ALERT",
             "19": "CAN_TXD", "20": "CAN_RXD", "21": "CAN_STB", "22": "MOTOR_OK", "23": "LED_1",
             "24": "LED_2", "25": "LED_3", "26": None, "27": "ESP_IO0", "28": None, "29": None, "30": None,
-            "31": "FLT_54", "32": "BRAKE_ACT", "33": None, "34": None, "35": None, "36": "L:RXD0",
+            "31": "FLT_54", "32": "BRAKE_ACT", "33": "PWR_HOLD", "34": "PWR_BTN", "35": None, "36": "L:RXD0",
             "37": "L:TXD0", "38": "AUX5_SNS", "39": "NTC_SNS"}
 
 
@@ -1801,7 +1802,10 @@ def sheet_io():
         "Rear-panel motor switch (closed = motors allowed): opening it clears the latch (Q low, /Q high) -> MOTOR_KILL holds "
         "the drive group off.",
         "It stays off after the switch closes until the ESP32 clocks MOTOR_ARM, which it does only after dropping INP and "
-        "re-running pre-charge. Power-on also starts latched off. The battery E-STOP is separate (BMS soft-start)."],
+        "re-running pre-charge. Power-on also starts latched off. The battery E-STOP is separate (BMS soft-start).",
+        "Soft power: the BMS soft-start loop (through the E-STOP) is closed by button pole 1 or by the AQY282S that the ESP32 "
+        "holds (PWR_HOLD, GPIO40). Pole 2 reads the button (PWR_BTN, GPIO41, low = on). Button off: the ESP32 asks the "
+        "Jetson to stow and shut down, then releases PWR_HOLD. A reset or a dead ESP32 releases it too."],
         drawn=True)
     W, gnd, v33, lab = marks(sh)
 
@@ -1932,6 +1936,54 @@ def sheet_io():
             at_pin(rt, 2, (a0[0] - 15.24, a0[1]))
             W(PIN(rt, 2), (a0[0] - 10.16, a0[1]))
             v33(PIN(rt, 1))
+
+    # --- soft power: BMS soft-start loop (through the E-STOP) closed by the 2-pole latching button
+    #     (pole 1) or by the AQY282S PhotoMOS that the ESP32 holds (PWR_HOLD); pole 2 is a dry sense contact
+    jb = sh.add("Connector_Generic:Conn_01x04", "J", "B4B-XH-A(LF)(SN) (power button, 2-pole)", FP["XH4"],
+                {1: "L:SS_A", 2: "L:SS_B", 3: "L:BTN_SNS", 4: "GND"}, mirror=True)
+    at_pin(jb, 1, (40.64, 228.6))
+    for n_, net in ((1, "L:SS_A"), (2, "L:SS_B"), (3, "L:BTN_SNS")):
+        W(PIN(jb, n_), (50.8, PIN(jb, n_)[1]))
+        lab(net, (50.8, PIN(jb, n_)[1]), 0)
+    W(PIN(jb, 4), (45.72, PIN(jb, 4)[1]), (45.72, PIN(jb, 4)[1] + 2.54))
+    gnd((45.72, PIN(jb, 4)[1] + 2.54))
+    js = CONN2(sh, "B2B-XH-A(LF)(SN) (BMS soft-start via E-STOP)", "XH2", "L:SS_A", "L:SS_B", mirror=True)
+    at_pin(js, 1, (40.64, 248.92))
+    for n_, net in ((1, "L:SS_A"), (2, "L:SS_B")):
+        W(PIN(js, n_), (50.8, PIN(js, n_)[1]))
+        lab(net, (50.8, PIN(js, n_)[1]), 0)
+
+    k = sh.add("Relay_SolidState:AQY282S", "U", "AQY282S", "Package_SO:SO-4_4.4x4.3mm_P2.54mm",
+               {1: "L:SSR_A", 2: "GND", 3: "L:SS_A", 4: "L:SS_B"}, fields={"MPN": "AQY282S"})
+    at_pin(k, 1, (91.44, 241.3))
+    yk = PIN(k, 1)[1]
+    rk = R(sh, 330, "PWR_HOLD", "L:SSR_A")
+    at_pin(rk, 2, (86.36, yk))
+    W(PIN(rk, 2), PIN(k, 1))
+    W(PIN(rk, 1), (68.58, yk))
+    lab("PWR_HOLD", (68.58, yk), 180)
+    hang(sh, R(sh, 100e3, "PWR_HOLD", "GND", rot=0), (76.2, yk))
+    TP(sh, "PWR_HOLD", at=(71.12, yk))
+    gnd(PIN(k, 2))
+    for n_, net in ((3, "L:SS_A"), (4, "L:SS_B")):
+        W(PIN(k, n_), (116.84, PIN(k, n_)[1]))
+        lab(net, (116.84, PIN(k, n_)[1]), 0)
+        TP(sh, net, at=(111.76, PIN(k, n_)[1]), rot=180 if n_ == 3 else 0)
+
+    # button sense (pole 2): 10k pull-up, 1k / 100 nF filter; PWR_BTN low = button ON
+    ys = 241.3
+    lab("L:BTN_SNS", (139.7, ys), 180)
+    rpu = R(sh, 10e3, "+3V3", "L:BTN_SNS", rot=0)
+    at_pin(rpu, 2, (144.78, ys))
+    W((139.7, ys), PIN(rpu, 2))
+    v33(PIN(rpu, 1))
+    rf = R(sh, 1e3, "L:BTN_SNS", "PWR_BTN")
+    at_pin(rf, 1, (149.86, ys))
+    W(PIN(rpu, 2), PIN(rf, 1))
+    hang(sh, C(sh, 100e-9, "PWR_BTN", "GND", rot=0), (162.56, ys))
+    W(PIN(rf, 2), (172.72, ys))
+    TP(sh, "PWR_BTN", at=(167.64, ys))
+    lab("PWR_BTN", (172.72, ys), 0)
     return sh
 
 
