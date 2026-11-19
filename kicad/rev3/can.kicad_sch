@@ -2350,6 +2350,106 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector_Generic_MountingPin:Conn_01x04_MountingPin")
+		(at 215.9 127 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "1ec523df-f396-5677-b5d3-4fe6c2756303")
+		(property "Reference" "J34"
+			(at 215.9 121.92 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CAN 1 (Molex CLIK-Mate 502585-0470)"
+			(at 217.17 134.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal"
+			(at 215.9 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 215.9 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 215.9 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "502585-0470"
+			(at 215.9 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "41d4b3c2-3260-53c7-aa4d-127eeb672cc4")
+		)
+		(pin "2"
+			(uuid "358098b2-fadb-5dbd-8149-1a6fbfdf0c4d")
+		)
+		(pin "3"
+			(uuid "66f789e5-62c4-50eb-8de4-9b251a1942b1")
+		)
+		(pin "4"
+			(uuid "8ef82612-8ad8-5ba8-b8af-2ac81cb7da2f")
+		)
+		(pin "MP"
+			(uuid "4575fc4c-47eb-528f-bc03-696a876dd624")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
+					(reference "J34")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 154.94 120.65 0)
 		(unit 1)
@@ -2441,7 +2541,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 86.36 115.57 0)
+		(at 165.1 133.35 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2451,7 +2551,7 @@
 		(dnp no)
 		(uuid "30f22235-de97-5f0c-8ecf-f9e464d5ac2b")
 		(property "Reference" "C110"
-			(at 86.995 113.03 0)
+			(at 165.735 130.81 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2461,8 +2561,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
-			(at 86.995 118.11 0)
+		(property "Value" "4.7nF/50V"
+			(at 165.735 135.89 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2473,7 +2573,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 86.36 115.57 0)
+			(at 165.1 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2484,7 +2584,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 86.36 115.57 0)
+			(at 165.1 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2495,7 +2595,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 86.36 115.57 0)
+			(at 165.1 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2505,8 +2605,8 @@
 				)
 			)
 		)
-		(property "MPN" "C0603C104K5RACTU"
-			(at 86.36 115.57 0)
+		(property "MPN" "CL10B472KB8NNNC"
+			(at 165.1 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2686,6 +2786,98 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at 86.36 115.57 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "4db54e78-7d03-546b-baad-c44c02a84b2c")
+		(property "Reference" "C108"
+			(at 86.995 113.03 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 86.995 118.11 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 86.36 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 86.36 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 86.36 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C0603C104K5RACTU"
+			(at 86.36 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "23a526fd-ed7f-54e9-9234-95e48d8804fd")
+		)
+		(pin "2"
+			(uuid "a5a5e040-24dd-5c21-9ea4-2a841b97b814")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
+					(reference "C108")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 205.74 167.64 0)
 		(unit 1)
@@ -2763,106 +2955,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic_MountingPin:Conn_01x04_MountingPin")
-		(at 215.9 152.4 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "6051b4e8-e9b7-54b8-bcdf-98caef6f8b1b")
-		(property "Reference" "J46"
-			(at 215.9 147.32 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "CAN 2 (Molex CLIK-Mate 502585-0470)"
-			(at 217.17 160.02 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal"
-			(at 215.9 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 215.9 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 215.9 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "502585-0470"
-			(at 215.9 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "76285306-7ff6-526a-81a8-facd36767e43")
-		)
-		(pin "2"
-			(uuid "aad16d95-bed9-5ff7-9e20-d0c6c34e92d9")
-		)
-		(pin "3"
-			(uuid "9ba963b7-df1f-500c-9805-6e5872486234")
-		)
-		(pin "4"
-			(uuid "671f1bba-6338-5ddc-b5a5-a713b3f1932b")
-		)
-		(pin "MP"
-			(uuid "d8b34200-2643-5a2e-bddf-e5066ee5146f")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
-					(reference "J46")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 205.74 142.24 0)
 		(unit 1)
@@ -2934,106 +3026,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
 					(reference "#PWRcan007")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic_MountingPin:Conn_01x04_MountingPin")
-		(at 215.9 127 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "6c730991-ea88-5142-a769-b99b36a9c0c2")
-		(property "Reference" "J45"
-			(at 215.9 121.92 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "CAN 1 (Molex CLIK-Mate 502585-0470)"
-			(at 217.17 134.62 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal"
-			(at 215.9 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 215.9 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 215.9 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "502585-0470"
-			(at 215.9 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "eee44416-de94-5949-be9d-69cf24e92864")
-		)
-		(pin "2"
-			(uuid "84991865-22cf-5c2a-b3f5-14a0daee603d")
-		)
-		(pin "3"
-			(uuid "cf28cea6-ef11-5456-9ba6-791d3c7f46fc")
-		)
-		(pin "4"
-			(uuid "92f8e1f0-7716-57ea-919f-86cfe4b2b451")
-		)
-		(pin "MP"
-			(uuid "a4a73580-84d3-53b8-9a1f-57870083fbdb")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
-					(reference "J45")
 					(unit 1)
 				)
 			)
@@ -3127,8 +3119,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 119.38 115.57 0)
+		(lib_id "Connector_Generic_MountingPin:Conn_01x04_MountingPin")
+		(at 215.9 152.4 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3136,9 +3128,19 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "72c38953-8280-58a9-91cc-ec5c79334260")
-		(property "Reference" "C111"
-			(at 120.015 113.03 0)
+		(uuid "708e5659-cc6f-53b6-84c8-93ad544b8b0e")
+		(property "Reference" "J35"
+			(at 215.9 147.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CAN 2 (Molex CLIK-Mate 502585-0470)"
+			(at 217.17 160.02 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3148,19 +3150,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
-			(at 120.015 118.11 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 119.38 115.57 0)
+		(property "Footprint" "Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal"
+			(at 215.9 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3171,7 +3162,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 119.38 115.57 0)
+			(at 215.9 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3182,7 +3173,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 119.38 115.57 0)
+			(at 215.9 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3192,8 +3183,8 @@
 				)
 			)
 		)
-		(property "MPN" "C0603C104K5RACTU"
-			(at 119.38 115.57 0)
+		(property "MPN" "502585-0470"
+			(at 215.9 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3204,15 +3195,24 @@
 			)
 		)
 		(pin "1"
-			(uuid "0e101f2c-a61a-5fa4-bacd-05cdc2add3e8")
+			(uuid "5814650a-8f4d-58f8-ba2f-d139865459d2")
 		)
 		(pin "2"
-			(uuid "15fa347b-1b9c-5e12-a750-858e438a0ef3")
+			(uuid "017ace1d-aa86-5613-9689-5735d5d4732a")
+		)
+		(pin "3"
+			(uuid "a179294f-f1f3-5117-a718-402e6d91623c")
+		)
+		(pin "4"
+			(uuid "b3e5998f-7ea0-5fd2-9911-2816e6f77f25")
+		)
+		(pin "MP"
+			(uuid "b8f3f237-e7c9-5230-80c8-e5da9540a859")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
-					(reference "C111")
+					(reference "J35")
 					(unit 1)
 				)
 			)
@@ -3459,98 +3459,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
 					(reference "#PWRcan006")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 165.1 133.35 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "965d8f7c-6de6-5d49-9c4c-ab75d4501f7f")
-		(property "Reference" "C112"
-			(at 165.735 130.81 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "4.7nF/50V"
-			(at 165.735 135.89 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 165.1 133.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 165.1 133.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 165.1 133.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "CL10B472KB8NNNC"
-			(at 165.1 133.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "8f7e7e77-fe28-54b0-b388-b90af227d5ae")
-		)
-		(pin "2"
-			(uuid "9a0d8da1-31a5-56e2-8f6d-6cb25fc72648")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
-					(reference "C112")
 					(unit 1)
 				)
 			)
@@ -3805,6 +3713,98 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
 					(reference "R164")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 119.38 115.57 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f2a34066-f00a-54c4-911e-a8a6c0050b1c")
+		(property "Reference" "C109"
+			(at 120.015 113.03 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 120.015 118.11 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 119.38 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 119.38 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 119.38 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C0603C104K5RACTU"
+			(at 119.38 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "c345c3e5-35b7-5560-8597-5ebbe57080fd")
+		)
+		(pin "2"
+			(uuid "17041e05-3081-52b9-aee3-f40f41115399")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
+					(reference "C109")
 					(unit 1)
 				)
 			)

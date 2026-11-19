@@ -565,7 +565,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "OUT42D = drive group (two EPOS4 50/5 per XT90, 2 spare). OUT42C = converter feeds (3 + 1 spare)."
+	(text "OUT42D = drive group (3 x XT90, two EPOS4 50/5 per XT90). OUT42C = 2 converter feeds; one is Y-split in the harness for the third converter."
 		(exclude_from_sim no)
 		(at 20 42 0)
 		(effects
@@ -628,12 +628,6 @@
 		(uuid "0001651b-c922-5070-81be-c310e9f4dd05")
 	)
 	(junction
-		(at 45.72 198.12)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "01b8f169-29d7-561c-acdf-77ba64ec9d79")
-	)
-	(junction
 		(at 134.62 147.32)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -658,12 +652,6 @@
 		(uuid "0c119148-a311-59a8-aab4-b720f3dbffde")
 	)
 	(junction
-		(at 177.8 81.28)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "0dabdb4a-0539-5fdb-aef2-2a57be6e8607")
-	)
-	(junction
 		(at 116.84 81.28)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -674,12 +662,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "13c31413-fb14-5336-bf6c-520e9ef0ad2a")
-	)
-	(junction
-		(at 45.72 187.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "181b342b-5bf1-57dc-a6df-88bbd691612c")
 	)
 	(junction
 		(at 45.72 147.32)
@@ -700,12 +682,6 @@
 		(uuid "20db976d-c33c-52f0-bdf3-7d312aad2cf3")
 	)
 	(junction
-		(at 59.69 198.12)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2c18da91-a735-5597-82dd-c7fce183ca84")
-	)
-	(junction
 		(at 40.64 86.36)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -718,22 +694,10 @@
 		(uuid "3067f5f2-b606-5f1e-a903-09af39fb53c0")
 	)
 	(junction
-		(at 237.49 208.28)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "34f568aa-8a44-57f2-807e-29dcee6d8398")
-	)
-	(junction
 		(at 59.69 157.48)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "355c51cc-2679-5c91-855a-9dc8ae166823")
-	)
-	(junction
-		(at 134.62 187.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3c6e0ee5-8cb2-5041-bf46-086b85d1b94a")
 	)
 	(junction
 		(at 45.72 157.48)
@@ -772,12 +736,6 @@
 		(uuid "5f2942b8-64ae-5e74-9e25-9f2da1fbb36a")
 	)
 	(junction
-		(at 237.49 218.44)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5fa4fa2a-abdc-534b-afc1-03bd8c4bd2eb")
-	)
-	(junction
 		(at 237.49 137.16)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -790,40 +748,16 @@
 		(uuid "6b4c1941-65ee-5bfb-b890-50f3f3b6b49c")
 	)
 	(junction
-		(at 223.52 208.28)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6e76b460-1980-5797-9b4a-49f20d168835")
-	)
-	(junction
 		(at 59.69 187.96)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8226ed8c-f1c3-5b3f-9e35-350211aa889e")
 	)
 	(junction
-		(at 237.49 228.6)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "827b0a8b-8a30-5bb9-be48-96d123d92f1e")
-	)
-	(junction
-		(at 223.52 187.96)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "8a19c0db-8dfa-5492-b89f-53947dbcb715")
-	)
-	(junction
 		(at 223.52 167.64)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8d1a76f0-cf4b-5884-a18d-8f59e2207db0")
-	)
-	(junction
-		(at 177.8 91.44)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "90ae743d-f534-5b83-a104-3e01df1c3daa")
 	)
 	(junction
 		(at 59.69 137.16)
@@ -838,28 +772,10 @@
 		(uuid "940972b2-e287-5c97-8ef0-6d87e3fed482")
 	)
 	(junction
-		(at 237.49 238.76)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "96be5ee0-d4d0-5656-9fa1-b2955d4a9bd3")
-	)
-	(junction
 		(at 177.8 71.12)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a1076067-014d-5c74-9cfc-f2726a772b06")
-	)
-	(junction
-		(at 59.69 208.28)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "a4ef34fa-3aae-5a31-a0bf-59889945a91a")
-	)
-	(junction
-		(at 237.49 198.12)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "a5e901c1-9fa9-5e4c-8d0e-e2dcd5e0eef4")
 	)
 	(junction
 		(at 223.52 147.32)
@@ -892,22 +808,10 @@
 		(uuid "bef693d5-1c67-5897-a6a9-7c2ec990eaa0")
 	)
 	(junction
-		(at 223.52 228.6)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "bf5e022c-4457-53f6-b086-20c62fffc3c4")
-	)
-	(junction
 		(at 148.59 167.64)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c1d76955-94a3-59ca-9cff-18e6ae21021c")
-	)
-	(junction
-		(at 223.52 218.44)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "c9334493-a637-5f83-9dbf-a119a48caf85")
 	)
 	(junction
 		(at 237.49 147.32)
@@ -916,28 +820,10 @@
 		(uuid "cc420689-9b14-54ef-b323-acc306ddbd97")
 	)
 	(junction
-		(at 148.59 198.12)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "cc4406bc-4ea8-5117-9013-d6bee6a51b72")
-	)
-	(junction
 		(at 45.72 177.8)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d749830a-bc88-53d2-937a-fc76fc2be800")
-	)
-	(junction
-		(at 116.84 91.44)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d8160b5d-0933-55a2-a8e5-8c9d6b4301b3")
-	)
-	(junction
-		(at 223.52 198.12)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d8888240-79d4-5cd3-8a6c-3f8e6c895d76")
 	)
 	(junction
 		(at 237.49 167.64)
@@ -1061,26 +947,6 @@
 	)
 	(wire
 		(pts
-			(xy 233.68 198.12) (xy 237.49 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "15913933-b0b1-5842-8c94-0a23bad1ee16")
-	)
-	(wire
-		(pts
-			(xy 59.69 198.12) (xy 73.66 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "16aff5f9-74ae-59e6-9d15-338d02279eec")
-	)
-	(wire
-		(pts
 			(xy 134.62 177.8) (xy 137.16 177.8)
 		)
 		(stroke
@@ -1088,16 +954,6 @@
 			(type default)
 		)
 		(uuid "173233e1-e045-5fa6-9225-c8ce439a9420")
-	)
-	(wire
-		(pts
-			(xy 233.68 218.44) (xy 237.49 218.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "17a29ea0-c158-55e7-9c2d-89df58d634a8")
 	)
 	(wire
 		(pts
@@ -1138,16 +994,6 @@
 			(type default)
 		)
 		(uuid "1cba2664-7c9d-50f5-a564-0158b0a31523")
-	)
-	(wire
-		(pts
-			(xy 233.68 208.28) (xy 237.49 208.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1fe74e24-5dca-5322-8124-cf29fb668fe3")
 	)
 	(wire
 		(pts
@@ -1231,26 +1077,6 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 81.28) (xy 177.8 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2c39a69e-149b-5ce0-b88f-d7b6c3f1e41b")
-	)
-	(wire
-		(pts
-			(xy 223.52 208.28) (xy 223.52 218.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2d2ac79b-17d5-5902-b6d3-1d2c5e7d6cd8")
-	)
-	(wire
-		(pts
 			(xy 144.78 167.64) (xy 148.59 167.64)
 		)
 		(stroke
@@ -1281,16 +1107,6 @@
 	)
 	(wire
 		(pts
-			(xy 223.52 218.44) (xy 226.06 218.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "345906e0-f2de-5c6c-825e-b6426f335f94")
-	)
-	(wire
-		(pts
 			(xy 233.68 147.32) (xy 237.49 147.32)
 		)
 		(stroke
@@ -1308,16 +1124,6 @@
 			(type default)
 		)
 		(uuid "354df3ca-158c-5166-aed6-ce9f75d572b6")
-	)
-	(wire
-		(pts
-			(xy 251.46 241.3) (xy 248.92 241.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "36e8f154-621e-5585-b9ef-7f69d8efa1f9")
 	)
 	(wire
 		(pts
@@ -1401,16 +1207,6 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 91.44) (xy 187.96 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "473237da-f795-541f-91d4-23c2dc0cca83")
-	)
-	(wire
-		(pts
 			(xy 116.84 71.12) (xy 127 71.12)
 		)
 		(stroke
@@ -1451,16 +1247,6 @@
 	)
 	(wire
 		(pts
-			(xy 237.49 218.44) (xy 251.46 218.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4b2621f3-ce5e-5ef6-929f-820288827089")
-	)
-	(wire
-		(pts
 			(xy 35.56 86.36) (xy 40.64 86.36)
 		)
 		(stroke
@@ -1481,16 +1267,6 @@
 	)
 	(wire
 		(pts
-			(xy 237.49 198.12) (xy 251.46 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4d1ede71-6f79-5de1-b9dc-5a558ff47a7b")
-	)
-	(wire
-		(pts
 			(xy 55.88 177.8) (xy 59.69 177.8)
 		)
 		(stroke
@@ -1508,26 +1284,6 @@
 			(type default)
 		)
 		(uuid "56425920-fa6d-5057-858c-085e759b6578")
-	)
-	(wire
-		(pts
-			(xy 134.62 187.96) (xy 134.62 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "56cb4504-3e55-5db5-9931-fc5486c1b6b1")
-	)
-	(wire
-		(pts
-			(xy 127 104.14) (xy 124.46 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "56cb6afc-8b39-506f-94b4-237096c7880f")
 	)
 	(wire
 		(pts
@@ -1561,26 +1317,6 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 200.66) (xy 71.12 200.66)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5aa7afc3-14d2-57d2-8169-9f11d456ce2f")
-	)
-	(wire
-		(pts
-			(xy 73.66 210.82) (xy 71.12 210.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5acdc84f-3f70-5207-a7f2-cbc1f0e3c195")
-	)
-	(wire
-		(pts
 			(xy 162.56 149.86) (xy 160.02 149.86)
 		)
 		(stroke
@@ -1601,26 +1337,6 @@
 	)
 	(wire
 		(pts
-			(xy 223.52 228.6) (xy 226.06 228.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "60f51d46-2979-5e15-9609-2a265a312a76")
-	)
-	(wire
-		(pts
-			(xy 177.8 91.44) (xy 177.8 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "615e0fa4-2331-5519-ab83-9f5e28ef7b0e")
-	)
-	(wire
-		(pts
 			(xy 148.59 187.96) (xy 162.56 187.96)
 		)
 		(stroke
@@ -1638,26 +1354,6 @@
 			(type default)
 		)
 		(uuid "64afdef2-9366-57ad-b22a-fd535d257972")
-	)
-	(wire
-		(pts
-			(xy 45.72 187.96) (xy 45.72 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "65d7c7ff-61b4-558c-93dc-fc2e2f512442")
-	)
-	(wire
-		(pts
-			(xy 223.52 198.12) (xy 223.52 208.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "670e5378-ff14-5977-8178-7930f91dba2b")
 	)
 	(wire
 		(pts
@@ -1688,16 +1384,6 @@
 			(type default)
 		)
 		(uuid "71dff856-941d-5a36-873f-9e38d520c89b")
-	)
-	(wire
-		(pts
-			(xy 45.72 198.12) (xy 48.26 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "763a4c2c-af9d-5475-9921-d89459fb7a8c")
 	)
 	(wire
 		(pts
@@ -1738,16 +1424,6 @@
 			(type default)
 		)
 		(uuid "7fe9355e-e4a2-5280-8424-b976aa757c2c")
-	)
-	(wire
-		(pts
-			(xy 55.88 208.28) (xy 59.69 208.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "802b5611-431c-5a7b-932a-3dca5c540c13")
 	)
 	(wire
 		(pts
@@ -1821,16 +1497,6 @@
 	)
 	(wire
 		(pts
-			(xy 55.88 198.12) (xy 59.69 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "84ad16bd-eba7-55b0-8929-827533496fe8")
-	)
-	(wire
-		(pts
 			(xy 73.66 139.7) (xy 71.12 139.7)
 		)
 		(stroke
@@ -1838,16 +1504,6 @@
 			(type default)
 		)
 		(uuid "85835c4a-57e1-530e-b271-5be162c764fa")
-	)
-	(wire
-		(pts
-			(xy 223.52 208.28) (xy 226.06 208.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "86adb8e0-377a-5070-8b62-b796d96bc51c")
 	)
 	(wire
 		(pts
@@ -1971,16 +1627,6 @@
 	)
 	(wire
 		(pts
-			(xy 59.69 208.28) (xy 73.66 208.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "99b1e740-0140-513d-9bfa-687c30b2ff7f")
-	)
-	(wire
-		(pts
 			(xy 116.84 81.28) (xy 116.84 91.44)
 		)
 		(stroke
@@ -2031,16 +1677,6 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 101.6) (xy 187.96 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9fe4c031-7f11-5fd4-a216-51b6b4a04bb1")
-	)
-	(wire
-		(pts
 			(xy 45.72 187.96) (xy 48.26 187.96)
 		)
 		(stroke
@@ -2088,16 +1724,6 @@
 			(type default)
 		)
 		(uuid "a3ff13d1-d3e0-56e0-b6be-a39cc1dfb8f5")
-	)
-	(wire
-		(pts
-			(xy 144.78 198.12) (xy 148.59 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a45197a7-3726-5d35-878d-e7322551b448")
 	)
 	(wire
 		(pts
@@ -2161,16 +1787,6 @@
 	)
 	(wire
 		(pts
-			(xy 187.96 93.98) (xy 185.42 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "aa7a3c48-e346-5d82-a608-1fc428dc500b")
-	)
-	(wire
-		(pts
 			(xy 45.72 147.32) (xy 45.72 157.48)
 		)
 		(stroke
@@ -2188,26 +1804,6 @@
 			(type default)
 		)
 		(uuid "aacd3a5a-4a7a-5f38-b39d-5c71d886b03f")
-	)
-	(wire
-		(pts
-			(xy 148.59 198.12) (xy 162.56 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ab6f39f6-787f-5073-b4ee-788f67689e07")
-	)
-	(wire
-		(pts
-			(xy 251.46 220.98) (xy 248.92 220.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ab98b12c-6936-583f-be15-a189ba6f07a4")
 	)
 	(wire
 		(pts
@@ -2238,26 +1834,6 @@
 			(type default)
 		)
 		(uuid "ae708811-435e-57ad-9365-bcdfda681628")
-	)
-	(wire
-		(pts
-			(xy 251.46 231.14) (xy 248.92 231.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "af42d1f5-354e-57c6-ae63-55743dcf3912")
-	)
-	(wire
-		(pts
-			(xy 223.52 187.96) (xy 223.52 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b1312cf1-c0d0-5790-b589-6b8f99504cd9")
 	)
 	(wire
 		(pts
@@ -2301,16 +1877,6 @@
 	)
 	(wire
 		(pts
-			(xy 223.52 228.6) (xy 223.52 238.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c15279be-d464-535c-b7ca-0cb6e46edcab")
-	)
-	(wire
-		(pts
 			(xy 251.46 160.02) (xy 248.92 160.02)
 		)
 		(stroke
@@ -2341,16 +1907,6 @@
 	)
 	(wire
 		(pts
-			(xy 237.49 238.76) (xy 251.46 238.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cc8ebb73-22d1-547b-8a1c-71aa03cd73d4")
-	)
-	(wire
-		(pts
 			(xy 251.46 149.86) (xy 248.92 149.86)
 		)
 		(stroke
@@ -2358,16 +1914,6 @@
 			(type default)
 		)
 		(uuid "d912fe84-1654-5c99-80dd-cc041f9d5f7e")
-	)
-	(wire
-		(pts
-			(xy 237.49 208.28) (xy 251.46 208.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "da016ed2-14f8-5e38-9fae-72e07fb23345")
 	)
 	(wire
 		(pts
@@ -2381,16 +1927,6 @@
 	)
 	(wire
 		(pts
-			(xy 116.84 101.6) (xy 127 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dd9b0765-4a70-5d88-96e5-11f8101d381f")
-	)
-	(wire
-		(pts
 			(xy 148.59 147.32) (xy 162.56 147.32)
 		)
 		(stroke
@@ -2398,16 +1934,6 @@
 			(type default)
 		)
 		(uuid "de32e669-431f-565c-9d2a-4cc2767badcf")
-	)
-	(wire
-		(pts
-			(xy 45.72 208.28) (xy 48.26 208.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "de3bc690-76f5-57e3-953f-3b5dff2eee2f")
 	)
 	(wire
 		(pts
@@ -2421,36 +1947,6 @@
 	)
 	(wire
 		(pts
-			(xy 162.56 200.66) (xy 160.02 200.66)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "df8173e1-0b93-5451-ad89-2929bbb12aae")
-	)
-	(wire
-		(pts
-			(xy 116.84 91.44) (xy 116.84 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e04265ea-6ce5-5900-a007-5c73a47c37d0")
-	)
-	(wire
-		(pts
-			(xy 223.52 218.44) (xy 223.52 228.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e2cd10ea-508d-5ad6-9d0f-c992b5a14857")
-	)
-	(wire
-		(pts
 			(xy 237.49 177.8) (xy 251.46 177.8)
 		)
 		(stroke
@@ -2461,16 +1957,6 @@
 	)
 	(wire
 		(pts
-			(xy 134.62 198.12) (xy 137.16 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e5434339-87d1-51dc-95db-389310a8c884")
-	)
-	(wire
-		(pts
 			(xy 134.62 132.08) (xy 134.62 137.16)
 		)
 		(stroke
@@ -2478,26 +1964,6 @@
 			(type default)
 		)
 		(uuid "e7b6bac5-39fa-5250-9a1d-eff9381b6bed")
-	)
-	(wire
-		(pts
-			(xy 223.52 238.76) (xy 226.06 238.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ea0fe8fc-e77e-5938-8d33-1c32ddd0d035")
-	)
-	(wire
-		(pts
-			(xy 187.96 104.14) (xy 185.42 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ea9d39d9-20fb-5d25-8d55-1615da6cda62")
 	)
 	(wire
 		(pts
@@ -2531,16 +1997,6 @@
 	)
 	(wire
 		(pts
-			(xy 233.68 238.76) (xy 237.49 238.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ef256e75-1164-5c13-942b-95a1649c5331")
-	)
-	(wire
-		(pts
 			(xy 162.56 190.5) (xy 160.02 190.5)
 		)
 		(stroke
@@ -2548,26 +2004,6 @@
 			(type default)
 		)
 		(uuid "f0f4c206-ce1f-5321-bb77-32b802608a8c")
-	)
-	(wire
-		(pts
-			(xy 251.46 210.82) (xy 248.92 210.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f29b8f02-c39a-51c1-9ffb-76b32ae59ba3")
-	)
-	(wire
-		(pts
-			(xy 251.46 200.66) (xy 248.92 200.66)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f3b0caba-26b6-5840-b4e0-c15dba54a3f2")
 	)
 	(wire
 		(pts
@@ -2591,26 +2027,6 @@
 	)
 	(wire
 		(pts
-			(xy 237.49 228.6) (xy 251.46 228.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f45c5260-8a4e-514e-b86c-fbf355e96204")
-	)
-	(wire
-		(pts
-			(xy 45.72 198.12) (xy 45.72 208.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f559b751-ae03-5e8a-9467-5fa39e2c2649")
-	)
-	(wire
-		(pts
 			(xy 111.76 66.04) (xy 116.84 66.04)
 		)
 		(stroke
@@ -2631,16 +2047,6 @@
 	)
 	(wire
 		(pts
-			(xy 223.52 198.12) (xy 226.06 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f829ea64-6bfa-5ed5-bfa3-c01101e725b5")
-	)
-	(wire
-		(pts
 			(xy 237.49 157.48) (xy 251.46 157.48)
 		)
 		(stroke
@@ -2658,16 +2064,6 @@
 			(type default)
 		)
 		(uuid "fd116396-de77-5e8a-abf8-44a7565101ff")
-	)
-	(wire
-		(pts
-			(xy 233.68 228.6) (xy 237.49 228.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fdefb77b-49cc-5f7c-a403-bf3a7c84a0e9")
 	)
 	(wire
 		(pts
@@ -2709,16 +2105,6 @@
 		)
 		(uuid "0fc15c4c-c5c5-5261-b786-71c07c20993e")
 	)
-	(label "O5_11"
-		(at 237.49 238.76 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "237bb2d1-a1c8-582f-b55d-ce94123091b4")
-	)
 	(label "O5_1"
 		(at 237.49 137.16 0)
 		(effects
@@ -2739,16 +2125,6 @@
 		)
 		(uuid "3017352f-3098-572d-a46e-d23c353dbea9")
 	)
-	(label "O5_7"
-		(at 237.49 198.12 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "45ce6f35-a4ca-5a74-b45c-415c175173a2")
-	)
 	(label "O5_3"
 		(at 237.49 157.48 0)
 		(effects
@@ -2758,16 +2134,6 @@
 			(justify left bottom)
 		)
 		(uuid "585f2f75-d0a9-5980-93a1-9bdbce4d5f81")
-	)
-	(label "O5_8"
-		(at 237.49 208.28 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "5ad1cb88-8c99-5181-b299-ed766dc26324")
 	)
 	(label "O5_6"
 		(at 237.49 187.96 0)
@@ -2799,26 +2165,6 @@
 		)
 		(uuid "79b308e6-128f-549c-bc41-aaf6ab8703a6")
 	)
-	(label "O24_7"
-		(at 59.69 198.12 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "7c6bd362-31d5-57d6-bd9c-68cd67d6074a")
-	)
-	(label "O24_8"
-		(at 59.69 208.28 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "915ea8d7-715a-5bbf-86a9-a92bf6eb45b0")
-	)
 	(label "O5_4"
 		(at 237.49 167.64 0)
 		(effects
@@ -2848,26 +2194,6 @@
 			(justify left bottom)
 		)
 		(uuid "a83b6d01-0517-5116-852d-44419b37afcf")
-	)
-	(label "O5_9"
-		(at 237.49 218.44 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "aa11e9c9-148a-5afe-a853-66b724d2cb59")
-	)
-	(label "O5_10"
-		(at 237.49 228.6 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "b164f1aa-c6c7-5864-be19-8584c98f5d0b")
 	)
 	(label "O5_5"
 		(at 237.49 177.8 0)
@@ -2938,16 +2264,6 @@
 			(justify left bottom)
 		)
 		(uuid "f0fa2c9b-71d7-56c4-8fca-5f671cacf44f")
-	)
-	(label "O12_7"
-		(at 148.59 198.12 0)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left bottom)
-		)
-		(uuid "fb7e4b96-74eb-55fc-892b-7751f869519e")
 	)
 	(global_label "VIN12"
 		(shape passive)
@@ -3167,7 +2483,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 132.08 101.6 0)
+		(at 193.04 71.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3177,7 +2493,7 @@
 		(dnp no)
 		(uuid "003ac223-b733-5b6d-be5d-47ee7cc296f6")
 		(property "Reference" "J11"
-			(at 134.62 101.6 0)
+			(at 195.58 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3188,7 +2504,7 @@
 			)
 		)
 		(property "Value" "XT90PB-F"
-			(at 134.62 104.14 0)
+			(at 195.58 73.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3199,7 +2515,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
-			(at 132.08 101.6 0)
+			(at 193.04 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3210,7 +2526,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 132.08 101.6 0)
+			(at 193.04 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3221,7 +2537,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 132.08 101.6 0)
+			(at 193.04 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3232,7 +2548,7 @@
 			)
 		)
 		(property "MPN" "XT90PB-F"
-			(at 132.08 101.6 0)
+			(at 193.04 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3259,7 +2575,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 71.12 139.7 0)
+		(at 71.12 170.18 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3269,6 +2585,175 @@
 		(dnp no)
 		(uuid "029e5463-f4d0-5dcd-8f56-b732e95c46c5")
 		(property "Reference" "#PWRoutputs016"
+			(at 71.12 176.53 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 71.12 173.99 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 71.12 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 71.12 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 71.12 170.18 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "10d681f5-4aed-5bfb-ba13-a0c3404c6ea4")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
+					(reference "#PWRoutputs016")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 256.54 157.48 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "05a29767-e62b-5285-a051-271df19fad52")
+		(property "Reference" "J28"
+			(at 259.08 157.48 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "XT30UPB-F"
+			(at 259.08 160.02 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
+			(at 256.54 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 256.54 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 256.54 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT30UPB-F"
+			(at 256.54 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "fea8b75a-0b42-5170-9a22-3aa02e2470f5")
+		)
+		(pin "2"
+			(uuid "077b1049-8ffd-5eb4-9486-0dfbb9ae6b59")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
+					(reference "J28")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 71.12 139.7 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "0ae29962-245d-5bca-ad70-ade4b903b237")
+		(property "Reference" "#PWRoutputs013"
 			(at 71.12 146.05 0)
 			(hide yes)
 			(show_name no)
@@ -3323,252 +2808,6 @@
 			)
 		)
 		(pin "1"
-			(uuid "10d681f5-4aed-5bfb-ba13-a0c3404c6ea4")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "#PWRoutputs016")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 167.64 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "05a29767-e62b-5285-a051-271df19fad52")
-		(property "Reference" "J28"
-			(at 170.18 167.64 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT60PT-F"
-			(at 170.18 170.18 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 167.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 167.64 167.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 167.64 167.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "XT60PT-F"
-			(at 167.64 167.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "fea8b75a-0b42-5170-9a22-3aa02e2470f5")
-		)
-		(pin "2"
-			(uuid "077b1049-8ffd-5eb4-9486-0dfbb9ae6b59")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J28")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 248.92 231.14 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "0763e1ec-41f7-5c5e-9b9c-9d298c6a58e9")
-		(property "Reference" "#PWRoutputs040"
-			(at 248.92 237.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 248.92 234.95 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 248.92 231.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 248.92 231.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 248.92 231.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d6fefa21-f96d-58c4-b455-2f00be329d6a")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "#PWRoutputs040")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 185.42 93.98 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "0ae29962-245d-5bca-ad70-ade4b903b237")
-		(property "Reference" "#PWRoutputs013"
-			(at 185.42 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 185.42 97.79 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 185.42 93.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 185.42 93.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 185.42 93.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
 			(uuid "c73f0ac7-52b2-50e9-84b8-752f2e8c7880")
 		)
 		(instances
@@ -3582,7 +2821,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 160.02 170.18 0)
+		(at 248.92 160.02 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3592,7 +2831,7 @@
 		(dnp no)
 		(uuid "125a02e7-d77b-5e72-bad2-eec71a7e0689")
 		(property "Reference" "#PWRoutputs027"
-			(at 160.02 176.53 0)
+			(at 248.92 166.37 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3603,7 +2842,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 160.02 173.99 0)
+			(at 248.92 163.83 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3613,7 +2852,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 160.02 170.18 0)
+			(at 248.92 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3624,7 +2863,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 160.02 170.18 0)
+			(at 248.92 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3635,7 +2874,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 160.02 170.18 0)
+			(at 248.92 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3659,7 +2898,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 71.12 210.82 0)
+		(at 160.02 180.34 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3669,7 +2908,7 @@
 		(dnp no)
 		(uuid "1286ea30-59fa-5f45-ace2-83b6847340da")
 		(property "Reference" "#PWRoutputs023"
-			(at 71.12 217.17 0)
+			(at 160.02 186.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3680,7 +2919,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 71.12 214.63 0)
+			(at 160.02 184.15 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3690,7 +2929,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 71.12 210.82 0)
+			(at 160.02 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3701,7 +2940,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 71.12 210.82 0)
+			(at 160.02 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3712,7 +2951,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 71.12 210.82 0)
+			(at 160.02 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3736,7 +2975,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 160.02 139.7 0)
+		(at 160.02 190.5 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3746,7 +2985,7 @@
 		(dnp no)
 		(uuid "154af2cf-a3a4-56cc-9384-ce4474f3b262")
 		(property "Reference" "#PWRoutputs024"
-			(at 160.02 146.05 0)
+			(at 160.02 196.85 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3757,7 +2996,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 160.02 143.51 0)
+			(at 160.02 194.31 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3767,7 +3006,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 160.02 139.7 0)
+			(at 160.02 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3778,7 +3017,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 160.02 139.7 0)
+			(at 160.02 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3789,7 +3028,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 160.02 139.7 0)
+			(at 160.02 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3813,7 +3052,7 @@
 	)
 	(symbol
 		(lib_id "Device:Polyfuse")
-		(at 52.07 208.28 90)
+		(at 140.97 147.32 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3823,7 +3062,7 @@
 		(dnp no)
 		(uuid "19cf3cff-40e8-56c1-a47d-3ddfd085d98e")
 		(property "Reference" "F8"
-			(at 48.26 205.74 90)
+			(at 137.16 144.78 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3833,8 +3072,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "MF-R300"
-			(at 48.26 210.82 90)
+		(property "Value" "MF-LSMF300/16X-2"
+			(at 137.16 149.86 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3844,8 +3083,8 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:Fuse_Bourns_MF-R300_P5.08mm"
-			(at 52.07 208.28 0)
+		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
+			(at 140.97 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3856,7 +3095,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 52.07 208.28 0)
+			(at 140.97 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3867,7 +3106,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 52.07 208.28 0)
+			(at 140.97 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3877,8 +3116,8 @@
 				)
 			)
 		)
-		(property "MPN" "MF-R300"
-			(at 52.07 208.28 0)
+		(property "MPN" "MF-LSMF300/16X-2"
+			(at 140.97 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3997,7 +3236,7 @@
 	)
 	(symbol
 		(lib_id "Device:Polyfuse")
-		(at 229.87 137.16 90)
+		(at 229.87 167.64 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4007,7 +3246,7 @@
 		(dnp no)
 		(uuid "1cbb6805-bf48-581e-9e33-ca7f298a6de8")
 		(property "Reference" "F16"
-			(at 226.06 134.62 90)
+			(at 226.06 165.1 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4018,7 +3257,7 @@
 			)
 		)
 		(property "Value" "MF-LSMF300X-2"
-			(at 226.06 139.7 90)
+			(at 226.06 170.18 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4029,7 +3268,7 @@
 			)
 		)
 		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 229.87 137.16 0)
+			(at 229.87 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4040,7 +3279,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 229.87 137.16 0)
+			(at 229.87 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4051,7 +3290,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 229.87 137.16 0)
+			(at 229.87 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4062,7 +3301,7 @@
 			)
 		)
 		(property "MPN" "MF-LSMF300X-2"
-			(at 229.87 137.16 0)
+			(at 229.87 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4181,7 +3420,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 157.48 0)
+		(at 256.54 147.32 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4191,6 +3430,98 @@
 		(dnp no)
 		(uuid "22649ef6-33d7-51fe-86b7-f852a3c054a6")
 		(property "Reference" "J27"
+			(at 259.08 147.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "XT30UPB-F"
+			(at 259.08 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
+			(at 256.54 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 256.54 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 256.54 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT30UPB-F"
+			(at 256.54 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "05b5d4ac-c00e-54c2-9c80-279c3036a1a7")
+		)
+		(pin "2"
+			(uuid "7670e695-384c-55ed-8720-7381046a96b6")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
+					(reference "J27")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 167.64 157.48 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "244ec45e-e6a7-51f4-b33f-e8781e32cdd8")
+		(property "Reference" "J22"
 			(at 170.18 157.48 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4257,98 +3588,6 @@
 			)
 		)
 		(pin "1"
-			(uuid "05b5d4ac-c00e-54c2-9c80-279c3036a1a7")
-		)
-		(pin "2"
-			(uuid "7670e695-384c-55ed-8720-7381046a96b6")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J27")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 187.96 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "244ec45e-e6a7-51f4-b33f-e8781e32cdd8")
-		(property "Reference" "J22"
-			(at 81.28 187.96 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Deans T female"
-			(at 81.28 190.5 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 187.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 78.74 187.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 78.74 187.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
-			(at 78.74 187.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
 			(uuid "e5a345a0-1a94-563c-9fd0-7b9e803d3405")
 		)
 		(pin "2"
@@ -4365,7 +3604,7 @@
 	)
 	(symbol
 		(lib_id "Device:Polyfuse")
-		(at 140.97 147.32 90)
+		(at 140.97 167.64 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4375,7 +3614,7 @@
 		(dnp no)
 		(uuid "2805d36a-117c-5306-b689-4f80a10d03c1")
 		(property "Reference" "F10"
-			(at 137.16 144.78 90)
+			(at 137.16 165.1 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4386,7 +3625,7 @@
 			)
 		)
 		(property "Value" "MF-LSMF300/16X-2"
-			(at 137.16 149.86 90)
+			(at 137.16 170.18 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4397,7 +3636,7 @@
 			)
 		)
 		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 140.97 147.32 0)
+			(at 140.97 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4408,7 +3647,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 140.97 147.32 0)
+			(at 140.97 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4419,7 +3658,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 140.97 147.32 0)
+			(at 140.97 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4430,7 +3669,7 @@
 			)
 		)
 		(property "MPN" "MF-LSMF300/16X-2"
-			(at 140.97 147.32 0)
+			(at 140.97 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4456,192 +3695,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 198.12 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "2a9bb93f-56b9-5c6c-b84e-10ae220cb4e6")
-		(property "Reference" "J38"
-			(at 259.08 198.12 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT30UPB-F"
-			(at 259.08 200.66 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
-			(at 256.54 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 256.54 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 256.54 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "XT30UPB-F"
-			(at 256.54 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "ded7e192-6e9e-503b-8def-48916e3ef228")
-		)
-		(pin "2"
-			(uuid "ebabeb09-a07e-51b1-ae6e-87d902641639")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J38")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:Polyfuse")
-		(at 229.87 167.64 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "32a7dd50-1680-5d90-82f9-1e537c173eaa")
-		(property "Reference" "F19"
-			(at 226.06 165.1 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "MF-LSMF300X-2"
-			(at 226.06 170.18 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 229.87 167.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 229.87 167.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 229.87 167.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "MF-LSMF300X-2"
-			(at 229.87 167.64 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "94477ff6-0c68-5a76-9669-56d89b7719b1")
-		)
-		(pin "2"
-			(uuid "60902cfb-729d-58ff-9e60-95aafeeea2d4")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "F19")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
-		(at 71.12 160.02 0)
+		(at 71.12 190.5 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4651,7 +3706,7 @@
 		(dnp no)
 		(uuid "350d1b6a-8fc9-5fee-8613-0e8f6e4d8171")
 		(property "Reference" "#PWRoutputs018"
-			(at 71.12 166.37 0)
+			(at 71.12 196.85 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4662,7 +3717,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 71.12 163.83 0)
+			(at 71.12 194.31 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4672,7 +3727,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 71.12 160.02 0)
+			(at 71.12 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4683,7 +3738,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 71.12 160.02 0)
+			(at 71.12 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4694,7 +3749,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 71.12 160.02 0)
+			(at 71.12 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4718,7 +3773,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 160.02 149.86 0)
+		(at 248.92 139.7 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4728,7 +3783,7 @@
 		(dnp no)
 		(uuid "36022be1-7ce8-527e-a60d-869cb51a275c")
 		(property "Reference" "#PWRoutputs025"
-			(at 160.02 156.21 0)
+			(at 248.92 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4739,7 +3794,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 160.02 153.67 0)
+			(at 248.92 143.51 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4749,7 +3804,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 160.02 149.86 0)
+			(at 248.92 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4760,7 +3815,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 160.02 149.86 0)
+			(at 248.92 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4771,7 +3826,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 160.02 149.86 0)
+			(at 248.92 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4795,7 +3850,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 71.12 170.18 0)
+		(at 160.02 139.7 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4805,7 +3860,7 @@
 		(dnp no)
 		(uuid "36f2437a-d5bf-5888-a5dd-baba64b45de2")
 		(property "Reference" "#PWRoutputs019"
-			(at 71.12 176.53 0)
+			(at 160.02 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4816,7 +3871,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 71.12 173.99 0)
+			(at 160.02 143.51 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4826,7 +3881,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 71.12 170.18 0)
+			(at 160.02 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4837,7 +3892,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 71.12 170.18 0)
+			(at 160.02 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4848,7 +3903,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 71.12 170.18 0)
+			(at 160.02 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4872,7 +3927,7 @@
 	)
 	(symbol
 		(lib_id "Device:Polyfuse")
-		(at 140.97 198.12 90)
+		(at 229.87 157.48 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4882,7 +3937,7 @@
 		(dnp no)
 		(uuid "3ab20a38-225e-5116-8449-fb5bbee36226")
 		(property "Reference" "F15"
-			(at 137.16 195.58 90)
+			(at 226.06 154.94 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4892,8 +3947,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "MF-LSMF300/16X-2"
-			(at 137.16 200.66 90)
+		(property "Value" "MF-LSMF300X-2"
+			(at 226.06 160.02 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4904,7 +3959,7 @@
 			)
 		)
 		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 140.97 198.12 0)
+			(at 229.87 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4915,7 +3970,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 140.97 198.12 0)
+			(at 229.87 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4926,7 +3981,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 140.97 198.12 0)
+			(at 229.87 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4936,8 +3991,8 @@
 				)
 			)
 		)
-		(property "MPN" "MF-LSMF300/16X-2"
-			(at 140.97 198.12 0)
+		(property "MPN" "MF-LSMF300X-2"
+			(at 229.87 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4957,282 +4012,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
 					(reference "F15")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:Polyfuse")
-		(at 229.87 177.8 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "3ab38bae-f35d-5cbd-94f1-e980ea9e85e6")
-		(property "Reference" "F20"
-			(at 226.06 175.26 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "MF-LSMF300X-2"
-			(at 226.06 180.34 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 229.87 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 229.87 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 229.87 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "MF-LSMF300X-2"
-			(at 229.87 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e9546063-643d-5ba4-bd01-8201f10c2a22")
-		)
-		(pin "2"
-			(uuid "1999ba4e-1426-542d-8f96-7498794a472a")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "F20")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 218.44 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "3ee9361d-dd06-5c6b-86aa-7b2bc386d769")
-		(property "Reference" "J40"
-			(at 259.08 218.44 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT30UPB-F"
-			(at 259.08 220.98 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
-			(at 256.54 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 256.54 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 256.54 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "XT30UPB-F"
-			(at 256.54 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6e87b299-72bc-5e52-8597-075e5d841599")
-		)
-		(pin "2"
-			(uuid "a7474bea-7cd7-5d39-aea4-b806e2502f20")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J40")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:Polyfuse")
-		(at 229.87 208.28 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "41c5ab0f-c2ff-560b-9a16-ef525d80f867")
-		(property "Reference" "F23"
-			(at 226.06 205.74 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "MF-LSMF300X-2"
-			(at 226.06 210.82 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 229.87 208.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 229.87 208.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 229.87 208.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "MF-LSMF300X-2"
-			(at 229.87 208.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "36d6d74f-3d0b-5249-9128-d973d2df38bb")
-		)
-		(pin "2"
-			(uuid "cf994e72-aaa7-5e5a-a44d-3574a2ecf3ee")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "F23")
 					(unit 1)
 				)
 			)
@@ -5331,100 +4110,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 177.8 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "44fe0cf9-4067-55d1-93e8-3b60dc9c7484")
-		(property "Reference" "J36"
-			(at 259.08 177.8 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT30UPB-F"
-			(at 259.08 180.34 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
-			(at 256.54 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 256.54 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 256.54 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "XT30UPB-F"
-			(at 256.54 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "02d4975f-8372-58fd-8123-a0994ed9ab30")
-		)
-		(pin "2"
-			(uuid "7f41c118-a38d-5609-a5b8-879124366b04")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J36")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
-		(at 160.02 200.66 0)
+		(at 248.92 190.5 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5434,7 +4121,7 @@
 		(dnp no)
 		(uuid "456ca80d-c347-5121-86f1-68b77087eaa6")
 		(property "Reference" "#PWRoutputs030"
-			(at 160.02 207.01 0)
+			(at 248.92 196.85 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5445,7 +4132,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 160.02 204.47 0)
+			(at 248.92 194.31 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5455,7 +4142,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 160.02 200.66 0)
+			(at 248.92 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5466,7 +4153,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 160.02 200.66 0)
+			(at 248.92 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5477,7 +4164,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 160.02 200.66 0)
+			(at 248.92 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5501,7 +4188,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 147.32 0)
+		(at 78.74 177.8 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5511,7 +4198,7 @@
 		(dnp no)
 		(uuid "45b03ef4-752e-5fe7-ac04-f64a06efee93")
 		(property "Reference" "J18"
-			(at 81.28 147.32 0)
+			(at 81.28 177.8 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5522,7 +4209,7 @@
 			)
 		)
 		(property "Value" "Deans T female"
-			(at 81.28 149.86 0)
+			(at 81.28 180.34 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5533,7 +4220,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 147.32 0)
+			(at 78.74 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5544,7 +4231,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 147.32 0)
+			(at 78.74 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5555,7 +4242,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 147.32 0)
+			(at 78.74 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5566,7 +4253,7 @@
 			)
 		)
 		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
-			(at 78.74 147.32 0)
+			(at 78.74 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5593,7 +4280,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 160.02 160.02 0)
+		(at 248.92 149.86 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5603,7 +4290,7 @@
 		(dnp no)
 		(uuid "46a30b13-3be7-5a40-b827-7d19263908c5")
 		(property "Reference" "#PWRoutputs026"
-			(at 160.02 166.37 0)
+			(at 248.92 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5614,7 +4301,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 160.02 163.83 0)
+			(at 248.92 153.67 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5624,7 +4311,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 160.02 160.02 0)
+			(at 248.92 149.86 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5635,7 +4322,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 160.02 160.02 0)
+			(at 248.92 149.86 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5646,7 +4333,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 160.02 160.02 0)
+			(at 248.92 149.86 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5854,7 +4541,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 246.38 73.66 0)
+		(at 71.12 160.02 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5864,7 +4551,7 @@
 		(dnp no)
 		(uuid "4f732ded-c60a-5ceb-9dc2-488615d7e57c")
 		(property "Reference" "#PWRoutputs015"
-			(at 246.38 80.01 0)
+			(at 71.12 166.37 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5875,7 +4562,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 246.38 77.47 0)
+			(at 71.12 163.83 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5885,7 +4572,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 246.38 73.66 0)
+			(at 71.12 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5896,7 +4583,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 246.38 73.66 0)
+			(at 71.12 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5907,7 +4594,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 246.38 73.66 0)
+			(at 71.12 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5931,7 +4618,7 @@
 	)
 	(symbol
 		(lib_id "Device:Polyfuse")
-		(at 229.87 147.32 90)
+		(at 229.87 177.8 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5941,7 +4628,7 @@
 		(dnp no)
 		(uuid "4faaef21-7cbb-5364-850e-f5b48a093245")
 		(property "Reference" "F17"
-			(at 226.06 144.78 90)
+			(at 226.06 175.26 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5952,7 +4639,7 @@
 			)
 		)
 		(property "Value" "MF-LSMF300X-2"
-			(at 226.06 149.86 90)
+			(at 226.06 180.34 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5963,7 +4650,7 @@
 			)
 		)
 		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 229.87 147.32 0)
+			(at 229.87 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5974,7 +4661,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 229.87 147.32 0)
+			(at 229.87 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5985,7 +4672,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 229.87 147.32 0)
+			(at 229.87 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5996,7 +4683,7 @@
 			)
 		)
 		(property "MPN" "MF-LSMF300X-2"
-			(at 229.87 147.32 0)
+			(at 229.87 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6023,7 +4710,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 193.04 91.44 0)
+		(at 78.74 137.16 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6033,7 +4720,7 @@
 		(dnp no)
 		(uuid "5292c4c7-ac8f-5240-970c-e18ed09dc8b5")
 		(property "Reference" "J14"
-			(at 195.58 91.44 0)
+			(at 81.28 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6043,8 +4730,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "XT90PB-F"
-			(at 195.58 93.98 0)
+		(property "Value" "Deans T female"
+			(at 81.28 139.7 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6054,8 +4741,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
-			(at 193.04 91.44 0)
+		(property "Footprint" "PowerBoard_rev3:DEANS-T"
+			(at 78.74 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6066,7 +4753,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 193.04 91.44 0)
+			(at 78.74 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6077,7 +4764,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 193.04 91.44 0)
+			(at 78.74 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6087,8 +4774,8 @@
 				)
 			)
 		)
-		(property "MPN" "XT90PB-F"
-			(at 193.04 91.44 0)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
+			(at 78.74 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6268,98 +4955,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 137.16 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "5940c3bd-3dd1-5b3e-888f-1b4565602fd3")
-		(property "Reference" "J32"
-			(at 259.08 137.16 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT30UPB-F"
-			(at 259.08 139.7 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
-			(at 256.54 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 256.54 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 256.54 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "XT30UPB-F"
-			(at 256.54 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "528a97f5-928c-5dd6-a332-867acd083b2a")
-		)
-		(pin "2"
-			(uuid "91def010-b579-5d96-b65b-895026cdd11a")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J32")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 43.18 73.66 0)
 		(unit 1)
@@ -6515,7 +5110,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 137.16 0)
+		(at 167.64 187.96 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6525,7 +5120,7 @@
 		(dnp no)
 		(uuid "5f002bbd-0b77-5ebf-91ff-53ef3b14e2a8")
 		(property "Reference" "J25"
-			(at 170.18 137.16 0)
+			(at 170.18 187.96 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6536,7 +5131,7 @@
 			)
 		)
 		(property "Value" "XT60PT-F"
-			(at 170.18 139.7 0)
+			(at 170.18 190.5 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6547,7 +5142,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 137.16 0)
+			(at 167.64 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6558,7 +5153,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 167.64 137.16 0)
+			(at 167.64 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6569,7 +5164,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 167.64 137.16 0)
+			(at 167.64 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6580,7 +5175,7 @@
 			)
 		)
 		(property "MPN" "XT60PT-F"
-			(at 167.64 137.16 0)
+			(at 167.64 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6607,99 +5202,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 157.48 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "6aa1a067-a7ad-59ee-8209-32f1d036be82")
-		(property "Reference" "J34"
-			(at 259.08 157.48 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT30UPB-F"
-			(at 259.08 160.02 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
-			(at 256.54 157.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 256.54 157.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 256.54 157.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "XT30UPB-F"
-			(at 256.54 157.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "871715ce-3f2b-52c0-b400-3fde4147751b")
-		)
-		(pin "2"
-			(uuid "afe2b1b4-686a-5e17-b67d-2e436f0e5e1a")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J34")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 157.48 0)
+		(at 78.74 187.96 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6709,7 +5212,7 @@
 		(dnp no)
 		(uuid "6ecfac3e-2acc-5153-a3cf-e893e3c197cd")
 		(property "Reference" "J19"
-			(at 81.28 157.48 0)
+			(at 81.28 187.96 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6720,7 +5223,7 @@
 			)
 		)
 		(property "Value" "Deans T female"
-			(at 81.28 160.02 0)
+			(at 81.28 190.5 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6731,7 +5234,7 @@
 			)
 		)
 		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 157.48 0)
+			(at 78.74 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6742,7 +5245,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 157.48 0)
+			(at 78.74 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6753,7 +5256,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 157.48 0)
+			(at 78.74 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6764,7 +5267,7 @@
 			)
 		)
 		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
-			(at 78.74 157.48 0)
+			(at 78.74 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6784,175 +5287,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
 					(reference "J19")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 208.28 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "71c590be-40d2-55de-be27-1fb411ebb72d")
-		(property "Reference" "J39"
-			(at 259.08 208.28 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT30UPB-F"
-			(at 259.08 210.82 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
-			(at 256.54 208.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 256.54 208.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 256.54 208.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "XT30UPB-F"
-			(at 256.54 208.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "28207d5b-35b1-5d32-bea2-5d3357512487")
-		)
-		(pin "2"
-			(uuid "925a431f-fa64-5930-99c7-11a75df5b06a")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J39")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 248.92 180.34 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "730c939d-a241-5239-b373-255561c0084e")
-		(property "Reference" "#PWRoutputs035"
-			(at 248.92 186.69 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 248.92 184.15 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 248.92 180.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 248.92 180.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 248.92 180.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a4210cec-786d-5f2e-9b29-5d63d54c891d")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "#PWRoutputs035")
 					(unit 1)
 				)
 			)
@@ -7037,7 +5371,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 185.42 104.14 0)
+		(at 71.12 149.86 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7047,7 +5381,7 @@
 		(dnp no)
 		(uuid "753b9358-8bcb-5f42-a218-9e055d0c58c5")
 		(property "Reference" "#PWRoutputs014"
-			(at 185.42 110.49 0)
+			(at 71.12 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7058,7 +5392,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 185.42 107.95 0)
+			(at 71.12 153.67 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7068,7 +5402,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 185.42 104.14 0)
+			(at 71.12 149.86 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7079,7 +5413,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 185.42 104.14 0)
+			(at 71.12 149.86 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7090,7 +5424,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 185.42 104.14 0)
+			(at 71.12 149.86 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7205,100 +5539,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 228.6 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "7df2225b-9c11-5557-be1d-b1224dfab9ff")
-		(property "Reference" "J41"
-			(at 259.08 228.6 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT30UPB-F"
-			(at 259.08 231.14 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
-			(at 256.54 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 256.54 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 256.54 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "XT30UPB-F"
-			(at 256.54 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f510d583-2d76-5d12-a871-d03d714cb1b2")
-		)
-		(pin "2"
-			(uuid "47935a49-f71c-58bd-9a97-0f19063e0934")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J41")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:Polyfuse")
-		(at 229.87 157.48 90)
+		(at 229.87 187.96 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7308,7 +5550,7 @@
 		(dnp no)
 		(uuid "80e6cfb0-67f9-5d64-83a1-a571972ff717")
 		(property "Reference" "F18"
-			(at 226.06 154.94 90)
+			(at 226.06 185.42 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7319,7 +5561,7 @@
 			)
 		)
 		(property "Value" "MF-LSMF300X-2"
-			(at 226.06 160.02 90)
+			(at 226.06 190.5 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7330,7 +5572,7 @@
 			)
 		)
 		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 229.87 157.48 0)
+			(at 229.87 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7341,7 +5583,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 229.87 157.48 0)
+			(at 229.87 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7352,7 +5594,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 229.87 157.48 0)
+			(at 229.87 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7363,7 +5605,7 @@
 			)
 		)
 		(property "MPN" "MF-LSMF300X-2"
-			(at 229.87 157.48 0)
+			(at 229.87 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7389,85 +5631,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 248.92 210.82 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "81dc9525-b461-52a7-82fc-43fb754d79d3")
-		(property "Reference" "#PWRoutputs038"
-			(at 248.92 217.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 248.92 214.63 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 248.92 210.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 248.92 210.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 248.92 210.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "44dfe799-5c42-5b29-a726-ced0baffe784")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "#PWRoutputs038")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 167.64 0)
+		(at 167.64 137.16 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7477,7 +5642,7 @@
 		(dnp no)
 		(uuid "829a3925-2a6d-5610-b575-11ecc0239bc4")
 		(property "Reference" "J20"
-			(at 81.28 167.64 0)
+			(at 170.18 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7487,8 +5652,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Deans T female"
-			(at 81.28 170.18 0)
+		(property "Value" "XT60PT-F"
+			(at 170.18 139.7 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7498,8 +5663,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 167.64 0)
+		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
+			(at 167.64 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7510,7 +5675,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 167.64 0)
+			(at 167.64 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7521,7 +5686,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 167.64 0)
+			(at 167.64 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7531,8 +5696,8 @@
 				)
 			)
 		)
-		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
-			(at 78.74 167.64 0)
+		(property "MPN" "XT60PT-F"
+			(at 167.64 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7805,7 +5970,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 71.12 149.86 0)
+		(at 71.12 180.34 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7815,7 +5980,7 @@
 		(dnp no)
 		(uuid "8e415726-f70b-53f1-9161-990f5ac4bfb2")
 		(property "Reference" "#PWRoutputs017"
-			(at 71.12 156.21 0)
+			(at 71.12 186.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7826,7 +5991,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 71.12 153.67 0)
+			(at 71.12 184.15 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7836,7 +6001,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 71.12 149.86 0)
+			(at 71.12 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7847,7 +6012,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 71.12 149.86 0)
+			(at 71.12 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7858,7 +6023,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 71.12 149.86 0)
+			(at 71.12 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7875,83 +6040,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
 					(reference "#PWRoutputs017")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 248.92 241.3 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8ea8979f-5e03-5290-a419-5d57b67ed384")
-		(property "Reference" "#PWRoutputs041"
-			(at 248.92 247.65 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 248.92 245.11 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 248.92 241.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 248.92 241.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 248.92 241.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e5539687-5fd9-5ddf-b848-9884ee7ffab6")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "#PWRoutputs041")
 					(unit 1)
 				)
 			)
@@ -8036,7 +6124,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 208.28 0)
+		(at 167.64 177.8 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8046,7 +6134,7 @@
 		(dnp no)
 		(uuid "9a766242-f3c7-556c-aa4e-9422d82b7da0")
 		(property "Reference" "J24"
-			(at 81.28 208.28 0)
+			(at 170.18 177.8 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8056,8 +6144,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Deans T female"
-			(at 81.28 210.82 0)
+		(property "Value" "XT60PT-F"
+			(at 170.18 180.34 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8067,8 +6155,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 208.28 0)
+		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
+			(at 167.64 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8079,7 +6167,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 208.28 0)
+			(at 167.64 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8090,7 +6178,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 208.28 0)
+			(at 167.64 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8100,8 +6188,8 @@
 				)
 			)
 		)
-		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
-			(at 78.74 208.28 0)
+		(property "MPN" "XT60PT-F"
+			(at 167.64 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8127,100 +6215,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:Polyfuse")
-		(at 229.87 198.12 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "9a938108-84fb-5655-9564-35d258ec3761")
-		(property "Reference" "F22"
-			(at 226.06 195.58 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "MF-LSMF300X-2"
-			(at 226.06 200.66 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 229.87 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 229.87 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 229.87 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "MF-LSMF300X-2"
-			(at 229.87 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d341e9bf-bb60-5fd1-8a9a-96179806367a")
-		)
-		(pin "2"
-			(uuid "0dce7dd8-4c05-5bca-81e1-8e6205fe6767")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "F22")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 254 71.12 0)
+		(at 78.74 157.48 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8230,7 +6226,7 @@
 		(dnp no)
 		(uuid "a04e52f6-61e1-5b26-8854-b87a15c44583")
 		(property "Reference" "J16"
-			(at 256.54 71.12 0)
+			(at 81.28 157.48 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8240,8 +6236,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "B2B-XH-A(LF)(SN) (54 V to Zyxel)"
-			(at 256.54 73.66 0)
+		(property "Value" "Deans T female"
+			(at 81.28 160.02 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8251,8 +6247,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
-			(at 254 71.12 0)
+		(property "Footprint" "PowerBoard_rev3:DEANS-T"
+			(at 78.74 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8263,7 +6259,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 254 71.12 0)
+			(at 78.74 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8274,7 +6270,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 254 71.12 0)
+			(at 78.74 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8284,8 +6280,8 @@
 				)
 			)
 		)
-		(property "MPN" "B2B-XH-A(LF)(SN)"
-			(at 254 71.12 0)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
+			(at 78.74 157.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8312,7 +6308,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 147.32 0)
+		(at 256.54 137.16 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8322,7 +6318,7 @@
 		(dnp no)
 		(uuid "a233d08b-7623-5329-9fc6-743f29eee2e3")
 		(property "Reference" "J26"
-			(at 170.18 147.32 0)
+			(at 259.08 137.16 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8332,8 +6328,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "XT60PT-F"
-			(at 170.18 149.86 0)
+		(property "Value" "XT30UPB-F"
+			(at 259.08 139.7 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8343,8 +6339,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 147.32 0)
+		(property "Footprint" "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
+			(at 256.54 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8355,7 +6351,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 167.64 147.32 0)
+			(at 256.54 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8366,7 +6362,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 167.64 147.32 0)
+			(at 256.54 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8376,8 +6372,8 @@
 				)
 			)
 		)
-		(property "MPN" "XT60PT-F"
-			(at 167.64 147.32 0)
+		(property "MPN" "XT30UPB-F"
+			(at 256.54 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8404,7 +6400,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 160.02 180.34 0)
+		(at 248.92 170.18 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8414,7 +6410,7 @@
 		(dnp no)
 		(uuid "a2379481-760b-508d-b0cb-5d1341199b8c")
 		(property "Reference" "#PWRoutputs028"
-			(at 160.02 186.69 0)
+			(at 248.92 176.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8425,7 +6421,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 160.02 184.15 0)
+			(at 248.92 173.99 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8435,7 +6431,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 160.02 180.34 0)
+			(at 248.92 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8446,7 +6442,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 160.02 180.34 0)
+			(at 248.92 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8457,7 +6453,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 160.02 180.34 0)
+			(at 248.92 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8481,7 +6477,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 71.12 180.34 0)
+		(at 160.02 149.86 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8491,7 +6487,7 @@
 		(dnp no)
 		(uuid "a3d29631-4744-5ac4-85b9-ab041db3331f")
 		(property "Reference" "#PWRoutputs020"
-			(at 71.12 186.69 0)
+			(at 160.02 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8502,7 +6498,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 71.12 184.15 0)
+			(at 160.02 153.67 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8512,7 +6508,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 71.12 180.34 0)
+			(at 160.02 149.86 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8523,7 +6519,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 71.12 180.34 0)
+			(at 160.02 149.86 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8534,7 +6530,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 71.12 180.34 0)
+			(at 160.02 149.86 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8558,7 +6554,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 198.12 0)
+		(at 167.64 167.64 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8568,7 +6564,7 @@
 		(dnp no)
 		(uuid "a4aec258-fe49-5c78-9627-9d48fa19a4a6")
 		(property "Reference" "J23"
-			(at 81.28 198.12 0)
+			(at 170.18 167.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8578,8 +6574,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Deans T female"
-			(at 81.28 200.66 0)
+		(property "Value" "XT60PT-F"
+			(at 170.18 170.18 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8589,8 +6585,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 198.12 0)
+		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
+			(at 167.64 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8601,7 +6597,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 198.12 0)
+			(at 167.64 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8612,7 +6608,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 198.12 0)
+			(at 167.64 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8622,8 +6618,8 @@
 				)
 			)
 		)
-		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
-			(at 78.74 198.12 0)
+		(property "MPN" "XT60PT-F"
+			(at 167.64 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8741,83 +6737,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 248.92 160.02 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "a7170bbf-fec2-5d4d-b1aa-e4f2d26d9cfa")
-		(property "Reference" "#PWRoutputs033"
-			(at 248.92 166.37 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 248.92 163.83 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 248.92 160.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 248.92 160.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 248.92 160.02 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f2387180-9cb7-5269-86cb-483e562d4950")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "#PWRoutputs033")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 40.64 86.36 0)
 		(unit 1)
@@ -8896,7 +6815,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 185.42 83.82 0)
+		(at 246.38 73.66 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8906,7 +6825,7 @@
 		(dnp no)
 		(uuid "ac34e45e-6d2f-55c6-9ba0-fb977d01880c")
 		(property "Reference" "#PWRoutputs012"
-			(at 185.42 90.17 0)
+			(at 246.38 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8917,7 +6836,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 185.42 87.63 0)
+			(at 246.38 77.47 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8927,7 +6846,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 185.42 83.82 0)
+			(at 246.38 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8938,7 +6857,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 185.42 83.82 0)
+			(at 246.38 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8949,7 +6868,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 185.42 83.82 0)
+			(at 246.38 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8973,7 +6892,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 177.8 0)
+		(at 167.64 147.32 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8983,7 +6902,7 @@
 		(dnp no)
 		(uuid "ace4ceb9-7d7f-529f-b580-5706025a7f06")
 		(property "Reference" "J21"
-			(at 81.28 177.8 0)
+			(at 170.18 147.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8993,8 +6912,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Deans T female"
-			(at 81.28 180.34 0)
+		(property "Value" "XT60PT-F"
+			(at 170.18 149.86 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9004,8 +6923,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 177.8 0)
+		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
+			(at 167.64 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9016,7 +6935,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 177.8 0)
+			(at 167.64 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9027,7 +6946,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 78.74 177.8 0)
+			(at 167.64 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9037,8 +6956,8 @@
 				)
 			)
 		)
-		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
-			(at 78.74 177.8 0)
+		(property "MPN" "XT60PT-F"
+			(at 167.64 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9065,7 +6984,7 @@
 	)
 	(symbol
 		(lib_id "Device:Polyfuse")
-		(at 140.97 187.96 90)
+		(at 229.87 147.32 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9075,7 +6994,7 @@
 		(dnp no)
 		(uuid "b03665fd-9201-5a74-a647-68ee1148f52b")
 		(property "Reference" "F14"
-			(at 137.16 185.42 90)
+			(at 226.06 144.78 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9085,8 +7004,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "MF-LSMF300/16X-2"
-			(at 137.16 190.5 90)
+		(property "Value" "MF-LSMF300X-2"
+			(at 226.06 149.86 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9097,7 +7016,7 @@
 			)
 		)
 		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 140.97 187.96 0)
+			(at 229.87 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9108,7 +7027,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 140.97 187.96 0)
+			(at 229.87 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9119,7 +7038,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 140.97 187.96 0)
+			(at 229.87 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9129,8 +7048,8 @@
 				)
 			)
 		)
-		(property "MPN" "MF-LSMF300/16X-2"
-			(at 140.97 187.96 0)
+		(property "MPN" "MF-LSMF300X-2"
+			(at 229.87 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9157,7 +7076,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 193.04 101.6 0)
+		(at 78.74 147.32 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9167,7 +7086,7 @@
 		(dnp no)
 		(uuid "b13d56b9-5260-5212-87cd-870024e09174")
 		(property "Reference" "J15"
-			(at 195.58 101.6 0)
+			(at 81.28 147.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9177,8 +7096,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "XT90PB-F"
-			(at 195.58 104.14 0)
+		(property "Value" "Deans T female"
+			(at 81.28 149.86 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9188,8 +7107,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
-			(at 193.04 101.6 0)
+		(property "Footprint" "PowerBoard_rev3:DEANS-T"
+			(at 78.74 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9200,7 +7119,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 193.04 101.6 0)
+			(at 78.74 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9211,7 +7130,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 193.04 101.6 0)
+			(at 78.74 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9221,8 +7140,8 @@
 				)
 			)
 		)
-		(property "MPN" "XT90PB-F"
-			(at 193.04 101.6 0)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
+			(at 78.74 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9249,7 +7168,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 177.8 0)
+		(at 256.54 167.64 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9259,98 +7178,6 @@
 		(dnp no)
 		(uuid "b1d740a6-a2d3-52af-9b13-8c005dfe40a6")
 		(property "Reference" "J29"
-			(at 170.18 177.8 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT60PT-F"
-			(at 170.18 180.34 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 167.64 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 167.64 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "XT60PT-F"
-			(at 167.64 177.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "c6369ea2-cf0e-5749-83b3-a1e1f298bd47")
-		)
-		(pin "2"
-			(uuid "e7ac8431-fc45-536f-9605-33f539615e79")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J29")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 167.64 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "b301364a-48b5-5479-abfb-6f60b74f2797")
-		(property "Reference" "J35"
 			(at 259.08 167.64 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9417,15 +7244,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "bce41fa6-18e1-5c92-ad0e-906c41b5ce9e")
+			(uuid "c6369ea2-cf0e-5749-83b3-a1e1f298bd47")
 		)
 		(pin "2"
-			(uuid "fd403fc5-8995-54e2-9ed1-7c63a0c2465c")
+			(uuid "e7ac8431-fc45-536f-9605-33f539615e79")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J35")
+					(reference "J29")
 					(unit 1)
 				)
 			)
@@ -9433,7 +7260,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 71.12 200.66 0)
+		(at 160.02 170.18 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9443,7 +7270,7 @@
 		(dnp no)
 		(uuid "b413eee5-8312-5bc7-afe1-b01eac4d7726")
 		(property "Reference" "#PWRoutputs022"
-			(at 71.12 207.01 0)
+			(at 160.02 176.53 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9454,7 +7281,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 71.12 204.47 0)
+			(at 160.02 173.99 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9464,7 +7291,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 71.12 200.66 0)
+			(at 160.02 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9475,7 +7302,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 71.12 200.66 0)
+			(at 160.02 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9486,7 +7313,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 71.12 200.66 0)
+			(at 160.02 170.18 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9509,85 +7336,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 248.92 190.5 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "b5a90091-ffd1-59e2-ad4f-39a9f1d609b6")
-		(property "Reference" "#PWRoutputs036"
-			(at 248.92 196.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 248.92 194.31 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 248.92 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 248.92 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 248.92 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "dde12aed-0be3-5d43-858e-d9465d0119a9")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "#PWRoutputs036")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 147.32 0)
+		(at 256.54 177.8 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9595,9 +7345,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "b9a8c296-2309-5c2a-bf86-17804297cca4")
-		(property "Reference" "J33"
-			(at 259.08 147.32 0)
+		(uuid "bf997422-3288-5cf7-8c76-ccd71f3c4d74")
+		(property "Reference" "J30"
+			(at 259.08 177.8 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9608,7 +7358,7 @@
 			)
 		)
 		(property "Value" "XT30UPB-F"
-			(at 259.08 149.86 0)
+			(at 259.08 180.34 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9619,7 +7369,7 @@
 			)
 		)
 		(property "Footprint" "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
-			(at 256.54 147.32 0)
+			(at 256.54 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9630,7 +7380,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 147.32 0)
+			(at 256.54 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9641,7 +7391,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 147.32 0)
+			(at 256.54 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9652,99 +7402,7 @@
 			)
 		)
 		(property "MPN" "XT30UPB-F"
-			(at 256.54 147.32 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "961d11e5-da89-5134-ad6d-4751b5ac3239")
-		)
-		(pin "2"
-			(uuid "a63451b8-0125-5771-ae5c-2cbcf53a2cf7")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J33")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 187.96 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "bf997422-3288-5cf7-8c76-ccd71f3c4d74")
-		(property "Reference" "J30"
-			(at 170.18 187.96 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT60PT-F"
-			(at 170.18 190.5 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 187.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 167.64 187.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 167.64 187.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "XT60PT-F"
-			(at 167.64 187.96 0)
+			(at 256.54 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9770,6 +7428,190 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:Polyfuse")
+		(at 140.97 177.8 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "c2129cf2-b5c7-5af4-b9ac-c41fdf8d24c0")
+		(property "Reference" "F11"
+			(at 137.16 175.26 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "MF-LSMF300/16X-2"
+			(at 137.16 180.34 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
+			(at 140.97 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 140.97 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 140.97 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "MF-LSMF300/16X-2"
+			(at 140.97 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "5e050217-3076-5a4d-afd8-dad356b505d2")
+		)
+		(pin "2"
+			(uuid "546893cf-a5b7-59c2-8abf-911ba57f712d")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
+					(reference "F11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 78.74 167.64 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "c66fe266-4a61-55d8-94b9-8b7fb531161f")
+		(property "Reference" "J17"
+			(at 81.28 167.64 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Deans T female"
+			(at 81.28 170.18 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "PowerBoard_rev3:DEANS-T"
+			(at 78.74 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 78.74 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 78.74 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
+			(at 78.74 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a62591f1-4c9c-536a-a955-f2d7e50043ea")
+		)
+		(pin "2"
+			(uuid "792e981f-f959-5c34-b467-b09015166e7b")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
+					(reference "J17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
 		(at 256.54 187.96 0)
 		(unit 1)
@@ -9779,8 +7621,8 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "c1c032c3-773c-5e38-9128-266006493fe6")
-		(property "Reference" "J37"
+		(uuid "c867331e-1bc2-5884-840d-60bbfd8511ed")
+		(property "Reference" "J31"
 			(at 259.08 187.96 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9847,543 +7689,6 @@
 			)
 		)
 		(pin "1"
-			(uuid "2651d4e9-1675-5cf8-954e-98b2c6641199")
-		)
-		(pin "2"
-			(uuid "b9eb06c2-7dca-5aff-b4a5-3416de58b068")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J37")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:Polyfuse")
-		(at 140.97 157.48 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "c2129cf2-b5c7-5af4-b9ac-c41fdf8d24c0")
-		(property "Reference" "F11"
-			(at 137.16 154.94 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "MF-LSMF300/16X-2"
-			(at 137.16 160.02 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 140.97 157.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 140.97 157.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 140.97 157.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "MF-LSMF300/16X-2"
-			(at 140.97 157.48 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5e050217-3076-5a4d-afd8-dad356b505d2")
-		)
-		(pin "2"
-			(uuid "546893cf-a5b7-59c2-8abf-911ba57f712d")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "F11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:Polyfuse")
-		(at 229.87 228.6 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "c59c2d31-8859-54cf-9506-3d473413ca40")
-		(property "Reference" "F25"
-			(at 226.06 226.06 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "MF-LSMF300X-2"
-			(at 226.06 231.14 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 229.87 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 229.87 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 229.87 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "MF-LSMF300X-2"
-			(at 229.87 228.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "dd628a4d-b50b-5c3b-bdc3-9071fe001db6")
-		)
-		(pin "2"
-			(uuid "28ea04dc-066a-5f5d-a777-a1e80bd70798")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "F25")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 78.74 137.16 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "c66fe266-4a61-55d8-94b9-8b7fb531161f")
-		(property "Reference" "J17"
-			(at 81.28 137.16 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Deans T female"
-			(at 81.28 139.7 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "PowerBoard_rev3:DEANS-T"
-			(at 78.74 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 78.74 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 78.74 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
-			(at 78.74 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a62591f1-4c9c-536a-a955-f2d7e50043ea")
-		)
-		(pin "2"
-			(uuid "792e981f-f959-5c34-b467-b09015166e7b")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J17")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 248.92 139.7 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "c6b9f66d-b71c-536d-bae9-ca7f62c93352")
-		(property "Reference" "#PWRoutputs031"
-			(at 248.92 146.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 248.92 143.51 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 248.92 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 248.92 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 248.92 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "88725899-04c8-50ee-a361-b8565091198f")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "#PWRoutputs031")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:Polyfuse")
-		(at 229.87 238.76 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "c6d38766-5184-5839-b3d1-3949a5749e53")
-		(property "Reference" "F26"
-			(at 226.06 236.22 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "MF-LSMF300X-2"
-			(at 226.06 241.3 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 229.87 238.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 229.87 238.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 229.87 238.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "MF-LSMF300X-2"
-			(at 229.87 238.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "d2cf0ef0-5038-5df3-8d86-599f565a62de")
-		)
-		(pin "2"
-			(uuid "73ac48fe-9c36-5a3a-9c95-5dacc4f096a7")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "F26")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 167.64 198.12 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "c867331e-1bc2-5884-840d-60bbfd8511ed")
-		(property "Reference" "J31"
-			(at 170.18 198.12 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT60PT-F"
-			(at 170.18 200.66 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical"
-			(at 167.64 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 167.64 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 167.64 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "XT60PT-F"
-			(at 167.64 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
 			(uuid "c55778ce-517e-557f-8354-9431fdeadef6")
 		)
 		(pin "2"
@@ -10400,7 +7705,7 @@
 	)
 	(symbol
 		(lib_id "Device:Polyfuse")
-		(at 140.97 177.8 90)
+		(at 229.87 137.16 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10410,7 +7715,7 @@
 		(dnp no)
 		(uuid "ca0f88fc-e48f-515a-a87e-5dcd1b0eae54")
 		(property "Reference" "F13"
-			(at 137.16 175.26 90)
+			(at 226.06 134.62 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10420,8 +7725,8 @@
 				(justify right)
 			)
 		)
-		(property "Value" "MF-LSMF300/16X-2"
-			(at 137.16 180.34 90)
+		(property "Value" "MF-LSMF300X-2"
+			(at 226.06 139.7 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10432,7 +7737,7 @@
 			)
 		)
 		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 140.97 177.8 0)
+			(at 229.87 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10443,7 +7748,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 140.97 177.8 0)
+			(at 229.87 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10454,7 +7759,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 140.97 177.8 0)
+			(at 229.87 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10464,8 +7769,8 @@
 				)
 			)
 		)
-		(property "MPN" "MF-LSMF300/16X-2"
-			(at 140.97 177.8 0)
+		(property "MPN" "MF-LSMF300X-2"
+			(at 229.87 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10676,84 +7981,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 248.92 220.98 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "cbff5980-761c-59cf-ab69-28ea840be75a")
-		(property "Reference" "#PWRoutputs039"
-			(at 248.92 227.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 248.92 224.79 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 248.92 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 248.92 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 248.92 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a48f12d6-4fe6-5763-b315-b735bdf99ca9")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "#PWRoutputs039")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 71.12 190.5 0)
+		(at 160.02 160.02 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10763,7 +7991,7 @@
 		(dnp no)
 		(uuid "ccb96b76-8bfd-5a11-a153-ed9069b21d5c")
 		(property "Reference" "#PWRoutputs021"
-			(at 71.12 196.85 0)
+			(at 160.02 166.37 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10774,7 +8002,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 71.12 194.31 0)
+			(at 160.02 163.83 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10784,7 +8012,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 71.12 190.5 0)
+			(at 160.02 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10795,7 +8023,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 71.12 190.5 0)
+			(at 160.02 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10806,7 +8034,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 71.12 190.5 0)
+			(at 160.02 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10921,160 +8149,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 248.92 200.66 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "d07b1d57-8ec6-5043-8209-7434121ed0d2")
-		(property "Reference" "#PWRoutputs037"
-			(at 248.92 207.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 248.92 204.47 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 248.92 200.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 248.92 200.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 248.92 200.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5a335fd5-1a63-5ef4-8539-78a3bbcfaf90")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "#PWRoutputs037")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 248.92 170.18 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "d36aedc1-aa0d-53b2-bf1b-577552c04d20")
-		(property "Reference" "#PWRoutputs034"
-			(at 248.92 176.53 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 248.92 173.99 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 248.92 170.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 248.92 170.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 248.92 170.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0508be16-d9c9-52bd-ab14-a641f99f8fa1")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "#PWRoutputs034")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
 		(at 50.8 101.6 0)
 		(unit 1)
@@ -11167,100 +8241,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:Polyfuse")
-		(at 229.87 218.44 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "dfb1bf6e-3651-5e63-9120-d18a95498866")
-		(property "Reference" "F24"
-			(at 226.06 215.9 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "MF-LSMF300X-2"
-			(at 226.06 220.98 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 229.87 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 229.87 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 229.87 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "MF-LSMF300X-2"
-			(at 229.87 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e4565428-c78c-5c67-9067-8bd06e3499a3")
-		)
-		(pin "2"
-			(uuid "0ce858c6-39df-5263-9b03-c666a2f686ed")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "F24")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 256.54 238.76 0)
+		(at 254 71.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11268,9 +8250,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "e2cc1e6f-d899-5c62-a88a-8aa6e784592f")
-		(property "Reference" "J42"
-			(at 259.08 238.76 0)
+		(uuid "e7f77949-aa89-5d86-8c29-a66997130f47")
+		(property "Reference" "J13"
+			(at 256.54 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11280,8 +8262,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "XT30UPB-F"
-			(at 259.08 241.3 0)
+		(property "Value" "B2B-XH-A(LF)(SN) (54 V to Zyxel)"
+			(at 256.54 73.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11291,8 +8273,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_AMASS:AMASS_XT30UPB-F_1x02_P5.0mm_Vertical"
-			(at 256.54 238.76 0)
+		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
+			(at 254 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11303,7 +8285,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 256.54 238.76 0)
+			(at 254 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11314,7 +8296,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 256.54 238.76 0)
+			(at 254 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11324,8 +8306,8 @@
 				)
 			)
 		)
-		(property "MPN" "XT30UPB-F"
-			(at 256.54 238.76 0)
+		(property "MPN" "B2B-XH-A(LF)(SN)"
+			(at 254 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11336,92 +8318,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "1fdaa6ae-42a5-59d1-863c-0dcb163b0fb6")
+			(uuid "9b3a0fe1-cfc5-5147-a63b-c2718b610011")
 		)
 		(pin "2"
-			(uuid "f9ce2ff9-e9a9-57ab-aea0-d540ec8ad5d3")
+			(uuid "66a2ebf2-3b86-5ed2-b30e-3e8f7b96768e")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J42")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 248.92 149.86 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "e75e0339-7d65-58f7-89ea-b7a7809fa606")
-		(property "Reference" "#PWRoutputs032"
-			(at 248.92 156.21 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 248.92 153.67 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 248.92 149.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 248.92 149.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 248.92 149.86 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "be1cb87f-f43d-534e-929e-86d7b7ffac23")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "#PWRoutputs032")
+					(reference "J13")
 					(unit 1)
 				)
 			)
@@ -11437,8 +8342,8 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "e7f77949-aa89-5d86-8c29-a66997130f47")
-		(property "Reference" "J13"
+		(uuid "eb280f2c-b1f5-54ca-a15c-b5990e596320")
+		(property "Reference" "J12"
 			(at 195.58 81.28 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11505,98 +8410,6 @@
 			)
 		)
 		(pin "1"
-			(uuid "9b3a0fe1-cfc5-5147-a63b-c2718b610011")
-		)
-		(pin "2"
-			(uuid "66a2ebf2-3b86-5ed2-b30e-3e8f7b96768e")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "J13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x02")
-		(at 193.04 71.12 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "eb280f2c-b1f5-54ca-a15c-b5990e596320")
-		(property "Reference" "J12"
-			(at 195.58 71.12 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "XT90PB-F"
-			(at 195.58 73.66 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "PowerBoard_rev3:XT90PB-F"
-			(at 193.04 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 193.04 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 193.04 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "XT90PB-F"
-			(at 193.04 71.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
 			(uuid "17053890-e59f-5323-8fad-0a9961cc0fdd")
 		)
 		(pin "2"
@@ -11613,7 +8426,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 124.46 104.14 0)
+		(at 185.42 73.66 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11623,7 +8436,7 @@
 		(dnp no)
 		(uuid "ee62f390-696a-5f64-b9c6-b09ef76afcfe")
 		(property "Reference" "#PWRoutputs010"
-			(at 124.46 110.49 0)
+			(at 185.42 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11634,7 +8447,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 124.46 107.95 0)
+			(at 185.42 77.47 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11644,7 +8457,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 124.46 104.14 0)
+			(at 185.42 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11655,7 +8468,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 124.46 104.14 0)
+			(at 185.42 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11666,7 +8479,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 124.46 104.14 0)
+			(at 185.42 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11690,7 +8503,7 @@
 	)
 	(symbol
 		(lib_id "Device:Polyfuse")
-		(at 140.97 167.64 90)
+		(at 140.97 187.96 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11700,7 +8513,7 @@
 		(dnp no)
 		(uuid "f13e94f0-b426-5992-8874-143a012bc725")
 		(property "Reference" "F12"
-			(at 137.16 165.1 90)
+			(at 137.16 185.42 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11711,7 +8524,7 @@
 			)
 		)
 		(property "Value" "MF-LSMF300/16X-2"
-			(at 137.16 170.18 90)
+			(at 137.16 190.5 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11722,7 +8535,7 @@
 			)
 		)
 		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 140.97 167.64 0)
+			(at 140.97 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11733,7 +8546,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 140.97 167.64 0)
+			(at 140.97 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11744,7 +8557,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 140.97 167.64 0)
+			(at 140.97 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11755,7 +8568,7 @@
 			)
 		)
 		(property "MPN" "MF-LSMF300/16X-2"
-			(at 140.97 167.64 0)
+			(at 140.97 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11782,99 +8595,7 @@
 	)
 	(symbol
 		(lib_id "Device:Polyfuse")
-		(at 229.87 187.96 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f27fc44e-d571-5b95-9f34-4d94e89c680a")
-		(property "Reference" "F21"
-			(at 226.06 185.42 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "MF-LSMF300X-2"
-			(at 226.06 190.5 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
-			(at 229.87 187.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 229.87 187.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 229.87 187.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "MF-LSMF300X-2"
-			(at 229.87 187.96 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5b979a04-9a80-57bd-91a1-6cb7d6b10254")
-		)
-		(pin "2"
-			(uuid "79848976-c037-59cc-8ffe-14ea2362afd7")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "F21")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:Polyfuse")
-		(at 52.07 198.12 90)
+		(at 140.97 137.16 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11884,98 +8605,6 @@
 		(dnp no)
 		(uuid "f637e602-a49d-536b-9a8d-e974dd8ee73f")
 		(property "Reference" "F7"
-			(at 48.26 195.58 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "MF-R300"
-			(at 48.26 200.66 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "PowerBoard_rev3:Fuse_Bourns_MF-R300_P5.08mm"
-			(at 52.07 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 52.07 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 52.07 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "MF-R300"
-			(at 52.07 198.12 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "bc7143b0-08a2-5c09-bfa0-ae797da486b5")
-		)
-		(pin "2"
-			(uuid "918ab2b9-4f6c-5b42-80eb-c3ceb76ae567")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
-					(reference "F7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:Polyfuse")
-		(at 140.97 137.16 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f94d9522-7355-51b1-84a1-4d4a5066016e")
-		(property "Reference" "F9"
 			(at 137.16 134.62 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12042,6 +8671,98 @@
 			)
 		)
 		(pin "1"
+			(uuid "bc7143b0-08a2-5c09-bfa0-ae797da486b5")
+		)
+		(pin "2"
+			(uuid "918ab2b9-4f6c-5b42-80eb-c3ceb76ae567")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
+					(reference "F7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:Polyfuse")
+		(at 140.97 157.48 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f94d9522-7355-51b1-84a1-4d4a5066016e")
+		(property "Reference" "F9"
+			(at 137.16 154.94 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "MF-LSMF300/16X-2"
+			(at 137.16 160.02 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder"
+			(at 140.97 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 140.97 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 140.97 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "MF-LSMF300/16X-2"
+			(at 140.97 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
 			(uuid "126398b9-dcaa-5c4d-9340-04a31132ca1a")
 		)
 		(pin "2"
@@ -12058,7 +8779,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 185.42 73.66 0)
+		(at 185.42 83.82 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12068,7 +8789,7 @@
 		(dnp no)
 		(uuid "fd8aa7fe-e8a5-5b9f-b797-568b64ca9b3c")
 		(property "Reference" "#PWRoutputs011"
-			(at 185.42 80.01 0)
+			(at 185.42 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12079,7 +8800,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 185.42 77.47 0)
+			(at 185.42 87.63 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12089,7 +8810,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 185.42 73.66 0)
+			(at 185.42 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12100,7 +8821,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 185.42 73.66 0)
+			(at 185.42 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12111,7 +8832,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 185.42 73.66 0)
+			(at 185.42 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12135,7 +8856,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 160.02 190.5 0)
+		(at 248.92 180.34 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12145,7 +8866,7 @@
 		(dnp no)
 		(uuid "fecdcccc-2309-587e-9508-5a2a8dc15669")
 		(property "Reference" "#PWRoutputs029"
-			(at 160.02 196.85 0)
+			(at 248.92 186.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12156,7 +8877,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 160.02 194.31 0)
+			(at 248.92 184.15 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -12166,7 +8887,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 160.02 190.5 0)
+			(at 248.92 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12177,7 +8898,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 160.02 190.5 0)
+			(at 248.92 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12188,7 +8909,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 160.02 190.5 0)
+			(at 248.92 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

@@ -105,29 +105,30 @@ PTCS = {
 #   c_out, n_out: ASSUMED capacitance per output, and the output count
 RAILS = [
     dict(name="42V-D", v=42.0, design=30.0, i_oc=60.0, t_oc=1.0, i_sc=150.0,
-         r_sns=0.5e-3, fet="IPB042N10N3G", n_main=2, c_out=940e-6, n_out=4, conn="XT90 (drives)",
+         r_sns=0.5e-3, fet="IPB042N10N3G", n_main=2, c_out=940e-6, n_out=3, conn="XT90 (drives)",
          i_inrush=0.4, ptc=None, src="battery bus", default_on=False,
-         note="Drive group: EPOS4 50/5 (two per connector, two connectors in use, two spare; "
+         note="Drive group: EPOS4 50/5 (two per connector, three connectors; "
               "ASSUMED 470 uF per drive) or CubeMars AK10-9 V3.0 actuators. The 60 A / 1.1 s trip sits "
               "above four EPOS4s accelerating (15 A each); CubeMars actuators (31.9 A peak) need a "
               "configured current limit. The rear-panel motor switch feeds this driver's EN/UVLO "
               "through the latch, so opening it cuts motor power in hardware without touching the Orin. "
               "Defaults OFF: the drives are useless without a controller."),
     dict(name="42V-C", v=42.0, design=30.0, i_oc=30.0, t_oc=0.5, i_sc=100.0,
-         r_sns=1e-3, fet="IPB042N10N3G", n_main=2, c_out=470e-6, n_out=4, conn="XT90 (converters)",
+         r_sns=1e-3, fet="IPB042N10N3G", n_main=2, c_out=705e-6, n_out=2, conn="XT90 (converters)",
          i_inrush=0.4, ptc=None, src="battery bus", default_on=True,
-         note="Converter-feed group: three feeds plus one spare. 24 V 300 W + 12 V 150 W + 5 V 150 W "
-              "is about 22 A at 30 V; the 30 A design leaves room for a converter on the spare. "
+         note="Converter-feed group: two XT90 feeds for three converters (one feed is Y-split in the harness, "
+              "so c_out is 1.5 converters' input capacitance per feed). 24 V 300 W + 12 V 150 W + 5 V 150 W "
+              "is about 22 A at 30 V, inside the 30 A design and one XT90's rating. "
               "Defaults ON, because the 12 V converter powers the Orin."),
     dict(name="24V", v=24.0, design=10.0, i_oc=11.0, t_oc=0.5, i_sc=None,
-         r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=8, conn="Deans T",
+         r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=6, conn="Deans T",
          i_inrush=1.0, ptc="MF-R300", src="300 W converter", default_on=False),
     dict(name="12V", v=12.0, design=10.0, i_oc=11.0, t_oc=0.5, i_sc=None,
-         r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=7, conn="XT60",
+         r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=6, conn="XT60",
          i_inrush=2.0, ptc="MF-LSMF300/16X-2", src="150 W converter", default_on=True,
          note="Feeds the Jetson AGX Orin, so it defaults ON in hardware."),
     dict(name="5V", v=5.0, design=15.0, i_oc=16.5, t_oc=0.5, i_sc=None,
-         r_sns=1e-3, fet="IPB042N10N3G", n_main=1, c_out=220e-6, n_out=11, conn="XT30",
+         r_sns=1e-3, fet="IPB042N10N3G", n_main=1, c_out=220e-6, n_out=6, conn="XT30",
          i_inrush=2.0, ptc="MF-LSMF300X-2", src="150 W converter, XT30-limited",
          default_on=False),
     dict(name="54V", v=42.0, design=4.0, i_oc=5.0, t_oc=0.5, i_sc=20.0,

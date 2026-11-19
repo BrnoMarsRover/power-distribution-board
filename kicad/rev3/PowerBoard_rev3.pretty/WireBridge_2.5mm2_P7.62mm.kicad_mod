@@ -1,14 +1,14 @@
-(footprint "BypassLink_M4_P15.24mm"
+(footprint "WireBridge_2.5mm2_P7.62mm"
 	(version 20260206)
 	(generator "pcbnew")
 	(generator_version "10.0")
 	(layer "F.Cu")
-	(descr "Emergency eFuse bypass: two M4 plated holes, 15.24 mm apart, for a bolted copper link or a ring-lugged wire. Not fitted in normal use.")
-	(tags "bypass link bolt")
+	(descr "Emergency eFuse bypass: two plated holes, 7.62 mm apart, for a solid 2.5 mm2 copper wire bridge. Not fitted in normal use.")
+	(tags "bypass wire bridge")
 	(property "Reference" "REF**"
-		(at 7.62 -6 0)
+		(at 3.81 -3.7 0)
 		(layer "F.SilkS")
-		(uuid "d3209829-3308-5da8-97b5-9cbdb008cf37")
+		(uuid "34ea6343-1826-5d4b-b56e-9f46f464aaa7")
 		(effects
 			(font
 				(size 1 1)
@@ -16,10 +16,10 @@
 			)
 		)
 	)
-	(property "Value" "BypassLink_M4_P15.24mm"
-		(at 7.62 6 0)
+	(property "Value" "WireBridge_2.5mm2_P7.62mm"
+		(at 3.81 4 0)
 		(layer "F.Fab")
-		(uuid "01efb005-db60-5d47-95d9-d06f11678212")
+		(uuid "fa6d3964-4f3c-5b08-90c6-5cb12dbcd435")
 		(effects
 			(font
 				(size 1 1)
@@ -31,7 +31,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "c2761091-d2c2-5d87-a251-df5327c14569")
+		(uuid "219818ce-bf3c-5248-88b0-1603c00e9b2d")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -42,7 +42,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "ec4da993-e193-510a-a385-1a4478cb7877")
+		(uuid "b23be3d4-81ae-58e5-9ddd-cbd072ae814c")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -52,20 +52,31 @@
 	(attr through_hole)
 	(duplicate_pad_numbers_are_jumpers no)
 	(fp_rect
-		(start -4.5 -4.5)
-		(end 19.74 4.5)
+		(start -2.3 -2.3)
+		(end 9.92 2.3)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "031ce03f-6ae9-5ea1-8c1b-25e658ec60fc")
+	)
+	(fp_rect
+		(start -2.5 -2.5)
+		(end 10.12 2.5)
 		(stroke
 			(width 0.05)
 			(type default)
 		)
 		(fill no)
 		(layer "F.CrtYd")
-		(uuid "796b95c2-5267-5cbb-9584-3f9f766c71c0")
+		(uuid "3b943941-f595-5e70-ad31-57e3c7e46cfd")
 	)
 	(fp_text user "BYPASS"
-		(at 7.62 0 0)
+		(at 3.81 3.7 0)
 		(layer "F.SilkS")
-		(uuid "f722863d-d128-5fca-b9f3-1524e3fe0742")
+		(uuid "cff48a40-5989-542b-9662-2b31bb5b081a")
 		(effects
 			(font
 				(size 1 1)
@@ -75,19 +86,19 @@
 	)
 	(pad "1" thru_hole circle
 		(at 0 0)
-		(size 8 8)
-		(drill 4.3)
+		(size 4 4)
+		(drill 2.3)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "33c05ac7-273e-5878-a97b-953912abed0a")
+		(uuid "7635333c-fba5-5d6e-a490-a60294cff079")
 	)
 	(pad "2" thru_hole circle
-		(at 15.24 0)
-		(size 8 8)
-		(drill 4.3)
+		(at 7.62 0)
+		(size 4 4)
+		(drill 2.3)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "bab85f49-9871-56f9-b110-8825c7cc24e5")
+		(uuid "3cc2f61a-fa81-58c7-91bc-a3c1824bf2b9")
 	)
 	(embedded_fonts no)
 )

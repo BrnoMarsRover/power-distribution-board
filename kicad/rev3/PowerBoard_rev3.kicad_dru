@@ -46,7 +46,7 @@
 
 (rule "Hand soldering: power pads connect solid"
   (constraint zone_connection solid)
-  (condition "A.Type == 'Pad' && (A.Library_Link == 'Connector_AMASS:*' || A.Library_Link == 'PowerBoard_rev3:XT90*' || A.Library_Link == 'PowerBoard_rev3:DEANS*' || A.Library_Link == 'Package_TO_SOT_SMD:TO-263*' || A.Library_Link == 'Package_TO_SOT_SMD:TO-252*' || A.Library_Link == 'Fuse:*' || A.Library_Link == 'Resistor_SMD:R_2512*' || A.Library_Link == 'PowerBoard_rev3:R_Bourns_CSS2H*' || A.Library_Link == 'PowerBoard_rev3:BypassLink*' || A.Library_Link == 'PowerBoard_rev3:Fuse_*' || A.Library_Link == 'Inductor_SMD:*')"))
+  (condition "A.Type == 'Pad' && (A.Library_Link == 'Connector_AMASS:*' || A.Library_Link == 'PowerBoard_rev3:XT90*' || A.Library_Link == 'PowerBoard_rev3:DEANS*' || A.Library_Link == 'Package_TO_SOT_SMD:TO-263*' || A.Library_Link == 'Package_TO_SOT_SMD:TO-252*' || A.Library_Link == 'Fuse:*' || A.Library_Link == 'Resistor_SMD:R_2512*' || A.Library_Link == 'PowerBoard_rev3:R_Bourns_CSS2H*' || A.Library_Link == 'PowerBoard_rev3:WireBridge*' || A.Library_Link == 'PowerBoard_rev3:Fuse_*' || A.Library_Link == 'Inductor_SMD:*')"))
 
 (rule "JLC: no blind, buried or micro vias"
   (constraint disallow buried_via micro_via))
