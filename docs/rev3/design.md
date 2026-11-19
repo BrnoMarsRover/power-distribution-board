@@ -345,7 +345,8 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
     diodes.
   - The status signal BRAKE_ACT goes to ESP32 IO39. Firmware logs it and drops the drive
     group if the chopper stays active (a battery that keeps refusing charge would
-    otherwise cook the resistor).
+    otherwise cook the resistor). Firmware also estimates the energy dumped into the
+    resistor from BRAKE_ACT's on-time and the bus voltage (section 9).
   - Resistor: off-board, on a heatsink, sized to the braking power; 10 Ω / 100 W is a
     starting point (4.7 A at 47 V).
     - Sizing rule: 47.5 V / R must exceed the largest regenerative bus current, or the bus
@@ -1056,7 +1057,8 @@ layout.
 - **Protocol v2** reports six branches: 42 V drives, 42 V converter feeds, 24 V, 12 V, 5 V
   and 54 V. Rev2 reported battery, 24, 15, 12 and 5 V.
   - It adds per branch: output voltage, pre-charge state and the latch-off fault reason.
-  - It adds battery Ah/Wh, motor-switch state, brake-chopper activity (BRAKE_ACT) and
+  - It adds battery Ah/Wh, motor-switch state, brake-chopper activity (BRAKE_ACT, its
+    energy and power estimate, and the resistor temperature estimate) and
     controller state.
   - **Protection logic that lives in firmware:**
     - Drive group: drop INP_42D on a sustained average above 20 A with EPOS4, about 45 A
@@ -1068,7 +1070,21 @@ layout.
       boot, first read each rail's VSNS_OUT and FLT. A rail the expander still holds on
       from before an ESP32 reset stays on, and nothing gets INP high before its output
       is up.
-    - Brake chopper: drop the drive group if BRAKE_ACT stays on.
+    - Brake chopper energy estimate (no extra hardware):
+      - BRAKE_ACT (GPIO39) is high exactly while Q_BR conducts. Time its edges with MCPWM
+        capture and sum the on-time.
+      - While on, the bus is held between 47.5 V and 45 V; take V from VSNS_OUT_42D
+        (about 10 samples/s) or use 46.25 V.
+      - Power while on is V² / R_BRAKE, with R_BRAKE a configured value (10 Ω gives about
+        212 W). Energy is that power times the on-time.
+      - Accuracy about ±5–10 %, limited by the resistor's tolerance and its drift when hot.
+      - Report the total energy (J), the power averaged over the last 1 s and 10 s, and the
+        duty cycle. Log them so the brake resistor can be sized from real drives (OPEN).
+    - Brake resistor protection: a first-order thermal model of R_BRAKE (thermal
+      resistance and time constant from its datasheet and heatsink, configured). Warn at
+      80 % of its rated temperature; drop the drive group at 100 %, or if BRAKE_ACT stays
+      on continuously for several seconds. This replaces the plain "BRAKE_ACT stays on"
+      rule.
     - Soft power: set PWR_HOLD at boot. On PWR_BTN off, run the Jetson stow-and-shutdown
       handshake, then release (120 s timeout; section 5.5).
     - Pre-charge sequencing: INP_G first, then INP only once VSNS_OUT has reached the
