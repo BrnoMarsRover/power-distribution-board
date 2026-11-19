@@ -1703,10 +1703,16 @@
 		(uuid "a2d72d29-b554-55fb-a7c2-ef2ede205cba")
 	)
 	(junction
-		(at 132.08 116.84)
+		(at 129.54 104.14)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "a973382b-ad1c-54bb-a4a3-a1645b975f5f")
+		(uuid "a6b632ee-f154-575d-a2b2-2d0efdafd142")
+	)
+	(junction
+		(at 139.7 116.84)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b521d500-d3dc-5dce-b48f-a122136b1030")
 	)
 	(junction
 		(at 210.82 104.14)
@@ -1918,6 +1924,16 @@
 	)
 	(wire
 		(pts
+			(xy 129.54 104.14) (xy 134.62 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4b375ebc-d865-5210-8af5-56bed2306513")
+	)
+	(wire
+		(pts
 			(xy 149.86 104.14) (xy 149.86 106.68)
 		)
 		(stroke
@@ -2008,16 +2024,6 @@
 	)
 	(wire
 		(pts
-			(xy 149.86 116.84) (xy 132.08 116.84)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7986fc14-0a52-5020-b4bc-bb76bc3473d0")
-	)
-	(wire
-		(pts
 			(xy 96.52 137.16) (xy 190.5 137.16)
 		)
 		(stroke
@@ -2025,6 +2031,16 @@
 			(type default)
 		)
 		(uuid "7ac9f5fb-b28e-5dba-9baa-f0b83d2c7e6b")
+	)
+	(wire
+		(pts
+			(xy 139.7 116.84) (xy 116.84 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7b4a7b58-0869-5676-a1b9-8ef44336ceed")
 	)
 	(wire
 		(pts
@@ -2148,16 +2164,6 @@
 	)
 	(wire
 		(pts
-			(xy 132.08 116.84) (xy 116.84 116.84)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b11e67e5-131c-5fb7-bad5-49cb64545edd")
-	)
-	(wire
-		(pts
 			(xy 86.36 104.14) (xy 63.5 104.14)
 		)
 		(stroke
@@ -2165,16 +2171,6 @@
 			(type default)
 		)
 		(uuid "b3047429-6a42-5bb6-8e68-cb91048beb9e")
-	)
-	(wire
-		(pts
-			(xy 124.46 104.14) (xy 134.62 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b3fad5ad-c37a-5d2e-8e47-86d603d25fc5")
 	)
 	(wire
 		(pts
@@ -2258,6 +2254,16 @@
 	)
 	(wire
 		(pts
+			(xy 149.86 116.84) (xy 139.7 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "edadcc22-8584-5d78-988b-696329a0f34a")
+	)
+	(wire
+		(pts
 			(xy 264.16 93.98) (xy 269.24 93.98)
 		)
 		(stroke
@@ -2275,6 +2281,16 @@
 			(type default)
 		)
 		(uuid "f5409a75-4867-5cc8-b9a5-a387dd10c391")
+	)
+	(wire
+		(pts
+			(xy 124.46 104.14) (xy 129.54 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f5d2368f-768b-587b-bd4a-804bcb59d8bd")
 	)
 	(wire
 		(pts
@@ -2383,6 +2399,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 139.7 116.84 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "04221b34-616c-5d1a-8991-f4bb6083fcef")
+		(property "Reference" "TP56"
+			(at 139.7 109.982 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PG"
+			(at 139.7 111.76 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 139.7 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 139.7 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 139.7 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ccb7dbfb-4c99-550a-917a-badaccd6c6a3")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
+					(reference "TP56")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:L")
 		(at 138.43 104.14 90)
 		(unit 1)
@@ -2462,8 +2554,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 241.3 104.14 0)
+		(lib_id "power:GND")
+		(at 312.42 114.3 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2471,9 +2563,9 @@
 		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "094209a7-3121-5298-bf02-fc90e7dbe696")
-		(property "Reference" "#FLGauxpower011"
-			(at 241.3 102.235 0)
+		(uuid "04c6a348-cb11-59e0-88e2-bf3df7155c00")
+		(property "Reference" "#PWRauxpower016"
+			(at 312.42 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2483,8 +2575,8 @@
 				)
 			)
 		)
-		(property "Value" "PWR_FLAG"
-			(at 241.3 100.33 0)
+		(property "Value" "GND"
+			(at 312.42 118.11 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2494,7 +2586,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 241.3 104.14 0)
+			(at 312.42 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2505,7 +2597,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 241.3 104.14 0)
+			(at 312.42 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2516,7 +2608,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 241.3 104.14 0)
+			(at 312.42 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2527,12 +2619,88 @@
 			)
 		)
 		(pin "1"
-			(uuid "b1fcf3af-2bc1-5661-9c83-27b60c542ba7")
+			(uuid "04ed4f44-f9be-501b-a798-5189aba6893e")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
-					(reference "#FLGauxpower011")
+					(reference "#PWRauxpower016")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 256.54 104.14 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "070c8d49-1a83-5d32-bfdd-4f11e11554ce")
+		(property "Reference" "TP60"
+			(at 256.54 97.282 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+5V_LOGIC"
+			(at 256.54 99.06 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 256.54 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 256.54 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 256.54 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "85a80e86-1930-58b8-a144-cb22d8147b3e")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
+					(reference "TP60")
 					(unit 1)
 				)
 			)
@@ -2548,8 +2716,8 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "1d2bb758-c9b6-5157-9abb-d48f4e4cb61e")
-		(property "Reference" "TP32"
+		(uuid "0f07fb76-182a-51c7-8f51-51d9aabcb907")
+		(property "Reference" "TP61"
 			(at 320.04 97.282 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2603,12 +2771,89 @@
 			)
 		)
 		(pin "1"
-			(uuid "2bbfb0fe-0d7d-5cf3-b91e-8711a8a5513e")
+			(uuid "42784a56-bf84-59ae-b346-d1fe2238efcd")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
-					(reference "TP32")
+					(reference "TP61")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 81.28 147.32 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "18c83c9b-8ab1-5fd8-86f5-cdfc61033f3b")
+		(property "Reference" "#PWRauxpower009"
+			(at 81.28 153.67 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 81.28 151.13 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 81.28 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 81.28 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 81.28 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b135b849-9fce-56e7-b7d7-0aa77d957a42")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
+					(reference "#PWRauxpower009")
 					(unit 1)
 				)
 			)
@@ -2858,6 +3103,83 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 287.02 111.76 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "32cff842-5d08-5843-af34-f68e74e3f380")
+		(property "Reference" "#PWRauxpower011"
+			(at 287.02 118.11 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 287.02 115.57 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 287.02 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 287.02 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 287.02 111.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "44244e5f-75a0-519a-b5d7-0ae3b9c51c1e")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
+					(reference "#PWRauxpower011")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:D_Schottky")
 		(at 227.33 104.14 180)
 		(unit 1)
@@ -2937,8 +3259,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3V3")
-		(at 325.12 104.14 0)
+		(lib_id "power:GND")
+		(at 248.92 114.3 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2948,7 +3270,7 @@
 		(dnp no)
 		(uuid "3bd87d1d-11cf-51db-b4ac-694114151f1b")
 		(property "Reference" "#PWRauxpower013"
-			(at 325.12 107.95 0)
+			(at 248.92 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2958,8 +3280,8 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
-			(at 325.12 100.584 0)
+		(property "Value" "GND"
+			(at 248.92 118.11 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2969,7 +3291,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 325.12 104.14 0)
+			(at 248.92 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2980,7 +3302,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 325.12 104.14 0)
+			(at 248.92 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2991,7 +3313,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 325.12 104.14 0)
+			(at 248.92 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3176,8 +3498,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 248.92 114.3 0)
+		(lib_id "power:PWR_FLAG")
+		(at 241.3 104.14 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3185,9 +3507,9 @@
 		(on_board no)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "5a34e469-10b4-5646-9dce-3b7956dd533a")
-		(property "Reference" "#PWRauxpower012"
-			(at 248.92 120.65 0)
+		(uuid "5961cd60-4f66-5da7-936c-221fb234a62c")
+		(property "Reference" "#FLGauxpower012"
+			(at 241.3 102.235 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3197,8 +3519,8 @@
 				)
 			)
 		)
-		(property "Value" "GND"
-			(at 248.92 118.11 0)
+		(property "Value" "PWR_FLAG"
+			(at 241.3 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3208,7 +3530,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 248.92 114.3 0)
+			(at 241.3 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3219,7 +3541,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 248.92 114.3 0)
+			(at 241.3 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3230,7 +3552,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 248.92 114.3 0)
+			(at 241.3 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3241,12 +3563,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "876ee5b7-74ad-5b0d-8a76-b4cb20469cf9")
+			(uuid "4c3bf52d-8b76-53a9-8143-b1ab8b2355fb")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
-					(reference "#PWRauxpower012")
+					(reference "#FLGauxpower012")
 					(unit 1)
 				)
 			)
@@ -3410,7 +3732,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 312.42 114.3 0)
+		(at 299.72 114.3 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3420,7 +3742,7 @@
 		(dnp no)
 		(uuid "6a97f724-c35a-5bc1-8bb7-baee8425462e")
 		(property "Reference" "#PWRauxpower015"
-			(at 312.42 120.65 0)
+			(at 299.72 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3431,7 +3753,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 312.42 118.11 0)
+			(at 299.72 118.11 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3441,7 +3763,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 312.42 114.3 0)
+			(at 299.72 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3452,7 +3774,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 312.42 114.3 0)
+			(at 299.72 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3463,7 +3785,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 312.42 114.3 0)
+			(at 299.72 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3838,161 +4160,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 132.08 116.84 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "7ff48e5b-5424-5595-904b-07e21de18880")
-		(property "Reference" "TP29"
-			(at 132.08 109.982 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "PG"
-			(at 132.08 111.76 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 132.08 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 132.08 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 132.08 116.84 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "280894fd-c9c8-5b14-91a9-ed1d79b5b421")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
-					(reference "TP29")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 210.82 104.14 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "88b85470-d65e-55c6-b328-27ed12773a18")
-		(property "Reference" "#FLGauxpower009"
-			(at 210.82 102.235 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "PWR_FLAG"
-			(at 210.82 100.33 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 210.82 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 210.82 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 210.82 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e4a199a6-5b4a-5235-baab-382f85d157ec")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
-					(reference "#FLGauxpower009")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
-		(at 177.8 114.3 0)
+		(at 162.56 114.3 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4002,7 +4171,7 @@
 		(dnp no)
 		(uuid "8d0cc4de-c7d1-52c4-b91a-e39e4fa16bec")
 		(property "Reference" "#PWRauxpower007"
-			(at 177.8 120.65 0)
+			(at 162.56 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4013,7 +4182,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 177.8 118.11 0)
+			(at 162.56 118.11 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4023,7 +4192,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 177.8 114.3 0)
+			(at 162.56 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4034,7 +4203,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 177.8 114.3 0)
+			(at 162.56 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4045,7 +4214,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 177.8 114.3 0)
+			(at 162.56 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4062,82 +4231,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
 					(reference "#PWRauxpower007")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 195.58 104.14 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8e2b6f64-e10d-592f-852f-76bdf7afbebe")
-		(property "Reference" "TP30"
-			(at 195.58 97.282 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+5V3_AUX"
-			(at 195.58 99.06 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 195.58 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 195.58 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 195.58 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "291d6911-679d-5976-8af7-9080f5780207")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
-					(reference "TP30")
 					(unit 1)
 				)
 			)
@@ -4219,6 +4312,82 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
 					(reference "C87")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 40.64 119.38 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a436a587-8435-5c65-8f00-4bae493be943")
+		(property "Reference" "TP58"
+			(at 40.64 112.522 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 40.64 114.3 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm"
+			(at 40.64 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 40.64 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 40.64 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f53698d1-5d0b-5854-b67b-709b13a30d3d")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
+					(reference "TP58")
 					(unit 1)
 				)
 			)
@@ -4541,8 +4710,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 299.72 114.3 0)
+		(lib_id "power:+3V3")
+		(at 325.12 104.14 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4552,7 +4721,7 @@
 		(dnp no)
 		(uuid "bdc54d02-c6a6-53db-8f74-50b045bd22d3")
 		(property "Reference" "#PWRauxpower014"
-			(at 299.72 120.65 0)
+			(at 325.12 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4562,8 +4731,8 @@
 				)
 			)
 		)
-		(property "Value" "GND"
-			(at 299.72 118.11 0)
+		(property "Value" "+3V3"
+			(at 325.12 100.584 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4573,7 +4742,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 299.72 114.3 0)
+			(at 325.12 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4584,7 +4753,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 299.72 114.3 0)
+			(at 325.12 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4595,7 +4764,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 299.72 114.3 0)
+			(at 325.12 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4619,7 +4788,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 81.28 147.32 0)
+		(at 177.8 114.3 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4629,7 +4798,7 @@
 		(dnp no)
 		(uuid "c071e954-d9ec-5c8d-baf5-0c921335ce3b")
 		(property "Reference" "#PWRauxpower008"
-			(at 81.28 153.67 0)
+			(at 177.8 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4640,7 +4809,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 81.28 151.13 0)
+			(at 177.8 118.11 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4650,7 +4819,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 81.28 147.32 0)
+			(at 177.8 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4661,7 +4830,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 81.28 147.32 0)
+			(at 177.8 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4672,7 +4841,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 81.28 147.32 0)
+			(at 177.8 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4776,82 +4945,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 256.54 104.14 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "c8e8fd13-c0cc-50f2-8aac-cd52936f3845")
-		(property "Reference" "TP31"
-			(at 256.54 97.282 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+5V_LOGIC"
-			(at 256.54 99.06 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 256.54 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 256.54 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 256.54 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "337b7503-fc99-5b5c-aa1d-89c62d7c3115")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
-					(reference "TP31")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 48.26 106.68 0)
 		(unit 1)
@@ -4923,83 +5016,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
 					(reference "#PWRauxpower002")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 287.02 111.76 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "d10deb63-7747-52e3-8322-a4e17146cb5a")
-		(property "Reference" "#PWRauxpower010"
-			(at 287.02 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 287.02 115.57 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 287.02 111.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 287.02 111.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 287.02 111.76 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "80602534-feaa-59be-82a6-e41a2395c6ce")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
-					(reference "#PWRauxpower010")
 					(unit 1)
 				)
 			)
@@ -5162,6 +5178,159 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 129.54 104.14 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "eafcf309-3266-57cb-9a21-6dc7bd0f5623")
+		(property "Reference" "TP57"
+			(at 129.54 110.998 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW"
+			(at 129.54 109.22 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 129.54 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 129.54 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 129.54 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0f4cdd1a-3603-5df3-b2ec-c855144ba2ad")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
+					(reference "TP57")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 210.82 104.14 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ed9a71b5-f72b-546a-a6df-051c241f7b82")
+		(property "Reference" "#FLGauxpower010"
+			(at 210.82 102.235 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 210.82 100.33 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 210.82 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 210.82 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 210.82 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2a31b507-8c64-54d3-8887-085c1e030541")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
+					(reference "#FLGauxpower010")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
 		(at 124.46 100.33 0)
 		(unit 1)
@@ -5237,6 +5406,82 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
 					(reference "C88")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 195.58 104.14 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "efc8c491-ed53-5733-827e-6b9bc902ef4a")
+		(property "Reference" "TP59"
+			(at 195.58 97.282 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+5V3_AUX"
+			(at 195.58 99.06 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 195.58 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 195.58 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 195.58 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "efee326e-496a-5442-b012-d9a891561a79")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
+					(reference "TP59")
 					(unit 1)
 				)
 			)
@@ -5321,7 +5566,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 162.56 114.3 0)
+		(at 40.64 119.38 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5331,7 +5576,7 @@
 		(dnp no)
 		(uuid "f24fbb40-1a18-523a-a51b-a6f0a86f1fc0")
 		(property "Reference" "#PWRauxpower006"
-			(at 162.56 120.65 0)
+			(at 40.64 125.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5342,7 +5587,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 162.56 118.11 0)
+			(at 40.64 123.19 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5352,7 +5597,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 162.56 114.3 0)
+			(at 40.64 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5363,7 +5608,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 162.56 114.3 0)
+			(at 40.64 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5374,7 +5619,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 162.56 114.3 0)
+			(at 40.64 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

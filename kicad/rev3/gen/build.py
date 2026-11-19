@@ -627,6 +627,7 @@ FP = dict(
     SOD123="Diode_SMD:D_SOD-123",
     LED="LED_SMD:LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder",
     TP="TestPoint:TestPoint_Pad_D1.5mm",
+    TPLOOP="TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm",
     PTC2920="Fuse:Fuse_2920_7451Metric_Pad2.10x5.45mm_HandSolder",
     PTC1812="Fuse:Fuse_1812_4532Metric_Pad1.30x3.40mm_HandSolder",
     XT90M="PowerBoard_rev3:XT90PB-M", XT90F="PowerBoard_rev3:XT90PB-F",
@@ -681,8 +682,23 @@ def LED(sh, color, k, a, at=None, rot=0):
     return sh.add("Device:LED", "D", color, FP["LED"], {1: k, 2: a}, at=at, rot=rot)
 
 
-def TP(sh, net, at=None):
-    return sh.add("Connector:TestPoint", "TP", net.split(":")[-1], FP["TP"], {1: net}, at=at)
+def TP(sh, net, at=None, rot=0):
+    return sh.add("Connector:TestPoint", "TP", net.split(":")[-1], FP["TP"], {1: net}, at=at, rot=rot)
+
+
+def GTP(sh, at):
+    """GND test loop for a scope or meter clip: the loop sits on a GND symbol."""
+    sh.mark("gnd", at)
+    return sh.add("Connector:TestPoint", "TP", "GND", FP["TPLOOP"], {1: "GND"}, at=at)
+
+
+def tp_panel(sh, nets, x0, y0, cols=3, dx=45.72, dy=10.16):
+    """A block of test points on global nets: label on the left, test point on the wire."""
+    for i, net in enumerate(nets):
+        x, y = x0 + dx * (i % cols), y0 + dy * (i // cols)
+        sh.mark("label", (x, y), net, 180)
+        sh.wire((x, y), (x + 7.62, y))
+        TP(sh, net, at=(x + 7.62, y))
 
 
 def FET(sh, part, g, d, s, at=None, rot=0, mirror=False):
@@ -777,6 +793,7 @@ def sheet_power_in():
     for n, net in ((3, "INA_ALERT"), (4, "I2C_SDA"), (5, "I2C_SCL")):
         W(P(n), (215.9, P(n)[1]))
         lab(net, (215.9, P(n)[1]), 0)
+    TP(sh, "INA_ALERT", at=(210.82, P(3)[1]))
     ra = R(sh, 10e3, "+3V3", "INA_ALERT", rot=0)
     at_pin(ra, 2, (203.2, P(3)[1]))
     v33(PIN(ra, 1))
@@ -803,6 +820,8 @@ def sheet_power_in():
     W(PIN(jbc, 1), (50.8, 132.08), (50.8, Y))
     W(PIN(jbc, 2), (45.72, PIN(jbc, 2)[1]), (45.72, yc), (241.3, yc), (241.3, PIN(jc, 2)[1]), PIN(jc, 2))
     lab("L:CHG_N", (127.0, yc), 0)
+    TP(sh, "L:CHG_N", at=(88.9, yc))
+    GTP(sh, (66.04, 124.46))
     sh.shift(0, -22.86)
     return sh
 
@@ -883,6 +902,7 @@ def sheet_switch(r):
     gnd(PIN(reb, 2))
     enp = P(1)
     W(enp, (73.66, enp[1]), (73.66, 139.7), (66.04, 139.7))
+    TP(sh, en, at=(83.82, enp[1]))
     if r["name"] == "42V-D":
         qe = sh.add("Transistor_FET:2N7002", "Q", "2N7002", FP["SOT23"], {1: "ESTOP_KILL", 2: "GND", 3: en},
                     at=(53.34, 144.78))
@@ -896,6 +916,8 @@ def sheet_switch(r):
     for pin_, net in ((inp, f"INP_{n}"), (inpg, f"INPG_{n}"), (flti, f"FLT_{n}")):
         W(pin_, (45.72, pin_[1]))
         lab(net, (45.72, pin_[1]), 180)
+    TP(sh, f"INP_{n}", at=(50.8, inp[1]))
+    TP(sh, f"INPG_{n}", at=(50.8, inpg[1]))
     W(fltt, (86.36, fltt[1]), (86.36, flti[1]))
     if on:
         ri = R(sh, 1e6, "+3V3", f"INP_{n}", at=(60.96, inp[1] - 3.81), rot=0)
@@ -1003,6 +1025,7 @@ def sheet_switch(r):
     lab(vin, (22.86, yR), 180)
     W((22.86, yR), PIN(rs, 1))
     if r["name"] in TVS_IN:
+        TP(sh, vin, at=(25.4, yR))
         hang(sh, DZ(sh, TVS_IN[r["name"]], vin, "GND", rot=270), (30.48, yR), gap=3.81)
         for x in (45.72, 58.42):
             hang(sh, CP(sh, f"47uF/{CBULK_V[r['name']]}V", vin, "GND", fp="CP8", rot=0), (x, yR), gap=3.81)
@@ -1139,6 +1162,7 @@ def sheet_boost():
 
     # gate drive: SW back to the node, bootstrap cap and diode, VCC, HO up to the high-side gate
     W(P(18), (139.7, P(18)[1]), (139.7, yi))
+    TP(sh, "L:SW", at=(137.16, P(18)[1]))
     cb = C(sh, 100e-9, "L:SW", "L:BST", volt=25, rot=0)
     at_pin(cb, 2, (134.62, P(20)[1]))
     W(P(20), (137.16, P(20)[1]))
@@ -1181,6 +1205,8 @@ def sheet_boost():
     at_pin(rft, 2, (P(10)[0] + 5.08, yf))
     W((P(10)[0], yf), PIN(rft, 2))
     W(PIN(rft, 1), (xo, yf), (xo, yi))
+    TP(sh, "SW54_OUT", at=(30.48, yi))
+    GTP(sh, (175.26, 124.46))
     hang(sh, R(sh, 4.99e3, "L:FB", "GND", rot=0), (P(10)[0], yf))
 
     # output rail: ceramics, bulk, TVS, indicator, voltage sense, test point, flag, label
@@ -1249,7 +1275,9 @@ def sheet_aux():
     yo = P(8)[1]
     rpg = hang(sh, R(sh, 100e3, "+5V3_AUX", "L:PG", rot=0), (149.86, yo), gnd=False)
     W(PIN(rpg, 2), (149.86, P(6)[1]), P(6))
-    TP(sh, "L:PG", at=(132.08, P(6)[1]))
+    TP(sh, "L:PG", at=(139.7, P(6)[1]))
+    TP(sh, "L:SW", at=(129.54, P(8)[1]), rot=180)
+    GTP(sh, (40.64, 119.38))
     for x in (162.56, 177.8):
         hang(sh, C(sh, 22e-6, "+5V3_AUX", "GND", fp="C1206", volt=10, rot=0), (x, yo))
 
@@ -1445,6 +1473,11 @@ def sheet_mcu():
     W(PIN(rsp, 2), (xg - 2.54, yt + 22.86), (xg - 12.7, yt + 22.86))
     lab("UART_SP", (xg - 12.7, yt + 22.86), 180)
 
+    # --- test points for the buses and control lines
+    tp_panel(sh, ["I2C_SDA", "I2C_SCL", "INA_ALERT", "UART_TX", "UART_RX", "UART_SP",
+                  "CAN_TXD", "CAN_RXD", "CAN_STB"], 35.56, 215.9)
+    GTP(sh, (127.0, 246.38))
+
     # --- status LEDs
     for i in (1, 2, 3):
         y = 193.04 + 10.16 * (i - 1)
@@ -1512,6 +1545,10 @@ def sheet_can():
     W((xt, 127.0), (165.1, 127.0))
     hang(sh, C(sh, 4.7e-9, "L:TMID", "GND", volt=50, rot=0), (165.1, 127.0))
 
+    TP(sh, "CANH", at=(170.18, yh))
+    TP(sh, "CANL", at=(170.18, yl))
+    GTP(sh, (220.98, yh))
+
     # two connectors in parallel (CANH crosses CANL once, without a junction)
     for i, y1 in ((1, 124.46), (2, 149.86)):
         j = sh.add("Connector_Generic_MountingPin:Conn_01x04_MountingPin", "J",
@@ -1577,6 +1614,9 @@ def sheet_io():
     arm = P(17)
     W(arm, (116.84, arm[1]), (116.84, Q(1)[1]), Q(1))
     hang(sh, R(sh, 100e3, "ESTOP_ARM", "GND", rot=0), (127.0, Q(1)[1]))
+    TP(sh, "ESTOP_ARM", at=(132.08, Q(1)[1]))
+    TP(sh, "ESTOP_KILL", at=(168.91, Q(3)[1]))
+    GTP(sh, (40.64, 160.02))
     yb = 157.48                                    # +3V3 bar over the flip-flop
     W(Q(2), (134.62, Q(2)[1]), (134.62, yb), (Q(8)[0], yb), Q(8))
     W(Q(7), (Q(7)[0], yb))

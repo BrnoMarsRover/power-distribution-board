@@ -2507,6 +2507,12 @@
 		(uuid "a0cdb41a-3f05-599d-b593-ec35b78a510a")
 	)
 	(junction
+		(at 30.48 86.36)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a680242f-d2c4-5ae4-b370-df82f7c6695c")
+	)
+	(junction
 		(at 113.03 86.36)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2583,6 +2589,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d62357e5-4df4-5792-ba38-c4d9e7fa64e9")
+	)
+	(junction
+		(at 137.16 124.46)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d9755bd0-a8f4-578b-adb4-d0980ea5a1d1")
 	)
 	(junction
 		(at 96.52 177.8)
@@ -2684,16 +2696,6 @@
 	)
 	(wire
 		(pts
-			(xy 134.62 124.46) (xy 139.7 124.46)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "116ed092-3d82-51d6-a79c-487fc41caea9")
-	)
-	(wire
-		(pts
 			(xy 88.9 142.24) (xy 58.42 142.24)
 		)
 		(stroke
@@ -2764,6 +2766,16 @@
 	)
 	(wire
 		(pts
+			(xy 30.48 86.36) (xy 35.56 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "274a1451-8071-5906-a788-798e99c126a2")
+	)
+	(wire
+		(pts
 			(xy 96.52 177.8) (xy 96.52 180.34)
 		)
 		(stroke
@@ -2771,6 +2783,16 @@
 			(type default)
 		)
 		(uuid "288d19d2-e55c-5a24-879f-e5082dee3f77")
+	)
+	(wire
+		(pts
+			(xy 137.16 124.46) (xy 139.7 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2acfb81f-0916-5b82-a6f2-53e6996cf0c7")
 	)
 	(wire
 		(pts
@@ -3031,6 +3053,16 @@
 			(type default)
 		)
 		(uuid "620b9eb2-c30d-53e8-837d-96a9f5e2ce6b")
+	)
+	(wire
+		(pts
+			(xy 134.62 124.46) (xy 137.16 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6a65d360-093e-5d1c-89b4-44c281b633c3")
 	)
 	(wire
 		(pts
@@ -3354,16 +3386,6 @@
 	)
 	(wire
 		(pts
-			(xy 25.4 86.36) (xy 35.56 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ba0576aa-f2e4-510a-955f-2ac6fd1556c4")
-	)
-	(wire
-		(pts
 			(xy 86.36 106.68) (xy 86.36 109.22)
 		)
 		(stroke
@@ -3461,6 +3483,16 @@
 			(type default)
 		)
 		(uuid "cdc6e59a-7af8-5186-ad33-386782a42668")
+	)
+	(wire
+		(pts
+			(xy 25.4 86.36) (xy 30.48 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cfd9a1f4-98e6-5828-8ee6-9e03b5897581")
 	)
 	(wire
 		(pts
@@ -4078,7 +4110,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 320.04 109.22 0)
+		(at 304.8 106.68 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4088,7 +4120,7 @@
 		(dnp no)
 		(uuid "0bfb0c80-8582-5cb0-86aa-fce7d9de702c")
 		(property "Reference" "#PWRboost54028"
-			(at 320.04 115.57 0)
+			(at 304.8 113.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4099,7 +4131,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 320.04 113.03 0)
+			(at 304.8 110.49 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4109,7 +4141,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 320.04 109.22 0)
+			(at 304.8 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4120,7 +4152,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 320.04 109.22 0)
+			(at 304.8 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4131,7 +4163,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 320.04 109.22 0)
+			(at 304.8 106.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4148,6 +4180,159 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
 					(reference "#PWRboost54028")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 353.06 86.36 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "0e7b7b68-2857-594c-bb63-17773dbb9508")
+		(property "Reference" "#FLGboost54031"
+			(at 353.06 84.455 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 353.06 82.55 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 353.06 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 353.06 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 353.06 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "232d33a9-325e-5cba-a0fe-262fa3a736a5")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
+					(reference "#FLGboost54031")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 345.44 86.36 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "15b17bf5-5c07-5cbe-9867-d82a091407d3")
+		(property "Reference" "TP55"
+			(at 345.44 79.502 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "OUT54"
+			(at 345.44 81.28 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 345.44 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 345.44 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 345.44 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "46916642-198d-583e-9811-af696b440e76")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
+					(reference "TP55")
 					(unit 1)
 				)
 			)
@@ -4227,6 +4412,82 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
 					(reference "R123")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 137.16 124.46 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "19028cf8-474b-57c2-8ff9-6b4901673c8e")
+		(property "Reference" "TP51"
+			(at 137.16 117.602 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW"
+			(at 137.16 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 137.16 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3e718d0d-ea90-55de-aec3-382e239986a1")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
+					(reference "TP51")
 					(unit 1)
 				)
 			)
@@ -5015,6 +5276,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 30.48 86.36 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "3d8a4b9f-8b92-561c-9127-d7fcc98aeb63")
+		(property "Reference" "TP53"
+			(at 30.48 79.502 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SW54_OUT"
+			(at 30.48 81.28 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 30.48 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 30.48 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 30.48 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ea7f5305-4047-5fba-85a2-9be318bc54d6")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
+					(reference "TP53")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
 		(at 73.66 161.29 0)
 		(unit 1)
@@ -5592,6 +5929,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 175.26 124.46 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "5e9ca859-16fe-5953-9e73-9cb846d9f695")
+		(property "Reference" "TP54"
+			(at 175.26 117.602 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 175.26 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm"
+			(at 175.26 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 175.26 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 175.26 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "16ef6546-6398-5004-b9da-ed6799521874")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
+					(reference "TP54")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 96.52 184.15 0)
 		(unit 1)
@@ -5753,7 +6166,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 243.84 96.52 0)
+		(at 228.6 96.52 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5763,7 +6176,7 @@
 		(dnp no)
 		(uuid "5fea041d-065c-5f1f-98fb-ad42e67ee61f")
 		(property "Reference" "#PWRboost54023"
-			(at 243.84 102.87 0)
+			(at 228.6 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5774,7 +6187,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 243.84 100.33 0)
+			(at 228.6 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5784,7 +6197,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 243.84 96.52 0)
+			(at 228.6 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5795,7 +6208,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 243.84 96.52 0)
+			(at 228.6 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5806,7 +6219,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 243.84 96.52 0)
+			(at 228.6 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6069,7 +6482,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 96.52 187.96 0)
+		(at 175.26 124.46 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6079,7 +6492,7 @@
 		(dnp no)
 		(uuid "6e55cc33-4da2-5549-a261-261a4ea78c1e")
 		(property "Reference" "#PWRboost54017"
-			(at 96.52 194.31 0)
+			(at 175.26 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6090,7 +6503,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 96.52 191.77 0)
+			(at 175.26 128.27 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6100,7 +6513,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 96.52 187.96 0)
+			(at 175.26 124.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6111,7 +6524,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 96.52 187.96 0)
+			(at 175.26 124.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6122,7 +6535,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 96.52 187.96 0)
+			(at 175.26 124.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6146,7 +6559,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 289.56 96.52 0)
+		(at 274.32 96.52 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6156,7 +6569,7 @@
 		(dnp no)
 		(uuid "723b6d37-be00-503f-8ed6-9e298c49ae9c")
 		(property "Reference" "#PWRboost54026"
-			(at 289.56 102.87 0)
+			(at 274.32 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6167,7 +6580,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 289.56 100.33 0)
+			(at 274.32 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6177,7 +6590,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 289.56 96.52 0)
+			(at 274.32 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6188,7 +6601,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 289.56 96.52 0)
+			(at 274.32 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6199,7 +6612,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 289.56 96.52 0)
+			(at 274.32 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6381,7 +6794,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 198.12 96.52 0)
+		(at 182.88 96.52 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6391,7 +6804,7 @@
 		(dnp no)
 		(uuid "76f312bf-2771-59fd-bfe6-a69d55934a82")
 		(property "Reference" "#PWRboost54020"
-			(at 198.12 102.87 0)
+			(at 182.88 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6402,7 +6815,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 198.12 100.33 0)
+			(at 182.88 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6412,7 +6825,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 198.12 96.52 0)
+			(at 182.88 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6423,7 +6836,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 198.12 96.52 0)
+			(at 182.88 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6434,7 +6847,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 198.12 96.52 0)
+			(at 182.88 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6778,7 +7191,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 167.64 96.52 0)
+		(at 96.52 187.96 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6788,7 +7201,7 @@
 		(dnp no)
 		(uuid "90a42dbc-a492-51fd-9020-d01153e3c39b")
 		(property "Reference" "#PWRboost54018"
-			(at 167.64 102.87 0)
+			(at 96.52 194.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6799,7 +7212,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 167.64 100.33 0)
+			(at 96.52 191.77 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6809,7 +7222,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 167.64 96.52 0)
+			(at 96.52 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6820,7 +7233,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 167.64 96.52 0)
+			(at 96.52 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6831,7 +7244,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 167.64 96.52 0)
+			(at 96.52 187.96 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7171,7 +7584,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 259.08 96.52 0)
+		(at 243.84 96.52 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7181,7 +7594,7 @@
 		(dnp no)
 		(uuid "9d8f58af-3100-5f3a-a70b-728be9ac4298")
 		(property "Reference" "#PWRboost54024"
-			(at 259.08 102.87 0)
+			(at 243.84 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7192,7 +7605,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 259.08 100.33 0)
+			(at 243.84 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7202,7 +7615,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 259.08 96.52 0)
+			(at 243.84 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7213,7 +7626,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 259.08 96.52 0)
+			(at 243.84 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7224,7 +7637,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 259.08 96.52 0)
+			(at 243.84 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7248,7 +7661,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 327.66 109.22 0)
+		(at 320.04 109.22 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7258,7 +7671,7 @@
 		(dnp no)
 		(uuid "a1f809f6-183f-5748-ab7e-c3ead02fe9d7")
 		(property "Reference" "#PWRboost54029"
-			(at 327.66 115.57 0)
+			(at 320.04 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7269,7 +7682,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 327.66 113.03 0)
+			(at 320.04 113.03 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7279,7 +7692,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 327.66 109.22 0)
+			(at 320.04 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7290,7 +7703,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 327.66 109.22 0)
+			(at 320.04 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7301,7 +7714,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 327.66 109.22 0)
+			(at 320.04 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7399,83 +7812,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
 					(reference "C83")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 353.06 86.36 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "a7e4d6a7-818e-58f9-a104-cdbf7570335c")
-		(property "Reference" "#FLGboost54030"
-			(at 353.06 84.455 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "PWR_FLAG"
-			(at 353.06 82.55 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 353.06 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 353.06 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 353.06 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "c8a09847-3cfa-554d-a7d4-8cced31dd185")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
-					(reference "#FLGboost54030")
 					(unit 1)
 				)
 			)
@@ -7711,6 +8047,83 @@
 	)
 	(symbol
 		(lib_id "power:GND")
+		(at 327.66 109.22 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b1ac596c-101f-5121-8093-db1373ef0c42")
+		(property "Reference" "#PWRboost54030"
+			(at 327.66 115.57 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 327.66 113.03 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 327.66 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 327.66 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 327.66 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0245e150-e686-5993-9753-8ed5a6979edd")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
+					(reference "#PWRboost54030")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
 		(at 78.74 96.52 0)
 		(unit 1)
 		(body_style 1)
@@ -7862,82 +8275,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
 					(reference "C73")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 132.08 139.7 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "b8038583-71e4-582e-9b8c-f7c109c08d86")
-		(property "Reference" "TP27"
-			(at 132.08 146.558 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "VCC"
-			(at 132.08 144.78 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 132.08 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 132.08 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 132.08 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5b4d6619-605d-5eae-b347-c43dfc5476b6")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
-					(reference "TP27")
 					(unit 1)
 				)
 			)
@@ -8105,7 +8442,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 304.8 106.68 0)
+		(at 289.56 96.52 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8115,7 +8452,7 @@
 		(dnp no)
 		(uuid "c79ac8e8-08ea-50ce-afcc-9dfb92d8d41b")
 		(property "Reference" "#PWRboost54027"
-			(at 304.8 113.03 0)
+			(at 289.56 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8126,7 +8463,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 304.8 110.49 0)
+			(at 289.56 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8136,7 +8473,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 304.8 106.68 0)
+			(at 289.56 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8147,7 +8484,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 304.8 106.68 0)
+			(at 289.56 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8158,7 +8495,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 304.8 106.68 0)
+			(at 289.56 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8513,7 +8850,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 274.32 96.52 0)
+		(at 259.08 96.52 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8523,7 +8860,7 @@
 		(dnp no)
 		(uuid "d4a049d0-898b-5b6c-91c2-ec98b1b774d5")
 		(property "Reference" "#PWRboost54025"
-			(at 274.32 102.87 0)
+			(at 259.08 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8534,7 +8871,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 274.32 100.33 0)
+			(at 259.08 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8544,7 +8881,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 274.32 96.52 0)
+			(at 259.08 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8555,7 +8892,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 274.32 96.52 0)
+			(at 259.08 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8566,7 +8903,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 274.32 96.52 0)
+			(at 259.08 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8664,82 +9001,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
 					(reference "C66")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 345.44 86.36 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "d8efc68e-9a28-5e97-91a5-6eed35e852e4")
-		(property "Reference" "TP28"
-			(at 345.44 79.502 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "OUT54"
-			(at 345.44 81.28 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 345.44 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 345.44 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 345.44 86.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4ea7fd2b-8ad3-521c-91cc-311166577c5b")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
-					(reference "TP28")
 					(unit 1)
 				)
 			)
@@ -8994,6 +9255,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 132.08 139.7 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e8a31baa-aebd-565f-9e7d-73df56fac7d8")
+		(property "Reference" "TP52"
+			(at 132.08 146.558 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "VCC"
+			(at 132.08 144.78 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 132.08 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 132.08 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 132.08 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b4f7ad1e-e0ce-58d8-9ec0-699744ebfbce")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/94cf5cf1-594f-5283-9734-ae337d60eb5f"
+					(reference "TP52")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
 		(at 81.28 171.45 0)
 		(unit 1)
@@ -9155,7 +9492,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 213.36 96.52 0)
+		(at 198.12 96.52 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9165,7 +9502,7 @@
 		(dnp no)
 		(uuid "ef191e27-1e53-5363-8b33-568317b7420e")
 		(property "Reference" "#PWRboost54021"
-			(at 213.36 102.87 0)
+			(at 198.12 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9176,7 +9513,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 213.36 100.33 0)
+			(at 198.12 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9186,7 +9523,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 213.36 96.52 0)
+			(at 198.12 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9197,7 +9534,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 213.36 96.52 0)
+			(at 198.12 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9208,7 +9545,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 213.36 96.52 0)
+			(at 198.12 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9311,7 +9648,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 182.88 96.52 0)
+		(at 167.64 96.52 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9321,7 +9658,7 @@
 		(dnp no)
 		(uuid "f2e38a4a-9351-5808-9831-1248f94d3b15")
 		(property "Reference" "#PWRboost54019"
-			(at 182.88 102.87 0)
+			(at 167.64 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9332,7 +9669,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 182.88 100.33 0)
+			(at 167.64 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9342,7 +9679,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 182.88 96.52 0)
+			(at 167.64 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9353,7 +9690,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 182.88 96.52 0)
+			(at 167.64 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9364,7 +9701,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 182.88 96.52 0)
+			(at 167.64 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9570,7 +9907,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 228.6 96.52 0)
+		(at 213.36 96.52 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9580,7 +9917,7 @@
 		(dnp no)
 		(uuid "f51aee51-58e6-54f9-85c8-3f9891c0fd5d")
 		(property "Reference" "#PWRboost54022"
-			(at 228.6 102.87 0)
+			(at 213.36 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9591,7 +9928,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 228.6 100.33 0)
+			(at 213.36 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9601,7 +9938,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 228.6 96.52 0)
+			(at 213.36 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9612,7 +9949,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 228.6 96.52 0)
+			(at 213.36 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9623,7 +9960,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 228.6 96.52 0)
+			(at 213.36 96.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

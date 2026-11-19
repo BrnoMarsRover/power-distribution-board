@@ -26,7 +26,7 @@ That run does six things:
    intended.
 
 Result at generation time:
-- 436 parts and 252 nets.
+- 481 parts and 252 nets.
 - Netlist check passes.
 - ERC is clean at every severity.
 

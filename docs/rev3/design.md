@@ -616,8 +616,18 @@ layout.
 - **Passives:** 0603 minimum, 0805 where space allows.
 - **USB-C (16-pin, 0.5 mm)** is the hardest joint on the board. A micro-B is the fallback,
   since USB is only for flashing and debug.
-- **Test points** on every switch's VOUT, IMON and FLT, on the aux rails and on the boost
-  output, for bring-up.
+- **Test points everywhere, for bring-up and debugging** (83 on the board):
+  - **Every eFuse:** VOUT, IMON, FLT, GATE, INP, INP_G and EN/UVLO, plus VIN on the
+    24 / 12 / 5 V rails.
+  - **Power:** VBAT, BUS42, CHG_N, INA_ALERT, both aux rails and the buck switch node,
+    +3V3, and the boost input, switch node, VCC and output.
+  - **Buses and control:** I2C, UART (TX, RX, spare), CAN logic (TXD, RXD, STB), CANH /
+    CANL, ESP_EN, ESP_IO0, TXD0 / RXD0, ESTOP_OK, ESTOP_ARM, ESTOP_KILL and the latch
+    output.
+  - **Ground:** six GND loops (through-hole, for a scope or meter clip), one in each
+    functional area. Signal test points are 1.5 mm SMD pads.
+  - **Layout:** put test points on the top side, ≥ 2.5 mm from tall parts so a probe can
+    land, with the silkscreen naming the net next to each.
 
 ---
 
