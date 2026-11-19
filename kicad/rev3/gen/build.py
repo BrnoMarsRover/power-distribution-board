@@ -182,16 +182,17 @@ CUSTOM = {
             ("13", "MODE", "input", 7.62, -22.86, 90), ("2", "OPT", "input", 12.7, -22.86, 90)],
         footprint="Package_SO:HTSSOP-20-1EP_4.4x6.5mm_P0.65mm_EP3.4x6.5mm_Mask2.96x2.96mm",
         datasheet=TI + "lm5122.pdf", desc="Synchronous boost controller, 65 V in, HTSSOP-20 (MH)"),
-    # Input on the left, BOOT 7.62 above SW so the bootstrap cap stands between them.
-    "LMR38010": pinned_symbol(
-        "LMR38010", 12.7, 12.7, [
-            ("3", "VIN", "power_in", -15.24, 10.16, 0), ("2", "EN", "input", -15.24, 2.54, 0),
-            ("4", "RT/SYNC", "passive", -15.24, -2.54, 0), ("5", "FB", "input", -15.24, -10.16, 0),
-            ("7", "BOOT", "passive", 15.24, 10.16, 180), ("8", "SW", "power_out", 15.24, 2.54, 180),
-            ("6", "PG", "open_collector", 15.24, -10.16, 180),
-            ("1", "GND", "power_in", -2.54, -15.24, 90), ("9", "EP", "passive", 2.54, -15.24, 90)],
+    # Input on the left with RON second (its resistor comes from VIN, above the UVLO divider);
+    # BST 7.62 above SW so the bootstrap cap stands between them.
+    "LM5017": pinned_symbol(
+        "LM5017", 12.7, 12.7, [
+            ("2", "VIN", "power_in", -15.24, 10.16, 0), ("4", "RON", "input", -15.24, 2.54, 0),
+            ("3", "UVLO", "input", -15.24, -2.54, 0), ("5", "FB", "input", -15.24, -10.16, 0),
+            ("7", "BST", "passive", 15.24, 10.16, 180), ("8", "SW", "power_out", 15.24, 2.54, 180),
+            ("6", "VCC", "power_out", 15.24, -10.16, 180),
+            ("1", "RTN", "power_in", -2.54, -15.24, 90), ("9", "EP", "passive", 2.54, -15.24, 90)],
         footprint="Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm",
-        datasheet=TI + "lmr38010.pdf", desc="80 V 1 A synchronous buck, HSOIC-8 (DDA)"),
+        datasheet=TI + "lm5017.pdf", desc="100 V 600 mA synchronous constant-on-time buck, SO-8 PowerPAD (DDA)"),
     # Sense inputs on top, 7.62 apart, so the Kelvin lines drop straight down from a 2-pin shunt.
     "INA228": pinned_symbol(
         "INA228", 10.16, 10.16, [
@@ -1367,65 +1368,80 @@ def sheet_boost():
 
 def sheet_aux():
     sh = Sheet("aux_power", "Always-on aux supply: 42 V -> 5.3 V -> 3.3 V", [
-        "LMR38010 runs from the battery bus before any switch, so logic power never depends on USB (rule R1).",
-        "Bring-up test: battery only, USB unplugged -> +5V3_AUX, +5V_LOGIC and +3V3 present, ESP32 boots.",
-        "VERIFY the LMR38010 variant has the RT/SYNC pin (adjustable frequency); RT = 49.9k gives ~525 kHz."],
+        "LM5017 runs from the battery bus before any switch, so logic power never depends on USB (rule R1).",
+        "Constant on-time buck: RON from VIN sets ~400 kHz; Rr / Cr / Cac inject the ripple FB needs (TI 'Type 3', datasheet 7.3.11).",
+        "Bring-up test: battery only, USB unplugged -> +5V3_AUX, +5V_LOGIC and +3V3 present, ESP32 boots."],
         drawn=True)
     W, gnd, v33, lab = marks(sh)
-    U = sh.add("PowerBoard_rev3:LMR38010", "U", "LMR38010SDDAR",
+    U = sh.add("PowerBoard_rev3:LM5017", "U", "LM5017MR/NOPB",
                "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm",
-               {3: "BUS42", 2: "L:EN", 4: "L:RT", 5: "L:FB", 7: "L:BOOT", 8: "L:SW", 6: "L:PG",
-                1: "GND", 9: "GND"}, fields={"LCSC": "C5219310"}, at=(101.6, 106.68))
+               {2: "BUS42", 4: "L:RON", 3: "L:UVLO", 5: "L:FB", 7: "L:BST", 8: "L:SW", 6: "L:VCC",
+                1: "GND", 9: "GND"}, fields={"MPN": "LM5017MR/NOPB"}, at=(101.6, 106.68))
+    U.label_at = {"Reference": (-12.7, -15.24), "Value": (-6.35, -15.24)}
     P = lambda n: PIN(U, n)
-    yr = P(3)[1]
+    yr = P(2)[1]
 
-    # input: bus label, ceramics, EN divider, RT
+    # input: bus label, ceramics, RON from VIN, UVLO divider (on 20.1 V, off 18.1 V with the 20 uA hysteresis)
     lab("BUS42", (25.4, yr), 180)
-    W((25.4, yr), P(3))
+    W((25.4, yr), P(2))
     for x in (35.56, 48.26):
-        hang(sh, C(sh, 2.2e-6, "BUS42", "GND", fp="C1210", volt=100, rot=0), (x, yr))
-    ret = hang(sh, R(sh, 470e3, "BUS42", "L:EN", rot=0), (63.5, yr), gap=0, gnd=False)
-    W(P(2), PIN(ret, 2))
-    hang(sh, R(sh, 30.1e3, "L:EN", "GND", rot=0), PIN(ret, 2))
-    W(P(4), (73.66, P(4)[1]))
-    hang(sh, R(sh, 49.9e3, "L:RT", "GND", rot=0), (73.66, P(4)[1]))
+        hang(sh, C(sh, 2.2e-6, "BUS42", "GND", fp="C1210", volt=100, rot=0, MPN="GRM32ER72A225KA35L"), (x, yr))
+    ron = hang(sh, R(sh, 147e3, "BUS42", "L:RON", fp="R1206", rot=0), (78.74, yr), gap=0, gnd=False)
+    W(P(4), PIN(ron, 2))
+    rut = hang(sh, R(sh, 100e3, "BUS42", "L:UVLO", fp="R1206", rot=0), (63.5, yr), gap=P(3)[1] - yr - 7.62, gnd=False)
+    W(P(3), PIN(rut, 2))
+    hang(sh, R(sh, 6.49e3, "L:UVLO", "GND", rot=0), PIN(rut, 2))
     W(P(1), (P(1)[0], P(1)[1] + 2.54), (P(9)[0], P(9)[1] + 2.54), P(9))
     W((101.6, P(1)[1] + 2.54), (101.6, P(1)[1] + 5.08))
     gnd((101.6, P(1)[1] + 5.08))
 
-    # switch node: bootstrap cap, inductor, output rail
-    cb = C(sh, 100e-9, "L:BOOT", "L:SW", volt=16, rot=0)
+    # switch node: bootstrap cap, inductor, output rail; VCC cap
+    cb = C(sh, 10e-9, "L:BST", "L:SW", volt=25, rot=0)
     at_pin(cb, 1, (124.46, P(7)[1]))
     W(P(7), PIN(cb, 1))
     W(P(8), PIN(cb, 2))
-    ind = sh.add("Device:L", "L", "33uH 1.5A", FP["L6"], {1: "L:SW", 2: "+5V3_AUX"}, rot=90)
+    ind = sh.add("Device:L", "L", "33uH", "Inductor_SMD:L_Bourns_SRR1260", {1: "L:SW", 2: "+5V3_AUX"}, rot=90,
+                 fields={"MPN": "SRR1260-330M"})
     at_pin(ind, 1, (134.62, P(8)[1]))
     W(PIN(cb, 2), PIN(ind, 1))
     yo = P(8)[1]
-    rpg = hang(sh, R(sh, 100e3, "+5V3_AUX", "L:PG", rot=0), (149.86, yo), gnd=False)
-    W(PIN(rpg, 2), (149.86, P(6)[1]), P(6))
-    TP(sh, "L:PG", at=(139.7, P(6)[1]))
-    TP(sh, "L:SW", at=(129.54, P(8)[1]), rot=180)
-    GTP(sh, (40.64, 119.38))
-    for x in (162.56, 177.8):
-        hang(sh, C(sh, 22e-6, "+5V3_AUX", "GND", fp="C1206", volt=10, rot=0), (x, yo))
+    W(P(6), (121.92, P(6)[1]))
+    hang(sh, C(sh, 1e-6, "L:VCC", "GND", volt=16, rot=0), (121.92, P(6)[1]), gap=0)
+    TP(sh, "L:VCC", at=(119.38, P(6)[1]))
+    TP(sh, "L:SW", at=(127.0, P(8)[1]), rot=180)
+    GTP(sh, (40.64, 127.0))
+    for x in (157.48, 170.18, 182.88):
+        hang(sh, C(sh, 22e-6, "+5V3_AUX", "GND", fp="C1206", volt=25, rot=0, MPN="CL31A226KAHNNNE"), (x, yo))
 
-    # feedback: divider below the IC, fed from the output rail
-    yf = 137.16
+    # ripple injection (Type 3): Rr from SW, Cr to VOUT, Cac into FB
+    yn = 124.46
+    rr = hang(sh, R(sh, 100e3, "L:SW", "L:RIP", fp="R1206", rot=0), (132.08, yo), gap=7.62, gnd=False)
+    W(PIN(rr, 2), (132.08, yn), (147.32, yn))
+    cr = C(sh, 3.3e-9, "+5V3_AUX", "L:RIP", volt=50, rot=0)
+    at_pin(cr, 2, (147.32, yn))
+    W(PIN(cr, 1), (147.32, yo))
+    yac = 134.62
+    cac = C(sh, 100e-9, "L:RIP", "L:FB", volt=16, rot=270)       # pin 1 on the right, towards the ripple node
+    at_pin(cac, 1, (121.92, yac))
+    yf = 142.24
+    W((132.08, yn), (132.08, yac), PIN(cac, 1))
+    W(PIN(cac, 2), (83.82, yac), (83.82, yf))
+
+    # feedback: divider below the IC, fed from the output rail (5.29 V)
     W(P(5), (81.28, P(5)[1]), (81.28, yf), (88.9, yf))
-    rft = R(sh, 100e3, "+5V3_AUX", "L:FB", rot=270)
+    rft = R(sh, 33.2e3, "+5V3_AUX", "L:FB", rot=270)
     at_pin(rft, 2, (88.9, yf))
-    W(PIN(rft, 1), (190.5, yf), (190.5, yo))
-    hang(sh, R(sh, 23.2e3, "L:FB", "GND", rot=0), (81.28, yf))
-    TP(sh, "+5V3_AUX", at=(195.58, yo))
-    lab("+5V3_AUX", (203.2, yo), 90)
-    sh.mark("flag", (210.82, yo))
+    W(PIN(rft, 1), (195.58, yf), (195.58, yo))
+    hang(sh, R(sh, 10e3, "L:FB", "GND", rot=0), (81.28, yf))
+    TP(sh, "+5V3_AUX", at=(200.66, yo))
+    lab("+5V3_AUX", (205.74, yo), 90)
+    sh.mark("flag", (213.36, yo))
 
     # diode-OR with USB VBUS
-    d1 = DS(sh, "SS34", "+5V_LOGIC", "+5V3_AUX", rot=180)
+    d1 = DS(sh, "SS34", "+5V_LOGIC", "+5V3_AUX", rot=180, MPN="SS34-E3/57T")
     at_pin(d1, 2, (223.52, yo))
     W(PIN(ind, 2), PIN(d1, 2))
-    d2 = DS(sh, "SS34", "+5V_LOGIC", "VBUS_USB", rot=180)
+    d2 = DS(sh, "SS34", "+5V_LOGIC", "VBUS_USB", rot=180, MPN="SS34-E3/57T")
     at_pin(d2, 2, (223.52, 124.46))
     lab("VBUS_USB", (210.82, 124.46), 180)
     W((210.82, 124.46), PIN(d2, 2))
@@ -1433,12 +1449,12 @@ def sheet_aux():
 
     # +5V_LOGIC rail and the 3.3 V LDO
     ldo = sh.add("Regulator_Linear:AP7361C-33E", "U", "AP7361C-33E", FP["SOT223"],
-                 {1: "+5V_LOGIC", 2: "GND", 3: "+3V3"})
+                 {1: "+5V_LOGIC", 2: "GND", 3: "+3V3"}, fields={"MPN": "AP7361C-33E-13"})
     at_pin(ldo, 1, (279.4, yo))
     W(PIN(d1, 1), PIN(ldo, 1))
     gnd(PIN(ldo, 2))
     sh.mark("flag", (241.3, yo))
-    hang(sh, C(sh, 22e-6, "+5V_LOGIC", "GND", fp="C1206", volt=10, rot=0), (248.92, yo))
+    hang(sh, C(sh, 22e-6, "+5V_LOGIC", "GND", fp="C1206", volt=25, rot=0, MPN="CL31A226KAHNNNE"), (248.92, yo))
     TP(sh, "+5V_LOGIC", at=(256.54, yo))
     W((264.16, yo), (264.16, 93.98), (269.24, 93.98))
     lab("+5V_LOGIC", (269.24, 93.98), 0)

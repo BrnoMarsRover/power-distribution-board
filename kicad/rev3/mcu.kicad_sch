@@ -6650,87 +6650,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 142.24 107.95 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "03db6154-a628-502c-ae3a-0d1a05ba0112")
-		(property "Reference" "C94"
-			(at 142.875 105.41 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100nF"
-			(at 142.875 110.49 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 142.24 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 142.24 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 142.24 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4f200e6a-cbcc-5be7-9007-d658b6f58298")
-		)
-		(pin "2"
-			(uuid "0d573bb2-5231-5e58-bd20-75fe14f7f1a2")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "C94")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+3V3")
 		(at 142.24 205.74 0)
 		(unit 1)
@@ -9488,87 +9407,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 154.94 107.95 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "7e0892e4-0519-534f-8da1-3f8a02177ebd")
-		(property "Reference" "C93"
-			(at 155.575 105.41 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "22uF/10V"
-			(at 155.575 110.49 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 154.94 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 154.94 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 154.94 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f0d01263-4bb5-5192-9b1b-b0e93d92e551")
-		)
-		(pin "2"
-			(uuid "0dce6fd3-4394-536c-a3f1-50bfeca2fc9e")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "C93")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 88.9 215.9 0)
 		(unit 1)
@@ -9874,6 +9712,87 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "R161")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 45.72 90.17 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8d63053b-98f2-5972-b0cf-d4d8be55c9d8")
+		(property "Reference" "C99"
+			(at 46.355 87.63 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1uF"
+			(at 46.355 92.71 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 45.72 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 45.72 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 45.72 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "018ce082-35fe-5177-9470-4d0fde76e67c")
+		)
+		(pin "2"
+			(uuid "4a11f24f-93ef-58e9-a1e4-2d95c8194811")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "C99")
 					(unit 1)
 				)
 			)
@@ -10888,6 +10807,87 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at 142.24 107.95 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b5018bcb-859e-5904-8a30-d9c6eb4e90a5")
+		(property "Reference" "C98"
+			(at 142.875 105.41 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 142.875 110.49 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 142.24 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 142.24 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 142.24 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "92a3404e-0b2e-5172-a9b6-34442f0e7b0f")
+		)
+		(pin "2"
+			(uuid "00add3f2-8b49-56ff-9af5-527b857273b7")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "C98")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Switch:SW_Push")
 		(at 55.88 91.44 270)
 		(unit 1)
@@ -11119,87 +11119,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "#PWRmcu001")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 45.72 90.17 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "c4013b9b-75b7-544a-b992-410f2b9b557f")
-		(property "Reference" "C95"
-			(at 46.355 87.63 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1uF"
-			(at 46.355 92.71 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 45.72 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 45.72 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 45.72 90.17 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "c544e8f5-312f-5ad1-b12b-348cd024d0bc")
-		)
-		(pin "2"
-			(uuid "3473ed08-02e8-545b-bb1d-223061ff5f20")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "C95")
 					(unit 1)
 				)
 			)
@@ -12926,87 +12845,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 40.64 191.77 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f1e11877-7dd8-5643-a42e-db8f27fa9b05")
-		(property "Reference" "C96"
-			(at 41.275 189.23 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100nF"
-			(at 41.275 194.31 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 40.64 191.77 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 40.64 191.77 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 40.64 191.77 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "583c3cbe-5149-5751-997d-15741995c9bb")
-		)
-		(pin "2"
-			(uuid "bc74619c-a3f4-55f9-a36d-647148b37688")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "C96")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector:TestPoint")
 		(at 43.18 226.06 0)
 		(unit 1)
@@ -13077,6 +12915,87 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "TP71")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 40.64 191.77 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f53e7984-7491-5ddc-8fdb-32b3b3c4612c")
+		(property "Reference" "C100"
+			(at 41.275 189.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 41.275 194.31 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 40.64 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 40.64 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 40.64 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f43edb8a-499b-5b6e-9baf-e30a53cbce1a")
+		)
+		(pin "2"
+			(uuid "673d768f-5ea9-5f08-b9cc-67616fd98f60")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "C100")
 					(unit 1)
 				)
 			)
@@ -13154,6 +13073,87 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "#PWRmcu031")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 154.94 107.95 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f95008e2-2bc2-5c84-bf49-93ef4f2cb6c7")
+		(property "Reference" "C97"
+			(at 155.575 105.41 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "22uF/10V"
+			(at 155.575 110.49 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 154.94 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 154.94 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 154.94 107.95 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "96a3e477-62b3-569f-aa3d-4b1c5d6dfad5")
+		)
+		(pin "2"
+			(uuid "8781b635-9ec4-5f2b-bff1-42e1df6f16b1")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "C97")
 					(unit 1)
 				)
 			)

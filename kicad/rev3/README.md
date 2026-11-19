@@ -26,7 +26,7 @@ That run does six things:
    intended.
 
 Result at generation time:
-- 513 parts and 282 nets.
+- 517 parts and 283 nets.
 - Netlist check passes.
 - ERC is clean at every severity.
 
@@ -73,14 +73,14 @@ it never touches a layout. The values and the reasons for them are in
 | `brake` | Brake chopper on OUT42D: TLV1805 + LM4040 comparator (on 47.5 V, off 45 V), IPB042N10N3G, XT60 to an off-board braking resistor, BRAKE_ACT to the ESP32 |
 | `outputs` | Rail input connectors, 8 × XT90 outputs, and the 24 / 12 / 5 V outputs with their PTCs. JST-XH 54 V output to the Zyxel |
 | `boost54` | LM5122 boost, 30–42 V to 54 V, 100 W |
-| `aux_power` | LMR38010 (42 V to 5.3 V), the diode-OR with USB VBUS, and the AP7361C 3.3 V LDO |
+| `aux_power` | LM5017 (42 V to 5.3 V, constant on-time with ripple injection), the diode-OR with USB VBUS, and the AP7361C 3.3 V LDO |
 | `mcu` | ESP32-S3-WROOM-1U, USB-C with ESD, host UART on JST-GH, buttons, LEDs, NTC |
 | `can` | TCAN1044AV, split termination on solder jumpers, two Molex CLIK-Mate 4p CAN connectors matching the EPOS4 50/5 (X11 / X12) |
 | `io` | TCA9535 (switch control), 2 × ADC128D818, motor-switch latch (74LVC1G74) and the rear-panel switch input |
 
 ## Custom parts
 
-- **Symbols:** TPS48111-Q1, LM5122, LMR38010, TCAN1044AV and INA228, with pinouts taken
+- **Symbols:** TPS48111-Q1, LM5122, LM5017, TLV1805, TCAN1044AV and INA228, with pinouts taken
   from the TI datasheets.
   - Their pins are arranged for the drawing. For example, the INA228 sense inputs sit on
     top, 5.08 mm apart under the shunt's sense pins, so the Kelvin lines drop straight down.
@@ -108,15 +108,16 @@ These are the things the generator could not settle on its own:
 - [ ] **Brake resistor.** Size the off-board resistor (10 Ω / 100 W assumed) to the
   rover's braking energy.
 - [x] **Boost inductor footprint.** Coilcraft MSS1583-223MED on KiCad's `L_Coilcraft_MSS1583-XXX`.
-- [ ] **Aux buck parts.** Confirm that the LMR38010SDDAR variant has the RT/SYNC pin, and
-  pick the actual 33 µH / 1.5 A inductor for its footprint.
+- [ ] **Aux buck (LM5017).** On first power-up, check the switching frequency (about
+  400 kHz) and that the FB ripple is clean, with no bursts of pulses followed by long gaps.
+  Then check the output at 0 and 0.5 A. The Type 3 ripple values are TI's starting point.
 - [ ] **Connector footprints.** XT90 and Deans: check the M and F pin geometry against the
   Amass drawings. For every power connector, check that footprint pin 1 is the housing's
   + side.
 - [ ] **Electrolytic sizes.** 100 µF / 100 V and 100 µF / 80 V parts may need a larger
   footprint than `CP_Elec_10x10.5`.
 - [ ] **Hand-solder holes.** Add a 1–1.5 mm plated hole through the exposed pads of the
-  LM5122, the LMR38010 and the ESP32 module (layout step).
+  LM5122, the LM5017 and the ESP32 module (layout step).
 - [ ] **Placement.** Put the MMBT3904 temperature sensors against their main FETs, and
   route every shunt Kelvin.
 - [ ] **ESD arrays are flow-through.** On both USBLC6-2SC6, pins 1/6 and 3/4 are joined
