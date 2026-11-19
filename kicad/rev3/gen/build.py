@@ -659,7 +659,7 @@ FP = dict(
     CLIK4="Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal",
     USBC="Connector_USB:USB_C_Receptacle_GCT_USB4085",
     BTN="Button_Switch_SMD:SW_SPST_TL3342",
-    ESP="RF_Module:ESP32-S3-WROOM-1U",
+    ESP="PowerBoard_rev3:ESP32-S3-WROOM-1U_HandSolder",
     SSOP8="Package_SO:SSOP-8_2.95x2.8mm_P0.65mm",
     VSSOP8="Package_SO:VSSOP-8_2.3x2mm_P0.5mm",
     SOT23_5="Package_TO_SOT_SMD:SOT-23-5",
@@ -2231,6 +2231,11 @@ def verify():
 
 
 if __name__ == "__main__":
+    # FROZEN 2026-11-19 for layout: references are numbered in sheet order, so regenerating after an
+    # edit renumbers parts and the PCB would silently swap them. Edit the schematic in KiCad instead.
+    if "--force" not in sys.argv:
+        raise SystemExit("build.py is frozen: the schematic is edited in KiCad from layout on. "
+                         "Run with --force only if you accept redoing the PCB links.")
     sheets = build()
     r = run(["sch", "upgrade", "--force", str(PROJ / f"{NAME}.kicad_sch")])
     for s in sheets:

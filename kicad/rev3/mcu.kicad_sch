@@ -8596,7 +8596,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "RF_Module:ESP32-S3-WROOM-1U"
+		(property "Footprint" "PowerBoard_rev3:ESP32-S3-WROOM-1U_HandSolder"
 			(at 165.1 152.4 0)
 			(hide yes)
 			(show_name no)

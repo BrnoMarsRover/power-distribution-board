@@ -120,6 +120,12 @@ DRU = """(version 1)
   (constraint text_height (min 1.0mm))
   (constraint text_thickness (min 0.15mm)))
 
+# ---- fine-pitch footprints ----------------------------------------------------------
+# Their own pads sit 0.15 mm apart, under the 0.2 mm class clearance but inside JLC's 0.127 mm.
+(rule "Fine pitch: pad to pad inside VSSOP-8 / USB4085 at JLC minimum"
+  (constraint clearance (min 0.127mm))
+  (condition "A.Type == 'Pad' && B.Type == 'Pad' && (A.Library_Link == 'Package_SO:VSSOP-8_2.3x2mm_P0.5mm' || A.Library_Link == 'Connector_USB:USB_C_Receptacle_GCT_USB4085') && A.Library_Link == B.Library_Link"))
+
 # ---- hand soldering ---------------------------------------------------------------
 # Rules later in the file win, so the general pad rule comes first.
 (rule "Hand soldering: 0.5 mm between courtyards (room for the iron)"
