@@ -33,7 +33,7 @@ KICAD_CLI = ["flatpak", "run", "--command=kicad-cli", "org.kicad.KiCad"]
 RULES = {
     "min_clearance": 0.127,             # JLC 0.09 at 1 oz
     "min_track_width": 0.25,            # team choice: robust for hand rework (JLC 0.09)
-    "min_connection": 0.25,
+    "min_connection": 0.0,      # off (KiCad default): it flags every pour-to-pad-corner neck; track width covers tracks
     "min_via_diameter": 0.6,            # 0.3 drill + 2 x 0.15 annular
     "min_via_annular_width": 0.15,      # JLC absolute minimum for multilayer PTH
     "min_through_hole_diameter": 0.3,   # below 0.3 mm is charged extra
@@ -135,6 +135,7 @@ DRU = """(version 1)
   (constraint zone_connection thermal_reliefs)
   (constraint thermal_relief_gap (opt 0.5mm))
   (constraint thermal_spoke_width (opt 0.5mm))
+  (constraint min_resolved_spokes 1)
   (condition "A.Type == 'Pad'"))
 
 (rule "Hand soldering: power pads connect solid"

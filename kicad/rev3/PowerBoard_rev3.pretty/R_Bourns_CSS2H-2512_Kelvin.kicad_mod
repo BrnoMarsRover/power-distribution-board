@@ -8,7 +8,7 @@
 	(property "Reference" "REF**"
 		(at 0 3 0)
 		(layer "F.SilkS")
-		(uuid "fe68aec2-81c0-4988-b3ed-7a25aa45e675")
+		(uuid "9be15afc-c1f8-4bb2-9e33-594ff9d31ff3")
 		(effects
 			(font
 				(size 1 1)
@@ -19,7 +19,7 @@
 	(property "Value" "CSS2H-2512"
 		(at 0 4.5 0)
 		(layer "F.Fab")
-		(uuid "2e7b899d-60b9-45c3-b2fc-0a9165c442a8")
+		(uuid "bfe3d39a-7215-4264-83ae-54a3d02cae97")
 		(effects
 			(font
 				(size 1 1)
@@ -31,7 +31,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "7fa99779-4891-4e49-9da9-a4a5fa9bc8d7")
+		(uuid "9a9b5eec-15b7-46ef-9aab-9bf7a910c52b")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -42,7 +42,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "f5095e64-c638-447d-a504-26c01be56be9")
+		(uuid "7b50751b-09aa-475c-b8db-164c7df088f1")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -62,7 +62,7 @@
 		)
 		(fill yes)
 		(layer "F.Cu")
-		(uuid "734f0821-6bf7-4146-8ebb-9de688819e95")
+		(uuid "71e4e05b-cbd4-4cea-87c2-60d92392ba15")
 	)
 	(fp_poly
 		(pts
@@ -74,7 +74,7 @@
 		)
 		(fill yes)
 		(layer "F.Cu")
-		(uuid "483f2119-330d-4b8a-9895-1ddbcbe95be3")
+		(uuid "aa5ff39a-eec5-4996-9cb9-d1ceebd75d0d")
 	)
 	(fp_line
 		(start -1.5 1.95)
@@ -84,7 +84,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "87d0485a-db6a-4a65-becb-d0b51b54af78")
+		(uuid "4ceb4980-aea5-4908-8e2b-1d128347b39d")
 	)
 	(fp_rect
 		(start -3.75 -3.5)
@@ -95,7 +95,7 @@
 		)
 		(fill no)
 		(layer "F.CrtYd")
-		(uuid "2b9f2b93-b81c-4574-938d-4fd2540cc7f2")
+		(uuid "d67bf956-c9b5-4473-90c4-1d091555a61e")
 	)
 	(fp_rect
 		(start -3.175 -1.525)
@@ -106,31 +106,31 @@
 		)
 		(fill no)
 		(layer "F.Fab")
-		(uuid "c34b40d9-2095-4855-a558-34fc19edcd9b")
+		(uuid "de1e7966-f4c9-40e8-87f3-4063398d626d")
 	)
 	(pad "1" smd rect
 		(at -2.6 0)
 		(size 1.8 3.4)
 		(layers "F.Cu" "F.Mask" "F.Paste")
-		(uuid "d7130d95-f846-4254-b50f-a6a733e4123a")
+		(uuid "1b4dc897-6a1c-4253-bc2a-4b0fb9261bf4")
 	)
 	(pad "2" smd rect
 		(at -0.51 -2.94)
 		(size 0.4 0.6)
 		(layers "F.Cu")
-		(uuid "3618e74a-6097-499e-9ed4-f0d7557b6165")
+		(uuid "62b8c869-421f-4270-83d4-3daeb4da9fda")
 	)
 	(pad "3" smd rect
 		(at 0.51 -2.94)
 		(size 0.4 0.6)
 		(layers "F.Cu")
-		(uuid "2d5d7989-5d3a-4d25-aece-70e7fd7e356a")
+		(uuid "666d5085-7a59-4a7c-a270-6b122820be6a")
 	)
 	(pad "4" smd rect
 		(at 2.6 0)
 		(size 1.8 3.4)
 		(layers "F.Cu" "F.Mask" "F.Paste")
-		(uuid "c51cc894-7823-4774-9f09-2381d4d2ca04")
+		(uuid "6b22f65c-7efb-4ab8-be2c-7c3482e0dbcc")
 	)
 	(embedded_fonts no)
 	(model "${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_2512_6332Metric.step"

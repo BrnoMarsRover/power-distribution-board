@@ -925,8 +925,8 @@ def sheet_switch(r):
     n = RAILNET[r["name"]]
     vin, out = VIN[r["name"]], OUT[r["name"]]
     on = r["default_on"]
-    title = {"42V-D": "42 V drive group eFuse (4 x XT90, EPOS4)",
-             "42V-C": "42 V converter-feed group eFuse (4 x XT90)",
+    title = {"42V-D": "42 V drive group eFuse (3 x XT90, EPOS4)",
+             "42V-C": "42 V converter-feed group eFuse (2 x XT90)",
              "24V": "24 V rail eFuse", "12V": "12 V rail eFuse (feeds the Orin)", "5V": "5 V rail eFuse",
              "54V": "54 V supply eFuse (input of the LM5122 boost)"}[r["name"]]
     notes = [f"TPS48111-Q1 + {v['n']} x {r['fet']} main + 1 pre-charge. Values from docs/rev3/rails.md "

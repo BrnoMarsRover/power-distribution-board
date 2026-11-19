@@ -883,6 +883,13 @@ layout.
     - Pads in pours get thermal reliefs (0.5 mm gap, 0.5 mm spokes).
     - Power connectors, D2PAK/DPAK tabs, PTCs, 2512 shunts and inductors connect solid.
     - Teardrops are on for pads and vias.
+  - **Zone checks:** KiCad's "minimum connection width" check is off (its default). It
+    flags every pour-to-pad-corner neck; the 0.25 mm track minimum still covers tracks.
+    Small pads may resolve with a single thermal spoke (`min_resolved_spokes 1`).
+  - **Rule-file gotcha:** KiCad ignores the whole `.kicad_dru` without any warning if one
+    constraint is malformed. `(constraint min_resolved_spokes (min 1))` did exactly that;
+    the bare number `1` works. Check a rule change against a known violation, for
+    example the USB-C fine-pitch clearance.
   - **Clean board:** silkscreen keeps 0.15 mm off pads. Courtyard overlaps, missing
     courtyards, silkscreen on copper, mask bridges and schematic mismatches are DRC
     errors, not warnings.
@@ -994,6 +1001,21 @@ layout.
      - **Result:** 20 million steps in about 3.5 minutes cut the weighted net length from
        about 16,900 to 8,250 (−51 %). The running total is checked against a full recount
        at the end.
+  2b. `gen/pcb_pours.py` — power pours:
+     - **Layers:** L2 is a solid GND plane; L1 and L4 have a low-priority GND fill.
+     - **Pour shapes:** every power net gets pours shaped to its power pads (connectors,
+       shunts, FET tabs and leads, TVS diodes, bulk capacitors, PTCs and bridges). Pads
+       more than 18 mm apart form separate pours; the 24 / 12 / 5 V output rails link at
+       50 mm so each FET group and its PTC column are one pour.
+     - **42 V paths:** on L1 and L4, stitched with via arrays (0.9 / 0.45 mm vias on a
+       2.2 mm grid, kept 1 mm from pads so they never cut thermal spokes).
+     - **24 / 12 / 5 V:** on L1, over a continuous L3 backbone, with vias beside every
+       SMD power pad.
+     - **Clearance:** 0.5 mm on the outer layers, 0.3 mm inside (IPC-2221B internal is
+       0.1 mm at 31–100 V). Minimum zone width is 0.5 mm, so there are no slivers.
+     - **What's left:** about 715 unrouted connections, mostly small signals plus ten
+       pour-to-pour links that need a track or a via. The PTC-to-connector links are
+       about 8 mm at 3 A and get tracks too: a pour there swallowed the PTC's input pad.
   3. `gen/pcb_silk.py` — the silkscreen.
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after
      "Update footprints from library", which resets the board-side model replacements.

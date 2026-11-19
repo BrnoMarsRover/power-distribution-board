@@ -42,6 +42,7 @@
   (constraint zone_connection thermal_reliefs)
   (constraint thermal_relief_gap (opt 0.5mm))
   (constraint thermal_spoke_width (opt 0.5mm))
+  (constraint min_resolved_spokes 1)
   (condition "A.Type == 'Pad'"))
 
 (rule "Hand soldering: power pads connect solid"

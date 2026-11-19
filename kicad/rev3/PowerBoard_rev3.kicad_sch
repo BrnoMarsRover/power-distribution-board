@@ -200,7 +200,7 @@
 			(color 0 0 0 0)
 		)
 		(uuid "51cc0ad9-0002-5479-8064-e81411f6b82b")
-		(property "Sheetname" "42 V converter-feed group eFuse (4 x XT90)"
+		(property "Sheetname" "42 V converter-feed group eFuse (2 x XT90)"
 			(at 162.08 59.3 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -247,7 +247,7 @@
 			(color 0 0 0 0)
 		)
 		(uuid "5276bed9-282c-5133-a909-670f1f800c18")
-		(property "Sheetname" "42 V drive group eFuse (4 x XT90, EPOS4)"
+		(property "Sheetname" "42 V drive group eFuse (3 x XT90, EPOS4)"
 			(at 96.04 59.3 0)
 			(show_name no)
 			(do_not_autoplace no)

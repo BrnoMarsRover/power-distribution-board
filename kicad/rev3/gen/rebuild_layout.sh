@@ -16,6 +16,7 @@ $KCLI sch export netlist -o $R/gen/out/netlist.net $R/PowerBoard_rev3.kicad_sch 
 $KPY $R/gen/pcb_import.py 2>&1 | grep -v swig/python
 $KPY $R/gen/pcb_place.py --overwrite-placement 2>&1 | grep -v swig/python
 $KPY $R/gen/pcb_optimize.py 2>&1 | grep -v swig/python
+$KPY $R/gen/pcb_pours.py 2>&1 | grep -v swig/python
 $KPY $R/gen/pcb_silk.py 2>&1 | grep -v swig/python
 $KPY $R/gen/pcb_models.py 2>&1 | grep -v swig/python | grep -i missing || true
 $KCLI pcb drc --schematic-parity --format json -o $R/gen/out/drc.json $R/PowerBoard_rev3.kicad_pcb | grep -i found
