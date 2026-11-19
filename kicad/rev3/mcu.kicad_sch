@@ -3882,52 +3882,48 @@
 		(uuid "efa587a4-fbc3-5606-8a67-fa1588ea3b71")
 	)
 	(no_connect
-		(at 256.54 116.84)
-		(uuid "010aa109-f4e1-53f3-9953-59de91190e0c")
-	)
-	(no_connect
 		(at 180.34 149.86)
-		(uuid "06310358-cd00-516f-8d40-5106892a285d")
-	)
-	(no_connect
-		(at 180.34 160.02)
-		(uuid "4db27a94-392d-52b0-82dd-6a19c09f1583")
-	)
-	(no_connect
-		(at 180.34 167.64)
-		(uuid "57eb92f5-8ac0-5a96-9900-5e55ac768815")
-	)
-	(no_connect
-		(at 180.34 147.32)
-		(uuid "81ab2c2f-cf9b-590a-913a-29e5f33fdf09")
-	)
-	(no_connect
-		(at 180.34 170.18)
-		(uuid "a2ce991c-f1ed-5c59-ab86-0ce5b1b8fa40")
-	)
-	(no_connect
-		(at 180.34 157.48)
-		(uuid "ae65fc9f-cd73-5612-84c6-6cb0a6cfb606")
-	)
-	(no_connect
-		(at 149.86 142.24)
-		(uuid "d1483521-6f58-536c-84d0-626a91da8bfd")
+		(uuid "09e870a7-9cf5-54e1-bde4-2e3c22f2898b")
 	)
 	(no_connect
 		(at 180.34 165.1)
-		(uuid "dae1d656-4a07-559c-a74b-80482e3d4d7d")
+		(uuid "1b99c37b-98ab-5637-8c94-c69c300da916")
 	)
 	(no_connect
 		(at 180.34 162.56)
-		(uuid "eb011bd9-df7c-585d-a127-2c59daad6070")
-	)
-	(no_connect
-		(at 256.54 114.3)
-		(uuid "f5ec44ea-c5ef-5d3b-a3e7-e7cbeebd5709")
+		(uuid "205fc952-3a0b-5cde-84e9-d042700718f7")
 	)
 	(no_connect
 		(at 180.34 152.4)
-		(uuid "f8fc6393-6d48-575f-85f2-64bc879bdad4")
+		(uuid "2fd426cc-3647-5592-9f21-a68d104256f4")
+	)
+	(no_connect
+		(at 180.34 147.32)
+		(uuid "32cd81ef-3169-506a-a856-826ce3259ae4")
+	)
+	(no_connect
+		(at 180.34 170.18)
+		(uuid "352f1cb0-6692-506c-a831-05b61e16f332")
+	)
+	(no_connect
+		(at 180.34 160.02)
+		(uuid "7434474c-cc15-539b-a297-63b21c807696")
+	)
+	(no_connect
+		(at 256.54 114.3)
+		(uuid "b11bd104-566a-554d-9689-23590b386f4d")
+	)
+	(no_connect
+		(at 149.86 142.24)
+		(uuid "b626f217-65e8-564b-a419-d5fcd3e097f6")
+	)
+	(no_connect
+		(at 256.54 116.84)
+		(uuid "b9f5c608-8689-52dd-bd42-a0f50182ee2e")
+	)
+	(no_connect
+		(at 180.34 167.64)
+		(uuid "d08be321-f0df-56e7-bd64-0f2e8c2809c6")
 	)
 	(wire
 		(pts
@@ -4538,6 +4534,16 @@
 			(type default)
 		)
 		(uuid "83d81345-af2e-5d7f-8d3c-db0b67b8894b")
+	)
+	(wire
+		(pts
+			(xy 180.34 157.48) (xy 185.42 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "841f6015-a044-59e9-ac0d-3603dc0d7552")
 	)
 	(wire
 		(pts
@@ -5755,6 +5761,30 @@
 			)
 		)
 	)
+	(global_label "BRAKE_ACT"
+		(shape passive)
+		(at 185.42 157.48 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "8887fa30-85e6-5a23-9a79-5346da3e36d1")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
 	(global_label "UART_SP"
 		(shape passive)
 		(at 127 226.06 180)
@@ -6260,6 +6290,87 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 229.87 154.94 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "00ae655f-19f8-5238-9d43-1719be3086d7")
+		(property "Reference" "R155"
+			(at 226.06 160.02 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100"
+			(at 226.06 162.56 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+			(at 229.87 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 229.87 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 229.87 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "b436e482-1e04-5aa2-aade-99761e39856b")
+		)
+		(pin "2"
+			(uuid "19535521-8eb8-5b07-9eb1-355e2d13b8cd")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "R155")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 271.78 134.62 0)
 		(unit 1)
@@ -6331,166 +6442,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "#PWRmcu020")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 35.56 113.03 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "03ba6e6d-2532-5a43-86e4-a8d63305a10d")
-		(property "Reference" "R131"
-			(at 37.592 113.03 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10k"
-			(at 35.56 113.03 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 35.56 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 35.56 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 35.56 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "8b2f7d10-5b4a-5f34-9d9c-92de2b443c58")
-		)
-		(pin "2"
-			(uuid "3d38f6a9-39dd-5953-8278-4b4061cabbc6")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R131")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 154.94 107.95 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "03db6154-a628-502c-ae3a-0d1a05ba0112")
-		(property "Reference" "C94"
-			(at 155.575 105.41 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "22uF/10V"
-			(at 155.575 110.49 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 154.94 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 154.94 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 154.94 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4f200e6a-cbcc-5be7-9007-d658b6f58298")
-		)
-		(pin "2"
-			(uuid "0d573bb2-5231-5e58-bd20-75fe14f7f1a2")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "C94")
 					(unit 1)
 				)
 			)
@@ -6574,8 +6525,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 66.04 116.84 0)
+		(lib_id "Device:R")
+		(at 269.24 166.37 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6583,9 +6534,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "06d972d5-c6a3-5c13-8637-b7a5e4f75bbb")
-		(property "Reference" "TP65"
-			(at 66.04 109.982 0)
+		(uuid "05379337-0519-5999-a548-8f7fc05c5616")
+		(property "Reference" "R156"
+			(at 271.272 166.37 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6594,8 +6545,8 @@
 				)
 			)
 		)
-		(property "Value" "ESP_IO0"
-			(at 66.04 111.76 0)
+		(property "Value" "100"
+			(at 269.24 166.37 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6604,8 +6555,8 @@
 				)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 66.04 116.84 0)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+			(at 269.24 166.37 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6616,7 +6567,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 66.04 116.84 0)
+			(at 269.24 166.37 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6627,7 +6578,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 66.04 116.84 0)
+			(at 269.24 166.37 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6638,91 +6589,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "ec75216d-90bc-53c0-8cdf-21dbc9e7f172")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "TP65")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:LED")
-		(at 242.57 203.2 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "0bb30b8b-50fc-5ecc-b7d7-b708624d28b1")
-		(property "Reference" "D17"
-			(at 242.57 205.74 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "yellow"
-			(at 242.57 200.66 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "LED_SMD:LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder"
-			(at 242.57 203.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 242.57 203.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 242.57 203.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f46a2bf0-9ab3-5b7b-acf7-14fcc0c116f1")
+			(uuid "8f8a3de8-eb17-58c7-b792-1902b881af4f")
 		)
 		(pin "2"
-			(uuid "3da3eeb4-55e8-5414-ae8b-3b76c6e037ce")
+			(uuid "5e844675-22d8-5aab-b21e-756c00a0eb0f")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "D17")
+					(reference "R156")
 					(unit 1)
 				)
 			)
@@ -6738,8 +6613,8 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "0fa72301-cecf-53d0-bf39-d2ebd838e3f6")
-		(property "Reference" "TP63"
+		(uuid "06d972d5-c6a3-5c13-8637-b7a5e4f75bbb")
+		(property "Reference" "TP65"
 			(at 193.04 109.982 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6793,136 +6668,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "55fb74d9-270a-5ff5-9bb3-5c662a6e35cd")
+			(uuid "ec75216d-90bc-53c0-8cdf-21dbc9e7f172")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "TP63")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:USB_C_Receptacle_USB2.0_16P")
-		(at 241.3 101.6 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "0ff5e1d8-31ba-546b-9b9f-e7203dadb8fb")
-		(property "Reference" "J42"
-			(at 241.3 79.375 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "USB-C (flash/debug)"
-			(at 241.3 81.915 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
-			(at 241.3 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 241.3 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 241.3 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "A1"
-			(uuid "d8e923ba-2ff6-5a5b-bc60-4cecb2c6083d")
-		)
-		(pin "A4"
-			(uuid "65443e21-d142-5fa7-b41d-8b10b886012f")
-		)
-		(pin "A5"
-			(uuid "a9440467-551c-5a41-876c-17c553f97c06")
-		)
-		(pin "A6"
-			(uuid "ad3382d7-48f5-5100-9605-e6698ce3b044")
-		)
-		(pin "A7"
-			(uuid "39b72705-c724-5a7c-adfe-1f5bfb0c40c6")
-		)
-		(pin "A8"
-			(uuid "96caf1cf-3f1e-5abc-b4a5-166f30b62271")
-		)
-		(pin "A9"
-			(uuid "58b5145a-317f-53a3-b373-c210d016155a")
-		)
-		(pin "A12"
-			(uuid "7c68baca-cabc-5c02-9180-14250ca713cf")
-		)
-		(pin "B1"
-			(uuid "88106383-fefc-5971-a6e2-1ec992927cc8")
-		)
-		(pin "B4"
-			(uuid "f7a79d4f-7155-507c-98a8-db04a39989dc")
-		)
-		(pin "B5"
-			(uuid "690eb895-00a4-596e-8639-d58ac416f842")
-		)
-		(pin "B6"
-			(uuid "d0efef18-56e4-576c-8214-66dbfb111e4b")
-		)
-		(pin "B7"
-			(uuid "fa9fc54e-d9d3-5a5f-8ad7-3280c89791ba")
-		)
-		(pin "B8"
-			(uuid "9190ce65-9a82-5f84-ba45-a63fac001d06")
-		)
-		(pin "B9"
-			(uuid "d1a75b38-a1c4-5f50-b790-86f60654be0c")
-		)
-		(pin "B12"
-			(uuid "c4890838-3b8f-5b94-bf4d-8963dedf94e1")
-		)
-		(pin "SH"
-			(uuid "26d1be40-fc1d-5a29-a56e-971a65b6e71d")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "J42")
+					(reference "TP65")
 					(unit 1)
 				)
 			)
@@ -7000,6 +6751,85 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "#PWRmcu003")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 271.78 130.81 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "16d497b7-5a3e-5c4d-86e4-dda89f6ec1e5")
+		(property "Reference" "R152"
+			(at 273.812 130.81 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "5.1k"
+			(at 271.78 130.81 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+			(at 271.78 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 271.78 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 271.78 130.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ed63dd03-229b-55fd-b3f2-c07bb939c943")
+		)
+		(pin "2"
+			(uuid "3062f937-8379-5d06-988d-415ae2448f1b")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "R152")
 					(unit 1)
 				)
 			)
@@ -7084,7 +6914,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 43.18 236.22 0)
+		(at 88.9 226.06 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7094,7 +6924,7 @@
 		(dnp no)
 		(uuid "2432eec7-8904-5163-9f53-d09dd07b064a")
 		(property "Reference" "TP72"
-			(at 43.18 229.362 0)
+			(at 88.9 219.202 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7103,8 +6933,8 @@
 				)
 			)
 		)
-		(property "Value" "CAN_TXD"
-			(at 43.18 231.14 0)
+		(property "Value" "UART_RX"
+			(at 88.9 220.98 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7114,7 +6944,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 43.18 236.22 0)
+			(at 88.9 226.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7125,7 +6955,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 43.18 236.22 0)
+			(at 88.9 226.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7136,7 +6966,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 43.18 236.22 0)
+			(at 88.9 226.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7313,217 +7143,8 @@
 		)
 	)
 	(symbol
-		(lib_id "RF_Module:ESP32-S3-WROOM-1")
-		(at 165.1 152.4 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "441d7bae-5ffc-5664-bad4-9238f656f4a2")
-		(property "Reference" "U11"
-			(at 167.64 182.88 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "ESP32-S3-WROOM-1U-N8"
-			(at 167.64 185.42 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "RF_Module:ESP32-S3-WROOM-1U"
-			(at 165.1 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 165.1 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 165.1 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C2980297"
-			(at 165.1 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "75e9b849-6a66-54dc-aae5-7d93f00e30ce")
-		)
-		(pin "2"
-			(uuid "87f7b02b-e130-5061-8d0a-4aa93f9ad56f")
-		)
-		(pin "3"
-			(uuid "820bc70e-15d4-579c-8be0-48488a47b86b")
-		)
-		(pin "4"
-			(uuid "b5fa6458-3c16-50bf-9b59-676da777bda4")
-		)
-		(pin "5"
-			(uuid "71c320d4-2a07-5377-a254-43ea514c4b0c")
-		)
-		(pin "6"
-			(uuid "7769ca16-c2ff-59e7-b779-4b479b27df2a")
-		)
-		(pin "7"
-			(uuid "fbacf22f-5f9c-56b3-9f9d-1750e50e87fc")
-		)
-		(pin "8"
-			(uuid "45adf9be-ae81-5eaf-a7a9-01a7d3d3872c")
-		)
-		(pin "9"
-			(uuid "65156e2f-1307-5423-898e-8ee8d00bd086")
-		)
-		(pin "10"
-			(uuid "fe8c5add-3758-5f29-9603-84f90caf706b")
-		)
-		(pin "11"
-			(uuid "92ae2de1-3ead-5036-8d02-d597fdeb16d9")
-		)
-		(pin "12"
-			(uuid "cf360b8d-fb84-5fb8-8007-e27aead8ce43")
-		)
-		(pin "13"
-			(uuid "c3520bc6-a2ac-591c-896e-c922e3b45914")
-		)
-		(pin "14"
-			(uuid "590e761a-d5ae-5188-9b68-54e0365e3c03")
-		)
-		(pin "15"
-			(uuid "e676122e-8aea-5ff9-b37a-efdb3251c6d0")
-		)
-		(pin "16"
-			(uuid "64411e11-c00c-5cc0-a653-4312716294b6")
-		)
-		(pin "17"
-			(uuid "37861d6a-8d65-5c43-b670-98dae5e43f88")
-		)
-		(pin "18"
-			(uuid "f4db8f0a-ec0f-50de-9c30-6844c800cd4e")
-		)
-		(pin "19"
-			(uuid "21f93926-35d6-59d2-8dd4-bd57ddd6256e")
-		)
-		(pin "20"
-			(uuid "b176ee82-aa86-5587-9ca3-21fb32b93dda")
-		)
-		(pin "21"
-			(uuid "f34d363f-3a06-5120-a15d-af50b5567058")
-		)
-		(pin "22"
-			(uuid "9bd1e824-100c-5289-91b7-a23f4a3d6afe")
-		)
-		(pin "23"
-			(uuid "f2eeb5bf-a0fc-516b-84aa-020e56d42940")
-		)
-		(pin "24"
-			(uuid "b70ecf1a-35dd-58f8-b43e-07289fbb8f3d")
-		)
-		(pin "25"
-			(uuid "ceaeef12-4d16-5272-b448-96b6e4e7aa20")
-		)
-		(pin "26"
-			(uuid "6fb663a8-6c1a-5bdc-bc92-591c0dbe8db0")
-		)
-		(pin "27"
-			(uuid "3df8420f-2045-5dea-8fa2-843974656b75")
-		)
-		(pin "28"
-			(uuid "3f9f8d17-a563-5f22-8448-4476b952e9fb")
-		)
-		(pin "29"
-			(uuid "fb5f5306-e96a-533e-8d75-84ed0d8d4795")
-		)
-		(pin "30"
-			(uuid "cec1ca1b-b052-5606-b603-dcdd949ca149")
-		)
-		(pin "31"
-			(uuid "c9728276-522b-5726-b038-9b7ec41cc14f")
-		)
-		(pin "32"
-			(uuid "fc32aa44-8c9b-5df7-b0ac-fa86a334e2c0")
-		)
-		(pin "33"
-			(uuid "564d5690-330b-51de-83ec-b88d1608cbe1")
-		)
-		(pin "34"
-			(uuid "d375dcae-f394-51ab-b5d7-681e67ea010b")
-		)
-		(pin "35"
-			(uuid "9f5b010c-cc8b-5ee2-a000-ef07e8d13ec6")
-		)
-		(pin "36"
-			(uuid "44d6e01f-a996-50f8-9904-faee4af3bba0")
-		)
-		(pin "37"
-			(uuid "3f26bf05-6704-5706-b399-8c54b4411ef7")
-		)
-		(pin "38"
-			(uuid "bce3952e-1bb8-5037-b66f-d912ce254cc1")
-		)
-		(pin "39"
-			(uuid "939ae1b0-1ebf-5dbb-929b-d3f582171774")
-		)
-		(pin "40"
-			(uuid "24dcbf76-756c-544c-b670-631736ad017c")
-		)
-		(pin "41"
-			(uuid "92038e42-efc5-5fd4-a854-7096961843eb")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "U11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
-		(at 30.48 148.59 0)
+		(at 229.87 213.36 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7531,9 +7152,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "4590ed4d-b5b9-5f43-b4a1-e93bdaed92bd")
-		(property "Reference" "R132"
-			(at 32.512 148.59 90)
+		(uuid "3521b62e-b082-5a8c-8499-fdbbf417036e")
+		(property "Reference" "R159"
+			(at 229.87 210.82 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7542,8 +7163,8 @@
 				)
 			)
 		)
-		(property "Value" "4.7k"
-			(at 30.48 148.59 90)
+		(property "Value" "1k"
+			(at 229.87 215.9 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7553,7 +7174,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 30.48 148.59 0)
+			(at 229.87 213.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7564,7 +7185,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 30.48 148.59 0)
+			(at 229.87 213.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7575,7 +7196,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 30.48 148.59 0)
+			(at 229.87 213.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7586,15 +7207,94 @@
 			)
 		)
 		(pin "1"
-			(uuid "5b1ef4a0-ea14-511f-abb2-6723573e4bd7")
+			(uuid "1e51e094-8e09-5ec2-b57c-81878355e5d7")
 		)
 		(pin "2"
-			(uuid "eccbb25a-695a-5e3c-ad2c-9cd6000ff3ba")
+			(uuid "776fa861-bf93-5744-b33f-ac10691c78ad")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R132")
+					(reference "R159")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 229.87 193.04 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "411c72da-f059-5456-baa6-3230056d031a")
+		(property "Reference" "R157"
+			(at 229.87 190.5 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1k"
+			(at 229.87 195.58 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+			(at 229.87 193.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 229.87 193.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 229.87 193.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "cf0b34ca-3231-5338-be89-137f26d8793d")
+		)
+		(pin "2"
+			(uuid "f66ac524-84e7-510b-b358-0fbb9b002363")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "R157")
 					(unit 1)
 				)
 			)
@@ -7678,6 +7378,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 134.62 236.22 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "5128ef92-e821-54d0-8fb0-9a9db83f3d5b")
+		(property "Reference" "TP76"
+			(at 134.62 229.362 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "CAN_STB"
+			(at 134.62 231.14 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 134.62 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 134.62 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 134.62 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "23ef020b-7d04-56d2-bad3-ce7b9141f359")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "TP76")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 45.72 93.98 0)
 		(unit 1)
@@ -7755,164 +7531,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 229.87 203.2 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "55a690c2-3d87-5024-93c1-2047aeed8d3f")
-		(property "Reference" "R143"
-			(at 229.87 200.66 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "1k"
-			(at 229.87 205.74 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 229.87 203.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 229.87 203.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 229.87 203.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "63674c5b-60a3-5f67-9638-4a7482559fee")
-		)
-		(pin "2"
-			(uuid "1d4a3a84-1680-5f62-a163-106d8950824a")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R143")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 83.82 191.77 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "595c6a30-9f1a-5775-8710-261ccf23bcd3")
-		(property "Reference" "R136"
-			(at 85.852 191.77 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10k"
-			(at 83.82 191.77 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 83.82 191.77 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 83.82 191.77 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 83.82 191.77 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "8d75afa9-289c-549b-8e6d-e903fc53c15a")
-		)
-		(pin "2"
-			(uuid "0f0f93f6-4b85-57ff-878e-c56c3e327ed2")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R136")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 248.92 203.2 0)
 		(unit 1)
@@ -7984,6 +7602,85 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "#PWRmcu028")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 63.5 148.59 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "5f40c987-d298-5fea-84ab-5ab7182ca4cc")
+		(property "Reference" "R148"
+			(at 65.532 148.59 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "4.7k"
+			(at 63.5 148.59 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+			(at 63.5 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 63.5 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 63.5 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9a76ba37-df97-543e-8dd0-2d054420ccba")
+		)
+		(pin "2"
+			(uuid "58e0d2b1-7740-52eb-a46d-98fb43d4ad8b")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "R148")
 					(unit 1)
 				)
 			)
@@ -8071,8 +7768,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Power_Protection:USBLC6-2SC6")
-		(at 243.84 152.4 0)
+		(lib_id "RF_Module:ESP32-S3-WROOM-1")
+		(at 165.1 152.4 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8082,7 +7779,7 @@
 		(dnp no)
 		(uuid "61c0117c-a186-5a9d-8f5d-291a11607335")
 		(property "Reference" "U13"
-			(at 251.46 144.78 0)
+			(at 167.64 182.88 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8092,8 +7789,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "USBLC6-2SC6"
-			(at 251.46 147.32 0)
+		(property "Value" "ESP32-S3-WROOM-1U-N8"
+			(at 167.64 185.42 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8103,8 +7800,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
-			(at 243.84 152.4 0)
+		(property "Footprint" "RF_Module:ESP32-S3-WROOM-1U"
+			(at 165.1 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8115,7 +7812,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 243.84 152.4 0)
+			(at 165.1 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8126,7 +7823,18 @@
 			)
 		)
 		(property "Description" ""
-			(at 243.84 152.4 0)
+			(at 165.1 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C2980297"
+			(at 165.1 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8153,6 +7861,111 @@
 		)
 		(pin "6"
 			(uuid "930bd03e-86de-563e-885d-416b98a0d392")
+		)
+		(pin "7"
+			(uuid "f833d49c-73cd-5baf-8c95-5444f5f6c676")
+		)
+		(pin "8"
+			(uuid "f0407141-4717-5798-a185-c677e4306681")
+		)
+		(pin "9"
+			(uuid "faae06b9-c3e8-57d7-a17a-00f5857a979d")
+		)
+		(pin "10"
+			(uuid "78edbfd4-9096-5851-8fd3-317be77ee672")
+		)
+		(pin "11"
+			(uuid "9469f88d-fc9e-52ae-903e-2404f0b96bdf")
+		)
+		(pin "12"
+			(uuid "d227329a-3a91-5990-96e4-8b476fb147fe")
+		)
+		(pin "13"
+			(uuid "7c751fcc-2230-53e8-89f9-7d6a58781e80")
+		)
+		(pin "14"
+			(uuid "cb526616-36eb-59f1-8260-a642eda3c3f0")
+		)
+		(pin "15"
+			(uuid "c30ad4fe-0443-5a91-bd50-c5e1333a5c8a")
+		)
+		(pin "16"
+			(uuid "2867ed0e-3a6e-51b5-9f7a-9368c3993820")
+		)
+		(pin "17"
+			(uuid "1cc34e61-0de2-5b36-8d28-54dbf93a24d8")
+		)
+		(pin "18"
+			(uuid "61782a9b-b0d5-56bd-a9c6-ccac2737bc3f")
+		)
+		(pin "19"
+			(uuid "fe6aaf77-4702-5850-bedd-3cdfedc3f87a")
+		)
+		(pin "20"
+			(uuid "e618488f-5406-5f7c-b13b-5e4108134200")
+		)
+		(pin "21"
+			(uuid "be571e4e-723a-5b91-a52d-4dbb2e0c2a76")
+		)
+		(pin "22"
+			(uuid "57cbb3b2-4e2c-5d3e-94c0-f49d49b147a0")
+		)
+		(pin "23"
+			(uuid "b8b72431-7d89-5f4a-9462-ca720132b209")
+		)
+		(pin "24"
+			(uuid "c2b2c945-b925-51bf-8c02-0ef2b438a2d1")
+		)
+		(pin "25"
+			(uuid "b0b231d6-0a96-5297-87e3-b08ccfe5b3c5")
+		)
+		(pin "26"
+			(uuid "a291c909-ede5-54d6-9279-24f4d16ae063")
+		)
+		(pin "27"
+			(uuid "7e773d7a-1bae-54d7-bb84-f942c0d0216c")
+		)
+		(pin "28"
+			(uuid "022db5ef-28ca-53b3-9106-a75be8787126")
+		)
+		(pin "29"
+			(uuid "fc69c227-ee0f-5924-9df5-eb6aed191a28")
+		)
+		(pin "30"
+			(uuid "e4ed4b01-1a5b-59c2-85fd-6ed8f856630f")
+		)
+		(pin "31"
+			(uuid "5f4fdb64-1582-5a80-9731-da9e4387edba")
+		)
+		(pin "32"
+			(uuid "38e66652-0301-5e7e-aba4-a3151c72ef0b")
+		)
+		(pin "33"
+			(uuid "b2a94d50-df7b-5a9b-b1a5-2fc7e382e0cb")
+		)
+		(pin "34"
+			(uuid "8c47efa3-c53a-5f93-bd2f-01874a4be5b8")
+		)
+		(pin "35"
+			(uuid "09ac233b-f02f-59ba-8bbb-0a8a58af0244")
+		)
+		(pin "36"
+			(uuid "4218c281-1a74-5a61-9e46-1f0038224fff")
+		)
+		(pin "37"
+			(uuid "31a7bec5-84d7-5a87-94b0-b07673ee9371")
+		)
+		(pin "38"
+			(uuid "166b531f-a8f3-5984-bae4-b6b471bc239b")
+		)
+		(pin "39"
+			(uuid "14d2273e-7721-5216-8fb1-c440ca1c75a5")
+		)
+		(pin "40"
+			(uuid "12600f2c-c365-5849-9abd-f215963523dd")
+		)
+		(pin "41"
+			(uuid "7981b146-4213-57ce-b63a-e79d72dac59c")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -8241,8 +8054,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 269.24 166.37 0)
+		(lib_id "Device:LED")
+		(at 242.57 213.36 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8250,9 +8063,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "625531bd-5959-5091-806e-50e04330d0f9")
-		(property "Reference" "R141"
-			(at 271.272 166.37 90)
+		(uuid "6570919f-8ada-5d1b-b071-352370b3cba6")
+		(property "Reference" "D20"
+			(at 242.57 215.9 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8261,8 +8074,8 @@
 				)
 			)
 		)
-		(property "Value" "100"
-			(at 269.24 166.37 90)
+		(property "Value" "red"
+			(at 242.57 210.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8271,8 +8084,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 269.24 166.37 0)
+		(property "Footprint" "LED_SMD:LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder"
+			(at 242.57 213.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8283,7 +8096,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 269.24 166.37 0)
+			(at 242.57 213.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8294,7 +8107,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 269.24 166.37 0)
+			(at 242.57 213.36 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8305,15 +8118,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "896fc948-b1f8-5402-ab07-aeafdf84a934")
+			(uuid "556a6354-5b67-5ae5-9aef-6c78d9a3218a")
 		)
 		(pin "2"
-			(uuid "89a1a183-aabb-5b2f-a234-31f7f58a6597")
+			(uuid "efb3f19b-6830-5ebb-a451-83f81ca00283")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R141")
+					(reference "D20")
 					(unit 1)
 				)
 			)
@@ -8321,7 +8134,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 127 246.38 0)
+		(at 88.9 236.22 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8331,7 +8144,7 @@
 		(dnp no)
 		(uuid "6ad40e04-10e1-5c27-bec0-5c962d12bfb8")
 		(property "Reference" "TP75"
-			(at 127 239.522 0)
+			(at 88.9 229.362 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8340,8 +8153,8 @@
 				)
 			)
 		)
-		(property "Value" "GND"
-			(at 127 241.3 0)
+		(property "Value" "CAN_RXD"
+			(at 88.9 231.14 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8350,8 +8163,8 @@
 				)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm"
-			(at 127 246.38 0)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 88.9 236.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8362,7 +8175,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 127 246.38 0)
+			(at 88.9 236.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8373,7 +8186,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 127 246.38 0)
+			(at 88.9 236.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8396,8 +8209,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic_MountingPin:Conn_01x04_MountingPin")
-		(at 276.86 154.94 0)
+		(lib_id "Power_Protection:USBLC6-2SC6")
+		(at 281.94 101.6 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8405,9 +8218,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "6dc374ca-f1cb-5d4e-a2e0-a4356545c658")
-		(property "Reference" "J43"
-			(at 280.67 149.86 0)
+		(uuid "6add79a3-41f8-5d66-a059-819af5a33c33")
+		(property "Reference" "U14"
+			(at 289.56 93.98 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8417,8 +8230,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "JST-GH 4p (host UART to Orin)"
-			(at 280.67 152.4 0)
+		(property "Value" "USBLC6-2SC6"
+			(at 289.56 96.52 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8428,8 +8241,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical"
-			(at 276.86 154.94 0)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
+			(at 281.94 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8440,7 +8253,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 276.86 154.94 0)
+			(at 281.94 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8451,7 +8264,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 276.86 154.94 0)
+			(at 281.94 101.6 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8462,19 +8275,146 @@
 			)
 		)
 		(pin "1"
-			(uuid "30f660b7-ddec-5e8a-925b-816b7e312f5a")
+			(uuid "927f12c7-f077-521a-a74a-9a9de58af616")
 		)
 		(pin "2"
-			(uuid "b96afeeb-0402-5f6a-b18a-2d2e90d804f6")
+			(uuid "4ed4d697-5b82-571d-a0f8-54391e48ae60")
 		)
 		(pin "3"
-			(uuid "31dc7363-8bde-5c2c-a6df-b0375b96e0c2")
+			(uuid "f66e2eea-4407-5ea1-9a0a-245518ace89f")
 		)
 		(pin "4"
-			(uuid "c37e695e-07ab-5996-ac00-5470ac1b4e12")
+			(uuid "a117ebc9-48e4-55d4-b5f5-bf02663ab598")
 		)
-		(pin "MP"
-			(uuid "1dd27bbd-bbee-5528-ba25-fbc9187a902c")
+		(pin "5"
+			(uuid "3755021c-78fe-533f-bd6f-136d65e69564")
+		)
+		(pin "6"
+			(uuid "9358f8f0-c128-5310-bf6b-045416133694")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "U14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:USB_C_Receptacle_USB2.0_16P")
+		(at 241.3 101.6 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "6dc374ca-f1cb-5d4e-a2e0-a4356545c658")
+		(property "Reference" "J43"
+			(at 241.3 79.375 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "USB-C (flash/debug)"
+			(at 241.3 81.915 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
+			(at 241.3 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 241.3 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 241.3 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "A1"
+			(uuid "67db2aa9-4eaf-5907-af70-2a75a2264b83")
+		)
+		(pin "A4"
+			(uuid "1a85e257-80d6-5001-842b-725e844515a6")
+		)
+		(pin "A5"
+			(uuid "cb285177-f87e-5261-814b-809a613d6d01")
+		)
+		(pin "A6"
+			(uuid "4411d654-9dcc-5b4b-976a-36231979f9e4")
+		)
+		(pin "A7"
+			(uuid "f1e06218-c0d4-53e6-83ca-ffb02a6be4e8")
+		)
+		(pin "A8"
+			(uuid "00a857af-d03a-5c9d-870a-68a656ccc1ad")
+		)
+		(pin "A9"
+			(uuid "8999452e-aab6-5e38-b604-48132c1d0431")
+		)
+		(pin "A12"
+			(uuid "5cdc289b-0497-53d8-afb5-1d6e250822aa")
+		)
+		(pin "B1"
+			(uuid "f94fb5dc-a9b6-5ef3-8503-25bcf51e916b")
+		)
+		(pin "B4"
+			(uuid "ffd7f406-23a0-595e-aaf2-91011eab43f7")
+		)
+		(pin "B5"
+			(uuid "738a02b4-b16b-5879-bb56-b80f08e35c23")
+		)
+		(pin "B6"
+			(uuid "8712b06f-053b-5388-a447-b033b5f2ae1b")
+		)
+		(pin "B7"
+			(uuid "a1fa89bf-ccb7-5c3f-bddd-797d0ac9a1b4")
+		)
+		(pin "B8"
+			(uuid "95e2cb1e-d605-524a-ab9b-a238008d3d19")
+		)
+		(pin "B9"
+			(uuid "7a258564-2cc0-57dd-a863-f8a60bf03ec1")
+		)
+		(pin "B12"
+			(uuid "96c08e1e-5a7e-5f8e-bca2-2d5a582da0c3")
+		)
+		(pin "SH"
+			(uuid "2d018aa5-1b82-5285-8344-7992835cb80b")
 		)
 		(instances
 			(project "PowerBoard_rev3"
@@ -8487,7 +8427,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 30.48 191.77 0)
+		(at 292.1 130.81 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8495,9 +8435,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "6f74f355-dcbe-5456-a059-c74d6fa13dcf")
-		(property "Reference" "R134"
-			(at 32.512 191.77 90)
+		(uuid "6ee8119a-81aa-57e8-867b-d005bdfd58fa")
+		(property "Reference" "R153"
+			(at 294.132 130.81 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8506,8 +8446,8 @@
 				)
 			)
 		)
-		(property "Value" "10k"
-			(at 30.48 191.77 90)
+		(property "Value" "5.1k"
+			(at 292.1 130.81 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8517,7 +8457,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 30.48 191.77 0)
+			(at 292.1 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8528,7 +8468,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 30.48 191.77 0)
+			(at 292.1 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8539,7 +8479,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 30.48 191.77 0)
+			(at 292.1 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8550,15 +8490,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "a71bedf9-eb9a-5f6a-9d45-7f16e1092bba")
+			(uuid "307c67ca-5c84-5254-8d5c-bacd12324ce4")
 		)
 		(pin "2"
-			(uuid "d1736b94-fd7d-5451-9521-43d6fbf08ef9")
+			(uuid "0e51a8f5-2559-5bc2-93bf-2c6055a1f2ea")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R134")
+					(reference "R153")
 					(unit 1)
 				)
 			)
@@ -8643,7 +8583,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 88.9 236.22 0)
+		(at 134.62 226.06 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8653,7 +8593,7 @@
 		(dnp no)
 		(uuid "75ed6f6d-4c82-5b5d-bba5-30305c92d0e1")
 		(property "Reference" "TP73"
-			(at 88.9 229.362 0)
+			(at 134.62 219.202 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8662,8 +8602,8 @@
 				)
 			)
 		)
-		(property "Value" "CAN_RXD"
-			(at 88.9 231.14 0)
+		(property "Value" "UART_SP"
+			(at 134.62 220.98 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8673,7 +8613,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 88.9 236.22 0)
+			(at 134.62 226.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8684,7 +8624,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 88.9 236.22 0)
+			(at 134.62 226.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8695,7 +8635,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 88.9 236.22 0)
+			(at 134.62 226.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8795,166 +8735,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 292.1 130.81 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "7e63e3ad-23e2-55cd-86b5-b0e208f331ca")
-		(property "Reference" "R138"
-			(at 294.132 130.81 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "5.1k"
-			(at 292.1 130.81 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 292.1 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 292.1 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 292.1 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "9bf75997-4014-5390-8d57-250f9ad473d1")
-		)
-		(pin "2"
-			(uuid "b900373b-5061-56cf-9409-61669508df30")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R138")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 83.82 179.07 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "7f0a3925-c2eb-52d2-a923-8232121e20ef")
-		(property "Reference" "R135"
-			(at 85.852 179.07 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10k"
-			(at 83.82 179.07 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 83.82 179.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 83.82 179.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 83.82 179.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "7b28cd45-26af-55f1-ba0b-9733f67e35c8")
-		)
-		(pin "2"
-			(uuid "5a108e57-ba4a-54f6-bcb3-19055448b0d0")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R135")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 43.18 226.06 0)
+		(at 88.9 215.9 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8964,7 +8746,7 @@
 		(dnp no)
 		(uuid "837fae78-2dbf-5398-9f0e-04dd12045b83")
 		(property "Reference" "TP69"
-			(at 43.18 219.202 0)
+			(at 88.9 209.042 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8973,8 +8755,8 @@
 				)
 			)
 		)
-		(property "Value" "UART_TX"
-			(at 43.18 220.98 0)
+		(property "Value" "I2C_SCL"
+			(at 88.9 210.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8984,7 +8766,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 43.18 226.06 0)
+			(at 88.9 215.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8995,7 +8777,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 43.18 226.06 0)
+			(at 88.9 215.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9006,7 +8788,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 43.18 226.06 0)
+			(at 88.9 215.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9107,7 +8889,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 229.87 152.4 90)
+		(at 83.82 179.07 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9115,31 +8897,29 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "8ae71562-53fc-5b61-95b0-2b4392482c50")
-		(property "Reference" "R139"
-			(at 226.06 147.32 90)
+		(uuid "8a1f7129-507d-5ae2-ba0b-73f396668405")
+		(property "Reference" "R150"
+			(at 85.852 179.07 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
-		(property "Value" "100"
-			(at 226.06 149.86 90)
+		(property "Value" "10k"
+			(at 83.82 179.07 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 229.87 152.4 0)
+			(at 83.82 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9150,7 +8930,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 229.87 152.4 0)
+			(at 83.82 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9161,7 +8941,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 229.87 152.4 0)
+			(at 83.82 179.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9172,15 +8952,91 @@
 			)
 		)
 		(pin "1"
-			(uuid "e7a34e1f-0390-54fc-8b70-2bb99a90f9f9")
+			(uuid "8823fb35-1a0b-5681-91f8-925b4e994fb7")
 		)
 		(pin "2"
-			(uuid "de207dab-7637-5796-b8ab-59b6958946d4")
+			(uuid "1aab11a3-c0ca-5fad-8180-3453e93e3198")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R139")
+					(reference "R150")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 127 246.38 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8e061e0b-de4a-553d-9a83-cc00ccd01fdd")
+		(property "Reference" "TP77"
+			(at 127 239.522 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 127 241.3 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm"
+			(at 127 246.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 127 246.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 127 246.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8db2ff96-e3a0-56e9-8aea-b6ece289ba05")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "TP77")
 					(unit 1)
 				)
 			)
@@ -9188,7 +9044,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 229.87 213.36 90)
+		(at 35.56 113.03 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9196,9 +9052,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "92f82342-be7d-53f8-b538-6aa0358a9652")
-		(property "Reference" "R144"
-			(at 229.87 210.82 90)
+		(uuid "8f559c71-03da-526a-ad45-ca41b59340b4")
+		(property "Reference" "R146"
+			(at 37.592 113.03 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9207,8 +9063,8 @@
 				)
 			)
 		)
-		(property "Value" "1k"
-			(at 229.87 215.9 90)
+		(property "Value" "10k"
+			(at 35.56 113.03 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9218,7 +9074,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 229.87 213.36 0)
+			(at 35.56 113.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9229,7 +9085,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 229.87 213.36 0)
+			(at 35.56 113.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9240,7 +9096,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 229.87 213.36 0)
+			(at 35.56 113.03 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9251,94 +9107,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "deb53cb7-9eb1-5b92-bdea-b7a5ddc61ca0")
+			(uuid "67415b49-c7e6-5bb3-b154-c387caeb75d8")
 		)
 		(pin "2"
-			(uuid "422d3d93-2fdc-5161-9f37-2de27c3546c0")
+			(uuid "78b76d03-5a21-55b9-832e-8d5a116a1391")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R144")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 63.5 148.59 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "95a92a00-1c36-5877-8fe0-78841f0df924")
-		(property "Reference" "R133"
-			(at 65.532 148.59 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "4.7k"
-			(at 63.5 148.59 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 63.5 148.59 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 63.5 148.59 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 63.5 148.59 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "bb9edb98-bf13-56e9-a61c-8b175ba3fac4")
-		)
-		(pin "2"
-			(uuid "f5acea74-7a0f-5879-88d3-df3a829de6df")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R133")
+					(reference "R146")
 					(unit 1)
 				)
 			)
@@ -9500,7 +9277,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 88.9 215.9 0)
+		(at 66.04 116.84 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9510,7 +9287,7 @@
 		(dnp no)
 		(uuid "a19eeaf0-defb-5999-a155-7ebba6d01a79")
 		(property "Reference" "TP67"
-			(at 88.9 209.042 0)
+			(at 66.04 109.982 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9519,8 +9296,8 @@
 				)
 			)
 		)
-		(property "Value" "I2C_SCL"
-			(at 88.9 210.82 0)
+		(property "Value" "ESP_IO0"
+			(at 66.04 111.76 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9530,7 +9307,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 88.9 215.9 0)
+			(at 66.04 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9541,7 +9318,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 88.9 215.9 0)
+			(at 66.04 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9552,7 +9329,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 88.9 215.9 0)
+			(at 66.04 116.84 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9569,99 +9346,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "TP67")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Power_Protection:USBLC6-2SC6")
-		(at 281.94 101.6 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "a4a31dd9-7c41-54b9-a9fb-e47a3cd65bb8")
-		(property "Reference" "U12"
-			(at 289.56 93.98 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "USBLC6-2SC6"
-			(at 289.56 96.52 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
-			(at 281.94 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 281.94 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 281.94 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "2ef59943-e743-55f7-8d69-d58eb01f6867")
-		)
-		(pin "2"
-			(uuid "2c39e2f1-6b3c-5759-8860-fc74d1b7403f")
-		)
-		(pin "3"
-			(uuid "49d9ad81-7f4b-5db9-90fc-94d05e2cbdfe")
-		)
-		(pin "4"
-			(uuid "0aee09f0-4dff-5d94-858c-ecc4368c8a23")
-		)
-		(pin "5"
-			(uuid "cb340258-24ab-50cc-94c7-73e133bd8c0f")
-		)
-		(pin "6"
-			(uuid "47515543-1b65-55e2-88e8-53a1dca9cc84")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "U12")
 					(unit 1)
 				)
 			)
@@ -9747,6 +9431,85 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 30.48 148.59 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ab360708-3e0d-5595-a0c2-6c09f776c2b6")
+		(property "Reference" "R147"
+			(at 32.512 148.59 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "4.7k"
+			(at 30.48 148.59 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+			(at 30.48 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 30.48 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 30.48 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "34117e8e-5a77-5aee-b0a6-f70f6e9593a6")
+		)
+		(pin "2"
+			(uuid "5ce66927-39d3-54b0-aa78-570d9e10905e")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "R147")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3V3")
 		(at 35.56 109.22 0)
 		(unit 1)
@@ -9818,85 +9581,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "#PWRmcu008")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 229.87 193.04 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "acf9c71f-25f9-5c8a-a3db-163b595946aa")
-		(property "Reference" "R142"
-			(at 229.87 190.5 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "1k"
-			(at 229.87 195.58 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 229.87 193.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 229.87 193.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 229.87 193.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b0518aaf-8761-5e3b-8451-834a94a9a841")
-		)
-		(pin "2"
-			(uuid "dc8322a0-ebca-574f-a47d-19a7cd8fe72e")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R142")
 					(unit 1)
 				)
 			)
@@ -9981,7 +9665,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 134.62 215.9 0)
+		(at 43.18 215.9 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9991,7 +9675,7 @@
 		(dnp no)
 		(uuid "b1efe536-80fe-57a3-ba9e-57c260276a32")
 		(property "Reference" "TP68"
-			(at 134.62 209.042 0)
+			(at 43.18 209.042 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10000,8 +9684,8 @@
 				)
 			)
 		)
-		(property "Value" "INA_ALERT"
-			(at 134.62 210.82 0)
+		(property "Value" "I2C_SDA"
+			(at 43.18 210.82 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10011,7 +9695,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 134.62 215.9 0)
+			(at 43.18 215.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10022,7 +9706,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 134.62 215.9 0)
+			(at 43.18 215.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10033,7 +9717,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 134.62 215.9 0)
+			(at 43.18 215.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10050,6 +9734,87 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "TP68")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 40.64 191.77 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b5018bcb-859e-5904-8a30-d9c6eb4e90a5")
+		(property "Reference" "C98"
+			(at 41.275 189.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 41.275 194.31 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 40.64 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 40.64 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 40.64 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "92a3404e-0b2e-5172-a9b6-34442f0e7b0f")
+		)
+		(pin "2"
+			(uuid "00add3f2-8b49-56ff-9af5-527b857273b7")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "C98")
 					(unit 1)
 				)
 			)
@@ -10137,8 +9902,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 35.56 80.01 0)
+		(lib_id "Device:LED")
+		(at 242.57 203.2 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10146,9 +9911,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "c2bfba88-ef96-57a5-acd2-4c45b4a2bbbe")
-		(property "Reference" "R130"
-			(at 37.592 80.01 90)
+		(uuid "bf879fcb-5aea-5ac7-bbc6-5148a8460464")
+		(property "Reference" "D19"
+			(at 242.57 205.74 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10157,8 +9922,8 @@
 				)
 			)
 		)
-		(property "Value" "10k"
-			(at 35.56 80.01 90)
+		(property "Value" "yellow"
+			(at 242.57 200.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10167,8 +9932,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 35.56 80.01 0)
+		(property "Footprint" "LED_SMD:LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder"
+			(at 242.57 203.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10179,7 +9944,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 35.56 80.01 0)
+			(at 242.57 203.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10190,7 +9955,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 35.56 80.01 0)
+			(at 242.57 203.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10201,15 +9966,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "1008c4d8-4d50-50f9-af17-283e2149814c")
+			(uuid "303ac0e4-6742-5735-b8cd-c9c5022be441")
 		)
 		(pin "2"
-			(uuid "777ce167-6187-5cb7-978c-7d3a3460b60b")
+			(uuid "7cd1470b-fd18-531a-a553-4c84c5d03952")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R130")
+					(reference "D19")
 					(unit 1)
 				)
 			)
@@ -10294,7 +10059,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 142.24 107.95 0)
+		(at 154.94 107.95 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10304,7 +10069,7 @@
 		(dnp no)
 		(uuid "c4013b9b-75b7-544a-b992-410f2b9b557f")
 		(property "Reference" "C95"
-			(at 142.875 105.41 0)
+			(at 155.575 105.41 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10314,8 +10079,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
-			(at 142.875 110.49 0)
+		(property "Value" "22uF/10V"
+			(at 155.575 110.49 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10325,8 +10090,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 142.24 107.95 0)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 154.94 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10337,7 +10102,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 142.24 107.95 0)
+			(at 154.94 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10348,7 +10113,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 142.24 107.95 0)
+			(at 154.94 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10375,7 +10140,7 @@
 	)
 	(symbol
 		(lib_id "Device:LED")
-		(at 242.57 213.36 180)
+		(at 242.57 193.04 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10385,7 +10150,7 @@
 		(dnp no)
 		(uuid "c4662ece-277b-56f4-8067-6253230f7b60")
 		(property "Reference" "D18"
-			(at 242.57 215.9 0)
+			(at 242.57 195.58 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10394,8 +10159,8 @@
 				)
 			)
 		)
-		(property "Value" "red"
-			(at 242.57 210.82 0)
+		(property "Value" "green"
+			(at 242.57 190.5 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10405,7 +10170,7 @@
 			)
 		)
 		(property "Footprint" "LED_SMD:LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder"
-			(at 242.57 213.36 0)
+			(at 242.57 193.04 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10416,7 +10181,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 242.57 213.36 0)
+			(at 242.57 193.04 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10427,7 +10192,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 242.57 213.36 0)
+			(at 242.57 193.04 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10454,7 +10219,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 134.62 236.22 0)
+		(at 43.18 236.22 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10464,7 +10229,7 @@
 		(dnp no)
 		(uuid "c667f8c3-3ec3-59d5-b02f-c0e0e0affaf9")
 		(property "Reference" "TP74"
-			(at 134.62 229.362 0)
+			(at 43.18 229.362 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10473,8 +10238,8 @@
 				)
 			)
 		)
-		(property "Value" "CAN_STB"
-			(at 134.62 231.14 0)
+		(property "Value" "CAN_TXD"
+			(at 43.18 231.14 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10484,7 +10249,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 134.62 236.22 0)
+			(at 43.18 236.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10495,7 +10260,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 134.62 236.22 0)
+			(at 43.18 236.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10506,7 +10271,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 134.62 236.22 0)
+			(at 43.18 236.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10530,7 +10295,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 43.18 215.9 0)
+		(at 66.04 83.82 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10540,7 +10305,7 @@
 		(dnp no)
 		(uuid "c81e587c-892e-5c8c-8391-fb9ebaff2685")
 		(property "Reference" "TP66"
-			(at 43.18 209.042 0)
+			(at 66.04 76.962 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10549,8 +10314,8 @@
 				)
 			)
 		)
-		(property "Value" "I2C_SDA"
-			(at 43.18 210.82 0)
+		(property "Value" "ESP_EN"
+			(at 66.04 78.74 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10560,7 +10325,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 43.18 215.9 0)
+			(at 66.04 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10571,7 +10336,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 43.18 215.9 0)
+			(at 66.04 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10582,7 +10347,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 43.18 215.9 0)
+			(at 66.04 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10682,8 +10447,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 88.9 226.06 0)
+		(lib_id "Device:R")
+		(at 30.48 191.77 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10691,9 +10456,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "d88d0c7a-cda5-5524-9c1a-adff64ed048f")
-		(property "Reference" "TP70"
-			(at 88.9 219.202 0)
+		(uuid "d3f68cfc-7ec6-5a3f-8873-23dfccd68d87")
+		(property "Reference" "R149"
+			(at 32.512 191.77 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10702,8 +10467,8 @@
 				)
 			)
 		)
-		(property "Value" "UART_RX"
-			(at 88.9 220.98 0)
+		(property "Value" "10k"
+			(at 30.48 191.77 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10712,8 +10477,8 @@
 				)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 88.9 226.06 0)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+			(at 30.48 191.77 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10724,7 +10489,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 88.9 226.06 0)
+			(at 30.48 191.77 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10735,7 +10500,179 @@
 			)
 		)
 		(property "Description" ""
-			(at 88.9 226.06 0)
+			(at 30.48 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "aa93a4a9-56e7-5d6f-b42f-221741f0c083")
+		)
+		(pin "2"
+			(uuid "74f3a878-d78f-564c-96d5-a98192842af3")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "R149")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Power_Protection:USBLC6-2SC6")
+		(at 243.84 152.4 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d6e56438-661e-57a4-a1a7-b31d95108fe1")
+		(property "Reference" "U15"
+			(at 251.46 144.78 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "USBLC6-2SC6"
+			(at 251.46 147.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
+			(at 243.84 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 243.84 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 243.84 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d61ab4da-be3b-5b8d-b349-fba34c46f954")
+		)
+		(pin "2"
+			(uuid "2f8ef604-5b12-5bb6-b3a8-dfc0cfccabee")
+		)
+		(pin "3"
+			(uuid "3089fd27-965d-55bc-96df-a65bc12d7859")
+		)
+		(pin "4"
+			(uuid "3c17d336-1477-5b91-a4a4-e9fa6ed7754c")
+		)
+		(pin "5"
+			(uuid "c102298a-353e-5171-9978-520aa1b39c4e")
+		)
+		(pin "6"
+			(uuid "50243a1e-6890-5702-970e-a7e9a3ba10a1")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "U15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 134.62 215.9 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d88d0c7a-cda5-5524-9c1a-adff64ed048f")
+		(property "Reference" "TP70"
+			(at 134.62 209.042 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "INA_ALERT"
+			(at 134.62 210.82 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 134.62 215.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 134.62 215.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 134.62 215.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10990,7 +10927,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 66.04 83.82 0)
+		(at 185.42 121.92 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11000,7 +10937,7 @@
 		(dnp no)
 		(uuid "db2cee83-4485-50a8-9141-27e79f687c56")
 		(property "Reference" "TP64"
-			(at 66.04 76.962 0)
+			(at 185.42 115.062 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11009,8 +10946,8 @@
 				)
 			)
 		)
-		(property "Value" "ESP_EN"
-			(at 66.04 78.74 0)
+		(property "Value" "TXD0"
+			(at 185.42 116.84 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11020,7 +10957,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 66.04 83.82 0)
+			(at 185.42 121.92 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11031,7 +10968,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 66.04 83.82 0)
+			(at 185.42 121.92 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11042,7 +10979,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 66.04 83.82 0)
+			(at 185.42 121.92 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11142,87 +11079,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:LED")
-		(at 242.57 193.04 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "de6eeb90-9c4c-5d89-830a-b89f57b42528")
-		(property "Reference" "D16"
-			(at 242.57 195.58 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "green"
-			(at 242.57 190.5 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "LED_SMD:LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder"
-			(at 242.57 193.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 242.57 193.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 242.57 193.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "5fe5000b-7685-547c-b0ff-4f1e1523b778")
-		)
-		(pin "2"
-			(uuid "f37c7b2f-da57-55d6-aa3a-09f94b105330")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "D16")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
-		(at 271.78 130.81 0)
+		(at 229.87 203.2 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11230,9 +11088,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "dfbf62fc-2bd5-55ac-be90-4289a5f45aaa")
-		(property "Reference" "R137"
-			(at 273.812 130.81 90)
+		(uuid "e36c819a-f7e7-5103-a243-11d85f4a91f2")
+		(property "Reference" "R158"
+			(at 229.87 200.66 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11241,8 +11099,8 @@
 				)
 			)
 		)
-		(property "Value" "5.1k"
-			(at 271.78 130.81 90)
+		(property "Value" "1k"
+			(at 229.87 205.74 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11252,7 +11110,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 271.78 130.81 0)
+			(at 229.87 203.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11263,7 +11121,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 271.78 130.81 0)
+			(at 229.87 203.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11274,7 +11132,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 271.78 130.81 0)
+			(at 229.87 203.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11285,15 +11143,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "11b0793c-713e-5c08-aef1-b0c555fbe18b")
+			(uuid "6a250472-02e4-5284-aae2-c0afc8019f24")
 		)
 		(pin "2"
-			(uuid "b7aee745-3ac7-5c92-b44c-f76430ee7238")
+			(uuid "247d74c3-4a5f-5260-89e9-1be8ac55f654")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R137")
+					(reference "R158")
 					(unit 1)
 				)
 			)
@@ -11377,6 +11235,166 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 229.87 152.4 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e7b6dc56-7c1f-5a0a-9e23-d52826ee23fc")
+		(property "Reference" "R154"
+			(at 226.06 147.32 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "100"
+			(at 226.06 149.86 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+			(at 229.87 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 229.87 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 229.87 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7d872db9-b304-5cd6-9b4d-dcfddc010641")
+		)
+		(pin "2"
+			(uuid "a0284347-15bd-56a0-89b5-a4bbbac4ba2e")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "R154")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 83.82 191.77 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "eab9af0a-4e26-5954-9368-7cd2aa3e5ade")
+		(property "Reference" "R151"
+			(at 85.852 191.77 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10k"
+			(at 83.82 191.77 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+			(at 83.82 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 83.82 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 83.82 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8cdf2d89-e743-5ae5-a3e9-b430b2fba10d")
+		)
+		(pin "2"
+			(uuid "8647064d-c966-5d5a-ac7f-4ac0339259ea")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "R151")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 55.88 96.52 0)
 		(unit 1)
@@ -11454,8 +11472,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 185.42 121.92 0)
+		(lib_id "Device:R")
+		(at 35.56 80.01 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11463,9 +11481,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "ec3b2077-df33-5420-927e-a02c16604067")
-		(property "Reference" "TP62"
-			(at 185.42 115.062 0)
+		(uuid "ed48d985-c556-5533-8672-271efc3a7e76")
+		(property "Reference" "R145"
+			(at 37.592 80.01 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11474,8 +11492,8 @@
 				)
 			)
 		)
-		(property "Value" "TXD0"
-			(at 185.42 116.84 0)
+		(property "Value" "10k"
+			(at 35.56 80.01 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11484,8 +11502,8 @@
 				)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 185.42 121.92 0)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
+			(at 35.56 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11496,7 +11514,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 185.42 121.92 0)
+			(at 35.56 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11507,7 +11525,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 185.42 121.92 0)
+			(at 35.56 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11518,12 +11536,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "3f20788d-a647-51fb-8c7f-9863088d9b9d")
+			(uuid "085c938c-a374-5344-abbb-12e538aab26c")
+		)
+		(pin "2"
+			(uuid "5eba4eff-bab4-5836-ac85-da2168812246")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "TP62")
+					(reference "R145")
 					(unit 1)
 				)
 			)
@@ -11761,8 +11782,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 229.87 154.94 270)
+		(lib_id "Device:C")
+		(at 142.24 107.95 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11770,9 +11791,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "f0f58f9e-e82e-5411-8c6e-8897e36e5075")
-		(property "Reference" "R140"
-			(at 226.06 160.02 90)
+		(uuid "f1e11877-7dd8-5643-a42e-db8f27fa9b05")
+		(property "Reference" "C96"
+			(at 142.875 105.41 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11782,8 +11803,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100"
-			(at 226.06 162.56 90)
+		(property "Value" "100nF"
+			(at 142.875 110.49 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11793,8 +11814,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 229.87 154.94 0)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 142.24 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11805,7 +11826,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 229.87 154.94 0)
+			(at 142.24 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11816,7 +11837,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 229.87 154.94 0)
+			(at 142.24 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11827,15 +11848,91 @@
 			)
 		)
 		(pin "1"
-			(uuid "da8720b7-f443-5a6b-a089-12275ffc93c9")
+			(uuid "583c3cbe-5149-5751-997d-15741995c9bb")
 		)
 		(pin "2"
-			(uuid "f44e78ef-3c4c-5a0c-a593-99ea5dc9b6a0")
+			(uuid "bc74619c-a3f4-55f9-a36d-647148b37688")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "R140")
+					(reference "C96")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 43.18 226.06 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f42bdf91-0213-553d-8c8d-a5780b55d498")
+		(property "Reference" "TP71"
+			(at 43.18 219.202 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "UART_TX"
+			(at 43.18 220.98 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
+			(at 43.18 226.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 43.18 226.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 43.18 226.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7920d8de-b3be-5800-87e3-536472a72670")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "TP71")
 					(unit 1)
 				)
 			)
@@ -11851,8 +11948,8 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "f1e11877-7dd8-5643-a42e-db8f27fa9b05")
-		(property "Reference" "C96"
+		(uuid "f95008e2-2bc2-5c84-bf49-93ef4f2cb6c7")
+		(property "Reference" "C97"
 			(at 46.355 87.63 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11908,163 +12005,6 @@
 			)
 		)
 		(pin "1"
-			(uuid "583c3cbe-5149-5751-997d-15741995c9bb")
-		)
-		(pin "2"
-			(uuid "bc74619c-a3f4-55f9-a36d-647148b37688")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "C96")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 134.62 226.06 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f42bdf91-0213-553d-8c8d-a5780b55d498")
-		(property "Reference" "TP71"
-			(at 134.62 219.202 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "UART_SP"
-			(at 134.62 220.98 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_D1.5mm"
-			(at 134.62 226.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 134.62 226.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 134.62 226.06 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "7920d8de-b3be-5800-87e3-536472a72670")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "TP71")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 40.64 191.77 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f95008e2-2bc2-5c84-bf49-93ef4f2cb6c7")
-		(property "Reference" "C97"
-			(at 41.275 189.23 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100nF"
-			(at 41.275 194.31 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 40.64 191.77 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 40.64 191.77 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 40.64 191.77 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
 			(uuid "96a3e477-62b3-569f-aa3d-4b1c5d6dfad5")
 		)
 		(pin "2"
@@ -12074,6 +12014,96 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "C97")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic_MountingPin:Conn_01x04_MountingPin")
+		(at 276.86 154.94 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "f9876e48-765f-55b2-9979-20f7c7d76ecd")
+		(property "Reference" "J44"
+			(at 280.67 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "JST-GH 4p (host UART to Orin)"
+			(at 280.67 152.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical"
+			(at 276.86 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 276.86 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 276.86 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "dbfb3109-f897-59bf-8d9b-3ec09fb91f25")
+		)
+		(pin "2"
+			(uuid "72b1d316-e5b2-5317-9721-78e591b2869f")
+		)
+		(pin "3"
+			(uuid "f3381d4f-db2a-5c6c-bc9f-94066d1da7c5")
+		)
+		(pin "4"
+			(uuid "895c8093-6c44-54a3-b626-2ed2e65af005")
+		)
+		(pin "MP"
+			(uuid "44fe75c6-9a25-50ee-ba72-278782cdf11c")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "J44")
 					(unit 1)
 				)
 			)

@@ -44,7 +44,7 @@
 		(uuid "ae5468a1-6051-56ec-98d6-34b0e57b8f1a")
 	)
 	(sheet
-		(at 96.04 141.28)
+		(at 162.08 141.28)
 		(size 50.8 20.32)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -60,7 +60,7 @@
 		)
 		(uuid "084a4302-8a15-5394-bf69-acacc701e44b")
 		(property "Sheetname" "CAN bus to the EPOS4 drives (TCAN1044AV)"
-			(at 96.04 140.58 0)
+			(at 162.08 140.58 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -71,7 +71,7 @@
 			)
 		)
 		(property "Sheetfile" "can.kicad_sch"
-			(at 96.04 162.28 0)
+			(at 162.08 162.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -85,13 +85,13 @@
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14"
-					(page "13")
+					(page "14")
 				)
 			)
 		)
 	)
 	(sheet
-		(at 30 141.28)
+		(at 96.04 141.28)
 		(size 50.8 20.32)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -107,7 +107,7 @@
 		)
 		(uuid "0f4c8e4d-36f6-5e6f-a801-0296a18d8e21")
 		(property "Sheetname" "ESP32-S3-WROOM-1U, USB, host UART, LEDs"
-			(at 30 140.58 0)
+			(at 96.04 140.58 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -118,7 +118,7 @@
 			)
 		)
 		(property "Sheetfile" "mcu.kicad_sch"
-			(at 30 162.28 0)
+			(at 96.04 162.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -132,7 +132,7 @@
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14"
-					(page "12")
+					(page "13")
 				)
 			)
 		)
@@ -326,7 +326,54 @@
 		)
 	)
 	(sheet
-		(at 228.12 100.64)
+		(at 162.08 100.64)
+		(size 50.8 20.32)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "7ea6b5eb-b8d9-59c7-a905-2ed248e0ec95")
+		(property "Sheetname" "Brake chopper on the drive output (EPOS4 braking energy)"
+			(at 162.08 99.94 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "brake.kicad_sch"
+			(at 162.08 121.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14"
+					(page "9")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 294.16 100.64)
 		(size 50.8 20.32)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -342,7 +389,7 @@
 		)
 		(uuid "94cf5cf1-594f-5283-9734-ae337d60eb5f")
 		(property "Sheetname" "54 V boost for the Zyxel XMG-105HP (LM5122)"
-			(at 228.12 99.94 0)
+			(at 294.16 99.94 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -353,7 +400,7 @@
 			)
 		)
 		(property "Sheetfile" "boost54.kicad_sch"
-			(at 228.12 121.64 0)
+			(at 294.16 121.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -367,7 +414,7 @@
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14"
-					(page "10")
+					(page "11")
 				)
 			)
 		)
@@ -420,7 +467,7 @@
 		)
 	)
 	(sheet
-		(at 162.08 141.28)
+		(at 228.12 141.28)
 		(size 50.8 20.32)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -436,7 +483,7 @@
 		)
 		(uuid "a49d71e0-df6f-5957-a2f8-e887a3c1578b")
 		(property "Sheetname" "Switch control (TCA9535), measurement (ADC128D818 x2), E-STO"
-			(at 162.08 140.58 0)
+			(at 228.12 140.58 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -447,7 +494,7 @@
 			)
 		)
 		(property "Sheetfile" "io.kicad_sch"
-			(at 162.08 162.28 0)
+			(at 228.12 162.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -461,7 +508,7 @@
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14"
-					(page "14")
+					(page "15")
 				)
 			)
 		)
@@ -561,7 +608,7 @@
 		)
 	)
 	(sheet
-		(at 162.08 100.64)
+		(at 228.12 100.64)
 		(size 50.8 20.32)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -577,7 +624,7 @@
 		)
 		(uuid "fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb")
 		(property "Sheetname" "Rail inputs, output connectors and per-output PTCs"
-			(at 162.08 99.94 0)
+			(at 228.12 99.94 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -588,7 +635,7 @@
 			)
 		)
 		(property "Sheetfile" "outputs.kicad_sch"
-			(at 162.08 121.64 0)
+			(at 228.12 121.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -602,13 +649,13 @@
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14"
-					(page "9")
+					(page "10")
 				)
 			)
 		)
 	)
 	(sheet
-		(at 294.16 100.64)
+		(at 30 141.28)
 		(size 50.8 20.32)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -624,7 +671,7 @@
 		)
 		(uuid "fbd1cb5a-880c-5dbb-8b6e-d3abaa615900")
 		(property "Sheetname" "Always-on aux supply: 42 V -> 5.3 V -> 3.3 V"
-			(at 294.16 99.94 0)
+			(at 30 140.58 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -635,7 +682,7 @@
 			)
 		)
 		(property "Sheetfile" "aux_power.kicad_sch"
-			(at 294.16 121.64 0)
+			(at 30 162.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -649,7 +696,7 @@
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14"
-					(page "11")
+					(page "12")
 				)
 			)
 		)

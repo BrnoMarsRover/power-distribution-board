@@ -27,6 +27,7 @@ E96 = [1.00, 1.02, 1.05, 1.07, 1.10, 1.13, 1.15, 1.18, 1.21, 1.24, 1.27, 1.30, 1
        6.49, 6.65, 6.81, 6.98, 7.15, 7.32, 7.50, 7.68, 7.87, 8.06, 8.25, 8.45, 8.66,
        8.87, 9.09, 9.31, 9.53, 9.76]
 E12 = [1.0, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2]
+E6 = [1.0, 1.5, 2.2, 3.3, 4.7, 6.8]
 
 
 def nearest(value, series):
@@ -85,9 +86,9 @@ PTCS = {
 #         current-limited converter, so a hot-plug spike cannot trip the rail)
 #   c_out, n_out: ASSUMED capacitance per output, and the output count
 RAILS = [
-    dict(name="42V-D", v=42.0, design=30.0, i_oc=50.0, t_oc=0.5, i_sc=150.0,
+    dict(name="42V-D", v=42.0, design=30.0, i_oc=60.0, t_oc=1.0, i_sc=150.0,
          r_sns=0.5e-3, fet="IPB042N10N3G", n_main=2, c_out=940e-6, n_out=4, conn="XT90 (drives)",
-         i_inrush=2.0, ptc=None, src="battery bus", default_on=False,
+         i_inrush=0.4, ptc=None, src="battery bus", default_on=False,
          note="EPOS4 drive group: two EPOS4 50/5 per connector, two connectors in use and two "
               "spare (ASSUMED 470 uF per EPOS4). The 50 A / 0.5 s trip must sit above the drives' acceleration "
               "peaks. The E-STOP loop feeds this driver's EN/UVLO, so opening it cuts motor power "
@@ -95,13 +96,13 @@ RAILS = [
               "a controller."),
     dict(name="42V-C", v=42.0, design=30.0, i_oc=33.0, t_oc=0.5, i_sc=100.0,
          r_sns=1e-3, fet="IPB042N10N3G", n_main=2, c_out=470e-6, n_out=4, conn="XT90 (converters)",
-         i_inrush=2.0, ptc=None, src="battery bus", default_on=True,
+         i_inrush=0.4, ptc=None, src="battery bus", default_on=True,
          note="Converter-feed group: three feeds plus one spare. 24 V 300 W + 12 V 150 W + 5 V 150 W "
               "is about 22 A at 30 V; the 30 A design leaves room for a converter on the spare. "
               "Defaults ON, because the 12 V converter powers the Orin."),
     dict(name="24V", v=24.0, design=12.5, i_oc=13.75, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=8, conn="Deans T",
-         i_inrush=2.0, ptc="SMD2920P300TF/33", src="300 W converter", default_on=False),
+         i_inrush=1.0, ptc="SMD2920P300TF/33", src="300 W converter", default_on=False),
     dict(name="12V", v=12.0, design=12.5, i_oc=13.75, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=7, conn="XT60",
          i_inrush=2.0, ptc="SMD2920P300TF/16", src="150 W converter", default_on=True,
@@ -111,8 +112,8 @@ RAILS = [
          i_inrush=2.0, ptc="SMD1812P300TF", src="150 W converter, XT30-limited",
          default_on=False),
     dict(name="54V", v=42.0, design=4.0, i_oc=5.0, t_oc=0.5, i_sc=20.0,
-         r_sns=5e-3, fet="IPB042N10N3G", n_main=1, c_out=600e-6, n_out=1, conn="Zyxel XMG-105HP supply",
-         i_inrush=1.0, ptc=None, src="battery bus, then the LM5122 boost to 54 V",
+         r_sns=3e-3, fet="IPB042N10N3G", n_main=1, c_out=600e-6, n_out=1, conn="Zyxel XMG-105HP supply",
+         i_inrush=0.4, ptc=None, src="battery bus, then the LM5122 boost to 54 V",
          default_on=True,
          note="The eFuse sits on the boost's 42 V input. It switches the boost and is its "
               "short-circuit protection, because a boost cannot block current from input to output. "
@@ -150,7 +151,7 @@ def rail_values(r):
     v["energy"] = 0.5 * v["c_load"] * r["v"] ** 2
     v["rds"], v["fet_lcsc"], v["fet_desc"] = FETS[r["fet"]]
     # Eq. 4/20: C_BST > Qg(total) / 1 V + 10 x C_g
-    v["c_bst"] = ceil_e(FET_QG[r["fet"]] * (r["n_main"] + 1) / 1.0 + 10 * v["c_g"], E12)
+    v["c_bst"] = ceil_e(FET_QG[r["fet"]] * (r["n_main"] + 1) / 1.0 + 10 * v["c_g"], E6)
     return v
 
 

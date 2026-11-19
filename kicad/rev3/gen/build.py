@@ -212,6 +212,14 @@ CUSTOM = {
             ("2", "GND", "power_in", 0, -12.7, 90)],
         footprint="Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
         datasheet=TI + "tcan1044a-q1.pdf", desc="CAN FD transceiver, +-58 V bus fault, VIO 1.8-5.5 V"),
+    "TLV1805": pinned_symbol(
+        "TLV1805", 7.62, 7.62, [
+            ("3", "IN-", "input", -10.16, 2.54, 0), ("4", "IN+", "input", -10.16, -5.08, 0),
+            ("1", "OUT", "output", 10.16, 0, 180), ("6", "V+", "power_in", 0, 10.16, 270),
+            ("2", "V-", "power_in", 0, -10.16, 90), ("5", "SHDN", "input", 5.08, -10.16, 90)],
+        footprint="Package_TO_SOT_SMD:SOT-23-6",
+        datasheet="https://www.ti.com/lit/ds/symlink/tlv1805.pdf",
+        desc="40 V push-pull comparator, 100 mA output (drives a MOSFET gate), SOT-23-6 (DBV)"),
     "Q_NMOS_GDS": mosfet_symbol(),
 }
 
@@ -635,6 +643,7 @@ FP = dict(
     XT90M="PowerBoard_rev3:XT90PB-M", XT90F="PowerBoard_rev3:XT90PB-F",
     XT60M="Connector_AMASS:AMASS_XT60-M_1x02_P7.20mm_Vertical",
     XT60F="Connector_AMASS:AMASS_XT60-F_1x02_P7.20mm_Vertical",
+    SMB_D="Diode_SMD:D_SMB",
     XT30M="Connector_AMASS:AMASS_XT30U-M_1x02_P5.0mm_Vertical",
     XT30F="Connector_AMASS:AMASS_XT30U-F_1x02_P5.0mm_Vertical",
     DEANS="PowerBoard_rev3:DEANS-T",
@@ -705,8 +714,8 @@ def tp_panel(sh, nets, x0, y0, cols=3, dx=45.72, dy=10.16):
 
 def FET(sh, part, g, d, s, at=None, rot=0, mirror=False):
     fp = FP["D2PAK"] if part == "IPB042N10N3G" else FP["DPAK"]
-    lcsc = rails.FETS[part][1]
-    return sh.add("PowerBoard_rev3:Q_NMOS_GDS", "Q", part, fp, {1: g, 2: d, 3: s}, fields={"LCSC": lcsc}, at=at,
+    mpn = {"IPB042N10N3G": "IPB042N10N3GATMA1"}.get(part, part)
+    return sh.add("PowerBoard_rev3:Q_NMOS_GDS", "Q", part, fp, {1: g, 2: d, 3: s}, fields={"MPN": mpn}, at=at,
                   rot=rot, mirror=mirror)
 
 
@@ -866,36 +875,41 @@ def sheet_switch(r):
     yR, yO, yQ, yG = 96.52, 127.0, 111.76, 121.92   # VIN/drain rails, output rail, FETs, gate bus
     en = "L:EN"
     U = sh.add("PowerBoard_rev3:TPS48111-Q1", "U", "TPS48111-Q1", CUSTOM_FP_TPS,
-               {20: vin, 18: "L:CSP", 17: "L:DRN", 19: "L:ISCP" if v["r_iscp"] else "L:DRN", 1: en,
+               {20: "L:VS", 18: "L:CSP", 17: "L:SNSN", 19: "L:ISCP" if v["r_iscp"] else "L:SNSN", 1: en,
                 3: f"INP_{n}", 2: f"INPG_{n}", 10: "L:DIODE", 6: "GND",
                 12: "L:BST", 15: "L:PU", 14: "L:GATE", 13: out, 11: "L:GPRE",
                 5: f"FLT_{n}", 4: f"FLT_{n}", 7: f"IMON_{n}", 8: "L:IWRN", 9: "L:TMR"},
-               fields={"LCSC": "C17558994"}, at=(X, Y))
+               fields={"MPN": "TPS48111LQDGXRQ1"}, at=(X, Y))
     P = lambda num: PIN(U, num)
-
-    # --- power path: VIN rail, shunt, drain rail
-    shunt_lcsc = {0.5e-3: "C154666", 1e-3: "C154668", 2e-3: "C160590", 5e-3: "C185817"}[r["r_sns"]]
-    rs = R(sh, f"{r['r_sns'] * 1e3:g}m 2512", vin, "L:DRN", fp="R2512", at=(124.46, yR), LCSC=shunt_lcsc)
-
-    # --- top pins up to the rails
     vs, iscp, csp, csn = P(20), P(19), P(18), P(17)
-    rset = R(sh, v["r_set"], vin, "L:CSP", at=(csp[0], 111.76), rot=0)
-    W((csp[0], yR), PIN(rset, 1))
-    W(PIN(rset, 2), csp)
-    W((csn[0], yR), csn)
+
+    # --- power path: VIN rail, Kelvin shunt (sense pins below, the CS- one straight above CS-), drain rail
+    shunt_mpn = {0.5e-3: "CSS2H-2512R-L500F", 1e-3: "CSS2H-2512R-1L00F", 2e-3: "CSS2H-2512K-2L00F",
+                 3e-3: "CSS2H-2512K-3L00F"}[r["r_sns"]]
+    rs = sh.add("Device:R_Shunt", "R", f"{r['r_sns'] * 1e3:g}m", FP["SHUNT2512K"],
+                {1: vin, 2: "L:SNSP", 3: "L:SNSN", 4: "L:DRN"}, rot=90, mirror="x", fields={"MPN": shunt_mpn})
+    at_pin(rs, 3, (csn[0], yR + 2.54))
+    rs.label_at = {"Reference": (-3.81, -5.08), "Value": (-3.81, -2.54)}
+
+    # --- top pins: R_SET from the + sense finger, CS- straight from the - finger, ISCP and VS from the rail
+    rset = hang(sh, R(sh, v["r_set"], "L:SNSP", "L:CSP", rot=0), PIN(rs, 2), gnd=False)
+    W(PIN(rset, 2), (PIN(rset, 2)[0], 111.76), (csp[0], 111.76), csp)
+    W(PIN(rs, 3), csn)
     if v["r_iscp"]:
         risc = R(sh, v["r_iscp"], vin, "L:ISCP", at=(iscp[0], 111.76), rot=0)
         W((iscp[0], yR), PIN(risc, 1))
         W(PIN(risc, 2), iscp)
-        cis = C(sh, 1e-9, "L:ISCP", "L:DRN", at=(124.46, 134.62))
+        cis = C(sh, 1e-9, "L:ISCP", "L:SNSN", at=(124.46, 134.62))
         W((iscp[0], 134.62), PIN(cis, 1))
         W(PIN(cis, 2), (csn[0], 134.62))
     else:
         W(iscp, (iscp[0], 134.62), (csn[0], 134.62))
-    W((vs[0], yR), vs)
-    c1 = C(sh, 100e-9, vin, "GND", volt=100, at=(91.44, 128.27), rot=0)
-    c2 = C(sh, 1e-6, vin, "GND", fp="C1206", volt=100, at=(76.2, 128.27), rot=0)
+    rvs = hang(sh, R(sh, 100, vin, "L:VS", rot=0), (vs[0], yR), gnd=False)     # TI: R_VS on noisy buses
+    W(PIN(rvs, 2), vs)
+    c1 = C(sh, 100e-9, "L:VS", "GND", volt=100, at=(91.44, 128.27), rot=0)
+    c2 = C(sh, 1e-6, "L:VS", "GND", fp="C1206", volt=100, at=(76.2, 128.27), rot=0)
     W(PIN(c2, 1), (vs[0], 124.46))
+    M("flag", (86.36, 124.46))         # VS is fed through R_VS, a passive part
     gnd(PIN(c1, 2))
     gnd(PIN(c2, 2))
 
@@ -970,11 +984,12 @@ def sheet_switch(r):
     W(PIN(qp, 3), (PIN(qp, 3)[0], yO))
     W(g, (xp - 10.16, g[1]), (xp - 10.16, yQ), PIN(qp, 1))
     rgp = R(sh, 330, "L:GPRE", "L:CG", at=(185.42, g[1] + 3.81), rot=0)
-    cgp = C(sh, v["c_g"], "L:CG", "GND", volt=50, at=(185.42, g[1] + 15.24), rot=0)
+    # C_g charges to VOUT + 12 V (about 54 V on the 42 V rails)
+    cgp = C(sh, v["c_g"], "L:CG", "GND", fp="C1206", volt=100 if r["v"] > 30 else 50, at=(185.42, g[1] + 15.24), rot=0)
     W(PIN(rgp, 2), PIN(cgp, 1))
     gnd(PIN(cgp, 2))
-    W(PIN(rs, 2), (PIN(qp, 2)[0], yR))
-    lab("L:DRN", (PIN(rs, 2)[0] + 5.08, yR), 0)        # named so board netclasses can find it
+    W(PIN(rs, 4), (PIN(qp, 2)[0], yR))
+    lab("L:DRN", (PIN(rs, 4)[0] + 5.08, yR), 0)        # named so board netclasses can find it
 
     # --- output rail: voltage sense, indicator, test point, label
     xe = 302.26
@@ -1050,6 +1065,85 @@ def sheet_switch(r):
 
 
 CUSTOM_FP_TPS = "PowerBoard_rev3:TI_DGX0019A_VSSOP-19"
+
+
+def sheet_brake():
+    """Brake chopper on the drive-group output: dumps EPOS4 braking energy into an external resistor
+    when the bus climbs above what a full battery can explain."""
+    sh = Sheet("brake", "Brake chopper on the drive output (EPOS4 braking energy)", [
+        "On at 47.5 V, off at 45.0 V: above a full pack (42 V), below the SMCJ45A (50 V min) and the EPOS4 50/5 (56 V abs. max, cutout 58 V).",
+        "Hardware only: TLV1805 compares OUT42D against an LM4040 2.5 V reference and drives Q_BR directly. Runs from OUT42D through a 12 V zener,",
+        "so it also works with the drive eFuse off (braking current then reaches OUT42D through the main FETs' body diodes).",
+        "R_BRAKE is off-board on a heatsink (e.g. 10 ohm 100 W: 4.7 A at 47 V). BRAKE_ACT tells the ESP32 (IO39); firmware logs it and",
+        "drops the drive group if the chopper stays on (battery not accepting charge for a long time)."], drawn=True)
+    W, gnd, v33, lab = marks(sh)
+    y0, yv = 81.28, 104.14                       # OUT42D rail, 12 V local supply line
+
+    lab("OUT42D", (25.4, y0), 180)
+    # 12 V supply for the comparator, from the drive output itself
+    r1 = hang(sh, R(sh, 4.7e3, "OUT42D", "L:VBR_A", fp="R1206", rot=0), (129.54, y0), gnd=False)
+    r2 = hang(sh, R(sh, 4.7e3, "L:VBR_A", "L:VBR", fp="R1206", rot=0), PIN(r1, 2), gnd=False)
+    W(PIN(r2, 2), (129.54, yv), (83.82, yv))
+    hang(sh, DZ(sh, "12V", "L:VBR", "GND", fp="SOD123", rot=270, MPN="MMSZ5242BT1G"), (109.22, yv))
+    hang(sh, C(sh, 10e-6, "L:VBR", "GND", fp="C1206", volt=25, rot=0), (116.84, yv))
+    TP(sh, "L:VBR", at=(93.98, yv))
+    sh.mark("flag", (124.46, yv))
+
+    U = sh.add("PowerBoard_rev3:TLV1805", "U", "TLV1805DBVR", "Package_TO_SOT_SMD:SOT-23-6",
+               {3: "L:REF", 4: "L:SNS", 1: "L:BR_G", 6: "L:VBR", 2: "GND", 5: "GND"},
+               fields={"MPN": "TLV1805DBVR"}, at=(101.6, 129.54))
+    P = lambda n: PIN(U, n)
+    W((P(6)[0], yv), P(6))
+    gnd(P(2))
+    gnd(P(5))
+
+    # 2.5 V reference into IN-
+    rr = hang(sh, R(sh, 10e3, "L:VBR", "L:REF", rot=0), (83.82, yv), gnd=False)
+    yref = PIN(rr, 2)[1] + 2.54
+    W(PIN(rr, 2), (83.82, yref), (88.9, yref), (88.9, P(3)[1]), P(3))
+    ref = sh.add("Reference_Voltage:LM4040DBZ-2.5", "U", "LM4040 2.5V", "Package_TO_SOT_SMD:SOT-23",
+                 {1: "L:REF", 2: "GND", 3: None}, rot=90, fields={"MPN": "LM4040B25IDBZR"})
+    ref.label_at = {"Reference": (-12.7, -1.27), "Value": (-12.7, 1.27)}
+    hang(sh, ref, (83.82, yref))
+
+    # OUT42D divider into IN+, hysteresis from OUT
+    rt = R(sh, 178e3, "OUT42D", "L:SNS", fp="R1206", rot=0)
+    at_pin(rt, 2, (66.04, P(4)[1] - 2.54))
+    W((66.04, y0), PIN(rt, 1))
+    W(PIN(rt, 2), (66.04, P(4)[1]), P(4))
+    hang(sh, R(sh, 10e3, "L:SNS", "GND", rot=0), (66.04, P(4)[1]))
+    yh = 152.4
+    rh = R(sh, 845e3, "L:BR_G", "L:SNS", rot=270)
+    at_pin(rh, 2, (88.9, yh))
+    W((71.12, P(4)[1]), (71.12, yh), PIN(rh, 2))
+    W(PIN(rh, 1), (114.3, yh), (114.3, P(1)[1]))
+
+    # output: gate resistor, brake FET, status divider (also the gate pull-down)
+    rg = R(sh, 22, "L:BR_G", "L:BR_GATE")
+    at_pin(rg, 1, (119.38, P(1)[1]))
+    W(P(1), PIN(rg, 1))
+    q = FET(sh, "IPB042N10N3G", "L:BR_GATE", "L:BRK_SW", "GND")
+    at_pin(q, 1, (137.16, P(1)[1]))
+    W(PIN(rg, 2), PIN(q, 1))
+    gnd(PIN(q, 3))
+    rs1 = hang(sh, R(sh, 100e3, "L:BR_GATE", "BRAKE_ACT", rot=0), (132.08, P(1)[1]), gnd=False)
+    ys = PIN(rs1, 2)[1] + 10.16
+    W(PIN(rs1, 2), (132.08, ys), (137.16, ys))
+    hang(sh, R(sh, 36e3, "BRAKE_ACT", "GND", rot=0), (132.08, ys))
+    lab("BRAKE_ACT", (137.16, ys), 0)
+    TP(sh, "BRAKE_ACT", at=(134.62, ys))
+
+    # resistor connector with the freewheel diode across it
+    ysw = 96.52
+    W(PIN(q, 2), (PIN(q, 2)[0], ysw), (157.48, ysw), (157.48, y0 + 2.54), (162.56, y0 + 2.54))
+    j = CONN2(sh, "XT60PT-F (brake resistor)", "XT60F", "OUT42D", "L:BRK_SW")
+    at_pin(j, 1, (162.56, y0))
+    j.label_at = {"Reference": (2.54, 0), "Value": (2.54, 2.54)}
+    W((25.4, y0), PIN(j, 1))
+    dfw = DS(sh, "STPS3H100U", "OUT42D", "L:BRK_SW", fp="SMB_D", rot=270, MPN="STPS3H100U")
+    hang(sh, dfw, (152.4, y0), gnd=False)
+    W(PIN(dfw, 2), (152.4, ysw))
+    return sh
 
 
 def sheet_outputs():
@@ -1333,7 +1427,7 @@ ESP_PINS = {"1": "GND", "2": "+3V3", "3": "ESP_EN", "4": "I2C_SDA", "5": "I2C_SC
             "13": "USB_DN", "14": "USB_DP", "15": None, "16": None, "17": "FLT_12", "18": "INA_ALERT",
             "19": "CAN_TXD", "20": "CAN_RXD", "21": "CAN_STB", "22": "ESTOP_OK", "23": "LED_1",
             "24": "LED_2", "25": "LED_3", "26": None, "27": "ESP_IO0", "28": None, "29": None, "30": None,
-            "31": "FLT_54", "32": None, "33": None, "34": None, "35": None, "36": "L:RXD0",
+            "31": "FLT_54", "32": "BRAKE_ACT", "33": None, "34": None, "35": None, "36": "L:RXD0",
             "37": "L:TXD0", "38": "AUX5_SNS", "39": "NTC_SNS"}
 
 
@@ -1712,7 +1806,7 @@ def build():
     write_custom_lib()
     write_custom_footprints()
     sheets = [sheet_power_in()] + [sheet_switch(r) for r in rails.RAILS] + \
-             [sheet_outputs(), sheet_boost(), sheet_aux(), sheet_mcu(), sheet_can(), sheet_io()]
+             [sheet_brake(), sheet_outputs(), sheet_boost(), sheet_aux(), sheet_mcu(), sheet_can(), sheet_io()]
     root_uuid = uid("root")
     root_items = []
     x, y = 30.0, 60.0

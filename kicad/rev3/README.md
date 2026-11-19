@@ -19,14 +19,14 @@ That run does six things:
 
 1. Writes the custom symbols (`PowerBoard_rev3.kicad_sym`).
 2. Writes the custom footprints (`PowerBoard_rev3.pretty`).
-3. Writes the 13 sheets.
+3. Writes the 14 sheets.
 4. Upgrades every file to the KiCad 10 format with `kicad-cli` from the KiCad flatpak.
 5. Runs ERC.
 6. Exports KiCad's own netlist and checks it pin by pin against the netlist the script
    intended.
 
 Result at generation time:
-- 481 parts and 252 nets.
+- 505 parts and 280 nets.
 - Netlist check passes.
 - ERC is clean at every severity.
 
@@ -70,6 +70,7 @@ it never touches a layout. The values and the reasons for them are in
 | `sw_42d`, `sw_42c` | 42 V drive group and converter-feed group eFuses (TPS48111-Q1, 2 + 1 D2PAK). The drive group has the E-STOP kill FET on EN/UVLO. |
 | `sw_24`, `sw_12`, `sw_5` | Rail eFuses, input TVS, bulk capacitance, input and output voltage sense |
 | `sw_54` | eFuse in front of the 54 V boost |
+| `brake` | Brake chopper on OUT42D: TLV1805 + LM4040 comparator (on 47.5 V, off 45 V), IPB042N10N3G, XT60 to an off-board braking resistor, BRAKE_ACT to the ESP32 |
 | `outputs` | Rail input connectors, 8 × XT90 outputs, and the 24 / 12 / 5 V outputs with their PTCs. JST-XH 54 V output to the Zyxel |
 | `boost54` | LM5122 boost, 30–42 V to 54 V, 100 W |
 | `aux_power` | LMR38010 (42 V to 5.3 V), the diode-OR with USB VBUS, and the AP7361C 3.3 V LDO |
@@ -97,8 +98,12 @@ These are the things the generator could not settle on its own:
 - [ ] **LM5122 compensation.** R_SLOPE, R_COMP, C_COMP and C_HF are starting values from
   the datasheet example. Run TI's LM5122 quickstart calculator with 30–42 V in, 54 V,
   1.85 A, 400 kHz and 22 µH.
-- [ ] **Pre-charge FET SOA.** Check the IPB042N10N3G against the energies in `rails.md`:
-  the worst case is about 3.3 J on the drive group, assuming 470 µF per EPOS4.
+- [x] **Pre-charge FET SOA.** Ramps were cut to stay inside the IPB042N10N3G's DC SOA
+  (0.4 A at 42 V). See `docs/rev3/design.md` 4.3.
+- [ ] **EPOS4 input capacitance.** maxon doesn't publish it. Measure one drive: it sets the
+  pre-charge ramp time (470 µF per drive is assumed).
+- [ ] **Brake resistor.** Size the off-board resistor (10 Ω / 100 W assumed) to the
+  rover's braking energy.
 - [ ] **Boost inductor footprint.** `L_12x12mm_H6mm` is a placeholder. Match it to the
   TMPA1265SP-220MN-D (13.5 × 12.6 mm).
 - [ ] **Aux buck parts.** Confirm that the LMR38010SDDAR variant has the RT/SYNC pin, and

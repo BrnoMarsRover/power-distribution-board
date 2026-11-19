@@ -207,12 +207,12 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
 
 | Switch | FETs | Shunt | Over-current trip | Short-circuit trip |
 |--------|------|-------|-------------------|--------------------|
-| 42 V drives (4 × XT90), 30 A design | 2 × IPB042N10N3G in parallel + 1 pre-charge | 0.5 mΩ | 50 A for 0.5 s | 150 A |
+| 42 V drives (4 × XT90), 30 A design | 2 × IPB042N10N3G in parallel + 1 pre-charge | 0.5 mΩ | 60 A for 1.1 s (firmware: 20 A sustained) | 150 A |
 | 42 V converter feeds (4 × XT90), 30 A | 2 × IPB042N10N3G in parallel + 1 pre-charge | 1 mΩ | 33 A | 100 A |
 | 24 V (8 × Deans T), 12.5 A | IPB042N10N3G main + pre-charge | 2 mΩ | 13.8 A | off |
 | 12 V (7 × XT60), 12.5 A | IPB042N10N3G main + pre-charge | 2 mΩ | 13.8 A | off |
 | 5 V (11 × XT30), 15 A | IPB042N10N3G main + pre-charge | 2 mΩ | 16.7 A | off |
-| 54 V supply (boost input), 4 A | IPB042N10N3G main + pre-charge | 5 mΩ | 5.0 A | 20 A |
+| 54 V supply (boost input), 4 A | IPB042N10N3G main + pre-charge | 3 mΩ | 5.0 A | 20 A |
 
 - **42 V groups, one direction:** the parallel FETs all point the same way, not
   back-to-back, so regenerative braking and back-driven motors always have a path back to
@@ -221,8 +221,22 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
   sized for 30 A, so the spare feed can carry another converter.
   Splitting it from the drives means a motor surge can no longer trip the Orin's supply.
 - **42 V short-circuit trips stay on,** because the battery can deliver hundreds of amps.
-  The drive group's 50 A / 0.5 s over-current trip has to sit above the drives' acceleration
-  peaks: EPOS4 50/5 is 5 A continuous and about 15 A peak per drive.
+- **Drive-group trip (decided 2026-11-19): hardware 60 A for 1.1 s, firmware 20 A
+  sustained.**
+  - An EPOS4 50/5 may draw 15 A for up to 15 s while accelerating (maxon hardware
+    reference, table 3-12), so four drives could reach 60 A. The hardware trip sits at
+    that level, with 30 mV across the shunt, the top of TI's characterized 10–30 mV range.
+  - The ESP32 reads IMON_42D and drops INP_42D when the average stays above 20 A for
+    several seconds (window to tune on the rover). At about 300 W for the whole rover, 20 A
+    sustained on the drives means something is stuck or stalled.
+- **Shunts are Bourns CSS2H-2512 on the Kelvin land pattern** (the same net-tie footprint
+  as the battery shunt), R_SET is fed from the + sense finger, and CS− from the − finger:
+  - 0.5 mΩ CSS2H-2512R-L500F on the drive group;
+  - 1 mΩ CSS2H-2512R-1L00F on the converter group;
+  - 2 mΩ CSS2H-2512K-2L00F on the rails;
+  - 3 mΩ CSS2H-2512K-3L00F on the 54 V supply (the 5 mΩ is factory-order only).
+- **R_VS = 100 Ω** in series with each TPS48111's VS pin, with its 100 nF + 1 µF after it,
+  as TI recommends for noisy buses.
   - Hot-plugging a device onto a live group must not trip the fast detector, so use
     **XT90-S anti-spark plugs** on the 42 V devices.
 - **Rail short-circuit trip is disabled** (ISCP tied to CS−).
@@ -232,10 +246,38 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
     timer.
 - **The 5 V over-current trip** at 16.7 A also protects the XT30 input from the 150 W
   converter, which could otherwise push 30 A through it.
-- **Pre-charge FET stress:** the energy is ½CV² of the rail's load capacitance, which is
-  *assumed* for now (OPEN D12). The worst cases are the 42 V drive group (about 2.1 J) and
-  the converter group (about 1.2 J, up to 87 W peak), both in a D2PAK. Check each against
-  the IPB042N10N3G's SOA curve before layout.
+- **Pre-charge current kept inside the FET's DC SOA (checked 2026-11-19):**
+  - The IPB042N10N3G SOA (datasheet Diagram 3, T_C = 25 °C) allows about 2.2 A at 42 V for
+    10 ms and about 0.8 A DC. The original 2 A ramps on the 42 V rails were outside it.
+  - The ramps are now 0.4 A on the 42 V-input rails (both groups and the 54 V supply), about
+    half the DC line. The 24 V rail ramps at 1 A (DC line about 2.2 A at 24 V). The 12 V and
+    5 V rails keep 2 A, well inside.
+  - The slower ramp needs a larger C_g, up to 1 µF on the drive group, rated 100 V
+    because it charges to about VOUT + 12 V. The bootstrap cap follows TI's rule
+    (≥ Qg / 1 V + 10 × C_g), up to 15 µF, because the G pin draws its 100 µA from BST for
+    the whole ramp.
+  - Start-up gets slower: the drive group takes about 0.4 s to ramp, after about 1.8 s
+    of initial bootstrap charging. Firmware waits on VSNS_OUT before switching INP.
+  - Load capacitance is still *assumed* (OPEN D12): maxon does not publish the EPOS4
+    input capacitance.
+- **Brake chopper (decided 2026-11-19), sheet `brake`:**
+  - When the EPOS4s brake, their energy goes back onto OUT42D. If the battery will not
+    take it (full pack, cold cells, BMS charge cut), the bus climbs.
+  - A TLV1805 comparator, with an LM4040 2.5 V reference and a divider of 178 k / 10 k
+    plus 845 k of hysteresis, switches an IPB042N10N3G. That FET connects an off-board
+    braking resistor (XT60) across OUT42D:
+    - On at 47.5 V, off at 45.0 V.
+    - Above a full pack (42 V).
+    - Below the SMCJ45A (50 V minimum) and the EPOS4 50/5 (56 V absolute maximum,
+      overvoltage cutout at 58 V).
+  - It is hardware only and runs from OUT42D through a 12 V zener, so it works with the
+    drive eFuse off: braking current then reaches OUT42D through the main FETs' body
+    diodes.
+  - The status signal BRAKE_ACT goes to ESP32 IO39. Firmware logs it and drops the drive
+    group if the chopper stays active (a battery that keeps refusing charge would
+    otherwise cook the resistor).
+  - Resistor: off-board, on a heatsink, sized to the braking power; 10 Ω / 100 W is a
+    starting point (4.7 A at 47 V).
 
 ### 4.4 54 V supply for the Zyxel XMG-105HP
 
@@ -499,7 +541,8 @@ layout.
 | USB D− / D+ | 19 / 20 |
 | Status LEDs | 21, 47, 48 |
 | Debug console UART0 TX / RX (test pads) | 43 / 44 |
-| Spare | 39–42 |
+| Brake chopper active (BRAKE_ACT) | 39 |
+| Spare | 40–42 |
 
 ---
 
@@ -649,7 +692,14 @@ layout.
 - **Protocol v2** reports six branches: 42 V drives, 42 V converter feeds, 24 V, 12 V, 5 V
   and 54 V. Rev2 reported battery, 24, 15, 12 and 5 V.
   - It adds per branch: output voltage, pre-charge state and the latch-off fault reason.
-  - It adds battery Ah/Wh, E-STOP state and controller state.
+  - It adds battery Ah/Wh, E-STOP state, brake-chopper activity (BRAKE_ACT) and
+    controller state.
+  - **Protection logic that lives in firmware:**
+    - Drive group: drop INP_42D on a sustained average above 20 A (the hardware trip is
+      60 A / 1.1 s).
+    - Brake chopper: drop the drive group if BRAKE_ACT stays on.
+    - Pre-charge sequencing: INP_G first, then INP only once VSNS_OUT has reached the
+      input voltage.
   - Bump `jsonSchemaVersion` and `SUPPORTED_SCHEMA` together.
 - **Transport:** UART1 at 921 600 baud, with USB CDC as a fallback; both carry the same
   protocol.
