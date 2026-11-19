@@ -1364,6 +1364,17 @@
 		)
 		(uuid "0ddf5d78-8d3a-5eba-8081-f1fde558b39e")
 	)
+	(text "Terminate both bus ends only: here with the jumpers if the board is an end, on the last EPOS4 with DIP switch SW1 position 7 (120 ohm). Source: EPOS4 50/5 Hardware Reference 2023-07, section 3.3.11."
+		(exclude_from_sim no)
+		(at 20 48 0)
+		(effects
+			(font
+				(size 1.6 1.6)
+			)
+			(justify left bottom)
+		)
+		(uuid "211bec25-1cb6-56a6-9cdc-5350e6eef9cd")
+	)
 	(text "CAN bus to the EPOS4 drives (TCAN1044AV)"
 		(exclude_from_sim no)
 		(at 20 18 0)
@@ -1376,7 +1387,7 @@
 		)
 		(uuid "80f615f0-4aab-5008-8254-18094c65ecba")
 	)
-	(text "Terminate both bus ends only: here with the jumpers if the board is an end, on the last EPOS4 with DIP switch SW1 position 7 (120 ohm). Source: EPOS4 50/5 Hardware Reference 2023-07, section 3.3.11."
+	(text "Connectors match the EPOS4 50/5 X11 / X12: Molex CLIK-Mate 4p (1 CAN_H, 2 CAN_L, 3 GND, 4 shield), so maxon's CAN-CAN cable 520858 plugs straight in. Board header 502585-0470 mates with plug 502578-0400."
 		(exclude_from_sim no)
 		(at 20 42 0)
 		(effects
@@ -1387,7 +1398,7 @@
 		)
 		(uuid "a5b2dc95-219a-5aff-8cfc-c9a0ed49e3ed")
 	)
-	(text "Connectors match the EPOS4 50/5 X11 / X12: Molex CLIK-Mate 4p (1 CAN_H, 2 CAN_L, 3 GND, 4 shield), so maxon's CAN-CAN cable 520858 plugs straight in. Board header 502585-0470 mates with plug 502578-0400."
+	(text "STB has an internal pull-up: the transceiver stays in standby (bus silent) until the ESP32 drives STB low."
 		(exclude_from_sim no)
 		(at 20 36 0)
 		(effects
@@ -2461,6 +2472,17 @@
 				)
 			)
 		)
+		(property "MPN" "ERJ-6ENF60R4V"
+			(at 154.94 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f5c668d2-dfa7-594d-bd14-03686ed1682f")
 		)
@@ -2853,6 +2875,17 @@
 				)
 			)
 		)
+		(property "MPN" "502585-0470"
+			(at 215.9 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "76285306-7ff6-526a-81a8-facd36767e43")
 		)
@@ -3009,6 +3042,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 215.9 127 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "502585-0470"
 			(at 215.9 127 0)
 			(hide yes)
 			(show_name no)
@@ -3571,6 +3615,17 @@
 				)
 			)
 		)
+		(property "MPN" "ERJ-6ENF60R4V"
+			(at 154.94 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "febcbcc1-75a2-56f6-9aff-653f25c8d6e9")
 		)
@@ -3733,7 +3788,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C3234993"
+		(property "MPN" "TCAN1044AVDRQ1"
 			(at 101.6 132.08 0)
 			(hide yes)
 			(show_name no)

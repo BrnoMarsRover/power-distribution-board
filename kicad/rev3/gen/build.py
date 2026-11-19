@@ -1663,6 +1663,7 @@ def sheet_can():
     sh = Sheet("can", "CAN bus to the EPOS4 drives (TCAN1044AV)", [
         "Bus pins survive +-58 V faults internally. No external TVS: a 24 V CAN TVS would conduct if a CAN wire touched 42 V.",
         "Split termination enabled by closing both solder jumpers (only at a bus end).",
+        "STB has an internal pull-up: the transceiver stays in standby (bus silent) until the ESP32 drives STB low.",
         "Connectors match the EPOS4 50/5 X11 / X12: Molex CLIK-Mate 4p (1 CAN_H, 2 CAN_L, 3 GND, 4 shield), "
         "so maxon's CAN-CAN cable 520858 plugs straight in. Board header 502585-0470 mates with plug 502578-0400.",
         "Terminate both bus ends only: here with the jumpers if the board is an end, on the last EPOS4 with "
@@ -1671,7 +1672,7 @@ def sheet_can():
     W, gnd, v33, lab = marks(sh)
     U = sh.add("PowerBoard_rev3:TCAN1044AV", "U", "TCAN1044AVDRQ1", "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
                {1: "CAN_TXD", 4: "CAN_RXD", 8: "CAN_STB", 3: "+5V_LOGIC", 5: "+3V3",
-                7: "CANH", 6: "CANL", 2: "GND"}, fields={"LCSC": "C3234993"}, at=(101.6, 132.08))
+                7: "CANH", 6: "CANL", 2: "GND"}, fields={"MPN": "TCAN1044AVDRQ1"}, at=(101.6, 132.08))
     P = lambda n: PIN(U, n)
 
     # logic side from the ESP32
@@ -1697,8 +1698,8 @@ def sheet_can():
     jp = "Jumper:SolderJumper-2_P1.3mm_Open_Pad1.0x1.5mm"
     jh = sh.add("Jumper:SolderJumper_2_Open", "JP", "TERM_H", jp, {1: "CANH", 2: "L:TH"}, rot=270)
     jl = sh.add("Jumper:SolderJumper_2_Open", "JP", "TERM_L", jp, {1: "CANL", 2: "L:TL"}, rot=90)
-    rh = R(sh, 60.4, "L:TH", "L:TMID", fp="R0805", rot=0)
-    rl = R(sh, 60.4, "L:TMID", "L:TL", fp="R0805", rot=0)
+    rh = R(sh, 60.4, "L:TH", "L:TMID", fp="R0805", rot=0, MPN="ERJ-6ENF60R4V")
+    rl = R(sh, 60.4, "L:TMID", "L:TL", fp="R0805", rot=0, MPN="ERJ-6ENF60R4V")
     at_pin(jh, 1, (xt, 104.14))
     at_pin(rh, 1, (xt, 116.84))
     at_pin(rl, 1, (xt, 132.08))
@@ -1719,7 +1720,8 @@ def sheet_can():
     for i, y1 in ((1, 124.46), (2, 149.86)):
         j = sh.add("Connector_Generic_MountingPin:Conn_01x04_MountingPin", "J",
                    f"CAN {i} (Molex CLIK-Mate 502585-0470)", FP["CLIK4"],
-                   {1: "CANH", 2: "CANL", 3: "GND", 4: "GND", "MP": "GND"})
+                   {1: "CANH", 2: "CANL", 3: "GND", 4: "GND", "MP": "GND"},
+                   fields={"MPN": "502585-0470"})
         at_pin(j, 1, (210.82, y1))
         W((190.5, y1), PIN(j, 1))
         W((195.58, PIN(j, 2)[1]), PIN(j, 2))

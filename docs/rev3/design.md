@@ -647,7 +647,7 @@ job.
 
 ### 6.4 CAN
 
-- **Transceiver:** TWAI → **TCAN1044AV-Q1**.
+- **Transceiver:** TWAI → **TCAN1044AV-Q1** (TCAN1044AVDRQ1, SOIC-8).
   - VIO 1.8–5.5 V, so it runs directly on 3.3 V logic.
   - ±58 V bus-fault protection, which matters when a CAN wire can touch 42 V.
   - CAN FD capable up to 8 Mbit/s; the EPOS4 runs classic CANopen at ≤ 1 Mbit/s.
@@ -657,6 +657,14 @@ job.
     pinout (1 CAN_H, 2 CAN_L, 3 GND, 4 shield), so maxon's CAN-CAN cable (520858) plugs in
     directly.
   - The EPOS4 terminates with DIP switch SW1 position 7.
+  - TXD and STB have internal pull-ups, so a booting or reset ESP32 leaves the transceiver in
+    standby, silent on the bus, until firmware drives STB low.
+  - VCC comes from +5V_LOGIC: about 4.9 V normally and about 4.6 V on USB alone. Both are above
+    the 4.4 V maximum undervoltage threshold, so CAN also works on the bench with USB only.
+  - The CubeMars AK10-9 V3 carries CAN inside its XT30 2+2 power plug, so the harness splits CAN
+    from the CLIK-Mate chain. EPOS4 (CANopen) and CubeMars (MIT / servo protocol) can share one
+    bus at 1 Mbit/s as long as their node IDs and COB-IDs don't collide. Otherwise run them on
+    separate buses, which needs a second transceiver because the ESP32-S3 has one TWAI.
   - There is no external TVS: the TCAN1044AV's ±58 V bus-fault rating covers a CAN wire
     touching 42 V, where a 24 V TVS would conduct.
 - **Safety:**
