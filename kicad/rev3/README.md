@@ -6,6 +6,7 @@ comes from [`docs/rev3/rails.md`](../../docs/rev3/rails.md).
 
 A review PDF is at [`pdf/rev3/PowerBoard_rev3_schematic.pdf`](../../pdf/rev3/PowerBoard_rev3_schematic.pdf).
 The grouped BOM with part numbers is [`PowerBoard_rev3_bom.csv`](PowerBoard_rev3_bom.csv) (regenerate with `kicad-cli sch export bom`).
+For the LCSC BOM tool, `python3 gen/bom_lcsc.py` turns it into [`PowerBoard_rev3_bom_lcsc.csv`](PowerBoard_rev3_bom_lcsc.csv) (MPN + manufacturer, no PCB-only items).
 
 ## How the schematic was made
 
