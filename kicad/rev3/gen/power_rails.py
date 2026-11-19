@@ -34,15 +34,15 @@ BRIDGE_Y = 42.6                     # bridge pad 1 (DRN); pad 2 sits 5.08 mm low
 TVS_BESIDE_Y = 6.5                  # tvs_beside: upright TVS right of the input, ground pad up in the patch
 CONN_GAP = 0.8                      # PTC courtyard to connector courtyard (a rail may set its own conn_gap)
 
-# per rail: column copper edges (xl, xr) and the parts; fets = (pre-charge, main)
+# per rail: column copper edges (xl, xr) and the parts; fets = (pre-charge, main). The bulk caps are found by net.
 RAILS = {
-    "24": dict(xl=50.8, xr=76.0, vin="VIN24", out="OUT24", j_in="J5", tvs="D5", caps=("C37", "C36"),
+    "24": dict(xl=50.8, xr=76.0, vin="VIN24", out="OUT24", j_in="J5", tvs="D5",
                shunt="R41", fets=("Q11", "Q10"), bridge="JP3", led="D4"),
-    "12": dict(xl=76.5, xr=103.2, vin="VIN12", out="OUT12", j_in="J6", tvs="D7", caps=("C48", "C47"),
+    "12": dict(xl=76.5, xr=103.2, vin="VIN12", out="OUT12", j_in="J6", tvs="D7",
                shunt="R59", fets=("Q14", "Q13"), bridge="JP4", led="D6"),
     # L-shaped: full switch width (to xr, J38 starts at 131.6) only above band_bot; DRN, OUT and outputs end at col_r
     "5": dict(xl=104.1, xr=130.9, col_r=125.6, band_bot=34.6, vin="VIN5", out="OUT5", j_in="J7", tvs="D9",
-              caps=("C59", "C58"), shunt="R77", fets=("Q17", "Q16"), bridge="JP5", led="D8",
+              shunt="R77", fets=("Q17", "Q16"), bridge="JP5", led="D8",
               tvs_beside=True, bridge_below=True),
 }
 
@@ -112,10 +112,18 @@ def _hide_marks(fp):
             t.SetLayer(pcbnew.B_Fab if fp.IsFlipped() else pcbnew.F_Fab)
 
 
+def bulk_caps(FP, r):
+    """The rail's input electrolytics, found by footprint and net (capacitor numbers move when a sheet earlier in
+    the schematic gains or loses a capacitor)."""
+    return sorted((f.GetReference() for f in FP.values() if "CP_Radial" in f.GetFPIDAsString()
+                   and any(p.GetNetname() == r["vin"] for p in f.Pads())), key=lambda ref: int(ref[1:]))
+
+
 def place(FP):
     """Position and lock the power parts of every rail in RAILS. Returns the refs placed."""
     done = []
     for r in RAILS.values():
+        r["caps"] = bulk_caps(FP, r)
         g = _geo(r)
         cl = _conn_left(FP, r)
         # output column: connector + pad and PTC on one row, rail pad on the left

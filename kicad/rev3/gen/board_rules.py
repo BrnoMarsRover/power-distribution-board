@@ -84,7 +84,7 @@ CLASSES = [
     ("HV_Bus", 3.0, 0.2, (1.2, 0.6), "rgb(255, 0, 0)",
      ["VBAT", "BUS42", "OUT42D", "OUT42C", "/42 V*/DRN", "/Brake*/BRK_SW"]),
     ("HV_Power", 1.5, 0.2, (1.2, 0.6), "rgb(255, 120, 0)",
-     ["SW54_OUT", "OUT54", "/54 V*/DRN", "/54 V boost*/LIN", "/54 V boost*/SW"]),
+     ["OUT54", "/Rail inputs*/O54*", "/54 V boost*/LIN", "/54 V boost*/SW"]),   # O54_1: fuse to J13
     ("Power", 1.0, 0.2, (1.2, 0.6), "rgb(0, 160, 255)",
      ["VIN24", "VIN12", "VIN5", "OUT24", "OUT12", "OUT5", "/24 V*/DRN", "/12 V*/DRN",
       "/5 V*/DRN", "/Rail inputs*/O*", "*/CHG_N"]),

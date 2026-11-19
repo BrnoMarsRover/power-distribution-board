@@ -5,9 +5,10 @@ Run `python3 rails.py > rails.md` after changing anything here.
 
 Architecture (decided 2026-11-18): one eFuse per rail (TPS48111-Q1 + external FETs +
 shunt), plus one resettable PTC per 24/12/5 V output connector. The 15 V rail was dropped,
-and a 54 V supply for the Zyxel XMG-105HP PoE switch was added: an eFuse on the battery bus
-feeding an on-board LM5122 boost converter. The 42 V outputs are split into a drive group
-and a converter-feed group, each with its own eFuse.
+and a 54 V supply for the Zyxel XMG-105HP PoE switch was added: an on-board LM5122 boost
+converter. The 42 V outputs are split into a drive group and a converter-feed group, each
+with its own eFuse. The boost runs from the converter-feed group's output (2026-11-20; its
+own input eFuse was dropped) with a fuse on its output.
 
 The board is hand-soldered, so every part is leaded: D2PAK / DPAK FETs, no QFN, DFN, SON or
 TOLL packages. Every eFuse value is
@@ -115,11 +116,14 @@ RAILS = [
               "through the latch, so opening it cuts motor power in hardware without touching the Orin. "
               "Defaults OFF: the drives are useless without a controller."),
     dict(name="42V-C", v=42.0, design=30.0, i_oc=30.0, t_oc=0.5, i_sc=100.0,
-         r_sns=1e-3, fet="IPB042N10N3G", n_main=2, c_out=705e-6, n_out=2, conn="XT90 (converters)",
+         r_sns=1e-3, fet="IPB042N10N3G", n_main=2, c_out=705e-6, n_out=2, c_extra=600e-6,
+         conn="XT90 (converters) + the 54 V boost",
          i_inrush=0.4, ptc=None, src="battery bus", default_on=True,
          note="Converter-feed group: two XT90 feeds for three converters (one feed is Y-split in the harness, "
-              "so c_out is 1.5 converters' input capacitance per feed). 24 V 300 W + 12 V 150 W + 5 V 150 W "
-              "is about 22 A at 30 V, inside the 30 A design and one XT90's rating. "
+              "so c_out is 1.5 converters' input capacitance per feed), plus the on-board 54 V boost. "
+              "24 V 300 W + 12 V 150 W + 5 V 150 W + 54 V 100 W is about 26 A at 30 V, inside the 30 A design. "
+              "c_extra is the boost's output side and the Zyxel's input (ASSUMED 600 uF), which this "
+              "pre-charge also charges, through the boost inductor and its high-side FET's body diode. "
               "Defaults ON, because the 12 V converter powers the Orin."),
     dict(name="24V", v=24.0, design=10.0, i_oc=11.0, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=6, conn="Deans T",
@@ -132,6 +136,13 @@ RAILS = [
          r_sns=1e-3, fet="IPB042N10N3G", n_main=1, c_out=220e-6, n_out=6, conn="XT30",
          i_inrush=2.0, ptc="MF-LSMF300X-2", src="150 W converter, XT30-limited",
          default_on=False),
+    # (the 54 V supply eFuse, REMOVED_54V below, used to be the sixth entry)
+]
+
+# The 54 V supply's input eFuse, dropped 2026-11-20: the LM5122 boost now runs from the converter-feed
+# group's output. build.py still builds this sheet, without emitting it, so the parts after it keep
+# their reference numbers (U7, Q19-Q21, R95-..., JP6 and so on are left as gaps).
+REMOVED_54V = \
     dict(name="54V", v=42.0, design=4.0, i_oc=5.0, t_oc=0.5, i_sc=20.0,
          r_sns=3e-3, fet="IPB042N10N3G", n_main=1, c_out=600e-6, n_out=1, conn="Zyxel XMG-105HP supply",
          i_inrush=0.4, ptc=None, src="battery bus, then the LM5122 boost to 54 V",
@@ -139,8 +150,7 @@ RAILS = [
          note="The eFuse sits on the boost's 42 V input. It switches the boost and is its "
               "short-circuit protection, because a boost cannot block current from input to output. "
               "Defaults ON: the Zyxel is the rover's main network switch. "
-              "C_LOAD includes the boost's output side and the Zyxel's input: ASSUMED 600 uF."),
-]
+              "C_LOAD includes the boost's output side and the Zyxel's input: ASSUMED 600 uF.")
 
 
 # Power-on: every eFuse comes up OFF in hardware (pull-downs on INP / INP_G). "default_on" rails are
@@ -176,7 +186,7 @@ def rail_values(r):
     v["r_imon"] = floor_e(ADC_FULL_SCALE_V * R_SET / (0.9 * v["i_fs"] * r["r_sns"]), E24)
     v["mv_per_a"] = 0.9 * v["r_imon"] / R_SET * r["r_sns"] * 1e3
     # Eq. 5: pre-charge gate slew, C_g = C_LOAD * I_G / I_INRUSH
-    v["c_load"] = r["c_out"] * r["n_out"]
+    v["c_load"] = r["c_out"] * r["n_out"] + r.get("c_extra", 0.0)
     v["c_g"] = nearest(v["c_load"] * I_G / r["i_inrush"], E12)
     v["i_inrush"] = v["c_load"] * I_G / v["c_g"]
     v["t_ramp"] = v["c_load"] * r["v"] / v["i_inrush"]
@@ -286,8 +296,9 @@ def design_boost(b):
     rows = [
         ("Controller", "LM5122MHX/NOPB, synchronous boost, 65 V in (75 V abs max on VIN/CSP/CSN), 105 V switch node; "
                        "MODE grounded = diode emulation, so no reverse current into the battery"),
-        ("Operating point", f"{b['vin_min']:g}-{b['vin_max']:g} V in -> {b['vout']:g} V, {b['pout']:g} W "
-                            f"({i_out:.2f} A); the XMG-105HP draws 90 W at most, 70 W of it PoE"),
+        ("Operating point", f"{b['vin_min']:g}-{b['vin_max']:g} V in (the converter group's output, OUT42C) -> "
+                            f"{b['vout']:g} V, {b['pout']:g} W ({i_out:.2f} A); the XMG-105HP draws 90 W at most, "
+                            "70 W of it PoE"),
         ("Duty cycle", f"{d_min:.2f} - {d_max:.2f} (below 50 %, so slope compensation is not critical)"),
         ("Switching frequency", f"{b['fsw'] / 1e3:.0f} kHz, RT = {fmt_r(rt)}"),
         ("Inductor", f"{name} ({code}), {L * 1e6:g} uH, Isat {isat:g} A (above the {0.0875 / 0.01:.2f} A max "
@@ -317,16 +328,22 @@ def design_boost(b):
         ("Output TVS", "SMBJ58A-13-F: standoff 58 V, above the 57 V PoE maximum; clamps at 93.6 V, under the "
                        "105 V switch node and the FETs' 100 V"),
         ("Bootstrap diode", "BAS21 (200 V): it blocks VOUT plus switching ringing, more than a 75-100 V 1N4148W should see"),
-        ("Enable", "UVLO is held low by Q_BEN until firmware clears BOOST_DIS (expander P15), after the 54 V eFuse "
-                   "is fully on. The boost never runs off its eFuse's pre-charge FET"),
-        ("Over-voltage", "No OVP in the LM5122. Firmware reads VOUT 54V and opens the input eFuse "
-                         "above 57 V; the TVS covers fast transients"),
+        ("Enable", "UVLO is held low by Q_BEN until firmware clears BOOST_DIS (expander P15), after the converter "
+                   "group's main FETs are on, so the boost never runs off that group's pre-charge FET. Until then "
+                   "the output sits about 0.7 V below the input, through the inductor and the high-side body diode"),
+        ("Over-voltage", "No OVP in the LM5122. Firmware reads VOUT 54V and sets BOOST_DIS above 57 V, which "
+                         "drops the output to the input voltage; the TVS covers fast transients"),
+        ("Output fuse", "Littelfuse 0154003.DRT: 3 A slow-blow Nano2 (125 V AC/DC, 50 A breaking) in an SMD "
+                        "OMNI-BLOK clip holder; a spare 0452003.MRL clips in without soldering. 2.25 A at 75 % "
+                        "derating, above the Zyxel's 1.85 A; protects the 3 A JST-XH and its cable. A boost cannot "
+                        "limit an overload that pulls its output below its input; a hard short trips the converter "
+                        "group's eFuse first"),
         ("Output connector", "A type used for nothing else on the board, so a 54 V plug cannot reach a 5 / 12 / 24 V device"),
     ]
     return rows
 
 
-FLT_GPIOS = [6, 7, 8, 9, 16, 38]
+FLT_GPIOS = [6, 7, 8, 9, 16]            # GPIO38 was FLT 54V: spare
 ADC_ADDRS = [0x1D, 0x1E]
 
 
@@ -359,10 +376,12 @@ def main():
     vals = {r["name"]: rail_values(r) for r in RAILS}
     w("| Step | Typical |\n|---|---|")
     w("| ESP32 boots, reads every VSNS_OUT and FLT | 0.3-0.5 s |")
-    for name in ("42V-C", "12V", "54V"):
+    for name in ("42V-C", "12V"):
         vv = vals[name]
         w(f"| {name}: INP_G on; driver ready after ~{vv['t_bst']:.2f} s; pre-charge ~{vv['t_ramp'] * 1e3:.0f} ms; "
           f"INP on once VSNS_OUT is within 5 % of the input; INP_G off | |")
+        if name == "42V-C":
+            w("| 54 V boost: clear BOOST_DIS once the converter group's main FETs are on; soft-start | ~12 ms |")
     w("| Orin powered | about 1-1.5 s after the battery connects |")
     w("")
     w("The 12 V eFuse starts only once the converter group is fully on, so its pre-charge never draws "
@@ -389,6 +408,8 @@ def main():
         w(f"| {r['name']} | {r['n_out']} x {r['conn']} | {r['ptc']} ({code}, {pkg}) | {vmax} V | "
           f"{ihold:g} / {itrip:g} A | >= {ihold * rmin * 1e3:.0f} mV | {cable} |")
     w("")
+    w("The 54 V output has a 3 A slow-blow fuse in an SMD clip holder instead (Littelfuse 0154003.DRT): no "
+      "SMD PTC is rated for 54 V at 2 A.\n")
     w("The 42 V outputs have no PTC. Their cables are heavy, and no SMD PTC is rated for "
       "42 V at drive currents. Use XT90-S anti-spark plugs on the 42 V devices, so "
       "hot-plugging onto the live group cannot trip its short-circuit detector.\n")
@@ -398,24 +419,27 @@ def main():
       "ESP32 resets. The fault lines are inputs only, so they go straight to ESP32 GPIOs with "
       "interrupts.\n")
     pins = [f"P{p // 8}{p % 8}" for p in range(16)]
-    rows = [(f"INP {r['name']}", "out") for r in RAILS] + [(f"INP_G {r['name']}", "out") for r in RAILS]
+    rows = ([(f"INP {r['name']}", "out") for r in RAILS] + [("spare (was INP 54V)", "")]
+            + [(f"INP_G {r['name']}", "out") for r in RAILS] + [("spare (was INP_G 54V)", "")]
+            + [("MOTOR_ARM (clocks the motor latch)", "out"), ("BOOST_DIS (54 V boost off while high)", "out"),
+               ("spare", ""), ("spare", "")])
     w("| TCA9535 pin | Signal | Dir |\n|---|---|---|")
-    for i, (sig, d) in enumerate(rows):
-        w(f"| {pins[i]} | {sig} | {d} |")
-    for p in pins[len(rows):]:
-        w(f"| {p} | spare | |")
+    for p, (sig, d) in zip(pins, rows):
+        w(f"| {p} | {sig} | {d} |")
     w("")
     w("| ESP32-S3 GPIO | Signal |\n|---|---|")
     for g, r in zip(FLT_GPIOS, RAILS):
         w(f"| {g} | FLT {r['name']} (FLT_I + FLT_T wire-OR) |")
+    w("| 38 | spare (was FLT 54V) |")
     w("")
-    adc = ([f"IMON {r['name']}" for r in RAILS] + [f"VOUT {r['name']}" for r in RAILS]
+    adc = ([f"IMON {r['name']}" for r in RAILS] + ["spare, tied to GND (was IMON 54V)"]
+           + [f"VOUT {r['name']}" for r in RAILS] + ["VOUT 54V (the boost output)"]
            + [f"VIN {r['name']}" for r in RAILS if r["src"].endswith("converter")
-              or "converter," in r["src"]] + ["VIN 54V boost (the 54 V eFuse's output, VSNS_SW54)"])
+              or "converter," in r["src"]] + ["spare, tied to GND (was the 54 V eFuse's output)"])
     w(f"Two ADC128D818s (TSSOP-16, internal 2.56 V reference) at {', '.join(f'0x{a:02X}' for a in ADC_ADDRS)}. "
       "Each converts 12 ms per channel, so a full sweep runs at about 10 Hz. The 42 V bus voltage, "
-      "the input of both 42 V groups and the 54 V boost, comes from the INA228. VOUT 54V is the "
-      "boost output. Board NTC and aux 5 V go to ESP32 ADC1 pins (GPIO1, GPIO2).\n")
+      "the input of both 42 V groups, comes from the INA228; the boost's input is VOUT 42V-C, and its "
+      "input current is part of IMON 42V-C. Board NTC and aux 5 V go to ESP32 ADC1 pins (GPIO1, GPIO2).\n")
     w("| ADC | Input |\n|---|---|")
     for i, sname in enumerate(adc):
         w(f"| 0x{ADC_ADDRS[i // 8]:02X}.IN{i % 8} | {sname} |")

@@ -680,6 +680,7 @@ FP = dict(
     GH4="Connector_JST:JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical",
     CLIK4="Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal",
     USBC="PowerBoard_rev3:USB_C_Receptacle_GCT_USB4105-GF-A_2oz",
+    FUSE154="Fuse:Fuseholder_Littelfuse_Nano2_154x",
     BTN="Button_Switch_SMD:SW_SPST_TL3342",
     ESP="PowerBoard_rev3:ESP32-S3-WROOM-1U_HandSolder",
     SSOP8="Package_SO:SSOP-8_2.95x2.8mm_P0.65mm",
@@ -1294,10 +1295,24 @@ def sheet_outputs():
     n = {r["name"]: r["n_out"] for r in rails.RAILS}
     column("OUT42D", 116.84, 71.12, [("XT90PB-F", "XT90F")] * n["42V-D"])
     column("OUT42C", 177.8, 71.12, [("XT90PB-F", "XT90F")] * n["42V-C"])
-    column("OUT54", 238.76, 71.12, [("B2B-XH-A(LF)(SN) (54 V to Zyxel)", "XH2")])
+    # 54 V output: fuse in an SMD clip holder, then the XH header. The header is added here and the fuse after
+    # the other columns, so neither moves the references around it (J13 stays J13, the fuse becomes F19).
+    xz, yz = 238.76, 71.12
+    W((xz - 5.08, yz - 5.08), (xz, yz - 5.08), (xz, yz))
+    lab("OUT54", (xz - 5.08, yz - 5.08), 180)
+    xm = (xz + 13.97, yz)
+    W(xm, (xz + 27.94, yz))
+    lab("L:O54_1", xm, 0)
+    conn("B2B-XH-A(LF)(SN) (54 V to Zyxel)", "XH2", "L:O54_1", (xz + 27.94, yz))
     column("OUT24", 45.72, 137.16, [("Deans T female", "DEANS")] * n["24V"], ("SMD2920B300TF/30", "PTC2920"))
     column("OUT12", 134.62, 137.16, [("XT60PT-F", "XT60F")] * n["12V"], ("MF-LSMF300/16X-2", "PTC2920"))
     column("OUT5", 223.52, 137.16, [("XT30UPB-F", "XT30F")] * n["5V"], ("MF-LSMF300X-2", "PTC2920"))
+    fz = sh.add("Device:Fuse", "F", "0154003.DRT (3 A slow-blow, clip holder)", FP["FUSE154"],
+                {1: "OUT54", 2: "L:O54_1"}, rot=90, fields={"MPN": "0154003.DRT"})
+    at_pin(fz, 1, (xz + 2.54, yz))
+    fz.label_at = {"Reference": (-3.81, -2.54), "Value": (-3.81, 2.54)}
+    W((xz, yz), PIN(fz, 1))
+    W(PIN(fz, 2), xm)
     return sh
 
 
@@ -1305,10 +1320,12 @@ def sheet_boost():
     b = rails.BOOST
     bv = rails.boost_values(b)
     sh = Sheet("boost54", "54 V boost for the Zyxel XMG-105HP (LM5122)", [
-        "30-42 V in (from the 54 V supply eFuse) -> 54.35 V, 100 W, 400 kHz. Values from docs/rev3/rails.md.",
+        "30-42 V in from the converter group's output (OUT42C; the boost's own input eFuse was dropped 2026-11-20) "
+        "-> 54.35 V, 100 W, 400 kHz. Values from docs/rev3/rails.md.",
         "R_SLOPE and the Type 2 network between COMP and FB come from the LM5122 equations in rails.py "
         "(crossover about 8-11 kHz); confirm with a load-step test.",
-        "Q_BEN holds UVLO low until firmware clears BOOST_DIS (expander P15), after the 54 V eFuse is fully on.",
+        "Q_BEN holds UVLO low until firmware clears BOOST_DIS (expander P15), after the converter group's main FETs "
+        "are on. Until then OUT54 sits about 0.7 V below OUT42C (inductor + high-side body diode).",
         "Keep the SW node, Q_LS, Q_HS and the output ceramics in one tight loop. EP must be soldered (hand-solder hole)."],
         drawn=True)
     W, gnd, v33, lab = marks(sh)
@@ -1322,20 +1339,20 @@ def sheet_boost():
     P = lambda n: PIN(U, n)
 
     # input rail: label, ceramics, current shunt
-    lab("SW54_OUT", (25.4, yi), 180)
-    rs = R(sh, "10m 2512", "SW54_OUT", "L:LIN", fp="R2512", MPN="WSL2512R0100FEA")
+    lab("OUT42C", (25.4, yi), 180)
+    rs = R(sh, "10m 2512", "OUT42C", "L:LIN", fp="R2512", MPN="WSL2512R0100FEA")
     at_pin(rs, 1, (P(4)[0], yi))
     W((25.4, yi), PIN(rs, 1))
     for x in (40.64, 53.34, 66.04, 78.74):
-        hang(sh, C(sh, 2.2e-6, "SW54_OUT", "GND", fp="C1210", volt=100, rot=0), (x, yi))
+        hang(sh, C(sh, 2.2e-6, "OUT42C", "GND", fp="C1210", volt=100, rot=0), (x, yi))
 
     # VIN through an RC filter; current sense through 100 ohm + 1 nF, Kelvin from the shunt pads
-    rv = hang(sh, R(sh, 3, "SW54_OUT", "L:VIN_LM", rot=0), (P(5)[0], yi), gnd=False)
+    rv = hang(sh, R(sh, 3, "OUT42C", "L:VIN_LM", rot=0), (P(5)[0], yi), gnd=False)
     W(PIN(rv, 2), P(5))
     W((P(5)[0], 106.68), (86.36, 106.68))
     hang(sh, C(sh, 1e-6, "L:VIN_LM", "GND", fp="C1206", volt=100, rot=0), (86.36, 106.68))
     sh.mark("flag", (90.17, 106.68))
-    rcp = hang(sh, R(sh, 100, "SW54_OUT", "L:CSP", rot=0), PIN(rs, 1), gap=7.62, gnd=False)
+    rcp = hang(sh, R(sh, 100, "OUT42C", "L:CSP", rot=0), PIN(rs, 1), gap=7.62, gnd=False)
     rcn = hang(sh, R(sh, 100, "L:LIN", "L:CSN", rot=0), PIN(rs, 2), gap=7.62, gnd=False)
     ccs = C(sh, 1e-9, "L:CSP", "L:CSN")
     at_pin(ccs, 1, (P(4)[0], 106.68))
@@ -1376,7 +1393,7 @@ def sheet_boost():
 
     # settings comb on the left: each pin runs left, then down to its part
     yt = P(11)[1] + 5.08
-    rut = R(sh, 200e3, "SW54_OUT", "L:UVLO", rot=0)
+    rut = R(sh, 200e3, "OUT42C", "L:UVLO", rot=0)
     at_pin(rut, 2, (35.56, P(6)[1]))
     W((35.56, yi), PIN(rut, 1))
     W(P(6), PIN(rut, 2))
@@ -1411,7 +1428,7 @@ def sheet_boost():
     at_pin(rft, 2, (P(10)[0] + 5.08, yf))
     W((P(10)[0], yf), PIN(rft, 2))
     W(PIN(rft, 1), (xo, yf), (xo, yi))
-    TP(sh, "SW54_OUT", at=(30.48, yi))
+    TP(sh, "OUT42C", at=(30.48, yi))
     GTP(sh, (175.26, 124.46))
     hang(sh, R(sh, 4.99e3, "L:FB", "GND", rot=0), (P(10)[0], yf))
 
@@ -1562,7 +1579,7 @@ ESP_PINS = {"1": "GND", "2": "+3V3", "3": "ESP_EN", "4": "I2C_SDA", "5": "I2C_SC
             "13": "USB_DN", "14": "USB_DP", "15": None, "16": None, "17": "FLT_12", "18": "INA_ALERT",
             "19": "CAN_TXD", "20": "CAN_RXD", "21": "CAN_STB", "22": "MOTOR_OK", "23": "LED_1",
             "24": "LED_2", "25": "LED_3", "26": None, "27": "ESP_IO0", "28": None, "29": None, "30": None,
-            "31": "FLT_54", "32": "BRAKE_ACT", "33": "PWR_HOLD", "34": "PWR_BTN", "35": None, "36": "L:RXD0",
+            "31": "SPARE_IO38", "32": "BRAKE_ACT", "33": "PWR_HOLD", "34": "PWR_BTN", "35": None, "36": "L:RXD0",
             "37": "L:TXD0", "38": "AUX5_SNS", "39": "NTC_SNS"}
 
 
@@ -1715,14 +1732,16 @@ def sheet_mcu():
     W(PIN(rsp, 2), (xg - 2.54, yt + 22.86), (xg - 12.7, yt + 22.86))
     lab("UART_SP", (xg - 12.7, yt + 22.86), 180)
 
-    # --- pull-ups for the six eFuse fault lines (open-drain FLT_I + FLT_T on each eFuse sheet)
+    # --- pull-ups for the five eFuse fault lines (open-drain FLT_I + FLT_T on each eFuse sheet); the sixth,
+    # FLT_54 until its eFuse was dropped, stays as a pulled-up spare input on GPIO38
     for i, rn in enumerate(("42D", "42C", "24", "12", "5", "54")):
         x = 142.24 + 10.16 * i
-        rfl = R(sh, 10e3, "+3V3", f"FLT_{rn}", rot=0)
+        net = "SPARE_IO38" if rn == "54" else f"FLT_{rn}"
+        rfl = R(sh, 10e3, "+3V3", net, rot=0)
         at_pin(rfl, 1, (x, 205.74))
         v33(PIN(rfl, 1))
         W(PIN(rfl, 2), (x, 218.44))
-        lab(f"FLT_{rn}", (x, 218.44), 270)
+        lab(net, (x, 218.44), 270)
 
     # --- test points for the buses and control lines
     tp_panel(sh, ["I2C_SDA", "I2C_SCL", "INA_ALERT", "UART_TX", "UART_RX", "UART_SP",
@@ -1818,16 +1837,18 @@ def sheet_can():
     return sh
 
 
-ADC_MAP = [["IMON_42D", "IMON_42C", "IMON_24", "IMON_12", "IMON_5", "IMON_54", "VSNS_OUT_42D", "VSNS_OUT_42C"],
-           ["VSNS_OUT_24", "VSNS_OUT_12", "VSNS_OUT_5", "VSNS_OUT_54", "VSNS_IN_24", "VSNS_IN_12", "VSNS_IN_5", "VSNS_SW54"]]
-EXP_MAP = {4: "INP_42D", 5: "INP_42C", 6: "INP_24", 7: "INP_12", 8: "INP_5", 9: "INP_54", 10: "INPG_42D",
-           11: "INPG_42C", 13: "INPG_24", 14: "INPG_12", 15: "INPG_5", 16: "INPG_54", 17: "MOTOR_ARM",
+# The 54 V eFuse's channels (IMON_54, VSNS_SW54, INP_54, INPG_54) are spare since it was dropped (2026-11-20):
+# unused ADC inputs are tied to GND, the expander pins left open like the other spares.
+ADC_MAP = [["IMON_42D", "IMON_42C", "IMON_24", "IMON_12", "IMON_5", "GND", "VSNS_OUT_42D", "VSNS_OUT_42C"],
+           ["VSNS_OUT_24", "VSNS_OUT_12", "VSNS_OUT_5", "VSNS_OUT_54", "VSNS_IN_24", "VSNS_IN_12", "VSNS_IN_5", "GND"]]
+EXP_MAP = {4: "INP_42D", 5: "INP_42C", 6: "INP_24", 7: "INP_12", 8: "INP_5", 9: None, 10: "INPG_42D",
+           11: "INPG_42C", 13: "INPG_24", 14: "INPG_12", 15: "INPG_5", 16: None, 17: "MOTOR_ARM",
            18: "BOOST_DIS", 19: None, 20: None}
 
 
 def sheet_io():
     sh = Sheet("io", "Switch control (TCA9535), measurement (ADC128D818 x2), motor-switch latch", [
-        "TCA9535 at 0x20 holds INP / INP_G for all six switches, so they keep their state across an ESP32 reset.",
+        "TCA9535 at 0x20 holds INP / INP_G for all five switches, so they keep their state across an ESP32 reset.",
         "ADC128D818 at 0x1D (A1 = A0 = LOW) and 0x1E (A1 = LOW, A0 = MID). Internal 2.56 V reference (VREF pin open); "
         "firmware must select mode 1 (reg 0Bh) or IN7 is not converted. 12 ms per channel.",
         "The motor-switch RC (1 M x 100 nF hold-off, diode for a fast clear) goes through a Schmitt buffer into /CLR.",
@@ -2024,14 +2045,23 @@ def sheet_io():
 def build():
     write_custom_lib()
     write_custom_footprints()
-    sheets = [sheet_power_in()] + [sheet_switch(r) for r in rails.RAILS] + \
+    # The dropped 54 V eFuse (rails.REMOVED_54V) is built but not emitted: counting its parts keeps every
+    # later reference number where it was, so the layout scripts' references stay valid.
+    reserved = sheet_switch(rails.REMOVED_54V)
+    sheets = [sheet_power_in()] + [sheet_switch(r) for r in rails.RAILS] + [reserved] + \
              [sheet_brake(), sheet_outputs(), sheet_boost(), sheet_aux(), sheet_mcu(), sheet_can(), sheet_io()]
     root_uuid = uid("root")
     root_items = []
     x, y = 30.0, 60.0
-    for i, s in enumerate(sheets):
+    pages = 1
+    for s in sheets:
+        if s is reserved:
+            for p in s.parts:
+                PREFIX_COUNT[p.prefix] += 1
+            continue
         su = uid("sheet", s.name)
-        page = str(i + 2)
+        pages += 1
+        page = str(pages)
         em = Emitter(s, f"/{root_uuid}/{su}")
         (PROJ / s.file).write_text(em.render(root_uuid, su, s.title))
         root_items.append(
@@ -2064,6 +2094,7 @@ def build():
     (PROJ / "fp-lib-table").write_text(
         '(fp_lib_table (version 7)\n  (lib (name "PowerBoard_rev3")(type "KiCad")'
         '(uri "${KIPRJMOD}/PowerBoard_rev3.pretty")(options "")(descr "rev3 custom footprints"))\n)\n')
+    sheets.remove(reserved)
     (PROJ / "PowerBoard_rev3.pretty").mkdir(exist_ok=True)
     pro = PROJ / f"{NAME}.kicad_pro"
     if not pro.exists():

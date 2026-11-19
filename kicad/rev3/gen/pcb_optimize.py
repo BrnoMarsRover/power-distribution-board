@@ -91,14 +91,16 @@ for f in FPS:
     pos = mm(f.GetPosition())
     l, t, r, bt = courtyard(f)
     if not movable(f):
-        for side in ((False, True) if through(f) else (f.IsFlipped(),)):
+        both = through(f) and f.GetReference().startswith("J")   # connectors: whole outline (see pcb_place.py)
+        for side in ((False, True) if both else (f.IsFlipped(),)):
             fixed_boxes[side].append((l, t, r, bt))
-        if not through(f):                  # a lone hole (ESP32 solder hole, USB-C pegs) blocks the other side
+        if not both:                        # holes (ESP32 solder hole, USB-C pegs, THT legs) block the other side
+            m = 1.0 if through(f) else 0.0
             for pp in f.Pads():
                 if pp.GetAttribute() in (pcbnew.PAD_ATTRIB_PTH, pcbnew.PAD_ATTRIB_NPTH):   # plated or not
                     bb = pp.GetBoundingBox()
                     a, c = mm(pcbnew.VECTOR2I(bb.GetLeft(), bb.GetTop())), mm(pcbnew.VECTOR2I(bb.GetRight(), bb.GetBottom()))
-                    fixed_boxes[not f.IsFlipped()].append((a[0], a[1], c[0], c[1]))
+                    fixed_boxes[not f.IsFlipped()].append((a[0] - m, a[1] - m, c[0] + m, c[1] + m))
         continue
     p = Part()
     p.fp, p.ref, p.side = f, f.GetReference(), f.IsFlipped()

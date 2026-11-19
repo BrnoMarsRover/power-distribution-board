@@ -673,15 +673,11 @@
       },
       {
         "netclass": "HV_Power",
-        "pattern": "SW54_OUT"
-      },
-      {
-        "netclass": "HV_Power",
         "pattern": "OUT54"
       },
       {
         "netclass": "HV_Power",
-        "pattern": "/54 V*/DRN"
+        "pattern": "/Rail inputs*/O54*"
       },
       {
         "netclass": "HV_Power",
@@ -929,10 +925,6 @@
     [
       "4034b0c1-70ba-5e0e-ab11-01410c703ee1",
       "5 V rail eFuse"
-    ],
-    [
-      "63aa7a47-427f-5849-b294-7eba9b598769",
-      "54 V supply eFuse (input of the LM5122 boost)"
     ],
     [
       "fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb",

@@ -2541,7 +2541,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 165.1 133.35 0)
+		(at 119.38 115.57 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2551,7 +2551,7 @@
 		(dnp no)
 		(uuid "30f22235-de97-5f0c-8ecf-f9e464d5ac2b")
 		(property "Reference" "C110"
-			(at 165.735 130.81 0)
+			(at 120.015 113.03 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2561,8 +2561,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "4.7nF/50V"
-			(at 165.735 135.89 0)
+		(property "Value" "100nF"
+			(at 120.015 118.11 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2573,7 +2573,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 165.1 133.35 0)
+			(at 119.38 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2584,7 +2584,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 165.1 133.35 0)
+			(at 119.38 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2595,7 +2595,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 165.1 133.35 0)
+			(at 119.38 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2605,8 +2605,8 @@
 				)
 			)
 		)
-		(property "MPN" "CL10B472KB8NNNC"
-			(at 165.1 133.35 0)
+		(property "MPN" "C0603C104K5RACTU"
+			(at 119.38 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2780,98 +2780,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
 					(reference "#PWRcan001")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 86.36 115.57 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "4db54e78-7d03-546b-baad-c44c02a84b2c")
-		(property "Reference" "C108"
-			(at 86.995 113.03 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100nF"
-			(at 86.995 118.11 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 86.36 115.57 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 86.36 115.57 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 86.36 115.57 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "C0603C104K5RACTU"
-			(at 86.36 115.57 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "23a526fd-ed7f-54e9-9234-95e48d8804fd")
-		)
-		(pin "2"
-			(uuid "a5a5e040-24dd-5c21-9ea4-2a841b97b814")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
-					(reference "C108")
 					(unit 1)
 				)
 			)
@@ -3213,6 +3121,98 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
 					(reference "J35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 165.1 133.35 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "72c38953-8280-58a9-91cc-ec5c79334260")
+		(property "Reference" "C111"
+			(at 165.735 130.81 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "4.7nF/50V"
+			(at 165.735 135.89 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 165.1 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 165.1 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 165.1 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL10B472KB8NNNC"
+			(at 165.1 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0e101f2c-a61a-5fa4-bacd-05cdc2add3e8")
+		)
+		(pin "2"
+			(uuid "15fa347b-1b9c-5e12-a750-858e438a0ef3")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/084a4302-8a15-5394-bf69-acacc701e44b"
+					(reference "C111")
 					(unit 1)
 				)
 			)
@@ -3720,7 +3720,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 119.38 115.57 0)
+		(at 86.36 115.57 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3730,7 +3730,7 @@
 		(dnp no)
 		(uuid "f2a34066-f00a-54c4-911e-a8a6c0050b1c")
 		(property "Reference" "C109"
-			(at 120.015 113.03 0)
+			(at 86.995 113.03 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3741,7 +3741,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 120.015 118.11 0)
+			(at 86.995 118.11 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3752,7 +3752,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 119.38 115.57 0)
+			(at 86.36 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3763,7 +3763,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 119.38 115.57 0)
+			(at 86.36 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3774,7 +3774,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 119.38 115.57 0)
+			(at 86.36 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3785,7 +3785,7 @@
 			)
 		)
 		(property "MPN" "C0603C104K5RACTU"
-			(at 119.38 115.57 0)
+			(at 86.36 115.57 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

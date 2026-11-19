@@ -169,6 +169,158 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:Fuse"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "F"
+				(at 2.032 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Fuse"
+				(at -1.905 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at -1.778 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Fuse"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "fuse"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "*Fuse*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Fuse_0_1"
+				(rectangle
+					(start -0.762 -2.54)
+					(end 0.762 2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Fuse_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Device:Polyfuse"
 			(pin_numbers
 				(hide yes)
@@ -1012,6 +1164,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f89bee8b-465d-5bbc-b340-71d8715ea51e")
+	)
+	(junction
+		(at 252.73 71.12)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fdaef2f2-fc00-59e3-97c6-63bf2fafe3de")
 	)
 	(wire
 		(pts
@@ -1915,16 +2073,6 @@
 	)
 	(wire
 		(pts
-			(xy 238.76 71.12) (xy 248.92 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a7cfef03-25e2-5720-87e0-9e1a3bcc163b")
-	)
-	(wire
-		(pts
 			(xy 134.62 157.48) (xy 137.16 157.48)
 		)
 		(stroke
@@ -1995,6 +2143,16 @@
 	)
 	(wire
 		(pts
+			(xy 248.92 71.12) (xy 252.73 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b5439a80-6aa8-5210-85ef-ef47d9759f74")
+	)
+	(wire
+		(pts
 			(xy 55.88 187.96) (xy 59.69 187.96)
 		)
 		(stroke
@@ -2022,6 +2180,16 @@
 			(type default)
 		)
 		(uuid "b70afade-d0de-5d05-9127-43bbc4d14ec0")
+	)
+	(wire
+		(pts
+			(xy 238.76 71.12) (xy 241.3 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bcc077f9-bc12-563c-9894-4ce28ba63f91")
 	)
 	(wire
 		(pts
@@ -2075,13 +2243,13 @@
 	)
 	(wire
 		(pts
-			(xy 248.92 73.66) (xy 246.38 73.66)
+			(xy 266.7 73.66) (xy 264.16 73.66)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "dce423e3-d29a-557b-96df-c858b6b5acec")
+		(uuid "dbbede9f-2599-51e9-a70c-451e2dcdf90a")
 	)
 	(wire
 		(pts
@@ -2152,6 +2320,16 @@
 			(type default)
 		)
 		(uuid "edf7b640-08bd-58e1-bf88-12512c85d6c4")
+	)
+	(wire
+		(pts
+			(xy 252.73 71.12) (xy 266.7 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f0d5e7d9-f971-5e0e-97a7-cc06974346c5")
 	)
 	(wire
 		(pts
@@ -2352,6 +2530,16 @@
 			(justify left bottom)
 		)
 		(uuid "a83b6d01-0517-5116-852d-44419b37afcf")
+	)
+	(label "O54_1"
+		(at 252.73 71.12 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "ada360f3-0f50-5548-8caf-5d010f636444")
 	)
 	(label "O5_5"
 		(at 237.49 177.8 0)
@@ -3847,6 +4035,98 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
 					(reference "F10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:Fuse")
+		(at 245.11 71.12 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "32a7dd50-1680-5d90-82f9-1e537c173eaa")
+		(property "Reference" "F19"
+			(at 241.3 68.58 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "0154003.DRT (3 A slow-blow, clip holder)"
+			(at 241.3 73.66 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Fuse:Fuseholder_Littelfuse_Nano2_154x"
+			(at 245.11 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 245.11 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 245.11 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "0154003.DRT"
+			(at 245.11 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "94477ff6-0c68-5a76-9669-56d89b7719b1")
+		)
+		(pin "2"
+			(uuid "60902cfb-729d-58ff-9e60-95aafeeea2d4")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb"
+					(reference "F19")
 					(unit 1)
 				)
 			)
@@ -6973,7 +7253,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 246.38 73.66 0)
+		(at 264.16 73.66 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6983,7 +7263,7 @@
 		(dnp no)
 		(uuid "ac34e45e-6d2f-55c6-9ba0-fb977d01880c")
 		(property "Reference" "#PWRoutputs012"
-			(at 246.38 80.01 0)
+			(at 264.16 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6994,7 +7274,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 246.38 77.47 0)
+			(at 264.16 77.47 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7004,7 +7284,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 246.38 73.66 0)
+			(at 264.16 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7015,7 +7295,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 246.38 73.66 0)
+			(at 264.16 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7026,7 +7306,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 246.38 73.66 0)
+			(at 264.16 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8400,7 +8680,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 254 71.12 0)
+		(at 271.78 71.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8410,7 +8690,7 @@
 		(dnp no)
 		(uuid "e7f77949-aa89-5d86-8c29-a66997130f47")
 		(property "Reference" "J13"
-			(at 256.54 71.12 0)
+			(at 274.32 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8421,7 +8701,7 @@
 			)
 		)
 		(property "Value" "B2B-XH-A(LF)(SN) (54 V to Zyxel)"
-			(at 256.54 73.66 0)
+			(at 274.32 73.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8432,7 +8712,7 @@
 			)
 		)
 		(property "Footprint" "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical"
-			(at 254 71.12 0)
+			(at 271.78 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8443,7 +8723,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 254 71.12 0)
+			(at 271.78 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8454,7 +8734,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 254 71.12 0)
+			(at 271.78 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8465,7 +8745,7 @@
 			)
 		)
 		(property "MPN" "B2B-XH-A(LF)(SN)"
-			(at 254 71.12 0)
+			(at 271.78 71.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

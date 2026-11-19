@@ -6,28 +6,27 @@ One TPS48111-Q1 eFuse per rail (two for the 42 V outputs), with a resettable PTC
 
 ## eFuse values per rail
 
-| | 42V-D | 42V-C | 24V | 12V | 5V | 54V |
-|---|---|---|---|---|---|---|
-| Feeds | 3 x XT90 (drives), from battery bus | 2 x XT90 (converters), from battery bus | 6 x Deans T, from 300 W converter | 6 x XT60, from 150 W converter | 6 x XT30, from 150 W converter, XT30-limited | 1 x Zyxel XMG-105HP supply, from battery bus, then the LM5122 boost to 54 V |
-| Power-on default | OFF | OFF in hardware; **ESP32 turns it on at boot** | OFF | OFF in hardware; **ESP32 turns it on at boot** | OFF | OFF in hardware; **ESP32 turns it on at boot** |
-| Design current | 30 A | 30 A | 10 A | 10 A | 15 A | 4 A |
-| Main FET | 2 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC) in parallel, 1.89 W total at design current | 2 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC) in parallel, 1.89 W total at design current | 1 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC), 0.42 W total at design current | 1 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC), 0.42 W total at design current | 1 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC), 0.94 W total at design current | 1 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC), 0.07 W total at design current |
-| Pre-charge FET | IPB042N10N3G (same part) | IPB042N10N3G (same part) | IPB042N10N3G (same part) | IPB042N10N3G (same part) | IPB042N10N3G (same part) | IPB042N10N3G (same part) |
-| R_SNS | 0.5 mOhm, 0.45 W at design current, 30 mV at trip | 1 mOhm, 0.90 W at design current, 30 mV at trip | 2 mOhm, 0.20 W at design current, 22 mV at trip | 2 mOhm, 0.20 W at design current, 22 mV at trip | 1 mOhm, 0.23 W at design current, 16 mV at trip | 3 mOhm, 0.05 W at design current, 15 mV at trip |
-| R_SET | 100R | 100R | 100R | 100R | 100R | 100R |
-| R_IWRN | 39.2k -> trips at 60.7 A | 39.2k -> trips at 30.4 A | 53.6k -> trips at 11.1 A | 53.6k -> trips at 11.1 A | 71.5k -> trips at 16.6 A | 78.7k -> trips at 5.0 A |
-| C_TMR (R_TMR 100k, latch-off) | 47uF + 22uF -> 1092 ms | 22uF + 10uF -> 506 ms | 22uF + 10uF -> 506 ms | 22uF + 10uF -> 506 ms | 22uF + 10uF -> 506 ms | 22uF + 10uF -> 506 ms |
-| R_ISCP | 4.3k -> 149 A in 1.2 us | 6.2k -> 104 A in 1.2 us | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | 3.3k -> 20 A in 1.2 us |
-| R_IMON | 6.8k -> 31 mV/A, 2.4 V at 76 A | 6.8k -> 61 mV/A, 2.4 V at 38 A | 9.1k -> 164 mV/A, 2.4 V at 14 A | 9.1k -> 164 mV/A, 2.4 V at 14 A | 12k -> 108 mV/A, 2.4 V at 21 A | 13k -> 351 mV/A, 2.4 V at 6 A |
-| C_g / R_g (pre-charge slew) | 680nF / 330R -> 0.4 A for 286 ms | 330nF / 330R -> 0.4 A for 139 ms | 270nF / 330R -> 1.0 A for 65 ms | 150nF / 330R -> 1.9 A for 18 ms | 68nF / 330R -> 1.9 A for 3 ms | 150nF / 330R -> 0.4 A for 63 ms |
-| Pre-charge FET stress | 2.49 J, 17 W peak (ASSUMED 2.82mF load) - check its SOA | 1.24 J, 18 W peak (ASSUMED 1.41mF load) - check its SOA | 0.81 J, 25 W peak (ASSUMED 2.82mF load) - check its SOA | 0.20 J, 23 W peak (ASSUMED 2.82mF load) - check its SOA | 0.02 J, 10 W peak (ASSUMED 1.32mF load) - check its SOA | 0.53 J, 17 W peak (ASSUMED 600uF load) - check its SOA |
-| C_BST | 2 x 10uF/50V X7R 1210 (need 7.15uF at 12 V; counted at 50% for DC bias) | 1 x 10uF/50V X7R 1210 (need 3.65uF at 12 V; counted at 50% for DC bias) | 1 x 10uF/50V X7R 1210 (need 2.93uF at 12 V; counted at 50% for DC bias) | 1 x 10uF/50V X7R 1210 (need 1.73uF at 12 V; counted at 50% for DC bias) | 1 x 10uF/50V X7R 1210 (need 914nF at 12 V; counted at 50% for DC bias) | 1 x 10uF/50V X7R 1210 (need 1.73uF at 12 V; counted at 50% for DC bias) |
-| Power-on timing | OFF until the PC asks | ON at boot (ESP32): driver ready ~0.76 s after EN, pre-charge ~139 ms, then INP once VSNS_OUT reaches the input | OFF until the PC asks | ON at boot (ESP32): driver ready ~0.76 s after EN, pre-charge ~18 ms, then INP once VSNS_OUT reaches the input | OFF until the PC asks | ON at boot (ESP32): driver ready ~0.76 s after EN, pre-charge ~63 ms, then INP once VSNS_OUT reaches the input |
+| | 42V-D | 42V-C | 24V | 12V | 5V |
+|---|---|---|---|---|---|
+| Feeds | 3 x XT90 (drives), from battery bus | 2 x XT90 (converters) + the 54 V boost, from battery bus | 6 x Deans T, from 300 W converter | 6 x XT60, from 150 W converter | 6 x XT30, from 150 W converter, XT30-limited |
+| Power-on default | OFF | OFF in hardware; **ESP32 turns it on at boot** | OFF | OFF in hardware; **ESP32 turns it on at boot** | OFF |
+| Design current | 30 A | 30 A | 10 A | 10 A | 15 A |
+| Main FET | 2 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC) in parallel, 1.89 W total at design current | 2 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC) in parallel, 1.89 W total at design current | 1 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC), 0.42 W total at design current | 1 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC), 0.42 W total at design current | 1 x IPB042N10N3G (100 V, D2PAK, Qg 117 nC), 0.94 W total at design current |
+| Pre-charge FET | IPB042N10N3G (same part) | IPB042N10N3G (same part) | IPB042N10N3G (same part) | IPB042N10N3G (same part) | IPB042N10N3G (same part) |
+| R_SNS | 0.5 mOhm, 0.45 W at design current, 30 mV at trip | 1 mOhm, 0.90 W at design current, 30 mV at trip | 2 mOhm, 0.20 W at design current, 22 mV at trip | 2 mOhm, 0.20 W at design current, 22 mV at trip | 1 mOhm, 0.23 W at design current, 16 mV at trip |
+| R_SET | 100R | 100R | 100R | 100R | 100R |
+| R_IWRN | 39.2k -> trips at 60.7 A | 39.2k -> trips at 30.4 A | 53.6k -> trips at 11.1 A | 53.6k -> trips at 11.1 A | 71.5k -> trips at 16.6 A |
+| C_TMR (R_TMR 100k, latch-off) | 47uF + 22uF -> 1092 ms | 22uF + 10uF -> 506 ms | 22uF + 10uF -> 506 ms | 22uF + 10uF -> 506 ms | 22uF + 10uF -> 506 ms |
+| R_ISCP | 4.3k -> 149 A in 1.2 us | 6.2k -> 104 A in 1.2 us | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes |
+| R_IMON | 6.8k -> 31 mV/A, 2.4 V at 76 A | 6.8k -> 61 mV/A, 2.4 V at 38 A | 9.1k -> 164 mV/A, 2.4 V at 14 A | 9.1k -> 164 mV/A, 2.4 V at 14 A | 12k -> 108 mV/A, 2.4 V at 21 A |
+| C_g / R_g (pre-charge slew) | 680nF / 330R -> 0.4 A for 286 ms | 470nF / 330R -> 0.4 A for 197 ms | 270nF / 330R -> 1.0 A for 65 ms | 150nF / 330R -> 1.9 A for 18 ms | 68nF / 330R -> 1.9 A for 3 ms |
+| Pre-charge FET stress | 2.49 J, 17 W peak (ASSUMED 2.82mF load) - check its SOA | 1.77 J, 18 W peak (ASSUMED 2.01mF load) - check its SOA | 0.81 J, 25 W peak (ASSUMED 2.82mF load) - check its SOA | 0.20 J, 23 W peak (ASSUMED 2.82mF load) - check its SOA | 0.02 J, 10 W peak (ASSUMED 1.32mF load) - check its SOA |
+| C_BST | 2 x 10uF/50V X7R 1210 (need 7.15uF at 12 V; counted at 50% for DC bias) | 2 x 10uF/50V X7R 1210 (need 5.05uF at 12 V; counted at 50% for DC bias) | 1 x 10uF/50V X7R 1210 (need 2.93uF at 12 V; counted at 50% for DC bias) | 1 x 10uF/50V X7R 1210 (need 1.73uF at 12 V; counted at 50% for DC bias) | 1 x 10uF/50V X7R 1210 (need 914nF at 12 V; counted at 50% for DC bias) |
+| Power-on timing | OFF until the PC asks | ON at boot (ESP32): driver ready ~1.52 s after EN, pre-charge ~197 ms, then INP once VSNS_OUT reaches the input | OFF until the PC asks | ON at boot (ESP32): driver ready ~0.76 s after EN, pre-charge ~18 ms, then INP once VSNS_OUT reaches the input | OFF until the PC asks |
 
 - **42V-D:** Drive group: EPOS4 50/5 (two per connector, three connectors; ASSUMED 470 uF per drive) or CubeMars AK10-9 V3.0 actuators. The 60 A / 1.1 s trip sits above four EPOS4s accelerating (15 A each); CubeMars actuators (31.9 A peak) need a configured current limit. The rear-panel motor switch feeds this driver's EN/UVLO through the latch, so opening it cuts motor power in hardware without touching the Orin. Defaults OFF: the drives are useless without a controller.
-- **42V-C:** Converter-feed group: two XT90 feeds for three converters (one feed is Y-split in the harness, so c_out is 1.5 converters' input capacitance per feed). 24 V 300 W + 12 V 150 W + 5 V 150 W is about 22 A at 30 V, inside the 30 A design and one XT90's rating. Defaults ON, because the 12 V converter powers the Orin.
+- **42V-C:** Converter-feed group: two XT90 feeds for three converters (one feed is Y-split in the harness, so c_out is 1.5 converters' input capacitance per feed), plus the on-board 54 V boost. 24 V 300 W + 12 V 150 W + 5 V 150 W + 54 V 100 W is about 26 A at 30 V, inside the 30 A design. c_extra is the boost's output side and the Zyxel's input (ASSUMED 600 uF), which this pre-charge also charges, through the boost inductor and its high-side FET's body diode. Defaults ON, because the 12 V converter powers the Orin.
 - **12V:** Feeds the Jetson AGX Orin, so it defaults ON in hardware.
-- **54V:** The eFuse sits on the boost's 42 V input. It switches the boost and is its short-circuit protection, because a boost cannot block current from input to output. Defaults ON: the Zyxel is the rover's main network switch. C_LOAD includes the boost's output side and the Zyxel's input: ASSUMED 600 uF.
 
 ## Power-on sequence (ESP32)
 
@@ -36,9 +35,9 @@ Every eFuse powers up OFF (pull-downs on INP and INP_G). The ESP32 runs from the
 | Step | Typical |
 |---|---|
 | ESP32 boots, reads every VSNS_OUT and FLT | 0.3-0.5 s |
-| 42V-C: INP_G on; driver ready after ~0.76 s; pre-charge ~139 ms; INP on once VSNS_OUT is within 5 % of the input; INP_G off | |
+| 42V-C: INP_G on; driver ready after ~1.52 s; pre-charge ~197 ms; INP on once VSNS_OUT is within 5 % of the input; INP_G off | |
+| 54 V boost: clear BOOST_DIS once the converter group's main FETs are on; soft-start | ~12 ms |
 | 12V: INP_G on; driver ready after ~0.76 s; pre-charge ~18 ms; INP on once VSNS_OUT is within 5 % of the input; INP_G off | |
-| 54V: INP_G on; driver ready after ~0.76 s; pre-charge ~63 ms; INP on once VSNS_OUT is within 5 % of the input; INP_G off | |
 | Orin powered | about 1-1.5 s after the battery connects |
 
 The 12 V eFuse starts only once the converter group is fully on, so its pre-charge never draws through the converter group's pre-charge FET. If a step does not finish in its window (pre-charge slower than 4x the expected time, or FLT asserts), firmware leaves that rail off and reports it.
@@ -48,7 +47,7 @@ The 12 V eFuse starts only once the converter group is fully on, so its pre-char
 | | |
 |---|---|
 | Controller | LM5122MHX/NOPB, synchronous boost, 65 V in (75 V abs max on VIN/CSP/CSN), 105 V switch node; MODE grounded = diode emulation, so no reverse current into the battery |
-| Operating point | 30-42 V in -> 54 V, 100 W (1.85 A); the XMG-105HP draws 90 W at most, 70 W of it PoE |
+| Operating point | 30-42 V in (the converter group's output, OUT42C) -> 54 V, 100 W (1.85 A); the XMG-105HP draws 90 W at most, 70 W of it PoE |
 | Duty cycle | 0.26 - 0.47 (below 50 %, so slope compensation is not critical) |
 | Switching frequency | 400 kHz, RT = 22k |
 | Inductor | MSS1583-223MED (Coilcraft), 22 uH, Isat 10.4 A (above the 8.75 A max current limit), DCR 26 mOhm, 0.32 W |
@@ -61,8 +60,9 @@ The 12 V eFuse starts only once the converter group is fully on, so its pre-char
 | Loop compensation (COMP to FB) | R_COMP 200k + C_COMP 15nF in series, C_HF 82pF across. Crossover 7.7-10.8 kHz; RHP zero 65 kHz at 30 V; zero on the load pole (52 Hz), HF pole on the bulk-cap ESR zero (8.8 kHz). Confirm with a load-step test. |
 | Output TVS | SMBJ58A-13-F: standoff 58 V, above the 57 V PoE maximum; clamps at 93.6 V, under the 105 V switch node and the FETs' 100 V |
 | Bootstrap diode | BAS21 (200 V): it blocks VOUT plus switching ringing, more than a 75-100 V 1N4148W should see |
-| Enable | UVLO is held low by Q_BEN until firmware clears BOOST_DIS (expander P15), after the 54 V eFuse is fully on. The boost never runs off its eFuse's pre-charge FET |
-| Over-voltage | No OVP in the LM5122. Firmware reads VOUT 54V and opens the input eFuse above 57 V; the TVS covers fast transients |
+| Enable | UVLO is held low by Q_BEN until firmware clears BOOST_DIS (expander P15), after the converter group's main FETs are on, so the boost never runs off that group's pre-charge FET. Until then the output sits about 0.7 V below the input, through the inductor and the high-side body diode |
+| Over-voltage | No OVP in the LM5122. Firmware reads VOUT 54V and sets BOOST_DIS above 57 V, which drops the output to the input voltage; the TVS covers fast transients |
+| Output fuse | Littelfuse 0154003.DRT: 3 A slow-blow Nano2 (125 V AC/DC, 50 A breaking) in an SMD OMNI-BLOK clip holder; a spare 0452003.MRL clips in without soldering. 2.25 A at 75 % derating, above the Zyxel's 1.85 A; protects the 3 A JST-XH and its cable. A boost cannot limit an overload that pulls its output below its input; a hard short trips the converter group's eFuse first |
 | Output connector | A type used for nothing else on the board, so a 54 V plug cannot reach a 5 / 12 / 24 V device |
 
 ## Per-output PTCs
@@ -74,6 +74,8 @@ A PTC protects the cable to one device from an overload too small to trip the ra
 | 24V | 6 x Deans T | SMD2920B300TF/30 (YAGEO, 2920) | 30 V | 3 / 5 A | >= 36 mV | 0.5 mm2 / AWG 20 |
 | 12V | 6 x XT60 | MF-LSMF300/16X-2 (Bourns, 2920) | 16 V | 3 / 5 A | >= 45 mV | 0.5 mm2 / AWG 20 |
 | 5V | 6 x XT30 | MF-LSMF300X-2 (Bourns, 2920) | 6 V | 3 / 5 A | >= 45 mV | 0.5 mm2 / AWG 20 |
+
+The 54 V output has a 3 A slow-blow fuse in an SMD clip holder instead (Littelfuse 0154003.DRT): no SMD PTC is rated for 54 V at 2 A.
 
 The 42 V outputs have no PTC. Their cables are heavy, and no SMD PTC is rated for 42 V at drive currents. Use XT90-S anti-spark plugs on the 42 V devices, so hot-plugging onto the live group cannot trip its short-circuit detector.
 
@@ -88,17 +90,17 @@ One TCA9535 (0x20) holds every INP and INP_G, so the switches keep their state w
 | P02 | INP 24V | out |
 | P03 | INP 12V | out |
 | P04 | INP 5V | out |
-| P05 | INP 54V | out |
+| P05 | spare (was INP 54V) |  |
 | P06 | INP_G 42V-D | out |
 | P07 | INP_G 42V-C | out |
 | P10 | INP_G 24V | out |
 | P11 | INP_G 12V | out |
 | P12 | INP_G 5V | out |
-| P13 | INP_G 54V | out |
-| P14 | spare | |
-| P15 | spare | |
-| P16 | spare | |
-| P17 | spare | |
+| P13 | spare (was INP_G 54V) |  |
+| P14 | MOTOR_ARM (clocks the motor latch) | out |
+| P15 | BOOST_DIS (54 V boost off while high) | out |
+| P16 | spare |  |
+| P17 | spare |  |
 
 | ESP32-S3 GPIO | Signal |
 |---|---|
@@ -107,9 +109,9 @@ One TCA9535 (0x20) holds every INP and INP_G, so the switches keep their state w
 | 8 | FLT 24V (FLT_I + FLT_T wire-OR) |
 | 9 | FLT 12V (FLT_I + FLT_T wire-OR) |
 | 16 | FLT 5V (FLT_I + FLT_T wire-OR) |
-| 38 | FLT 54V (FLT_I + FLT_T wire-OR) |
+| 38 | spare (was FLT 54V) |
 
-Two ADC128D818s (TSSOP-16, internal 2.56 V reference) at 0x1D, 0x1E. Each converts 12 ms per channel, so a full sweep runs at about 10 Hz. The 42 V bus voltage, the input of both 42 V groups and the 54 V boost, comes from the INA228. VOUT 54V is the boost output. Board NTC and aux 5 V go to ESP32 ADC1 pins (GPIO1, GPIO2).
+Two ADC128D818s (TSSOP-16, internal 2.56 V reference) at 0x1D, 0x1E. Each converts 12 ms per channel, so a full sweep runs at about 10 Hz. The 42 V bus voltage, the input of both 42 V groups, comes from the INA228; the boost's input is VOUT 42V-C, and its input current is part of IMON 42V-C. Board NTC and aux 5 V go to ESP32 ADC1 pins (GPIO1, GPIO2).
 
 | ADC | Input |
 |---|---|
@@ -118,14 +120,14 @@ Two ADC128D818s (TSSOP-16, internal 2.56 V reference) at 0x1D, 0x1E. Each conver
 | 0x1D.IN2 | IMON 24V |
 | 0x1D.IN3 | IMON 12V |
 | 0x1D.IN4 | IMON 5V |
-| 0x1D.IN5 | IMON 54V |
+| 0x1D.IN5 | spare, tied to GND (was IMON 54V) |
 | 0x1D.IN6 | VOUT 42V-D |
 | 0x1D.IN7 | VOUT 42V-C |
 | 0x1E.IN0 | VOUT 24V |
 | 0x1E.IN1 | VOUT 12V |
 | 0x1E.IN2 | VOUT 5V |
-| 0x1E.IN3 | VOUT 54V |
+| 0x1E.IN3 | VOUT 54V (the boost output) |
 | 0x1E.IN4 | VIN 24V |
 | 0x1E.IN5 | VIN 12V |
 | 0x1E.IN6 | VIN 5V |
-| 0x1E.IN7 | VIN 54V boost (the 54 V eFuse's output, VSNS_SW54) |
+| 0x1E.IN7 | spare, tied to GND (was the 54 V eFuse's output) |

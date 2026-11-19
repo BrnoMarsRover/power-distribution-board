@@ -198,6 +198,8 @@ text("ALL POWER CONNECTORS:  + LEFT   - RIGHT", 100.0, 143.0, h=1.4, bold=True, 
 # ---------------------------------------------------------------- 54 V output, control strip
 x0, y0, x1, y1 = bbox("J13")
 text("54V ZYXEL", x0 - 0.8, (y0 + y1) / 2 - 0.8, h=1.0, just=R, bold=True)
+fx0, fy0, fx1, fy1 = bbox("F19")                       # the Zyxel output's fuse: what to clip in when it blows
+text("FUSE 3A T", fx1 + 0.8, (fy0 + fy1) / 2, h=1.0, just=L, bold=True)
 p1, p2 = pins("J13")
 text("+", p1, y0 - 1.0, h=1.2, bold=True)
 text("-", p2, y0 - 1.0, h=1.2, bold=True)

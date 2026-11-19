@@ -24,7 +24,7 @@ MFR = [  # MPN prefix -> manufacturer (longest match wins)
     ("SMBJ58A-13-F", "Diodes Incorporated"), ("SMBJ", "Littelfuse"), ("SMCJ", "Littelfuse"),
     ("IPB", "Infineon"), ("STPS", "STMicroelectronics"), ("USBLC6", "STMicroelectronics"),
     ("ESP32", "Espressif"), ("MF-", "Bourns"), ("CSS2H", "Bourns"), ("SRR", "Bourns"), ("MSS", "Coilcraft"),
-    ("APT2012", "Kingbright"), ("SMD2920", "YAGEO"), ("USB4105", "GCT"), ("WSL", "Vishay"), ("SS34-E3", "Vishay"),
+    ("0154", "Littelfuse"), ("APT2012", "Kingbright"), ("SMD2920", "YAGEO"), ("USB4105", "GCT"), ("WSL", "Vishay"), ("SS34-E3", "Vishay"),
 ]
 
 

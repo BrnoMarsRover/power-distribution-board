@@ -79,16 +79,27 @@ placed = {False: [], True: []}
 fixed = set()
 
 
+def blocks_both(fp):
+    """Through-hole connectors block their whole outline on the other side too: plugging flexes the board,
+    which cracks ceramic parts under them. Other through-hole parts (electrolytics, bridges) only need their
+    joints kept clear, so on the other side they block their holes plus room for the iron."""
+    return through(fp) and fp.GetReference().startswith("J")
+
+
+HOLE_MARGIN = 1.0                            # around a through-hole joint on the far side: room for the iron
+
+
 def claim(fp):
     bx = box(fp)
-    for side in ((False, True) if through(fp) else (fp.IsFlipped(),)):
+    for side in ((False, True) if blocks_both(fp) else (fp.IsFlipped(),)):
         placed[side].append(bx)
-    if not through(fp):                     # a lone hole (ESP32 solder hole, USB-C pegs) blocks the other side
+    if not blocks_both(fp):                 # holes (ESP32 solder hole, USB-C pegs, THT legs) block the other side
+        m = HOLE_MARGIN if through(fp) else 0.0
         for p in fp.Pads():
             if p.GetAttribute() in (pcbnew.PAD_ATTRIB_PTH, pcbnew.PAD_ATTRIB_NPTH):   # plated or not
                 bb = p.GetBoundingBox()
-                placed[not fp.IsFlipped()].append((TOMM(bb.GetLeft()) - X0, TOMM(bb.GetTop()) - Y0,
-                                                   TOMM(bb.GetRight()) - X0, TOMM(bb.GetBottom()) - Y0))
+                placed[not fp.IsFlipped()].append((TOMM(bb.GetLeft()) - X0 - m, TOMM(bb.GetTop()) - Y0 - m,
+                                                   TOMM(bb.GetRight()) - X0 + m, TOMM(bb.GetBottom()) - Y0 + m))
 
 
 MINUS_PIN1 = ("XT30", "XT60", "DEANS")       # pad 1 is the - side on these footprints (see build.py CONN2)
@@ -143,21 +154,30 @@ def label_room(fp):
     return 0.0
 
 
-def fit(fp, zone, bottom):
+def fit(fp, zone, bottom, gap=None):
     zx0, zy0, zx1, zy1 = zone
-    sides = (False, True) if through(fp) else (bottom,)
-    gap = GAP_BOTTOM if bottom else GAP
+    sides = (False, True) if blocks_both(fp) else (bottom,)
+    gap = gap or (GAP_BOTTOM if bottom else GAP)
     for deg in (0, 90):
         fp.SetOrientationDegrees(deg if not bottom else (180 - deg) % 360)
         l, t, r, bt = box(fp)
         w, h = r - l + label_room(fp), bt - t
+        legs = []                            # other through-hole parts: their holes on the far side, from (l, t)
+        if through(fp) and not blocks_both(fp):
+            for p in fp.Pads():
+                if p.GetAttribute() == pcbnew.PAD_ATTRIB_PTH:
+                    bb = p.GetBoundingBox()
+                    legs.append((TOMM(bb.GetLeft()) - X0 - l - HOLE_MARGIN, TOMM(bb.GetTop()) - Y0 - t - HOLE_MARGIN,
+                                 TOMM(bb.GetRight()) - X0 - l + HOLE_MARGIN, TOMM(bb.GetBottom()) - Y0 - t + HOLE_MARGIN))
         y = zy0
         while y + h <= zy1:
             x = zx0
             while x + w <= zx1:
                 cand = (x, y, x + w, y + h)
                 if not any(overlaps(cand, o, gap) for s in sides for o in placed[s]) and \
-                        not any(overlaps(cand, o, gap) for o in hole_boxes):
+                        not any(overlaps(cand, o, gap) for o in hole_boxes) and \
+                        not any(overlaps((x + a, y + b_, x + c, y + d), o, 0.0)
+                                for a, b_, c, d in legs for o in placed[not bottom]):
                     return cand
                 x += 0.5
             y += 0.5
@@ -173,12 +193,12 @@ overflow, spilled = [], []
 SPILL = (1, 13, 149, 149)                    # never into the inputs row
 
 
-def pack(refs, zone, bottom, spill=False):
+def pack(refs, zone, bottom, spill=False, gap=None):
     left = []
     for ref in sorted(refs, key=lambda r: -area(r)):
         fp = FP[ref]
         set_side(fp, bottom)
-        ok = fit(fp, zone, bottom)
+        ok = fit(fp, zone, bottom, gap)
         if ok is None and not spill:
             left.append(ref)
             continue
@@ -260,10 +280,34 @@ for rail, net_ in (("24", "OUT24"), ("12", "OUT12"), ("5", "OUT5")):
         upright(f, tall=True)                                        # every PTC is a 2920 standing upright
         fl, ft, fr, fb = box(f)
         put(ptc_of[j][0], cbox[0] - 1.2 - (fr - fl), (cbox[1] + cbox[3]) / 2 - (fb - ft) / 2, orient=lambda fp: None)
-# Zyxel 54 V out: bottom-left, on the board edge under the converter column
+# Zyxel 54 V out: bottom-left, on the board edge under the converter column, its fuse (clip holder) standing
+# right above its + pin with room for the + / - marks between them
 plus_left(FP["J13"])
 l, t, r, bt = box(FP["J13"])
-put("J13", 28.0, 149.4 - (bt - t))
+jbox = put("J13", 28.0, 149.4 - (bt - t))
+fz = FP["F19"]
+set_side(fz, False)
+power42._upright(fz, 0.0, 0.0, "1", "2")                      # pad 1 (OUT54) up, pad 2 (to J13 +) down
+fl, ft, fr, fb = box(fz)
+px = TOMM(pad(FP["J13"], plus_minus(FP["J13"])[0]).GetPosition().x) - X0
+fx = TOMM(pad(fz, "2").GetPosition().x) - X0
+put("F19", px - (fx - fl), jbox[1] - 2.4 - (fb - ft), orient=lambda f: None)
+# the boost's status LED at the top-left of its area, locked so it stays where it can be seen
+led54 = next(r for r, f in FP.items() if f.GetSheetname().startswith("54 V boost") and "LED" in f.GetFPIDAsString())
+set_side(FP[led54], False)
+upright(FP[led54], tall=True)
+put(led54, 26.8, 104.5, orient=lambda f: None)
+FP[led54].SetLocked(True)
+# the boost's two 12.5 mm output electrolytics: placed before packing (the boost's SMD parts go under them),
+# stacked at the right of the boost area
+caps54 = sorted((r for r, f in FP.items() if "CP_Radial" in f.GetFPIDAsString()
+                 and any(p.GetNetname() == "OUT54" for p in f.Pads())), key=lambda r: int(r[1:]))
+y = 101.0
+for ref in caps54:
+    set_side(FP[ref], False)
+    FP[ref].SetOrientationDegrees(0)
+    l, t, r, bt = box(FP[ref])
+    y = put(ref, 50.0 - (r - l), y, orient=lambda f: None)[3] + 0.6     # 0.6 mm off the 24 V PTCs
 
 
 def opening(fp, d=(0, 1)):
@@ -311,16 +355,17 @@ ZONES = {
     "24 V rail eFuse": ((51, 12, 76.0, 71.5), (51, 12, 76.0, 71.5)),
     "12 V rail eFuse": ((76.5, 12, 103.3, 71.5), (76.5, 12, 103.3, 71.5)),
     "5 V rail eFuse": ((104.1, 10, 125.6, 71.5), (104.1, 10, 125.6, 71.5)),
-    "54 V supply eFuse": ((126.1, 35.1, 149.4, 61.1), (126.1, 35.1, 149.4, 61.1)),   # under the JST block
-    "54 V boost": ((126.1, 120.6, 149, 149), (123.5, 36, 149, 149)),
+    # 54 V boost (fed from OUT42C since 2026-11-20): under the converter XT90s, next to the Zyxel output J13
+    "54 V boost": ((26.0, 100.5, 50.3, 141.0), (9.5, 100.5, 50.3, 149.4)),     # bottom: also under the brake corner
     "Brake chopper": ((1.5, 121.5, 26, 149), (1.5, 121.5, 26, 149)),
-    "Always-on aux": ((26.5, 98, 50.5, 149), (26.5, 98, 50.5, 149)),
+    "Always-on aux": ((126.1, 35.1, 149.4, 59.4), (125.6, 35.1, 149.4, 122.0)),   # beside the ESP32 it powers
     "Rail inputs": ((51, 131, 123.5, 149), (51, 72, 123.5, 149)),
     "ESP32-S3": ((126.1, 62, 149, 97), (123.5, 58, 149, 100)),
     "Switch control": ((78, 131, 123.5, 149), (51, 72, 123.5, 149)),
     "CAN bus": ((126.1, 93.5, 139, 120.5), (123.5, 93.5, 149, 121)),
 }
 SUPPLIES = ("54 V boost", "Always-on aux")   # SMD parts on the bottom, the whole switching loop on that side
+TIGHT = {"54 V boost": 0.6}                  # bottom gap override: the boost's hot loop packed at the courtyard rule
 POWER_1210 = ("Battery input",)
 
 
@@ -328,9 +373,9 @@ def is_bottom(fp):
     sheet, ref, lib = fp.GetSheetname(), fp.GetReference(), fp.GetFPID().GetLibItemName().wx_str()
     if ref.startswith(("J", "SW", "JP", "H", "F")):
         return False
-    if sheet.startswith(SUPPLIES):                # 5.3 V aux and 54 V boost: SMD down, THT and LEDs up
+    if sheet.startswith(SUPPLIES):                # 5.3 V aux and 54 V boost: SMD down, THT, LEDs and test pads up
         if ref.startswith("TP"):
-            return "Keystone" not in lib
+            return False                          # probed from the top with the board mounted
         return not (through(fp) or "LED" in lib)
     if ref.startswith("TP"):
         return "Keystone" not in lib                 # signal pads sit with their (bottom-side) circuitry
@@ -388,26 +433,6 @@ for ref in power_rails.place(FP):            # 24 / 12 / 5 V blocks with their i
 placed[False] += power_rails.KEEP_TOP
 placed[True] += power_rails.KEEP_BOTTOM
 
-# 54 V supply eFuse under the JST block, right of the 5 V column: pre-charge Q20 above main Q19 (leads left),
-# then a column right of their tabs: shunt R95 (BUS42 in at the top), LED, bypass bridge
-x54, y = power_rails.RAILS["5"]["col_r"] + 0.5, 35.1
-for ref in ("Q20", "Q19"):
-    set_side(FP[ref], False)
-    FP[ref].SetOrientationDegrees(0)
-    l, t, r, bt = put(ref, x54, y, orient=lambda f: None)
-    y = bt + 0.6
-x54, y = r + 0.6, 35.1
-for ref, top, bot in (("R95", "1", "4"), ("D10", "1", "2"), ("JP6", "1", "2")):
-    set_side(FP[ref], False)
-    power42._upright(FP[ref], 0.0, 0.0, top, bot)
-    l, t, r, bt = put(ref, x54, y, orient=lambda f: None)
-    y = bt + 0.6
-power42.label_under(FP["JP6"])
-bypass = next(t for t in FP["JP6"].GraphicalItems() if isinstance(t, pcbnew.PCB_TEXT) and t.GetText() == "BYPASS")
-bb = bypass.GetBoundingBox()                 # keep its label spot free of packed parts
-placed[False].append((TOMM(bb.GetLeft()) - X0, TOMM(bb.GetTop()) - Y0, TOMM(bb.GetRight()) - X0, TOMM(bb.GetBottom()) - Y0))
-for ref in ("Q20", "Q19", "R95", "D10", "JP6"):
-    FP[ref].SetLocked(True)
 
 # keep the label spots under the inputs free (battery label, polarity rule, + / - marks)
 for keep in ((8.0, 12.4, 31.0, 16.3), (51.0, 9.6, 123.0, 12.0), (78.0, 140.0, 122.0, 146.0),
@@ -429,8 +454,9 @@ for r, f in FP.items():
         continue
     groups.setdefault((key, is_bottom(f)), []).append(r)
 left = {False: [], True: []}
-for (key, bottom), refs in sorted(groups.items(), key=lambda kv: -sum(area(r) for r in kv[1])):
-    left[bottom] += pack(refs, ZONES[key][1 if bottom else 0], bottom)
+FIRST = ("Brake chopper",)                   # packed before the larger groups that share their corner
+for (key, bottom), refs in sorted(groups.items(), key=lambda kv: (kv[0][0] not in FIRST, -sum(area(r) for r in kv[1]))):
+    left[bottom] += pack(refs, ZONES[key][1 if bottom else 0], bottom, gap=TIGHT.get(key) if bottom else None)
 for bottom in (False, True):
     pack(left[bottom], SPILL, bottom, spill=True)
 

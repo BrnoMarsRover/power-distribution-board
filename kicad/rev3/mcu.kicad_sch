@@ -5133,6 +5133,30 @@
 			)
 		)
 	)
+	(global_label "SPARE_IO38"
+		(shape passive)
+		(at 185.42 154.94 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "061b3628-fe15-581d-a21e-83d92b4c4361")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
 	(global_label "CAN_TXD"
 		(shape passive)
 		(at 35.56 236.22 180)
@@ -5146,6 +5170,30 @@
 		(uuid "07aa38c0-2e92-528c-9cfb-65d6d94ed7c5")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 35.56 236.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+	)
+	(global_label "SPARE_IO38"
+		(shape passive)
+		(at 193.04 218.44 270)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify right)
+		)
+		(uuid "0bb60581-de87-5c8a-87fb-0479d4bdb767")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 193.04 218.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6213,30 +6261,6 @@
 			)
 		)
 	)
-	(global_label "FLT_54"
-		(shape passive)
-		(at 193.04 218.44 270)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify right)
-		)
-		(uuid "c0993b92-c5d6-5e9c-b59e-bc45d800d832")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 193.04 218.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-	)
 	(global_label "LED_2"
 		(shape passive)
 		(at 185.42 172.72 0)
@@ -6442,30 +6466,6 @@
 		(uuid "ede1a29d-b778-5e53-abeb-dd4eb3f2e111")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 185.42 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-	)
-	(global_label "FLT_54"
-		(shape passive)
-		(at 185.42 154.94 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "ef5b8ed7-fb76-5075-9f0f-ec3d58c0521b")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 185.42 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7025,7 +7025,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 142.24 107.95 0)
+		(at 154.94 107.95 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7035,7 +7035,7 @@
 		(dnp no)
 		(uuid "121cf8d2-da7f-5398-b32f-3a166ae7fafc")
 		(property "Reference" "C105"
-			(at 142.875 105.41 0)
+			(at 155.575 105.41 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7045,8 +7045,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
-			(at 142.875 110.49 0)
+		(property "Value" "22uF/10V"
+			(at 155.575 110.49 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7056,8 +7056,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 142.24 107.95 0)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 154.94 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7068,7 +7068,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 142.24 107.95 0)
+			(at 154.94 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7079,7 +7079,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 142.24 107.95 0)
+			(at 154.94 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7089,8 +7089,8 @@
 				)
 			)
 		)
-		(property "MPN" "C0603C104K5RACTU"
-			(at 142.24 107.95 0)
+		(property "MPN" "CL31B226KPHNNNE"
+			(at 154.94 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9409,6 +9409,98 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at 40.64 191.77 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "6e20fd97-296f-5fd1-8ed5-bf06e592b872")
+		(property "Reference" "C108"
+			(at 41.275 189.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 41.275 194.31 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 40.64 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 40.64 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 40.64 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C0603C104K5RACTU"
+			(at 40.64 191.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "7dde915c-ea72-5582-aa33-b5b2b485b728")
+		)
+		(pin "2"
+			(uuid "8aebe048-d0c4-53b1-b3ce-0febbb9d721b")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
+					(reference "C108")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 269.24 166.37 0)
 		(unit 1)
@@ -9741,7 +9833,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 45.72 90.17 0)
+		(at 142.24 107.95 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9751,7 +9843,7 @@
 		(dnp no)
 		(uuid "836b6864-fbc2-52ff-9cfd-2892900c6588")
 		(property "Reference" "C106"
-			(at 46.355 87.63 0)
+			(at 142.875 105.41 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9761,8 +9853,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1uF"
-			(at 46.355 92.71 0)
+		(property "Value" "100nF"
+			(at 142.875 110.49 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9773,7 +9865,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 45.72 90.17 0)
+			(at 142.24 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9784,7 +9876,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 45.72 90.17 0)
+			(at 142.24 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9795,7 +9887,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 45.72 90.17 0)
+			(at 142.24 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9805,8 +9897,8 @@
 				)
 			)
 		)
-		(property "MPN" "C0603C105K3RACTU"
-			(at 45.72 90.17 0)
+		(property "MPN" "C0603C104K5RACTU"
+			(at 142.24 107.95 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10942,7 +11034,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 40.64 191.77 0)
+		(at 45.72 90.17 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10952,7 +11044,7 @@
 		(dnp no)
 		(uuid "ab89e929-5d34-5c35-92e5-8d3443651146")
 		(property "Reference" "C107"
-			(at 41.275 189.23 0)
+			(at 46.355 87.63 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10962,8 +11054,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
-			(at 41.275 194.31 0)
+		(property "Value" "1uF"
+			(at 46.355 92.71 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10974,7 +11066,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 40.64 191.77 0)
+			(at 45.72 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10985,7 +11077,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 40.64 191.77 0)
+			(at 45.72 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10996,7 +11088,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 40.64 191.77 0)
+			(at 45.72 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11006,8 +11098,8 @@
 				)
 			)
 		)
-		(property "MPN" "C0603C104K5RACTU"
-			(at 40.64 191.77 0)
+		(property "MPN" "C0603C105K3RACTU"
+			(at 45.72 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11450,98 +11542,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
 					(reference "SW1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 154.94 107.95 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "b8d7ec72-6cb4-5aea-b5ae-6f8999849531")
-		(property "Reference" "C104"
-			(at 155.575 105.41 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "22uF/10V"
-			(at 155.575 110.49 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 154.94 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 154.94 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 154.94 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "CL31B226KPHNNNE"
-			(at 154.94 107.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "513c8e2c-4f63-504a-b002-5c0aa8233f4a")
-		)
-		(pin "2"
-			(uuid "838addaa-cc8b-51fb-a434-a0266b4fafc4")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/0f4c8e4d-36f6-5e6f-a801-0296a18d8e21"
-					(reference "C104")
 					(unit 1)
 				)
 			)

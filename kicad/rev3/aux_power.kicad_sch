@@ -3221,7 +3221,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 312.42 110.49 0)
+		(at 299.72 110.49 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3231,7 +3231,7 @@
 		(dnp no)
 		(uuid "1544cbe9-79b4-5ee9-a459-2afa102e6984")
 		(property "Reference" "C103"
-			(at 313.055 107.95 0)
+			(at 300.355 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3241,8 +3241,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
-			(at 313.055 113.03 0)
+		(property "Value" "10uF/10V"
+			(at 300.355 113.03 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3252,8 +3252,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 312.42 110.49 0)
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
+			(at 299.72 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3264,7 +3264,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 312.42 110.49 0)
+			(at 299.72 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3275,7 +3275,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 312.42 110.49 0)
+			(at 299.72 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3285,8 +3285,8 @@
 				)
 			)
 		)
-		(property "MPN" "C0603C104K5RACTU"
-			(at 312.42 110.49 0)
+		(property "MPN" "CL21B106KOQNNNE"
+			(at 299.72 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3390,7 +3390,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 157.48 110.49 0)
+		(at 121.92 120.65 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3400,7 +3400,7 @@
 		(dnp no)
 		(uuid "1d231967-c78b-5cfe-9bbd-7c2e735b5e91")
 		(property "Reference" "C96"
-			(at 158.115 107.95 0)
+			(at 122.555 118.11 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3410,8 +3410,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "22uF/25V"
-			(at 158.115 113.03 0)
+		(property "Value" "1uF/16V"
+			(at 122.555 123.19 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3421,8 +3421,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 157.48 110.49 0)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 121.92 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3433,7 +3433,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 157.48 110.49 0)
+			(at 121.92 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3444,7 +3444,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 157.48 110.49 0)
+			(at 121.92 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3454,8 +3454,8 @@
 				)
 			)
 		)
-		(property "MPN" "CL31A226KAHNNNE"
-			(at 157.48 110.49 0)
+		(property "MPN" "C0603C105K3RACTU"
+			(at 121.92 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3475,98 +3475,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
 					(reference "C96")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 35.56 102.87 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "3f6c258b-fe72-58f4-a991-3d0ed4c2f8d0")
-		(property "Reference" "C92"
-			(at 36.195 100.33 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "2.2uF/100V"
-			(at 36.195 105.41 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
-			(at 35.56 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 35.56 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 35.56 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "GRM32ER72A225KA35L"
-			(at 35.56 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0575bfff-a4f6-5a14-88de-cb89b49fb59f")
-		)
-		(pin "2"
-			(uuid "48d4b7e7-2ce6-5451-8378-0e301964652e")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
-					(reference "C92")
 					(unit 1)
 				)
 			)
@@ -3764,7 +3672,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 299.72 110.49 0)
+		(at 248.92 110.49 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3774,7 +3682,7 @@
 		(dnp no)
 		(uuid "64eb1560-e724-551d-a2f1-51d3da518947")
 		(property "Reference" "C102"
-			(at 300.355 107.95 0)
+			(at 249.555 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3784,8 +3692,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10uF/10V"
-			(at 300.355 113.03 0)
+		(property "Value" "22uF/25V"
+			(at 249.555 113.03 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3795,8 +3703,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 299.72 110.49 0)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 248.92 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3807,7 +3715,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 299.72 110.49 0)
+			(at 248.92 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3818,7 +3726,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 299.72 110.49 0)
+			(at 248.92 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3828,8 +3736,8 @@
 				)
 			)
 		)
-		(property "MPN" "CL21B106KOQNNNE"
-			(at 299.72 110.49 0)
+		(property "MPN" "CL31A226KAHNNNE"
+			(at 248.92 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4003,6 +3911,98 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
 					(reference "#PWRauxpower015")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 312.42 110.49 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "6b0d4682-a35c-5c5d-a1a3-8b7300e1940d")
+		(property "Reference" "C104"
+			(at 313.055 107.95 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 313.055 113.03 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 312.42 110.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 312.42 110.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 312.42 110.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C0603C104K5RACTU"
+			(at 312.42 110.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "82db2b65-8499-5e86-8b69-49d1225c1616")
+		)
+		(pin "2"
+			(uuid "655fb8c3-3a9c-5f5a-a016-aa086a261e6c")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/fbd1cb5a-880c-5dbb-8b6e-d3abaa615900"
+					(reference "C104")
 					(unit 1)
 				)
 			)
@@ -4435,7 +4435,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 124.46 100.33 0)
+		(at 48.26 102.87 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4445,7 +4445,7 @@
 		(dnp no)
 		(uuid "8e345fb2-952d-512b-97f2-4fc09309ca1a")
 		(property "Reference" "C94"
-			(at 125.095 97.79 0)
+			(at 48.895 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4455,8 +4455,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10nF/25V"
-			(at 125.095 102.87 0)
+		(property "Value" "2.2uF/100V"
+			(at 48.895 105.41 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4466,8 +4466,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 124.46 100.33 0)
+		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
+			(at 48.26 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4478,7 +4478,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 124.46 100.33 0)
+			(at 48.26 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4489,7 +4489,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 124.46 100.33 0)
+			(at 48.26 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4499,8 +4499,8 @@
 				)
 			)
 		)
-		(property "MPN" "CL10B103KB8NNNC"
-			(at 124.46 100.33 0)
+		(property "MPN" "GRM32ER72A225KA35L"
+			(at 48.26 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4604,7 +4604,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 170.18 110.49 0)
+		(at 157.48 110.49 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4614,7 +4614,7 @@
 		(dnp no)
 		(uuid "94a8b0e9-bc5c-5d21-9317-c4355c3187f5")
 		(property "Reference" "C97"
-			(at 170.815 107.95 0)
+			(at 158.115 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4625,7 +4625,7 @@
 			)
 		)
 		(property "Value" "22uF/25V"
-			(at 170.815 113.03 0)
+			(at 158.115 113.03 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4636,7 +4636,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 170.18 110.49 0)
+			(at 157.48 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4647,7 +4647,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 170.18 110.49 0)
+			(at 157.48 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4658,7 +4658,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 170.18 110.49 0)
+			(at 157.48 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4669,7 +4669,7 @@
 			)
 		)
 		(property "MPN" "CL31A226KAHNNNE"
-			(at 170.18 110.49 0)
+			(at 157.48 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4696,7 +4696,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 121.92 120.65 0)
+		(at 124.46 100.33 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4706,7 +4706,7 @@
 		(dnp no)
 		(uuid "985ffc36-de97-540e-bd38-51a035d137e0")
 		(property "Reference" "C95"
-			(at 122.555 118.11 0)
+			(at 125.095 97.79 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4716,8 +4716,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1uF/16V"
-			(at 122.555 123.19 0)
+		(property "Value" "10nF/25V"
+			(at 125.095 102.87 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4728,7 +4728,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 121.92 120.65 0)
+			(at 124.46 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4739,7 +4739,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 121.92 120.65 0)
+			(at 124.46 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4750,7 +4750,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 121.92 120.65 0)
+			(at 124.46 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4760,8 +4760,8 @@
 				)
 			)
 		)
-		(property "MPN" "C0603C105K3RACTU"
-			(at 121.92 120.65 0)
+		(property "MPN" "CL10B103KB8NNNC"
+			(at 124.46 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4875,7 +4875,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 182.88 110.49 0)
+		(at 170.18 110.49 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4885,7 +4885,7 @@
 		(dnp no)
 		(uuid "a747d78e-5b10-53a6-ab7e-2049f6d7c5fe")
 		(property "Reference" "C98"
-			(at 183.515 107.95 0)
+			(at 170.815 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4896,7 +4896,7 @@
 			)
 		)
 		(property "Value" "22uF/25V"
-			(at 183.515 113.03 0)
+			(at 170.815 113.03 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4907,7 +4907,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 182.88 110.49 0)
+			(at 170.18 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4918,7 +4918,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 182.88 110.49 0)
+			(at 170.18 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4929,7 +4929,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 182.88 110.49 0)
+			(at 170.18 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4940,7 +4940,7 @@
 			)
 		)
 		(property "MPN" "CL31A226KAHNNNE"
-			(at 182.88 110.49 0)
+			(at 170.18 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4967,7 +4967,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 48.26 102.87 0)
+		(at 35.56 102.87 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4977,7 +4977,7 @@
 		(dnp no)
 		(uuid "adf745b1-2faf-5b68-89ec-5da5fa693072")
 		(property "Reference" "C93"
-			(at 48.895 100.33 0)
+			(at 36.195 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4988,7 +4988,7 @@
 			)
 		)
 		(property "Value" "2.2uF/100V"
-			(at 48.895 105.41 0)
+			(at 36.195 105.41 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4999,7 +4999,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder"
-			(at 48.26 102.87 0)
+			(at 35.56 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5010,7 +5010,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 48.26 102.87 0)
+			(at 35.56 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5021,7 +5021,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 48.26 102.87 0)
+			(at 35.56 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5032,7 +5032,7 @@
 			)
 		)
 		(property "MPN" "GRM32ER72A225KA35L"
-			(at 48.26 102.87 0)
+			(at 35.56 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5380,7 +5380,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 118.11 134.62 270)
+		(at 147.32 120.65 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5390,27 +5390,29 @@
 		(dnp no)
 		(uuid "c76a6124-1e12-5342-b444-5dc7e3844af9")
 		(property "Reference" "C100"
-			(at 118.11 132.08 90)
+			(at 147.955 118.11 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "100nF/16V"
-			(at 118.11 137.16 90)
+		(property "Value" "3.3nF/50V"
+			(at 147.955 123.19 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 118.11 134.62 0)
+			(at 147.32 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5421,7 +5423,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 118.11 134.62 0)
+			(at 147.32 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5432,7 +5434,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 118.11 134.62 0)
+			(at 147.32 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5442,8 +5444,8 @@
 				)
 			)
 		)
-		(property "MPN" "C0603C104K5RACTU"
-			(at 118.11 134.62 0)
+		(property "MPN" "CL10B332KB8NNNC"
+			(at 147.32 120.65 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5714,7 +5716,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 248.92 110.49 0)
+		(at 118.11 134.62 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5724,29 +5726,27 @@
 		(dnp no)
 		(uuid "d404e47d-be7f-5973-ac77-91392ed1f241")
 		(property "Reference" "C101"
-			(at 249.555 107.95 0)
+			(at 118.11 132.08 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "22uF/25V"
-			(at 249.555 113.03 0)
+		(property "Value" "100nF/16V"
+			(at 118.11 137.16 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 248.92 110.49 0)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 118.11 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5757,7 +5757,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 248.92 110.49 0)
+			(at 118.11 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5768,7 +5768,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 248.92 110.49 0)
+			(at 118.11 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5778,8 +5778,8 @@
 				)
 			)
 		)
-		(property "MPN" "CL31A226KAHNNNE"
-			(at 248.92 110.49 0)
+		(property "MPN" "C0603C104K5RACTU"
+			(at 118.11 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6394,7 +6394,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 147.32 120.65 0)
+		(at 182.88 110.49 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6404,7 +6404,7 @@
 		(dnp no)
 		(uuid "fc50cb52-a7a4-54ae-b5ec-45defbde0daf")
 		(property "Reference" "C99"
-			(at 147.955 118.11 0)
+			(at 183.515 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6414,8 +6414,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "3.3nF/50V"
-			(at 147.955 123.19 0)
+		(property "Value" "22uF/25V"
+			(at 183.515 113.03 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6425,8 +6425,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 147.32 120.65 0)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 182.88 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6437,7 +6437,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 147.32 120.65 0)
+			(at 182.88 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6448,7 +6448,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 147.32 120.65 0)
+			(at 182.88 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6458,8 +6458,8 @@
 				)
 			)
 		)
-		(property "MPN" "CL10B332KB8NNNC"
-			(at 147.32 120.65 0)
+		(property "MPN" "CL31A226KAHNNNE"
+			(at 182.88 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

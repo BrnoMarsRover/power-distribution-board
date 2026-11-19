@@ -3183,7 +3183,7 @@
 		)
 		(uuid "1286b102-6f97-5322-a418-8c58ec9dcff5")
 	)
-	(text "TCA9535 at 0x20 holds INP / INP_G for all six switches, so they keep their state across an ESP32 reset."
+	(text "TCA9535 at 0x20 holds INP / INP_G for all five switches, so they keep their state across an ESP32 reset."
 		(exclude_from_sim no)
 		(at 20 24 0)
 		(effects
@@ -3425,12 +3425,20 @@
 		(uuid "f382eab9-23e7-57c3-bfb4-28c4f11cbc9b")
 	)
 	(no_connect
+		(at 109.22 101.6)
+		(uuid "0498b388-8779-5045-9cff-e6dd9bc89d72")
+	)
+	(no_connect
 		(at 218.44 114.3)
 		(uuid "19bf7104-300a-547c-a9f6-650a7d4b3ee5")
 	)
 	(no_connect
 		(at 243.84 175.26)
 		(uuid "24faddd8-2899-5bb1-b213-8d4f2c81dfff")
+	)
+	(no_connect
+		(at 109.22 119.38)
+		(uuid "58108a53-3554-54a4-a5e1-460e0de6127d")
 	)
 	(no_connect
 		(at 218.44 185.42)
@@ -3468,16 +3476,6 @@
 	)
 	(wire
 		(pts
-			(xy 109.22 119.38) (xy 129.54 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "07a8f859-4812-51cc-b02a-d3f3b71e3a37")
-	)
-	(wire
-		(pts
 			(xy 127 157.48) (xy 127 160.02)
 		)
 		(stroke
@@ -3485,6 +3483,16 @@
 			(type default)
 		)
 		(uuid "08c8000c-8ef5-5967-9eda-b117d42f3ff1")
+	)
+	(wire
+		(pts
+			(xy 218.44 104.14) (xy 213.36 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "09a880e7-b053-5ab4-82fc-b8c0a4cd0c50")
 	)
 	(wire
 		(pts
@@ -3808,16 +3816,6 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 104.14) (xy 195.58 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "40b3f3c2-5d90-596d-824e-98cacbd32688")
-	)
-	(wire
-		(pts
 			(xy 40.64 228.6) (xy 50.8 228.6)
 		)
 		(stroke
@@ -3965,6 +3963,16 @@
 			(type default)
 		)
 		(uuid "5335cc94-5a6b-5989-b52a-73b4474342f3")
+	)
+	(wire
+		(pts
+			(xy 218.44 180.34) (xy 213.36 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "536a6159-f449-5024-9b56-872fdbef43b1")
 	)
 	(wire
 		(pts
@@ -4275,26 +4283,6 @@
 			(type default)
 		)
 		(uuid "883e29b7-4342-5a63-ac31-15598120a213")
-	)
-	(wire
-		(pts
-			(xy 218.44 180.34) (xy 195.58 180.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8ae144fb-e798-5ddf-ad7b-47c0129d2c62")
-	)
-	(wire
-		(pts
-			(xy 109.22 101.6) (xy 129.54 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8d69d3e9-871a-52ff-ab43-f8805b8809e4")
 	)
 	(wire
 		(pts
@@ -5052,54 +5040,6 @@
 			)
 		)
 	)
-	(global_label "VSNS_SW54"
-		(shape passive)
-		(at 195.58 180.34 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify right)
-		)
-		(uuid "7c9d4d7d-8b71-5b50-b703-ba5f1926b04b")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 195.58 180.34 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-	)
-	(global_label "INPG_54"
-		(shape passive)
-		(at 129.54 119.38 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "8056dbe0-abc7-59d6-8683-0ff9cc8aa6b0")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 129.54 119.38 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-	)
 	(global_label "VSNS_OUT_42D"
 		(shape passive)
 		(at 195.58 106.68 180)
@@ -5268,30 +5208,6 @@
 			)
 		)
 	)
-	(global_label "INP_54"
-		(shape passive)
-		(at 129.54 101.6 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "a82b8db5-264b-55c0-8186-a3f8686088a5")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 129.54 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-	)
 	(global_label "VSNS_IN_24"
 		(shape passive)
 		(at 195.58 172.72 180)
@@ -5449,30 +5365,6 @@
 		(uuid "c7584357-7070-5212-9455-486473ce0075")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 195.58 91.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-	)
-	(global_label "IMON_54"
-		(shape passive)
-		(at 195.58 104.14 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify right)
-		)
-		(uuid "d8481c31-3dec-5556-8943-21b21e54f27f")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 195.58 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6017,98 +5909,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C")
-		(at 111.76 77.47 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "071172f8-c793-54bf-8be6-580c91437823")
-		(property "Reference" "C111"
-			(at 112.395 74.93 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100nF"
-			(at 112.395 80.01 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 111.76 77.47 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 111.76 77.47 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 111.76 77.47 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "C0603C104K5RACTU"
-			(at 111.76 77.47 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "ab5461a4-c7ba-537e-9aaa-8860fcc80813")
-		)
-		(pin "2"
-			(uuid "1cf96c96-185b-5225-a946-eb2e9b4ac875")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/a49d71e0-df6f-5957-a2f8-e887a3c1578b"
-					(reference "C111")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 101.6 208.28 0)
 		(unit 1)
@@ -6187,7 +5987,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 91.44 246.38 0)
+		(at 45.72 238.76 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6197,7 +5997,7 @@
 		(dnp no)
 		(uuid "0c3166b1-f44a-5a0d-8242-27820262678b")
 		(property "Reference" "#PWRio030"
-			(at 91.44 252.73 0)
+			(at 45.72 245.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6208,7 +6008,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 91.44 250.19 0)
+			(at 45.72 242.57 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6218,7 +6018,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 91.44 246.38 0)
+			(at 45.72 238.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6229,7 +6029,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 91.44 246.38 0)
+			(at 45.72 238.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6240,7 +6040,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 91.44 246.38 0)
+			(at 45.72 238.76 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6354,7 +6154,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 208.28 200.66 0)
+		(at 231.14 198.12 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6364,7 +6164,7 @@
 		(dnp no)
 		(uuid "12c7b365-9ac1-5328-b7f9-8623209ba8ff")
 		(property "Reference" "#PWRio026"
-			(at 208.28 207.01 0)
+			(at 231.14 204.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6375,7 +6175,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 208.28 204.47 0)
+			(at 231.14 201.93 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6385,7 +6185,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 208.28 200.66 0)
+			(at 231.14 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6396,7 +6196,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 208.28 200.66 0)
+			(at 231.14 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6407,7 +6207,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 208.28 200.66 0)
+			(at 231.14 198.12 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6693,7 +6493,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 276.86 88.9 0)
+		(at 269.24 88.9 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6703,7 +6503,7 @@
 		(dnp no)
 		(uuid "2578e3e1-14f6-5667-ad30-4942d0598b3a")
 		(property "Reference" "#PWRio018"
-			(at 276.86 95.25 0)
+			(at 269.24 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6714,7 +6514,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 276.86 92.71 0)
+			(at 269.24 92.71 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6724,7 +6524,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 276.86 88.9 0)
+			(at 269.24 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6735,7 +6535,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 276.86 88.9 0)
+			(at 269.24 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6746,7 +6546,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 276.86 88.9 0)
+			(at 269.24 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6947,7 +6747,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 101.6 204.47 0)
+		(at 76.2 204.47 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6957,7 +6757,7 @@
 		(dnp no)
 		(uuid "27690166-35a8-5d20-87ee-bbaa377c96e5")
 		(property "Reference" "C114"
-			(at 102.235 201.93 0)
+			(at 76.835 201.93 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6968,7 +6768,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 102.235 207.01 0)
+			(at 76.835 207.01 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6979,7 +6779,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 101.6 204.47 0)
+			(at 76.2 204.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6990,7 +6790,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 101.6 204.47 0)
+			(at 76.2 204.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7001,7 +6801,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 101.6 204.47 0)
+			(at 76.2 204.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7012,7 +6812,7 @@
 			)
 		)
 		(property "MPN" "C0603C104K5RACTU"
-			(at 101.6 204.47 0)
+			(at 76.2 204.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7038,8 +6838,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 276.86 160.02 0)
+		(lib_id "power:+3V3")
+		(at 231.14 147.32 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7049,7 +6849,7 @@
 		(dnp no)
 		(uuid "286de89a-85f7-5f73-8ee4-7208b81152c5")
 		(property "Reference" "#PWRio023"
-			(at 276.86 166.37 0)
+			(at 231.14 151.13 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7059,8 +6859,8 @@
 				)
 			)
 		)
-		(property "Value" "GND"
-			(at 276.86 163.83 0)
+		(property "Value" "+3V3"
+			(at 231.14 143.764 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7070,7 +6870,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 276.86 160.02 0)
+			(at 231.14 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7081,7 +6881,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 276.86 160.02 0)
+			(at 231.14 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7092,7 +6892,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 276.86 160.02 0)
+			(at 231.14 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7358,8 +7158,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3V3")
-		(at 231.14 147.32 0)
+		(lib_id "power:GND")
+		(at 213.36 124.46 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7369,7 +7169,7 @@
 		(dnp no)
 		(uuid "2c3c9eb8-b8a8-58b2-bf4f-23e999a7ec0a")
 		(property "Reference" "#PWRio021"
-			(at 231.14 151.13 0)
+			(at 213.36 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7379,8 +7179,8 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
-			(at 231.14 143.764 0)
+		(property "Value" "GND"
+			(at 213.36 128.27 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7390,7 +7190,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 231.14 147.32 0)
+			(at 213.36 124.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7401,7 +7201,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 231.14 147.32 0)
+			(at 213.36 124.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7412,7 +7212,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 231.14 147.32 0)
+			(at 213.36 124.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7790,7 +7590,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 127 163.83 0)
+		(at 111.76 77.47 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7800,7 +7600,7 @@
 		(dnp no)
 		(uuid "37bb8e08-8dcd-5094-bc00-3df559fe5877")
 		(property "Reference" "C112"
-			(at 127.635 161.29 0)
+			(at 112.395 74.93 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7811,7 +7611,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 127.635 166.37 0)
+			(at 112.395 80.01 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7822,7 +7622,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 127 163.83 0)
+			(at 111.76 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7833,7 +7633,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 127 163.83 0)
+			(at 111.76 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7844,7 +7644,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 127 163.83 0)
+			(at 111.76 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7855,7 +7655,7 @@
 			)
 		)
 		(property "MPN" "C0603C104K5RACTU"
-			(at 127 163.83 0)
+			(at 111.76 77.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7958,8 +7758,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3V3")
-		(at 231.14 76.2 0)
+		(lib_id "power:GND")
+		(at 213.36 104.14 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7969,7 +7769,7 @@
 		(dnp no)
 		(uuid "3fa66612-fe88-5c0d-96be-4bc08a683578")
 		(property "Reference" "#PWRio016"
-			(at 231.14 80.01 0)
+			(at 213.36 110.49 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7979,8 +7779,8 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
-			(at 231.14 72.644 0)
+		(property "Value" "GND"
+			(at 213.36 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7990,7 +7790,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 231.14 76.2 0)
+			(at 213.36 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8001,7 +7801,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 231.14 76.2 0)
+			(at 213.36 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8012,7 +7812,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 231.14 76.2 0)
+			(at 213.36 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8036,7 +7836,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 269.24 156.21 0)
+		(at 276.86 85.09 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8046,7 +7846,7 @@
 		(dnp no)
 		(uuid "4835e3ed-da63-597c-b9a0-41b7caefe97d")
 		(property "Reference" "C117"
-			(at 269.875 153.67 0)
+			(at 277.495 82.55 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8056,8 +7856,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
-			(at 269.875 158.75 0)
+		(property "Value" "1uF/16V"
+			(at 277.495 87.63 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8068,7 +7868,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 269.24 156.21 0)
+			(at 276.86 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8079,7 +7879,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 269.24 156.21 0)
+			(at 276.86 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8090,7 +7890,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 269.24 156.21 0)
+			(at 276.86 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8100,8 +7900,8 @@
 				)
 			)
 		)
-		(property "MPN" "C0603C104K5RACTU"
-			(at 269.24 156.21 0)
+		(property "MPN" "C0603C105K3RACTU"
+			(at 276.86 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8215,7 +8015,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 231.14 127 0)
+		(at 276.86 88.9 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8225,7 +8025,7 @@
 		(dnp no)
 		(uuid "4bc9af64-c999-5dc7-87b3-282140966b3b")
 		(property "Reference" "#PWRio019"
-			(at 231.14 133.35 0)
+			(at 276.86 95.25 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8236,7 +8036,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 231.14 130.81 0)
+			(at 276.86 92.71 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8246,7 +8046,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 231.14 127 0)
+			(at 276.86 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8257,7 +8057,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 231.14 127 0)
+			(at 276.86 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8268,7 +8068,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 231.14 127 0)
+			(at 276.86 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8292,7 +8092,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 269.24 160.02 0)
+		(at 213.36 180.34 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8302,7 +8102,7 @@
 		(dnp no)
 		(uuid "4e3af67a-4cfd-5e9a-845a-a43165288c9d")
 		(property "Reference" "#PWRio022"
-			(at 269.24 166.37 0)
+			(at 213.36 186.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8313,7 +8113,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 269.24 163.83 0)
+			(at 213.36 184.15 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8323,7 +8123,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 269.24 160.02 0)
+			(at 213.36 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8334,7 +8134,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 269.24 160.02 0)
+			(at 213.36 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8345,7 +8145,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 269.24 160.02 0)
+			(at 213.36 180.34 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8445,8 +8245,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 269.24 88.9 0)
+		(lib_id "power:+3V3")
+		(at 231.14 76.2 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8456,7 +8256,7 @@
 		(dnp no)
 		(uuid "5851c4d5-48b2-56d1-9ff0-2fc56b5e134b")
 		(property "Reference" "#PWRio017"
-			(at 269.24 95.25 0)
+			(at 231.14 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8466,8 +8266,8 @@
 				)
 			)
 		)
-		(property "Value" "GND"
-			(at 269.24 92.71 0)
+		(property "Value" "+3V3"
+			(at 231.14 72.644 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8477,7 +8277,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 269.24 88.9 0)
+			(at 231.14 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8488,7 +8288,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 269.24 88.9 0)
+			(at 231.14 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8499,7 +8299,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 269.24 88.9 0)
+			(at 231.14 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8964,7 +8764,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 162.56 251.46 0)
+		(at 91.44 246.38 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8974,7 +8774,7 @@
 		(dnp no)
 		(uuid "6ac332b3-f4c6-503f-9db6-7c6f2ab02ea0")
 		(property "Reference" "#PWRio032"
-			(at 162.56 257.81 0)
+			(at 91.44 252.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8985,7 +8785,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 162.56 255.27 0)
+			(at 91.44 250.19 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8995,7 +8795,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 162.56 251.46 0)
+			(at 91.44 246.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9006,7 +8806,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 162.56 251.46 0)
+			(at 91.44 246.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9017,7 +8817,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 162.56 251.46 0)
+			(at 91.44 246.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9041,7 +8841,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 162.56 247.65 0)
+		(at 276.86 156.21 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9051,7 +8851,7 @@
 		(dnp no)
 		(uuid "6d65fe3a-fcb3-5ab0-9abc-449642c2237e")
 		(property "Reference" "C119"
-			(at 163.195 245.11 0)
+			(at 277.495 153.67 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9061,8 +8861,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
-			(at 163.195 250.19 0)
+		(property "Value" "1uF/16V"
+			(at 277.495 158.75 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9073,7 +8873,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 162.56 247.65 0)
+			(at 276.86 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9084,7 +8884,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 162.56 247.65 0)
+			(at 276.86 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9095,7 +8895,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 162.56 247.65 0)
+			(at 276.86 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9105,8 +8905,8 @@
 				)
 			)
 		)
-		(property "MPN" "C0603C104K5RACTU"
-			(at 162.56 247.65 0)
+		(property "MPN" "C0603C105K3RACTU"
+			(at 276.86 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9229,6 +9029,98 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at 162.56 247.65 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "73c4d1fb-fa98-52cc-b5a7-204e5af1e515")
+		(property "Reference" "C120"
+			(at 163.195 245.11 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF"
+			(at 163.195 250.19 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 162.56 247.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 162.56 247.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 162.56 247.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "C0603C104K5RACTU"
+			(at 162.56 247.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a203e82a-de53-545b-b1df-f189fac2e2b4")
+		)
+		(pin "2"
+			(uuid "8320b10d-ff8c-5bd9-9e7d-261e991df6e2")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/a49d71e0-df6f-5957-a2f8-e887a3c1578b"
+					(reference "C120")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 68.58 132.08 0)
 		(unit 1)
@@ -9307,7 +9199,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 269.24 85.09 0)
+		(at 101.6 204.47 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9317,7 +9209,7 @@
 		(dnp no)
 		(uuid "7c2ec92b-40bf-59d0-858c-5fc80261704d")
 		(property "Reference" "C115"
-			(at 269.875 82.55 0)
+			(at 102.235 201.93 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9328,7 +9220,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 269.875 87.63 0)
+			(at 102.235 207.01 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9339,7 +9231,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 269.24 85.09 0)
+			(at 101.6 204.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9350,7 +9242,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 269.24 85.09 0)
+			(at 101.6 204.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9361,7 +9253,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 269.24 85.09 0)
+			(at 101.6 204.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9372,7 +9264,7 @@
 			)
 		)
 		(property "MPN" "C0603C104K5RACTU"
-			(at 269.24 85.09 0)
+			(at 101.6 204.47 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9936,7 +9828,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 213.36 195.58 0)
+		(at 276.86 160.02 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -9946,7 +9838,7 @@
 		(dnp no)
 		(uuid "8c3b2c56-eeb1-53e8-9af1-38b933a9ac63")
 		(property "Reference" "#PWRio025"
-			(at 213.36 201.93 0)
+			(at 276.86 166.37 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9957,7 +9849,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 213.36 199.39 0)
+			(at 276.86 163.83 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -9967,7 +9859,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 213.36 195.58 0)
+			(at 276.86 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9978,7 +9870,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 213.36 195.58 0)
+			(at 276.86 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9989,7 +9881,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 213.36 195.58 0)
+			(at 276.86 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10013,7 +9905,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 76.2 204.47 0)
+		(at 127 163.83 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10023,7 +9915,7 @@
 		(dnp no)
 		(uuid "9204edd3-60b7-5567-9330-3f72345e47d8")
 		(property "Reference" "C113"
-			(at 76.835 201.93 0)
+			(at 127.635 161.29 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10034,7 +9926,7 @@
 			)
 		)
 		(property "Value" "100nF"
-			(at 76.835 207.01 0)
+			(at 127.635 166.37 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10045,7 +9937,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 76.2 204.47 0)
+			(at 127 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10056,7 +9948,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 76.2 204.47 0)
+			(at 127 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10067,7 +9959,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 76.2 204.47 0)
+			(at 127 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10078,7 +9970,7 @@
 			)
 		)
 		(property "MPN" "C0603C104K5RACTU"
-			(at 76.2 204.47 0)
+			(at 127 163.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10272,7 +10164,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 276.86 156.21 0)
+		(at 269.24 156.21 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10282,7 +10174,7 @@
 		(dnp no)
 		(uuid "9d0dece3-15e3-546d-8a9a-3b20629e3f3f")
 		(property "Reference" "C118"
-			(at 277.495 153.67 0)
+			(at 269.875 153.67 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10292,8 +10184,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1uF/16V"
-			(at 277.495 158.75 0)
+		(property "Value" "100nF"
+			(at 269.875 158.75 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10304,7 +10196,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 276.86 156.21 0)
+			(at 269.24 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10315,7 +10207,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 276.86 156.21 0)
+			(at 269.24 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10326,7 +10218,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 276.86 156.21 0)
+			(at 269.24 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10336,8 +10228,8 @@
 				)
 			)
 		)
-		(property "MPN" "C0603C105K3RACTU"
-			(at 276.86 156.21 0)
+		(property "MPN" "C0603C104K5RACTU"
+			(at 269.24 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10451,7 +10343,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 45.72 238.76 0)
+		(at 208.28 200.66 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10461,7 +10353,7 @@
 		(dnp no)
 		(uuid "a3dbf7db-5b67-536c-b96e-c7e6136f1cb7")
 		(property "Reference" "#PWRio028"
-			(at 45.72 245.11 0)
+			(at 208.28 207.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10472,7 +10364,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 45.72 242.57 0)
+			(at 208.28 204.47 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10482,7 +10374,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 45.72 238.76 0)
+			(at 208.28 200.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10493,7 +10385,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 45.72 238.76 0)
+			(at 208.28 200.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10504,7 +10396,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 45.72 238.76 0)
+			(at 208.28 200.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10527,8 +10419,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3V3")
-		(at 195.58 190.5 0)
+		(lib_id "power:GND")
+		(at 213.36 195.58 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10538,7 +10430,7 @@
 		(dnp no)
 		(uuid "a4ca0288-01ea-51e6-a930-bff527dcb06b")
 		(property "Reference" "#PWRio027"
-			(at 195.58 194.31 0)
+			(at 213.36 201.93 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10548,8 +10440,8 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
-			(at 195.58 186.944 0)
+		(property "Value" "GND"
+			(at 213.36 199.39 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10559,7 +10451,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 195.58 190.5 0)
+			(at 213.36 195.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10570,7 +10462,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 195.58 190.5 0)
+			(at 213.36 195.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10581,7 +10473,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 195.58 190.5 0)
+			(at 213.36 195.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10604,8 +10496,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3V3")
-		(at 144.78 233.68 0)
+		(lib_id "power:GND")
+		(at 76.2 251.46 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10615,7 +10507,7 @@
 		(dnp no)
 		(uuid "a777f7c5-af10-575f-9aa3-c63056e1dd8e")
 		(property "Reference" "#PWRio031"
-			(at 144.78 237.49 0)
+			(at 76.2 257.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10625,8 +10517,8 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
-			(at 144.78 230.124 0)
+		(property "Value" "GND"
+			(at 76.2 255.27 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10636,7 +10528,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 144.78 233.68 0)
+			(at 76.2 251.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10647,7 +10539,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 144.78 233.68 0)
+			(at 76.2 251.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10658,7 +10550,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 144.78 233.68 0)
+			(at 76.2 251.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10682,7 +10574,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 213.36 124.46 0)
+		(at 231.14 127 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10692,7 +10584,7 @@
 		(dnp no)
 		(uuid "ab3e09f8-017d-5b66-928f-8121022d668e")
 		(property "Reference" "#PWRio020"
-			(at 213.36 130.81 0)
+			(at 231.14 133.35 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10703,7 +10595,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 213.36 128.27 0)
+			(at 231.14 130.81 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10713,7 +10605,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 213.36 124.46 0)
+			(at 231.14 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10724,7 +10616,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 213.36 124.46 0)
+			(at 231.14 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10735,7 +10627,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 213.36 124.46 0)
+			(at 231.14 127 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10848,8 +10740,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 76.2 251.46 0)
+		(lib_id "power:+3V3")
+		(at 195.58 190.5 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10859,7 +10751,7 @@
 		(dnp no)
 		(uuid "b1b1ff00-5136-5b5c-9fe2-32cb313bdd10")
 		(property "Reference" "#PWRio029"
-			(at 76.2 257.81 0)
+			(at 195.58 194.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10869,8 +10761,8 @@
 				)
 			)
 		)
-		(property "Value" "GND"
-			(at 76.2 255.27 0)
+		(property "Value" "+3V3"
+			(at 195.58 186.944 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10880,7 +10772,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 76.2 251.46 0)
+			(at 195.58 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10891,7 +10783,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 76.2 251.46 0)
+			(at 195.58 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10902,7 +10794,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 76.2 251.46 0)
+			(at 195.58 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10926,7 +10818,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 276.86 85.09 0)
+		(at 269.24 85.09 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -10936,7 +10828,7 @@
 		(dnp no)
 		(uuid "b51f4873-cb49-52a5-ba21-2156bfce81e1")
 		(property "Reference" "C116"
-			(at 277.495 82.55 0)
+			(at 269.875 82.55 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10946,8 +10838,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "1uF/16V"
-			(at 277.495 87.63 0)
+		(property "Value" "100nF"
+			(at 269.875 87.63 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10958,7 +10850,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
-			(at 276.86 85.09 0)
+			(at 269.24 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10969,7 +10861,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 276.86 85.09 0)
+			(at 269.24 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10980,7 +10872,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 276.86 85.09 0)
+			(at 269.24 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10990,8 +10882,8 @@
 				)
 			)
 		)
-		(property "MPN" "C0603C105K3RACTU"
-			(at 276.86 85.09 0)
+		(property "MPN" "C0603C104K5RACTU"
+			(at 269.24 85.09 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11284,6 +11176,83 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+3V3")
+		(at 144.78 233.68 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ccb5d530-0cb0-5368-b6bf-58aa2295b860")
+		(property "Reference" "#PWRio033"
+			(at 144.78 237.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 144.78 230.124 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 144.78 233.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 233.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 144.78 233.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "cd565eaf-2770-514b-b1ed-df539a52b3fb")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/a49d71e0-df6f-5957-a2f8-e887a3c1578b"
+					(reference "#PWRio033")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 55.88 208.28 0)
 		(unit 1)
@@ -11516,7 +11485,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 231.14 198.12 0)
+		(at 269.24 160.02 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -11526,7 +11495,7 @@
 		(dnp no)
 		(uuid "d5b35353-e4b8-56a8-8203-74bea08a8f61")
 		(property "Reference" "#PWRio024"
-			(at 231.14 204.47 0)
+			(at 269.24 166.37 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11537,7 +11506,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 231.14 201.93 0)
+			(at 269.24 163.83 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -11547,7 +11516,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 231.14 198.12 0)
+			(at 269.24 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11558,7 +11527,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 231.14 198.12 0)
+			(at 269.24 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11569,7 +11538,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 231.14 198.12 0)
+			(at 269.24 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -11586,6 +11555,83 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/a49d71e0-df6f-5957-a2f8-e887a3c1578b"
 					(reference "#PWRio024")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 162.56 251.46 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e86e7c12-c73e-5bc2-93ab-5e4763b5bffa")
+		(property "Reference" "#PWRio034"
+			(at 162.56 257.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 162.56 255.27 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 162.56 251.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 162.56 251.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 162.56 251.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "921cf803-90cc-5ff2-91b7-86f853121cf7")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/a49d71e0-df6f-5957-a2f8-e887a3c1578b"
+					(reference "#PWRio034")
 					(unit 1)
 				)
 			)

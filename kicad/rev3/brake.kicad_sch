@@ -2720,8 +2720,8 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "17c3ca5d-1851-5ddf-b02a-4007257b5746")
-		(property "Reference" "C70"
+		(uuid "180f8960-875e-53b5-a453-820c885d1875")
+		(property "Reference" "C71"
 			(at 117.475 107.95 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2788,15 +2788,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "c83fe871-646d-5eed-bb99-fa91017e3ba8")
+			(uuid "930e4ce1-e779-533c-8c8c-9fe92286a55e")
 		)
 		(pin "2"
-			(uuid "fe7b3d3c-1442-513b-a1b0-92c08f3cddaa")
+			(uuid "bd3d1caa-d135-508e-b58d-973b0cfb72f2")
 		)
 		(instances
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/7ea6b5eb-b8d9-59c7-a905-2ed248e0ec95"
-					(reference "C70")
+					(reference "C71")
 					(unit 1)
 				)
 			)
