@@ -9,10 +9,9 @@ Quantity,Manufacturer Part,Manufacturer,Comment,Designator,Footprint
 1,APT2012SYCK,Kingbright,yellow,D19,LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder
 1,AP7361C-33ER-13,Diodes Incorporated,AP7361C-33ER,U12,SOT-223-3_TabPin2
 1,AQY282S,Panasonic,AQY282S,U22,SO-4_4.4x4.3mm_P2.54mm
-1,BM04B-GHS-TBT(LF)(SN)(N),JST,JST-GH 4p (host UART to Orin),J33,JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical
 1,B2B-PH-K-S(LF)(SN),JST,JST-PH 2p motor switch,J36,JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical
 2,B2B-XH-A(LF)(SN),JST,"B2B-XH-A(LF)(SN) (54 V to Zyxel),B2B-XH-A(LF)(SN) (BMS soft-start via E-STOP)","J13,J38",JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical
-1,B4B-XH-A(LF)(SN),JST,"B4B-XH-A(LF)(SN) (power button, 2-pole)",J37,JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical
+2,B4B-XH-A(LF)(SN),JST,"B4B-XH-A(LF)(SN) (host UART to Orin),B4B-XH-A(LF)(SN) (power button, 2-pole)","J33,J37",JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical
 1,BAS21-7-F,Diodes Incorporated,BAS21,D13,SOT-23
 17,C0603C104K5RACTU,KEMET,"100nF,100nF/16V,100nF/25V","C7,C8,C77,C79,C100,C103,C105,C107-C109,C111-C115,C117,C119",C_0603_1608Metric_Pad1.08x0.95mm_HandSolder
 4,C0603C105K3RACTU,KEMET,"1uF,1uF/16V","C95,C106,C116,C118",C_0603_1608Metric_Pad1.08x0.95mm_HandSolder

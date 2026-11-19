@@ -187,7 +187,7 @@ for ref, label in (("J1", "BATTERY IN 30-42V"), ("J5", "24V IN"), ("J6", "12V IN
     text("+", p1, y1 + 1.0, h=1.4, bold=True)
     text("-", p2, y1 + 1.0, h=1.4, bold=True)
     if ref == "J1":
-        text(label, max((x0 + x1) / 2, 21.5), y1 + 3.0, h=1.2, bold=True)
+        text(label, (x0 + x1) / 2, y1 + 3.0, h=1.4, bold=True)
     else:
         text(label, x0 - 1.0, (y0 + y1) / 2, h=1.3, just=R, bold=True)
 for ref, label in (("J2", "CHARGER"), ("J3", "PACK CHG")):
@@ -236,7 +236,6 @@ if spot:
     text("POWER BOARD  ${REV}", spot[0] + lw / 2, spot[1] + lh + 1.6, h=1.8, bold=True, reach=1.0)
 else:
     missed.append("BMR logo")
-text("JLCJLCJLCJLC", 75.0, 12.0, h=1.0, bottom=True, free=True)
 
 for v, bottom in tp_labels:                                  # test-pad names last, around the rest
     settle(v, bottom, reach=4.0)

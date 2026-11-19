@@ -1679,7 +1679,7 @@ def sheet_mcu():
         W((x - 5.08, 124.46), (x, 124.46))
         hang(sh, R(sh, 5.1e3, net, "GND", rot=0), (x, 124.46))
 
-    # --- host UART to the Orin: 100 ohm series, ESD on TX/RX, JST-GH 4p
+    # --- host UART to the Orin: 1k series, ESD on TX/RX, JST-XH 4p (same family as the power-button header)
     x0, yt = 220.98, 152.4
     lab("UART_TX", (x0, yt), 180)
     lab("UART_RX", (x0, yt + 2.54), 180)
@@ -1700,9 +1700,9 @@ def sheet_mcu():
     W(PIN(rrx, 1), PIN(e2, 3))
     v33(PIN(e2, 5))
     gnd(PIN(e2, 2))
-    gh = sh.add("Connector_Generic_MountingPin:Conn_01x04_MountingPin", "J", "JST-GH 4p (host UART to Orin)",
-                FP["GH4"], {1: "L:TX_C", 2: "L:RX_C", 3: "GND", 4: "L:SP_C", "MP": "GND"},
-                fields={"MPN": "BM04B-GHS-TBT(LF)(SN)(N)"})
+    gh = sh.add("Connector_Generic:Conn_01x04", "J", "B4B-XH-A(LF)(SN) (host UART to Orin)",
+                FP["XH4"], {1: "L:TX_C", 2: "L:RX_C", 3: "GND", 4: "L:SP_C"},
+                fields={"MPN": "B4B-XH-A(LF)(SN)"})
     xg = x0 + 50.8
     at_pin(gh, 1, (xg, yt))
     gh.label_at = {"Reference": (3.81, -5.08), "Value": (3.81, -2.54)}
@@ -1710,7 +1710,6 @@ def sheet_mcu():
     W(PIN(e2, 4), PIN(gh, 2))
     W(PIN(gh, 3), (xg - 5.08, yt + 5.08), (xg - 5.08, yt + 15.24))
     gnd((xg - 5.08, yt + 15.24))
-    gnd(PIN(gh, "MP"))
     rsp = R(sh, 1e3, "L:SP_C", "UART_SP", rot=0)
     at_pin(rsp, 1, (xg - 2.54, yt + 10.16))
     W(PIN(rsp, 1), (xg - 2.54, yt + 7.62), PIN(gh, 4))
