@@ -2572,7 +2572,7 @@
 		)
 		(uuid "9633bc94-c2ac-50c7-ac6b-b092611c58cb")
 	)
-	(text "TPS48111-Q1 + 1 x IPB042N10N3G main + 1 pre-charge. Values from docs/rev3/rails.md (trip 16.7 A after 522 ms, latch-off; short-circuit trip disabled)."
+	(text "TPS48111-Q1 + 1 x IPB042N10N3G main + 1 pre-charge. Values from docs/rev3/rails.md (trip 16.6 A after 522 ms, latch-off; short-circuit trip disabled)."
 		(exclude_from_sim no)
 		(at 20 24 0)
 		(effects
@@ -4670,7 +4670,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "47uF/16V"
+		(property "Value" "47uF/35V"
 			(at 59.055 106.68 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4681,7 +4681,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:CP_Elec_8x10.5"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
 			(at 58.42 104.14 0)
 			(hide yes)
 			(show_name no)
@@ -4704,6 +4704,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 58.42 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "EEU-FC1V470"
 			(at 58.42 104.14 0)
 			(hide yes)
 			(show_name no)
@@ -4951,6 +4962,17 @@
 				)
 			)
 		)
+		(property "MPN" "SMBJ6.0A (Littelfuse)"
+			(at 30.48 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "17092146-cc8a-5d88-ba15-d54189f9430d")
 		)
@@ -5064,7 +5086,7 @@
 				)
 			)
 		)
-		(property "Value" "35.7k"
+		(property "Value" "71.5k"
 			(at 152.4 205.74 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5224,7 +5246,7 @@
 				)
 			)
 		)
-		(property "Value" "6.34k"
+		(property "Value" "12.7k"
 			(at 139.7 219.71 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5500,6 +5522,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 96.52 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "GRM31CR72A105KA01L"
 			(at 96.52 128.27 0)
 			(hide yes)
 			(show_name no)
@@ -7105,7 +7138,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "47uF/16V"
+		(property "Value" "47uF/35V"
 			(at 46.355 106.68 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7116,7 +7149,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:CP_Elec_8x10.5"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
 			(at 45.72 104.14 0)
 			(hide yes)
 			(show_name no)
@@ -7139,6 +7172,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 45.72 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "EEU-FC1V470"
 			(at 45.72 104.14 0)
 			(hide yes)
 			(show_name no)
@@ -7579,7 +7623,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "2m"
+		(property "Value" "1m"
 			(at 143.51 93.98 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7623,7 +7667,7 @@
 				)
 			)
 		)
-		(property "MPN" "CSS2H-2512K-2L00F"
+		(property "MPN" "CSS2H-2512R-1L00F"
 			(at 147.32 96.52 0)
 			(hide yes)
 			(show_name no)

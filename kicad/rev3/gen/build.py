@@ -626,6 +626,7 @@ FP = dict(
     C1210="Capacitor_SMD:C_1210_3225Metric_Pad1.33x2.70mm_HandSolder",
     CP10="Capacitor_SMD:CP_Elec_10x10.5",
     CPR12="Capacitor_THT:CP_Radial_D12.5mm_P5.00mm",
+    CPR6="Capacitor_THT:CP_Radial_D6.3mm_P2.50mm",
     SHUNT2512K="PowerBoard_rev3:R_Bourns_CSS2H-2512_Kelvin",
     CP8="Capacitor_SMD:CP_Elec_8x10.5",
     D2PAK="Package_TO_SOT_SMD:TO-263-2",
@@ -747,7 +748,6 @@ VIN = {"42V-D": "BUS42", "42V-C": "BUS42", "24V": "VIN24", "12V": "VIN12", "5V":
 OUT = {"42V-D": "OUT42D", "42V-C": "OUT42C", "24V": "OUT24", "12V": "OUT12", "5V": "OUT5", "54V": "SW54_OUT"}
 UVLO_ON = {"42V-D": 26, "42V-C": 26, "24V": 18, "12V": 9, "5V": 3.8, "54V": 26}
 TVS_IN = {"24V": "SMBJ26A", "12V": "SMBJ13A", "5V": "SMBJ6.0A"}
-CBULK_V = {"24V": 35, "12V": 25, "5V": 16}
 
 
 def divider_bottom(top, v_full, v_adc=2.4):
@@ -908,7 +908,7 @@ def sheet_switch(r):
     rvs = hang(sh, R(sh, 100, vin, "L:VS", rot=0), (vs[0], yR), gnd=False)     # TI: R_VS on noisy buses
     W(PIN(rvs, 2), vs)
     c1 = C(sh, 100e-9, "L:VS", "GND", volt=100, at=(91.44, 128.27), rot=0)
-    c2 = C(sh, 1e-6, "L:VS", "GND", fp="C1206", volt=100, at=(76.2, 128.27), rot=0)
+    c2 = C(sh, 1e-6, "L:VS", "GND", fp="C1206", volt=100, at=(76.2, 128.27), rot=0, MPN="GRM31CR72A105KA01L")
     W(PIN(c2, 1), (vs[0], 124.46))
     M("flag", (86.36, 124.46))         # VS is fed through R_VS, a passive part
     gnd(PIN(c1, 2))
@@ -1052,9 +1052,10 @@ def sheet_switch(r):
     W((22.86, yR), PIN(rs, 1))
     if r["name"] in TVS_IN:
         TP(sh, vin, at=(25.4, yR))
-        hang(sh, DZ(sh, TVS_IN[r["name"]], vin, "GND", rot=270), (30.48, yR), gap=3.81)
+        hang(sh, DZ(sh, TVS_IN[r["name"]], vin, "GND", rot=270, MPN=f"{TVS_IN[r['name']]} (Littelfuse)"),
+             (30.48, yR), gap=3.81)
         for x in (45.72, 58.42):
-            hang(sh, CP(sh, f"47uF/{CBULK_V[r['name']]}V", vin, "GND", fp="CP8", rot=0), (x, yR), gap=3.81)
+            hang(sh, CP(sh, "47uF/35V", vin, "GND", fp="CPR6", rot=0, MPN="EEU-FC1V470"), (x, yR), gap=3.81)
         xd = 71.12
         rit = R(sh, 100e3, vin, f"VSNS_IN_{n}", at=(xd, 110.49), rot=0)
         rib = R(sh, divider_bottom(100e3, r["v"] * 1.25), f"VSNS_IN_{n}", "GND", at=(xd, 134.62), rot=0)

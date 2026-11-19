@@ -2538,7 +2538,7 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "TPS48111-Q1 + 1 x IPB042N10N3G main + 1 pre-charge. Values from docs/rev3/rails.md (trip 13.8 A after 522 ms, latch-off; short-circuit trip disabled)."
+	(text "TPS48111-Q1 + 1 x IPB042N10N3G main + 1 pre-charge. Values from docs/rev3/rails.md (trip 11.1 A after 522 ms, latch-off; short-circuit trip disabled)."
 		(exclude_from_sim no)
 		(at 20 24 0)
 		(effects
@@ -5179,6 +5179,17 @@
 				)
 			)
 		)
+		(property "MPN" "SMBJ26A (Littelfuse)"
+			(at 30.48 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "42b299be-14b7-5619-9d3f-f74165dc50ea")
 		)
@@ -5952,7 +5963,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:CP_Elec_8x10.5"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
 			(at 58.42 104.14 0)
 			(hide yes)
 			(show_name no)
@@ -5975,6 +5986,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 58.42 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "EEU-FC1V470"
 			(at 58.42 104.14 0)
 			(hide yes)
 			(show_name no)
@@ -6881,7 +6903,7 @@
 				)
 			)
 		)
-		(property "Value" "7.68k"
+		(property "Value" "9.53k"
 			(at 139.7 219.71 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6995,6 +7017,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 96.52 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "GRM31CR72A105KA01L"
 			(at 96.52 128.27 0)
 			(hide yes)
 			(show_name no)
@@ -7120,7 +7153,7 @@
 				)
 			)
 		)
-		(property "Value" "43.2k"
+		(property "Value" "53.6k"
 			(at 152.4 205.74 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8174,7 +8207,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:CP_Elec_8x10.5"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
 			(at 45.72 104.14 0)
 			(hide yes)
 			(show_name no)
@@ -8197,6 +8230,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 45.72 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "EEU-FC1V470"
 			(at 45.72 104.14 0)
 			(hide yes)
 			(show_name no)

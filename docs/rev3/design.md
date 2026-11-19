@@ -211,9 +211,9 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
 |--------|------|-------|-------------------|--------------------|
 | 42 V drives (4 × XT90), 30 A design | 2 × IPB042N10N3G in parallel + 1 pre-charge | 0.5 mΩ | 60 A for 1.1 s (firmware: 20 A sustained) | 150 A |
 | 42 V converter feeds (4 × XT90), 30 A | 2 × IPB042N10N3G in parallel + 1 pre-charge | 1 mΩ | 30 A for 0.5 s | 100 A |
-| 24 V (8 × Deans T), 12.5 A | IPB042N10N3G main + pre-charge | 2 mΩ | 13.8 A | off |
-| 12 V (7 × XT60), 12.5 A | IPB042N10N3G main + pre-charge | 2 mΩ | 13.8 A | off |
-| 5 V (11 × XT30), 15 A | IPB042N10N3G main + pre-charge | 2 mΩ | 16.7 A | off |
+| 24 V (8 × Deans T), 10 A | IPB042N10N3G main + pre-charge | 2 mΩ | 11.1 A | off |
+| 12 V (7 × XT60), 10 A | IPB042N10N3G main + pre-charge | 2 mΩ | 11.1 A | off |
+| 5 V (11 × XT30), 15 A | IPB042N10N3G main + pre-charge | 1 mΩ | 16.6 A | off |
 | 54 V supply (boost input), 4 A | IPB042N10N3G main + pre-charge | 3 mΩ | 5.0 A | 20 A |
 
 - **42 V groups, one direction:** the parallel FETs all point the same way, not
@@ -284,6 +284,16 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
   as TI recommends for noisy buses.
   - Hot-plugging a device onto a live group must not trip the fast detector, so use
     **XT90-S anti-spark plugs** on the 42 V devices.
+- **Rail trips follow the converters (2026-11-19):** about 1.1× each converter's rated output
+  (AM9032 24 V 10 A, AM3290 12 V 10 A, AM5942 5 V 15 A). The eFuse then latches off a
+  sustained overload before the converter has to fold back on its own, and the rail reports
+  why. Re-run `rails.py` if the 24 V or 5 V converter changes (OPEN, section 4.6).
+  - The 5 V shunt is 1 mΩ (16 mV at 16.6 A). At 2 mΩ the trip voltage would have been
+    33 mV, above TI's characterized 10–30 mV, and the 1.8 mΩ part is not stocked.
+  - Every trip now sits inside 10–30 mV: 30 / 30 / 22 / 22 / 16 / 15 mV.
+- **Rail input parts:** SMBJ26A / 13A / 6.0A TVS. The bulk caps are 2 × 47 µF / 35 V
+  Panasonic EEU-FC1V470 (radial 6.3 × 11.2 mm, through-hole) on every rail, one part
+  stocked at both TME and Mouser.
 - **Rail short-circuit trip is disabled** (ISCP tied to CS−).
   - A hot-plugged device's input capacitors pull a spike of tens of µs. That would trip
     the 1.2 µs detector and drop the whole rail.

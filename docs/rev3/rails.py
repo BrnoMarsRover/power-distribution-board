@@ -101,15 +101,15 @@ RAILS = [
          note="Converter-feed group: three feeds plus one spare. 24 V 300 W + 12 V 150 W + 5 V 150 W "
               "is about 22 A at 30 V; the 30 A design leaves room for a converter on the spare. "
               "Defaults ON, because the 12 V converter powers the Orin."),
-    dict(name="24V", v=24.0, design=12.5, i_oc=13.75, t_oc=0.5, i_sc=None,
+    dict(name="24V", v=24.0, design=10.0, i_oc=11.0, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=8, conn="Deans T",
          i_inrush=1.0, ptc="SMD2920P300TF/33", src="300 W converter", default_on=False),
-    dict(name="12V", v=12.0, design=12.5, i_oc=13.75, t_oc=0.5, i_sc=None,
+    dict(name="12V", v=12.0, design=10.0, i_oc=11.0, t_oc=0.5, i_sc=None,
          r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=470e-6, n_out=7, conn="XT60",
          i_inrush=2.0, ptc="SMD2920P300TF/16", src="150 W converter", default_on=True,
          note="Feeds the Jetson AGX Orin, so it defaults ON in hardware."),
     dict(name="5V", v=5.0, design=15.0, i_oc=16.5, t_oc=0.5, i_sc=None,
-         r_sns=2e-3, fet="IPB042N10N3G", n_main=1, c_out=220e-6, n_out=11, conn="XT30",
+         r_sns=1e-3, fet="IPB042N10N3G", n_main=1, c_out=220e-6, n_out=11, conn="XT30",
          i_inrush=2.0, ptc="SMD1812P300TF", src="150 W converter, XT30-limited",
          default_on=False),
     dict(name="54V", v=42.0, design=4.0, i_oc=5.0, t_oc=0.5, i_sc=20.0,

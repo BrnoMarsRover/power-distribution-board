@@ -7959,6 +7959,17 @@
 				)
 			)
 		)
+		(property "MPN" "GRM31CR72A105KA01L"
+			(at 96.52 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "44ec3e35-cfb7-5f4e-bd99-0312cd82f3a6")
 		)
