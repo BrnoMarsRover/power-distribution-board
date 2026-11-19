@@ -905,6 +905,43 @@ layout.
 - **Repeated switches:** all six switches share one hierarchical KiCad sheet, instanced
   six times with different values.
 
+### 8.0 Floorplan (first pass, 2026-11-19)
+
+- **Board:** 150 × 150 mm with rev2's five M3 holes (corners 3.5 mm in, plus the centre), so
+  it fits the existing mount. 120 × 140 mm could not work: the part outlines alone take
+  18,100 mm², more than the board. The top side is nearly full at 150 × 150, so power parts
+  go on top and control and logic on the bottom.
+- **Edges (top side, pin 1 / + facing into the board):**
+  - Top: four drive XT90s, the brake-resistor XT60, four converter-feed XT90s.
+  - Left: battery XT90, charger and pack-charge XT60s, 12 V in, seven 12 V XT60 outputs,
+    each with its PTC beside it.
+  - Right: Zyxel 54 V header, 5 V in, eleven 5 V XT30 outputs with PTCs, then USB-C and the
+    Orin UART header.
+  - Bottom: 24 V in, eight 24 V Deans T outputs with PTCs, then the two CAN connectors.
+- **Interior:** each eFuse's FETs, shunt and bypass link sit near the connectors they
+  feed. Its TPS48111 and passives sit on the bottom, directly under them. The boost and the
+  aux buck stay entirely on top, so their switching loops stay on one side.
+- **Bottom:** the ESP32, the expander and ADCs, CAN, the INA228, and the signal test pads,
+  which sit with the circuitry they probe. GND test loops are through-hole.
+- **Tools:** `gen/pcb_import.py` (one-time footprint import, linked to the schematic) and
+  `gen/pcb_place.py` (this first pass; it refuses to run without `--overwrite-placement`).
+  From now on the schematic is edited in KiCad, and changes reach the board with
+  Update PCB from Schematic (F8).
+- **Hand placement checklist:**
+  - Pull every group together; some parts landed outside their zone (Q6 and parts of the
+    boost and of the 12 V and 54 V eFuses).
+  - Boost: keep the hot loop tight (FDD86102 pair, R121 sense resistor, output ceramics);
+    the LM5122 sits right next to it.
+  - Shunts: Kelvin traces from each CSS2H shunt to its TPS48111 (and from R1 to the
+    INA228), run as a pair, away from the boost switch node.
+  - 42 V paths: BUS42 and the drive and converter rails as L1 + L4 pours, stitched with
+    via arrays (about 1 A per 0.3 mm via), with mask-open strips for solder reinforcement.
+  - L2 stays a solid GND plane. Bottom-side parts break up the L4 pour, so keep them out
+    of the high-current corridors.
+  - Turn the USB-C and CLIK-Mate openings to face the board edge (the script cannot tell
+    which way they open).
+  - Tidy the reference designators: the 400 silkscreen DRC items are overlapping text.
+
 ### 8.1 Hand soldering (decided)
 
 - **Leaded packages only:** no QFN, DFN, SON, WQFN or TOLL.
