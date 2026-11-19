@@ -16,13 +16,13 @@ One TPS48111-Q1 eFuse per rail (two for the 42 V outputs), with a resettable PTC
 | R_SNS | 0.5 mOhm, 0.45 W at design current, 30 mV at trip | 1 mOhm, 0.90 W at design current, 30 mV at trip | 2 mOhm, 0.20 W at design current, 22 mV at trip | 2 mOhm, 0.20 W at design current, 22 mV at trip | 1 mOhm, 0.23 W at design current, 16 mV at trip | 3 mOhm, 0.05 W at design current, 15 mV at trip |
 | R_SET | 100R | 100R | 100R | 100R | 100R | 100R |
 | R_IWRN | 39.2k -> trips at 60.7 A | 39.2k -> trips at 30.4 A | 53.6k -> trips at 11.1 A | 53.6k -> trips at 11.1 A | 71.5k -> trips at 16.6 A | 78.7k -> trips at 5.0 A |
-| C_TMR (R_TMR 100k, latch-off) | 68uF -> 1076 ms | 33uF -> 522 ms | 33uF -> 522 ms | 33uF -> 522 ms | 33uF -> 522 ms | 33uF -> 522 ms |
+| C_TMR (R_TMR 100k, latch-off) | 47uF + 22uF -> 1092 ms | 22uF + 10uF -> 506 ms | 22uF + 10uF -> 506 ms | 22uF + 10uF -> 506 ms | 22uF + 10uF -> 506 ms | 22uF + 10uF -> 506 ms |
 | R_ISCP | 4.3k -> 149 A in 1.2 us | 6.2k -> 104 A in 1.2 us | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | ISCP tied to CS- (disabled): converter-limited, survives hot-plug spikes | 3.3k -> 20 A in 1.2 us |
 | R_IMON | 6.8k -> 31 mV/A, 2.4 V at 76 A | 6.8k -> 61 mV/A, 2.4 V at 38 A | 9.1k -> 164 mV/A, 2.4 V at 14 A | 9.1k -> 164 mV/A, 2.4 V at 14 A | 12k -> 108 mV/A, 2.4 V at 21 A | 13k -> 351 mV/A, 2.4 V at 6 A |
 | C_g / R_g (pre-charge slew) | 1uF / 330R -> 0.4 A for 420 ms | 470nF / 330R -> 0.4 A for 197 ms | 390nF / 330R -> 1.0 A for 94 ms | 150nF / 330R -> 2.2 A for 18 ms | 120nF / 330R -> 2.0 A for 6 ms | 150nF / 330R -> 0.4 A for 63 ms |
 | Pre-charge FET stress | 3.32 J, 16 W peak (ASSUMED 3.76mF load) - check its SOA | 1.66 J, 17 W peak (ASSUMED 1.88mF load) - check its SOA | 1.08 J, 23 W peak (ASSUMED 3.76mF load) - check its SOA | 0.24 J, 26 W peak (ASSUMED 3.29mF load) - check its SOA | 0.03 J, 10 W peak (ASSUMED 2.42mF load) - check its SOA | 0.53 J, 17 W peak (ASSUMED 600uF load) - check its SOA |
-| C_BST | 15uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 6.8uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 4.7uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 2.2uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 1.5uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) | 2.2uF (>= Qg(main + pre-charge) / 1 V + 10 x C_g) |
-| Power-on timing | OFF until the PC asks | ON at boot (ESP32): driver ready ~0.52 s after EN, pre-charge ~197 ms, then INP once VSNS_OUT reaches the input | OFF until the PC asks | ON at boot (ESP32): driver ready ~0.17 s after EN, pre-charge ~18 ms, then INP once VSNS_OUT reaches the input | OFF until the PC asks | ON at boot (ESP32): driver ready ~0.17 s after EN, pre-charge ~63 ms, then INP once VSNS_OUT reaches the input |
+| C_BST | 3 x 10uF/50V X7R 1210 (need 10.4uF at 12 V; counted at 50% for DC bias) | 2 x 10uF/50V X7R 1210 (need 5.05uF at 12 V; counted at 50% for DC bias) | 1 x 10uF/50V X7R 1210 (need 4.13uF at 12 V; counted at 50% for DC bias) | 1 x 10uF/50V X7R 1210 (need 1.73uF at 12 V; counted at 50% for DC bias) | 1 x 10uF/50V X7R 1210 (need 1.43uF at 12 V; counted at 50% for DC bias) | 1 x 10uF/50V X7R 1210 (need 1.73uF at 12 V; counted at 50% for DC bias) |
+| Power-on timing | OFF until the PC asks | ON at boot (ESP32): driver ready ~1.52 s after EN, pre-charge ~197 ms, then INP once VSNS_OUT reaches the input | OFF until the PC asks | ON at boot (ESP32): driver ready ~0.76 s after EN, pre-charge ~18 ms, then INP once VSNS_OUT reaches the input | OFF until the PC asks | ON at boot (ESP32): driver ready ~0.76 s after EN, pre-charge ~63 ms, then INP once VSNS_OUT reaches the input |
 
 - **42V-D:** Drive group: EPOS4 50/5 (two per connector, two connectors in use, two spare; ASSUMED 470 uF per drive) or CubeMars AK10-9 V3.0 actuators. The 60 A / 1.1 s trip sits above four EPOS4s accelerating (15 A each); CubeMars actuators (31.9 A peak) need a configured current limit. The rear-panel motor switch feeds this driver's EN/UVLO through the latch, so opening it cuts motor power in hardware without touching the Orin. Defaults OFF: the drives are useless without a controller.
 - **42V-C:** Converter-feed group: three feeds plus one spare. 24 V 300 W + 12 V 150 W + 5 V 150 W is about 22 A at 30 V; the 30 A design leaves room for a converter on the spare. Defaults ON, because the 12 V converter powers the Orin.
@@ -36,9 +36,9 @@ Every eFuse powers up OFF (pull-downs on INP and INP_G). The ESP32 runs from the
 | Step | Typical |
 |---|---|
 | ESP32 boots, reads every VSNS_OUT and FLT | 0.3-0.5 s |
-| 42V-C: INP_G on; driver ready after ~0.52 s; pre-charge ~197 ms; INP on once VSNS_OUT is within 5 % of the input; INP_G off | |
-| 12V: INP_G on; driver ready after ~0.17 s; pre-charge ~18 ms; INP on once VSNS_OUT is within 5 % of the input; INP_G off | |
-| 54V: INP_G on; driver ready after ~0.17 s; pre-charge ~63 ms; INP on once VSNS_OUT is within 5 % of the input; INP_G off | |
+| 42V-C: INP_G on; driver ready after ~1.52 s; pre-charge ~197 ms; INP on once VSNS_OUT is within 5 % of the input; INP_G off | |
+| 12V: INP_G on; driver ready after ~0.76 s; pre-charge ~18 ms; INP on once VSNS_OUT is within 5 % of the input; INP_G off | |
+| 54V: INP_G on; driver ready after ~0.76 s; pre-charge ~63 ms; INP on once VSNS_OUT is within 5 % of the input; INP_G off | |
 | Orin powered | about 1-1.5 s after the battery connects |
 
 The 12 V eFuse starts only once the converter group is fully on, so its pre-charge never draws through the converter group's pre-charge FET. If a step does not finish in its window (pre-charge slower than 4x the expected time, or FLT asserts), firmware leaves that rail off and reports it.

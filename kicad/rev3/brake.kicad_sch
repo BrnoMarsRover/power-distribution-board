@@ -2774,6 +2774,17 @@
 				)
 			)
 		)
+		(property "MPN" "RC0603FR-07845KL"
+			(at 92.71 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "71ccb49b-63ae-5a86-920a-6e0cee2835e4")
 		)
@@ -2853,6 +2864,17 @@
 				)
 			)
 		)
+		(property "MPN" "none: PCB pad"
+			(at 93.98 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "6fdc1ad4-f78f-514e-8033-f07af7cfebef")
 		)
@@ -2860,6 +2882,98 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/7ea6b5eb-b8d9-59c7-a905-2ed248e0ec95"
 					(reference "TP51")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 116.84 110.49 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "29b75267-fa04-5e93-930e-60b14fbbe602")
+		(property "Reference" "C72"
+			(at 117.475 107.95 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10uF/25V"
+			(at 117.475 113.03 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 116.84 110.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 116.84 110.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 116.84 110.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "CL31A106KAHNNNE"
+			(at 116.84 110.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "8aa0e9d6-b5a9-5d45-aabe-369c89cf4fee")
+		)
+		(pin "2"
+			(uuid "e9adf0f9-33ca-57a6-9408-2fbdb79bc12b")
+		)
+		(instances
+			(project "PowerBoard_rev3"
+				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/7ea6b5eb-b8d9-59c7-a905-2ed248e0ec95"
+					(reference "C72")
 					(unit 1)
 				)
 			)
@@ -3187,6 +3301,17 @@
 				)
 			)
 		)
+		(property "MPN" "RC0603FR-0722RL"
+			(at 123.19 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "dba129e4-06d5-5340-8465-5808ce3838e3")
 		)
@@ -3435,6 +3560,17 @@
 				)
 			)
 		)
+		(property "MPN" "RC0603FR-0710KL"
+			(at 83.82 110.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "5e55631c-d235-5170-8ad7-4c981bd099fe")
 		)
@@ -3504,6 +3640,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 134.62 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "none: PCB pad"
 			(at 134.62 149.86 0)
 			(hide yes)
 			(show_name no)
@@ -3682,6 +3829,17 @@
 				)
 			)
 		)
+		(property "MPN" "RC1206FR-074K7L"
+			(at 129.54 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "11c5e1a4-c5df-56bd-8d86-e7cce0cf4be0")
 		)
@@ -3751,6 +3909,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 132.08 135.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "RC0603FR-07100KL"
 			(at 132.08 135.89 0)
 			(hide yes)
 			(show_name no)
@@ -3842,6 +4011,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT60PT-F"
+			(at 167.64 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "416eec48-01e1-5f38-9225-3ac2b7799bbd")
 		)
@@ -3852,87 +4032,6 @@
 			(project "PowerBoard_rev3"
 				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/7ea6b5eb-b8d9-59c7-a905-2ed248e0ec95"
 					(reference "J4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C")
-		(at 116.84 110.49 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8ca12518-5b1c-5a45-9dd4-495726031d30")
-		(property "Reference" "C63"
-			(at 117.475 107.95 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10uF/25V"
-			(at 117.475 113.03 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 116.84 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 116.84 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 116.84 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b2d0fe49-c919-5968-b469-266dcd7617a9")
-		)
-		(pin "2"
-			(uuid "f4735f23-9e6f-5c87-a918-025171f285d9")
-		)
-		(instances
-			(project "PowerBoard_rev3"
-				(path "/516ab0ea-2d5a-54c1-908c-ca4e966c6d14/7ea6b5eb-b8d9-59c7-a905-2ed248e0ec95"
-					(reference "C63")
 					(unit 1)
 				)
 			)
@@ -4069,6 +4168,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 132.08 156.21 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "RC0603FR-0736KL"
 			(at 132.08 156.21 0)
 			(hide yes)
 			(show_name no)
@@ -4407,6 +4517,17 @@
 				)
 			)
 		)
+		(property "MPN" "RC1206FR-074K7L"
+			(at 129.54 97.79 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "34c6bfaf-b36f-599e-8ae2-c6c2ee32bd1c")
 		)
@@ -4476,6 +4597,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 66.04 140.97 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "RC0603FR-0710KL"
 			(at 66.04 140.97 0)
 			(hide yes)
 			(show_name no)
@@ -4709,6 +4841,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 66.04 128.27 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "RC1206FR-07178KL"
 			(at 66.04 128.27 0)
 			(hide yes)
 			(show_name no)

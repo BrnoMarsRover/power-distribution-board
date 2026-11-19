@@ -2920,6 +2920,17 @@
 				)
 			)
 		)
+		(property "MPN" "RC0603FR-0710RL"
+			(at 179.07 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "e1c9479c-e08a-587b-a194-fc7c965f4348")
 		)
@@ -3230,6 +3241,17 @@
 				)
 			)
 		)
+		(property "MPN" "C0603C104K5RACTU"
+			(at 176.53 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "5ee0ed6b-b861-5b35-98cc-914ea0b35310")
 		)
@@ -3386,6 +3408,17 @@
 				)
 			)
 		)
+		(property "MPN" "none: PCB pad"
+			(at 210.82 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "09b1758a-4879-580a-a16d-4eaae583aa83")
 		)
@@ -3529,6 +3562,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 88.9 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "none: PCB pad"
 			(at 88.9 147.32 0)
 			(hide yes)
 			(show_name no)
@@ -4030,6 +4074,17 @@
 				)
 			)
 		)
+		(property "MPN" "none: PCB pad"
+			(at 198.12 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "7c4be6c0-ac88-5479-91cc-6f2194da1626")
 		)
@@ -4175,6 +4230,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 248.92 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT60PT-M"
 			(at 248.92 91.44 0)
 			(hide yes)
 			(show_name no)
@@ -4331,6 +4397,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 45.72 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "none: PCB pad"
 			(at 45.72 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -4834,7 +4911,7 @@
 				)
 			)
 		)
-		(property "MPN" "SMCJ45A (Littelfuse)"
+		(property "MPN" "SMCJ45A"
 			(at 63.5 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -4915,6 +4992,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 25.4 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT60PT-M"
 			(at 25.4 109.22 0)
 			(hide yes)
 			(show_name no)
@@ -5006,6 +5094,17 @@
 				)
 			)
 		)
+		(property "MPN" "C0603C104K5RACTU"
+			(at 160.02 120.65 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "0d753606-2ae9-5dcb-9fb8-08017e058bc5")
 		)
@@ -5076,6 +5175,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 25.4 76.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT90PB-M"
 			(at 25.4 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -5339,6 +5449,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 66.04 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "5001"
 			(at 66.04 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -5794,6 +5915,17 @@
 				)
 			)
 		)
+		(property "MPN" "RC0603FR-0710KL"
+			(at 203.2 110.49 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "19b7f8b3-27b0-5749-b33d-edf5fe48ef82")
 		)
@@ -5940,6 +6072,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 173.99 87.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "RC0603FR-0710RL"
 			(at 173.99 87.63 0)
 			(hide yes)
 			(show_name no)

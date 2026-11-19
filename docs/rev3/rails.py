@@ -76,6 +76,10 @@ I_TMR = 82e-6            # TMR pull-up current
 R_TMR = 100e3            # across C_TMR -> latch-off mode (section 8.3.3.2)
 I_G = 100e-6             # pre-charge gate pull-up current, typical (72-140 uA)
 
+# Timer caps (TMR pin sits near 1.2 V, so DC bias is negligible): value, MPN, voltage
+TMR_PARTS = [(47e-6, "CL31A476MQHNNNE", 6.3), (22e-6, "CL31B226KPHNNNE", 10), (10e-6, "CL31A106KAHNNNE", 25)]
+# Bootstrap cap part: MPN, nominal C, fraction assumed left at 12 V DC bias (conservative for 50 V X7R 1210)
+C_BST_PART = ("CL32B106KBJNNNE", 10e-6, 0.5)
 FET_QG = {"IPB042N10N3G": 117e-9, "FDD86102": 19e-9}   # total gate charge at 10 V
 
 # FETs: name, R_DS(on) max at 10 V in ohms, JLC part, description. Leaded packages only.
@@ -152,7 +156,12 @@ def rail_values(r):
     v["i_oc"] = 11.9 * R_SET / v["r_iwrn"] / r["r_sns"]
     # Eq. 10 (latch-off, R_TMR across C_TMR): C_TMR = t_OC / (R_TMR * ln(1 / (1 - 1.2 / (R_TMR * I_TMR))))
     v["k_tmr"] = R_TMR * math.log(1 / (1 - 1.2 / (R_TMR * I_TMR)))
-    v["c_tmr"] = nearest(r["t_oc"] / v["k_tmr"], E12)
+    # Large MLCCs are scarce: build C_TMR from one or two stocked 1206 parts, closest to the target
+    target = r["t_oc"] / v["k_tmr"]
+    combos = [(c,) for c in TMR_PARTS] + [(a, b) for i, a in enumerate(TMR_PARTS) for b in TMR_PARTS[i:]]
+    v["c_tmr_parts"] = min(combos, key=lambda cs: (abs(sum(c[0] for c in cs) - target) / target > 0.1, len(cs),
+                                                    abs(sum(c[0] for c in cs) - target)))
+    v["c_tmr"] = sum(c[0] for c in v["c_tmr_parts"])
     v["r_tmr"] = R_TMR
     # Eq. 11: R_ISCP = I_SC * R_SNS / 15.6 uA - 464; None = ISCP tied to CS- (disabled)
     if r["i_sc"]:
@@ -172,8 +181,11 @@ def rail_values(r):
     v["energy"] = 0.5 * v["c_load"] * r["v"] ** 2
     v["rds"], v["fet_lcsc"], v["fet_desc"] = FETS[r["fet"]]
     # Eq. 4/20: C_BST > Qg(total) / 1 V + 10 x C_g
-    v["c_bst"] = ceil_e(FET_QG[r["fet"]] * (r["n_main"] + 1) / 1.0 + 10 * v["c_g"], E6)
-    v["t_bst"] = v["c_bst"] * V_BST_UVLOR_TYP / I_BST_TYP      # typical: gate driver ready after EN
+    # The cap sits at 12 V (charge pump), so it is counted at C_BST_PART's derated value.
+    v["c_bst_req"] = FET_QG[r["fet"]] * (r["n_main"] + 1) / 1.0 + 10 * v["c_g"]
+    v["n_bst"] = math.ceil(v["c_bst_req"] / (C_BST_PART[1] * C_BST_PART[2]) - 1e-9)
+    v["c_bst"] = v["n_bst"] * C_BST_PART[1]                     # nominal
+    v["t_bst"] = v["c_bst"] * V_BST_UVLOR_TYP / I_BST_TYP      # gate driver ready after EN; nominal C = slowest case
     return v
 
 
@@ -193,13 +205,15 @@ def design_rail(r):
                   f"{v['v_wrn'] * 1e3:.0f} mV at trip"),
         ("R_SET", fmt_r(R_SET)),
         ("R_IWRN", f"{fmt_r(v['r_iwrn'])} -> trips at {v['i_oc']:.1f} A"),
-        ("C_TMR (R_TMR 100k, latch-off)", f"{fmt_c(v['c_tmr'])} -> {v['c_tmr'] * v['k_tmr'] * 1e3:.0f} ms"),
+        ("C_TMR (R_TMR 100k, latch-off)", f"{' + '.join(fmt_c(c[0]) for c in v['c_tmr_parts'])} -> "
+                                           f"{v['c_tmr'] * v['k_tmr'] * 1e3:.0f} ms"),
         ("R_ISCP", iscp),
         ("R_IMON", f"{fmt_r(v['r_imon'])} -> {v['mv_per_a']:.0f} mV/A, {ADC_FULL_SCALE_V:g} V at {v['i_fs']:.0f} A"),
         ("C_g / R_g (pre-charge slew)", f"{fmt_c(v['c_g'])} / 330R -> {v['i_inrush']:.1f} A for {v['t_ramp'] * 1e3:.0f} ms"),
         ("Pre-charge FET stress", f"{v['energy']:.2f} J, {r['v'] * v['i_inrush']:.0f} W peak (ASSUMED "
                                   f"{fmt_c(v['c_load'])} load) - check its SOA"),
-        ("C_BST", f"{fmt_c(v['c_bst'])} (>= Qg(main + pre-charge) / 1 V + 10 x C_g)"),
+        ("C_BST", f"{v['n_bst']} x {fmt_c(C_BST_PART[1])}/50V X7R 1210 (need {fmt_c(v['c_bst_req'])} at 12 V; counted at "
+                  f"{C_BST_PART[2]:.0%} for DC bias)"),
         ("Power-on timing", power_on_text(r, v)),
     ]
 

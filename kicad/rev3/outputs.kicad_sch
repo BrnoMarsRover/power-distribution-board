@@ -3231,6 +3231,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT90PB-F"
+			(at 132.08 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "996f8689-d315-52a5-ac70-ea67feb1cee9")
 		)
@@ -3379,6 +3390,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 167.64 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT60PT-F"
 			(at 167.64 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -4223,6 +4245,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT60PT-F"
+			(at 167.64 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "05b5d4ac-c00e-54c2-9c80-279c3036a1a7")
 		)
@@ -4294,6 +4327,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 78.74 187.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
 			(at 78.74 187.96 0)
 			(hide yes)
 			(show_name no)
@@ -4467,6 +4511,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 256.54 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT30UPB-F"
 			(at 256.54 198.12 0)
 			(hide yes)
 			(show_name no)
@@ -5065,6 +5120,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT30UPB-F"
+			(at 256.54 218.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "6e87b299-72bc-5e52-8597-075e5d841599")
 		)
@@ -5238,6 +5304,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT90PB-F"
+			(at 132.08 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "75a66ca5-38c2-5ee0-b0a7-63e53268fad3")
 		)
@@ -5309,6 +5386,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 256.54 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT30UPB-F"
 			(at 256.54 177.8 0)
 			(hide yes)
 			(show_name no)
@@ -5467,6 +5555,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 78.74 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
 			(at 78.74 147.32 0)
 			(hide yes)
 			(show_name no)
@@ -5727,6 +5826,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT90PB-F"
+			(at 132.08 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "79bd8322-ed42-5f00-b332-ce73157b7f2a")
 		)
@@ -5977,6 +6087,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT90PB-F"
+			(at 193.04 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "223f2bd9-0ffe-5fd4-bced-d4258a289147")
 		)
@@ -6202,6 +6323,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 256.54 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT30UPB-F"
 			(at 256.54 137.16 0)
 			(hide yes)
 			(show_name no)
@@ -6447,6 +6579,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT60PT-F"
+			(at 167.64 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "6df655e8-c288-5ec3-8f5f-4af67c9ccb76")
 		)
@@ -6518,6 +6661,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 256.54 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT30UPB-F"
 			(at 256.54 157.48 0)
 			(hide yes)
 			(show_name no)
@@ -6609,6 +6763,17 @@
 				)
 			)
 		)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
+			(at 78.74 157.48 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "5c2fcf47-5d70-5e25-9fe8-fa9c75395309")
 		)
@@ -6680,6 +6845,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 256.54 208.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT30UPB-F"
 			(at 256.54 208.28 0)
 			(hide yes)
 			(show_name no)
@@ -7094,6 +7270,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT30UPB-F"
+			(at 256.54 228.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f510d583-2d76-5d12-a871-d03d714cb1b2")
 		)
@@ -7344,6 +7531,17 @@
 				)
 			)
 		)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
+			(at 78.74 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "d3bd5622-a352-5f56-8bec-4b730c2499ce")
 		)
@@ -7492,6 +7690,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 50.8 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
 			(at 50.8 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -7891,6 +8100,17 @@
 				)
 			)
 		)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
+			(at 78.74 208.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "9f7aed70-3fde-5b46-9365-1828ffc74375")
 		)
@@ -8064,6 +8284,17 @@
 				)
 			)
 		)
+		(property "MPN" "B2B-XH-A(LF)(SN)"
+			(at 254 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "3a5782f7-3364-58be-bb66-14566953ad17")
 		)
@@ -8135,6 +8366,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 167.64 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT60PT-F"
 			(at 167.64 147.32 0)
 			(hide yes)
 			(show_name no)
@@ -8380,6 +8622,17 @@
 				)
 			)
 		)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
+			(at 78.74 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "69092eff-11e3-5f65-ac85-dfb0744f2318")
 		)
@@ -8451,6 +8704,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 132.08 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT90PB-F"
 			(at 132.08 91.44 0)
 			(hide yes)
 			(show_name no)
@@ -8773,6 +9037,17 @@
 				)
 			)
 		)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
+			(at 78.74 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "d263f39f-1d65-5064-b051-c79520918b1c")
 		)
@@ -8946,6 +9221,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT90PB-F"
+			(at 193.04 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "bfbaffef-1283-5b36-9a46-8569af35a556")
 		)
@@ -9027,6 +9313,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT60PT-F"
+			(at 167.64 177.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "c6369ea2-cf0e-5749-83b3-a1e1f298bd47")
 		)
@@ -9098,6 +9395,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 256.54 167.64 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT30UPB-F"
 			(at 256.54 167.64 0)
 			(hide yes)
 			(show_name no)
@@ -9343,6 +9651,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT30UPB-F"
+			(at 256.54 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "961d11e5-da89-5134-ad6d-4751b5ac3239")
 		)
@@ -9424,6 +9743,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT60PT-F"
+			(at 167.64 187.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "b0202e22-804e-5847-8adc-fc4857c19e24")
 		)
@@ -9495,6 +9825,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 256.54 187.96 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT30UPB-F"
 			(at 256.54 187.96 0)
 			(hide yes)
 			(show_name no)
@@ -9770,6 +10111,17 @@
 				)
 			)
 		)
+		(property "MPN" "none: Deans T, bought outside TME / Mouser (sourcing exception)"
+			(at 78.74 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "a62591f1-4c9c-536a-a955-f2d7e50043ea")
 		)
@@ -10010,6 +10362,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 167.64 198.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT60PT-F"
 			(at 167.64 198.12 0)
 			(hide yes)
 			(show_name no)
@@ -10531,6 +10894,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT60PT-M"
+			(at 50.8 86.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "f621f8a2-f824-5cd2-901d-1ca6ce5e1546")
 		)
@@ -10766,6 +11140,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT30UPB-M"
+			(at 50.8 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "6c6ef337-4b19-5efe-bbbe-f34be90b6ca1")
 		)
@@ -10939,6 +11324,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT30UPB-F"
+			(at 256.54 238.76 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "1fdaa6ae-42a5-59d1-863c-0dcb163b0fb6")
 		)
@@ -11097,6 +11493,17 @@
 				)
 			)
 		)
+		(property "MPN" "XT90PB-F"
+			(at 193.04 81.28 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "9b3a0fe1-cfc5-5147-a63b-c2718b610011")
 		)
@@ -11168,6 +11575,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 193.04 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "XT90PB-F"
 			(at 193.04 71.12 0)
 			(hide yes)
 			(show_name no)

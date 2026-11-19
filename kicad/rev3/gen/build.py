@@ -513,6 +513,8 @@ class Emitter:
         ref = f"{p.prefix}{PREFIX_COUNT[p.prefix]}"
         p.ref = ref
         fields = dict(p.fields)
+        if not fields.get("MPN"):
+            fields["MPN"] = auto_mpn(p)
         g = p.geom()
         self.symbol(p.lib_id, ref, p.value, X, Y, p.rot, [a["number"] for a in p.pins],
                     footprint=p.footprint, fields=fields, unit=p.unit, two_pin=len(p.pins) == 2,
@@ -732,6 +734,35 @@ def CONN2(sh, value, fp, p1, p2, at=None, rot=0, mirror=False):
     return sh.add("Connector_Generic:Conn_01x02", "J", value, FP[fp], {1: p1, 2: p2}, at=at, rot=rot, mirror=mirror)
 
 
+# Part numbers for parts created without one. Passives come from mpn_passives.json, picked by
+# scratchpad tooling from Yageo RC (1 %) and Samsung / KEMET MLCC series, each checked in stock at Mouser.
+PASSIVE_MPN = json.loads((Path(__file__).parent / "mpn_passives.json").read_text())
+FIXED_MPN = {"MMBT3904": "MMBT3904LT1G", "2N7002": "2N7002LT1G"}
+
+
+def auto_mpn(p):
+    fp = p.footprint.split(":")[-1]
+    if p.lib_id.startswith(("Device:R", "Device:C")):
+        key = f"{p.lib_id}|{p.value}|{fp}"
+        if key not in PASSIVE_MPN:
+            raise SystemExit(f"no MPN for {key}: rerun the passive picker")
+        return PASSIVE_MPN[key]
+    if p.lib_id == "Connector:TestPoint":
+        return "5001" if "Loop" in fp else "none: PCB pad"            # Keystone 5001 black loop, 1.02 mm hole
+    if p.lib_id.startswith("Jumper:SolderJumper"):
+        return "none: PCB solder jumper"
+    if p.value in FIXED_MPN:
+        return FIXED_MPN[p.value]
+    first = p.value.split()[0]
+    if first.startswith(("XT30", "XT60", "XT90")):
+        return first                                                   # AMASS, from TME
+    if first.startswith("B2B-"):
+        return first                                                   # JST, Mouser
+    if p.value.startswith("Deans"):
+        return "none: Deans T, bought outside TME / Mouser (sourcing exception)"
+    raise SystemExit(f"no MPN rule for {p.lib_id} {p.value}")
+
+
 def hang(sh, p, pt, gap=2.54, top=1, bot=2, gnd=True):
     """Hang an upright two-pin part below pt (a point on a rail): a short wire down to its
     top pin, and GND on its bottom pin."""
@@ -782,7 +813,7 @@ def sheet_power_in():
     TP(sh, "VBAT", at=(45.72, Y))
     lab("VBAT", (162.56, Y), 90)
     sh.mark("flag", (53.34, Y))
-    hang(sh, DZ(sh, "SMCJ45A", "VBAT", "GND", fp="SMC", rot=270, MPN="SMCJ45A (Littelfuse)"), (63.5, Y))
+    hang(sh, DZ(sh, "SMCJ45A", "VBAT", "GND", fp="SMC", rot=270, MPN="SMCJ45A"), (63.5, Y))
     for x in (76.2, 91.44):
         hang(sh, CP(sh, "100uF/100V", "VBAT", "GND", fp="CPR12", rot=0, MPN="EEU-FC2A101"), (x, Y))
     for x in (106.68, 121.92, 137.16, 152.4):
@@ -958,9 +989,19 @@ def sheet_switch(r):
 
     # --- gate drive to the right
     pu, pd, bst, src, g = P(15), P(14), P(12), P(13), P(11)
-    cb = C(sh, v["c_bst"], "L:BST", out, fp="C0805", volt=25, at=(152.4, (bst[1] + src[1]) / 2), rot=0)
-    W(bst, PIN(cb, 1))
-    W(src, (165.1, src[1]), (165.1, yO))
+    # C_BST bank: n x 10 uF / 50 V X7R 1210, sized at half its nominal value (DC bias at 12 V)
+    cbs = []
+    for k in range(v["n_bst"]):
+        cb = C(sh, rails.C_BST_PART[1], "L:BST", out, fp="C1210", volt=50,
+               at=(152.4 + 10.16 * k, (bst[1] + src[1]) / 2), rot=0, MPN=rails.C_BST_PART[0])
+        if v["n_bst"] > 1:
+            cb.label_at = {"Reference": (-2.54, 6.35), "Value": (-2.54, 8.89)}
+        W(PIN(cbs[-1], 1) if cbs else bst, PIN(cb, 1))
+        if cbs:
+            W(PIN(cbs[-1], 2), PIN(cb, 2))
+        cbs.append(cb)
+    xsrc = max(165.1, PIN(cbs[-1], 2)[0] + 5.08)
+    W(src, (xsrc, src[1]), (xsrc, yO))
     rpu = R(sh, 10, "L:PU", "L:GATE", at=(154.94, pu[1]))
     W(pu, PIN(rpu, 1))
     W(PIN(rpu, 2), (160.02, pu[1]))
@@ -1006,7 +1047,7 @@ def sheet_switch(r):
 
     # --- output rail: voltage sense, indicator, test point, label
     xe = 302.26
-    W((165.1, yO), (xe, yO))
+    W((xsrc, yO), (xe, yO))
     lab(out, (xe, yO), 0)
     if True:     # on the 54 V eFuse this is its own output (the boost input); VSNS_OUT_54 is the boost output
         vsn = "VSNS_SW54" if r["name"] == "54V" else f"VSNS_OUT_{n}"
@@ -1051,8 +1092,14 @@ def sheet_switch(r):
     gnd(PIN(riw, 2))
     W(tp_, (tp_[0], 200.66), (tp_[0] + 7.62, 200.66))
     rtm = R(sh, v["r_tmr"], "L:TMR", "GND", at=(tp_[0], 204.47), rot=0)
-    ctm = C(sh, v["c_tmr"], "L:TMR", "GND", fp="C1206", volt=10, at=(tp_[0] + 7.62, 204.47), rot=0)
-    gnd(PIN(ctm, 2))
+    prev = None
+    for k, (cval, cmpn, cv) in enumerate(v["c_tmr_parts"]):
+        ctm = C(sh, cval, "L:TMR", "GND", fp="C1206", volt=f"{cv:g}", at=(tp_[0] + 7.62 + 10.16 * k, 204.47), rot=0,
+                MPN=cmpn)
+        if prev:
+            W(PIN(prev, 1), PIN(ctm, 1))
+        gnd(PIN(ctm, 2))
+        prev = ctm
     gnd(PIN(rtm, 2))
 
     # --- converter rails: input TVS, bulk capacitance, input voltage sense (left of everything)
@@ -1061,7 +1108,7 @@ def sheet_switch(r):
     W((22.86, yR), PIN(rs, 1))
     if r["name"] in TVS_IN:
         TP(sh, vin, at=(25.4, yR))
-        hang(sh, DZ(sh, TVS_IN[r["name"]], vin, "GND", rot=270, MPN=f"{TVS_IN[r['name']]} (Littelfuse)"),
+        hang(sh, DZ(sh, TVS_IN[r["name"]], vin, "GND", rot=270, MPN=TVS_IN[r['name']]),
              (30.48, yR), gap=3.81)
         for x in (45.72, 58.42):
             hang(sh, CP(sh, "47uF/35V", vin, "GND", fp="CPR6", rot=0, MPN="EEU-FC1V470"), (x, yR), gap=3.81)
@@ -1455,18 +1502,20 @@ def sheet_aux():
     W(PIN(d2, 1), (236.22, 124.46), (236.22, yo))
 
     # +5V_LOGIC rail and the 3.3 V LDO
-    ldo = sh.add("Regulator_Linear:AP7361C-33E", "U", "AP7361C-33E", FP["SOT223"],
-                 {1: "+5V_LOGIC", 2: "GND", 3: "+3V3"}, fields={"MPN": "AP7361C-33E-13"})
-    at_pin(ldo, 1, (279.4, yo))
-    W(PIN(d1, 1), PIN(ldo, 1))
-    gnd(PIN(ldo, 2))
+    # AP7361C-33ER: the SOT223R pinout (1 GND, 2 OUT + tab, 3 IN), the stocked variant; the AMS1117
+    # symbol has exactly that pinout. The -33E (1 IN, 2 GND, 3 OUT) is out of stock.
+    ldo = sh.add("Regulator_Linear:AMS1117-3.3", "U", "AP7361C-33ER", FP["SOT223"],
+                 {1: "GND", 2: "+3V3", 3: "+5V_LOGIC"}, fields={"MPN": "AP7361C-33ER-13"})
+    at_pin(ldo, 3, (279.4, yo))
+    W(PIN(d1, 1), PIN(ldo, 3))
+    gnd(PIN(ldo, 1))
     sh.mark("flag", (241.3, yo))
     hang(sh, C(sh, 22e-6, "+5V_LOGIC", "GND", fp="C1206", volt=25, rot=0, MPN="CL31A226KAHNNNE"), (248.92, yo))
     TP(sh, "+5V_LOGIC", at=(256.54, yo))
     W((264.16, yo), (264.16, 93.98), (269.24, 93.98))
     lab("+5V_LOGIC", (269.24, 93.98), 0)
     x3 = 325.12
-    W(PIN(ldo, 3), (x3, yo))
+    W(PIN(ldo, 2), (x3, yo))
     v33((x3, yo))
     hang(sh, C(sh, 10e-6, "+3V3", "GND", fp="C0805", volt=10, rot=0), (299.72, yo))
     hang(sh, C(sh, 100e-9, "+3V3", "GND", rot=0), (312.42, yo))

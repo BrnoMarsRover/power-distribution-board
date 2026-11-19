@@ -5,6 +5,7 @@ Open `PowerBoard_rev3.kicad_pro` in **KiCad 10**. The design spec lives in
 comes from [`docs/rev3/rails.md`](../../docs/rev3/rails.md).
 
 A review PDF is at [`pdf/rev3/PowerBoard_rev3_schematic.pdf`](../../pdf/rev3/PowerBoard_rev3_schematic.pdf).
+The grouped BOM with part numbers is [`PowerBoard_rev3_bom.csv`](PowerBoard_rev3_bom.csv) (regenerate with `kicad-cli sch export bom`).
 
 ## How the schematic was made
 
@@ -26,7 +27,7 @@ That run does six things:
    intended.
 
 Result at generation time:
-- 520 parts and 285 nets.
+- 529 parts and 285 nets.
 - Netlist check passes.
 - ERC is clean at every severity.
 
