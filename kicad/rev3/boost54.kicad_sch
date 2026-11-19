@@ -6623,6 +6623,17 @@
 				)
 			)
 		)
+		(property "MPN" "APT2012SGC"
+			(at 322.58 102.87 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "5f62d816-7d98-5046-ac8f-73dcf87199f5")
 		)

@@ -3730,6 +3730,17 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "UART series resistors are 1k: if the Orin is off, an idle-high TX can push at most ~3 mA into its header. Firmware also keeps TX quiet until it sees the Orin's TX idling high."
+		(exclude_from_sim no)
+		(at 20 54 0)
+		(effects
+			(font
+				(size 1.6 1.6)
+			)
+			(justify left bottom)
+		)
+		(uuid "0247357f-6705-5379-b40d-9dd9dfc5e80c")
+	)
 	(text "USB-C is for flashing and debug only (built-in USB-Serial/JTAG). VBUS only feeds the logic OR in aux_power."
 		(exclude_from_sim no)
 		(at 20 36 0)
@@ -7057,7 +7068,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "1k"
 			(at 226.06 162.56 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8345,6 +8356,17 @@
 				)
 			)
 		)
+		(property "MPN" "TL3342F160QG"
+			(at 55.88 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "1c111dc2-1bc1-5890-9405-23b6e7dedf88")
 		)
@@ -8426,7 +8448,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C2980297"
+		(property "MPN" "ESP32-S3-WROOM-1U-N8"
 			(at 165.1 152.4 0)
 			(hide yes)
 			(show_name no)
@@ -8789,6 +8811,17 @@
 				)
 			)
 		)
+		(property "MPN" "APT2012SURCK"
+			(at 242.57 213.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "556a6354-5b67-5ae5-9aef-6c78d9a3218a")
 		)
@@ -8946,6 +8979,17 @@
 				)
 			)
 		)
+		(property "MPN" "USBLC6-2SC6"
+			(at 281.94 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "927f12c7-f077-521a-a74a-9a9de58af616")
 		)
@@ -8994,7 +9038,7 @@
 				)
 			)
 		)
-		(property "Value" "USB-C (flash/debug)"
+		(property "Value" "USB4085-GF-A (flash/debug)"
 			(at 241.3 81.915 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9004,7 +9048,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
+		(property "Footprint" "Connector_USB:USB_C_Receptacle_GCT_USB4085"
 			(at 241.3 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -9027,6 +9071,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 241.3 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "USB4085-GF-A"
 			(at 241.3 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -9118,7 +9173,7 @@
 				)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "1k"
 			(at 269.24 166.37 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10403,6 +10458,17 @@
 				)
 			)
 		)
+		(property "MPN" "NCP18XH103F03RB"
+			(at 30.48 179.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "1db2d2ea-0c6e-5cf4-baa9-e3b1b00e5b83")
 		)
@@ -10953,6 +11019,17 @@
 				)
 			)
 		)
+		(property "MPN" "TL3342F160QG"
+			(at 55.88 91.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "1"
 			(uuid "fb0e4023-8eb3-5978-941c-86498b80134a")
 		)
@@ -11022,6 +11099,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 242.57 203.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "APT2012SYCK"
 			(at 242.57 203.2 0)
 			(hide yes)
 			(show_name no)
@@ -11178,6 +11266,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 242.57 193.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "APT2012SGC"
 			(at 242.57 193.04 0)
 			(hide yes)
 			(show_name no)
@@ -11567,6 +11666,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 243.84 152.4 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "USBLC6-2SC6"
 			(at 243.84 152.4 0)
 			(hide yes)
 			(show_name no)
@@ -12398,7 +12508,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "1k"
 			(at 226.06 149.86 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -13215,6 +13325,17 @@
 			)
 		)
 		(property "Description" ""
+			(at 276.86 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MPN" "BM04B-GHS-TBT(LF)(SN)(N)"
 			(at 276.86 154.94 0)
 			(hide yes)
 			(show_name no)

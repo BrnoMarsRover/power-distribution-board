@@ -610,11 +610,18 @@ job.
 - ESP32-S3 UART1 runs straight to the Orin at 3.3 V logic, with no converter in between.
 - UART0 is not used, because the ESP32 ROM prints its boot log there. Its pins
   (GPIO43/44) go to test pads as a debug console.
-- **Connector:** a locking 4-pin connector (TX, RX, GND, plus one spare for RTS or a
-  board-reset line), for example JST-GH.
+- **Connector:** a locking 4-pin JST-GH, BM04B-GHS-TBT (TME), carrying TX, RX, GND and
+  one spare for RTS or a board-reset line.
   - Rev2's 2-pin screw terminal had no ground, so the link had to borrow its return path
     from the power wiring.
-- **Protection:** 100 Ω series resistors and a low-capacitance ESD array on TX and RX.
+- **Protection:** 1 kΩ series resistors and a low-capacitance ESD array (USBLC6-2SC6,
+  flow-through) on TX and RX.
+  - The ESP32 is always on, but the Orin may not be. With the Orin off, an idle-high TX
+    pushes at most about 3 mA into its unpowered header through 1 kΩ. With the original
+    100 Ω it could have been about 30 mA, enough to partly power the Orin's I/O rail.
+  - At 921 600 baud, 1 kΩ and the cable's tens of pF give an edge of about 50 ns, well
+    under the 1.1 µs bit time.
+  - Firmware also keeps TX low or high-impedance until the Orin's own TX is idling high.
 - **Speed:** 921 600 baud by default. With five rails instead of 42 channels, a telemetry
   frame stays well under 1 kB, so 10–50 Hz telemetry plus gamepad relay leaves plenty of
   headroom.
@@ -629,7 +636,10 @@ job.
     is made.
 
 **USB-C (kept):**
-- USB 2.0 full speed, USBLC6-2SC6 ESD array *(candidate)*, 5.1 kΩ CC pull-downs.
+- USB 2.0 full speed, USBLC6-2SC6 ESD array (flow-through), 5.1 kΩ CC pull-downs.
+- **Receptacle: GCT USB4085-GF-A** (Mouser), a through-hole USB 2.0 Type-C part, replacing
+  the HRO TYPE-C-31-M-12 from JLC's catalogue. Its through-hole pins make it far easier to
+  hand-solder, and KiCad's footprint has the same pad names.
 - **Uses:** flashing and JTAG debugging through the S3's built-in USB-Serial/JTAG, and a
   fallback host link carrying the same protocol over CDC.
 - **VBUS** feeds only the logic node, through a diode, for bench flashing (section 7). It
@@ -835,7 +845,8 @@ layout.
 - **D2PAK and DPAK on large pours** need a high-power iron (≥ 80 W) or preheating, because
   the pours sink a lot of heat.
 - **Passives:** 0603 minimum, 0805 where space allows.
-- **USB-C (16-pin, 0.5 mm)** is the hardest joint on the board. A micro-B is the fallback,
+- **USB-C:** the GCT USB4085-GF-A has through-hole pins, so the usual hardest joint on
+  the board is now an easy one. A micro-B remains a fallback,
   since USB is only for flashing and debug.
 - **Test points everywhere, for bring-up and debugging** (83 on the board):
   - **Every eFuse:** VOUT, IMON, FLT, GATE, INP, INP_G and EN/UVLO, plus VIN on the

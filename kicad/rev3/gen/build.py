@@ -654,7 +654,7 @@ FP = dict(
     PH2="Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical",
     GH4="Connector_JST:JST_GH_BM04B-GHS-TBT_1x04-1MP_P1.25mm_Vertical",
     CLIK4="Connector_Molex:Molex_CLIK-Mate_502585-0470_1x04-1MP_P1.50mm_Horizontal",
-    USBC="Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12",
+    USBC="Connector_USB:USB_C_Receptacle_GCT_USB4085",
     BTN="Button_Switch_SMD:SW_SPST_TL3342",
     ESP="RF_Module:ESP32-S3-WROOM-1U",
     SSOP8="Package_SO:SSOP-8_2.95x2.8mm_P0.65mm",
@@ -692,8 +692,12 @@ def DS(sh, value, k, a, fp="SMA", at=None, rot=0, **f):
     return sh.add("Device:D_Schottky", "D", value, FP[fp], {1: k, 2: a}, fields=f, at=at, rot=rot)
 
 
+LED_MPN = {"green": "APT2012SGC", "yellow": "APT2012SYCK", "red": "APT2012SURCK"}   # Kingbright 0805
+
+
 def LED(sh, color, k, a, at=None, rot=0):
-    return sh.add("Device:LED", "D", color, FP["LED"], {1: k, 2: a}, at=at, rot=rot)
+    return sh.add("Device:LED", "D", color, FP["LED"], {1: k, 2: a}, at=at, rot=rot,
+                  fields={"MPN": LED_MPN[color]})
 
 
 def TP(sh, net, at=None, rot=0):
@@ -1482,14 +1486,16 @@ def sheet_mcu():
         "Host UART1 (IO17 TX, IO18 RX) goes to the Jetson AGX Orin 40-pin header (pins 10 / 8, GND pin 6).",
         "USB-C is for flashing and debug only (built-in USB-Serial/JTAG). VBUS only feeds the logic OR in aux_power.",
         "N8 module variant (no octal PSRAM). u.FL antenna: route the cable out of the rover body.",
-        "USBLC6 arrays are flow-through: pins 1/6 and 3/4 are joined inside the part. Route each line across its pad pair."],
+        "USBLC6 arrays are flow-through: pins 1/6 and 3/4 are joined inside the part. Route each line across its pad pair.",
+        "UART series resistors are 1k: if the Orin is off, an idle-high TX can push at most ~3 mA into its header. "
+        "Firmware also keeps TX quiet until it sees the Orin's TX idling high."],
         drawn=True)
     W, gnd, v33, lab = marks(sh)
     sot236 = FP["SOT23"].replace("SOT-23", "SOT-23-6")
 
     # --- module: supply and decoupling on top, signals out to labels on both sides
     E = sh.add("RF_Module:ESP32-S3-WROOM-1", "U", "ESP32-S3-WROOM-1U-N8", FP["ESP"], ESP_PINS,
-               fields={"LCSC": "C2980297"}, at=(165.1, 152.4))
+               fields={"MPN": "ESP32-S3-WROOM-1U-N8"}, at=(165.1, 152.4))
     E.label_at = {"Reference": (2.54, 30.48), "Value": (2.54, 33.02)}
     P = lambda n: PIN(E, n)
     W(P(2), (P(2)[0], 99.06))
@@ -1519,7 +1525,8 @@ def sheet_mcu():
         v33(PIN(r, 1))
         if cap:
             hang(sh, C(sh, 1e-6, net, "GND", rot=0), (45.72, y))
-        sw = sh.add("Switch:SW_Push", "SW", "RESET" if cap else "BOOT", FP["BTN"], {1: net, 2: "GND"}, rot=270)
+        sw = sh.add("Switch:SW_Push", "SW", "RESET" if cap else "BOOT", FP["BTN"], {1: net, 2: "GND"}, rot=270,
+                    fields={"MPN": "TL3342F160QG"})
         hang(sh, sw, (55.88, y))
         sw.label_at = {"Reference": (2.54, -1.27), "Value": (2.54, 1.27)}
         TP(sh, net, at=(66.04, y))
@@ -1533,7 +1540,8 @@ def sheet_mcu():
         lab(net, (x + 7.62, 154.94), 0)
 
     # --- board temperature (NTC) and logic supply sense
-    nt = sh.add("Device:Thermistor_NTC", "TH", "10k NTC", FP["R0603"], {1: "+3V3", 2: "NTC_SNS"})
+    nt = sh.add("Device:Thermistor_NTC", "TH", "10k NTC", FP["R0603"], {1: "+3V3", 2: "NTC_SNS"},
+                fields={"MPN": "NCP18XH103F03RB"})
     at_pin(nt, 1, (30.48, 175.26))
     v33(PIN(nt, 1))
     yn = PIN(nt, 2)[1] + 2.54
@@ -1550,9 +1558,10 @@ def sheet_mcu():
     lab("AUX5_SNS", (93.98, ya), 0)
 
     # --- USB-C: VBUS out to the logic OR, CC pull-downs, D-/D+ through the ESD array
-    J = sh.add("Connector:USB_C_Receptacle_USB2.0_16P", "J", "USB-C (flash/debug)", FP["USBC"],
+    J = sh.add("Connector:USB_C_Receptacle_USB2.0_16P", "J", "USB4085-GF-A (flash/debug)", FP["USBC"],
                {"A1": "GND", "A4": "VBUS_USB", "A5": "L:CC1", "B5": "L:CC2", "A6": "L:DP_C", "B6": "L:DP_C",
-                "A7": "L:DN_C", "B7": "L:DN_C", "A8": None, "B8": None, "SH": "GND"}, at=(241.3, 101.6))
+                "A7": "L:DN_C", "B7": "L:DN_C", "A8": None, "B8": None, "SH": "GND"}, at=(241.3, 101.6),
+               fields={"MPN": "USB4085-GF-A"})
     Pj = lambda n: PIN(J, n)
     xu = Pj("A4")[0]
     W(Pj("A4"), (320.04, Pj("A4")[1]))
@@ -1567,7 +1576,8 @@ def sheet_mcu():
     gnd(Pj("A1"))
     gnd(Pj("SH"))
     esd = sh.add("Power_Protection:USBLC6-2SC6", "U", "USBLC6-2SC6", sot236,
-                 {1: "L:DN_C", 6: "USB_DN", 3: "L:DP_C", 4: "USB_DP", 5: "VBUS_USB", 2: "GND"})
+                 {1: "L:DN_C", 6: "USB_DN", 3: "L:DP_C", 4: "USB_DP", 5: "VBUS_USB", 2: "GND"},
+                 fields={"MPN": "USBLC6-2SC6"})
     at_pin(esd, 1, (276.86, Pj("B7")[1]))
     esd.label_at = {"Reference": (7.62, -7.62), "Value": (7.62, -5.08)}
     W(Pj("B7"), PIN(esd, 1))
@@ -1586,16 +1596,17 @@ def sheet_mcu():
     x0, yt = 220.98, 152.4
     lab("UART_TX", (x0, yt), 180)
     lab("UART_RX", (x0, yt + 2.54), 180)
-    rtx = R(sh, 100, "UART_TX", "L:TX_R")
+    rtx = R(sh, 1e3, "UART_TX", "L:TX_R")
     at_pin(rtx, 1, (x0 + 5.08, yt))
-    rrx = R(sh, 100, "L:RX_R", "UART_RX", rot=270)
+    rrx = R(sh, 1e3, "L:RX_R", "UART_RX", rot=270)
     at_pin(rrx, 2, (x0 + 5.08, yt + 2.54))
     rtx.label_at = {"Reference": (-3.81, -5.08), "Value": (-3.81, -2.54)}
     rrx.label_at = {"Reference": (-3.81, 5.08), "Value": (-3.81, 7.62)}
     W((x0, yt), PIN(rtx, 1))
     W((x0, yt + 2.54), PIN(rrx, 2))
     e2 = sh.add("Power_Protection:USBLC6-2SC6", "U", "USBLC6-2SC6", sot236,
-                {1: "L:TX_R", 6: "L:TX_C", 3: "L:RX_R", 4: "L:RX_C", 5: "+3V3", 2: "GND"})
+                {1: "L:TX_R", 6: "L:TX_C", 3: "L:RX_R", 4: "L:RX_C", 5: "+3V3", 2: "GND"},
+                fields={"MPN": "USBLC6-2SC6"})
     at_pin(e2, 1, (x0 + 17.78, yt))
     e2.label_at = {"Reference": (7.62, -7.62), "Value": (7.62, -5.08)}
     W(PIN(rtx, 2), PIN(e2, 1))
@@ -1603,7 +1614,8 @@ def sheet_mcu():
     v33(PIN(e2, 5))
     gnd(PIN(e2, 2))
     gh = sh.add("Connector_Generic_MountingPin:Conn_01x04_MountingPin", "J", "JST-GH 4p (host UART to Orin)",
-                FP["GH4"], {1: "L:TX_C", 2: "L:RX_C", 3: "GND", 4: "L:SP_C", "MP": "GND"})
+                FP["GH4"], {1: "L:TX_C", 2: "L:RX_C", 3: "GND", 4: "L:SP_C", "MP": "GND"},
+                fields={"MPN": "BM04B-GHS-TBT(LF)(SN)(N)"})
     xg = x0 + 50.8
     at_pin(gh, 1, (xg, yt))
     gh.label_at = {"Reference": (3.81, -5.08), "Value": (3.81, -2.54)}
@@ -1612,7 +1624,7 @@ def sheet_mcu():
     W(PIN(gh, 3), (xg - 5.08, yt + 5.08), (xg - 5.08, yt + 15.24))
     gnd((xg - 5.08, yt + 15.24))
     gnd(PIN(gh, "MP"))
-    rsp = R(sh, 100, "L:SP_C", "UART_SP", rot=0)
+    rsp = R(sh, 1e3, "L:SP_C", "UART_SP", rot=0)
     at_pin(rsp, 1, (xg - 2.54, yt + 10.16))
     W(PIN(rsp, 1), (xg - 2.54, yt + 7.62), PIN(gh, 4))
     W(PIN(rsp, 2), (xg - 2.54, yt + 22.86), (xg - 12.7, yt + 22.86))
