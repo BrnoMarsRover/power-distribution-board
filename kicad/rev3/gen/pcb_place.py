@@ -19,6 +19,7 @@ import pcbnew
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import power42  # noqa: E402  hand-designed battery input and 42 V blocks
 import power_rails  # noqa: E402  hand-designed 24 / 12 / 5 V blocks (the rails it lists)
+import power54  # noqa: E402  hand-designed 54 V boost
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 if "--overwrite-placement" not in sys.argv:
@@ -280,34 +281,24 @@ for rail, net_ in (("24", "OUT24"), ("12", "OUT12"), ("5", "OUT5")):
         upright(f, tall=True)                                        # every PTC is a 2920 standing upright
         fl, ft, fr, fb = box(f)
         put(ptc_of[j][0], cbox[0] - 1.2 - (fr - fl), (cbox[1] + cbox[3]) / 2 - (fb - ft) / 2, orient=lambda fp: None)
-# Zyxel 54 V out: bottom-left, on the board edge under the converter column, its fuse (clip holder) standing
-# right above its + pin with room for the + / - marks between them
+# Zyxel 54 V out: on the bottom edge at the right of the boost area, its fuse (clip holder) lying left of it,
+# pad 2 next to the + pin; the boost (power54.py) sits above them and left, under the converter XT90s
 plus_left(FP["J13"])
 l, t, r, bt = box(FP["J13"])
-jbox = put("J13", 28.0, 149.4 - (bt - t))
+jbox = put("J13", 50.0 - (r - l), 149.4 - (bt - t))
 fz = FP["F19"]
 set_side(fz, False)
-power42._upright(fz, 0.0, 0.0, "1", "2")                      # pad 1 (OUT54) up, pad 2 (to J13 +) down
+power42._flat(fz, 0.0, 0.0, "1", "2")                         # pad 1 (OUT54) left, pad 2 (to J13 +) right
 fl, ft, fr, fb = box(fz)
-px = TOMM(pad(FP["J13"], plus_minus(FP["J13"])[0]).GetPosition().x) - X0
-fx = TOMM(pad(fz, "2").GetPosition().x) - X0
-put("F19", px - (fx - fl), jbox[1] - 2.4 - (fb - ft), orient=lambda f: None)
+jy = TOMM(pad(FP["J13"], plus_minus(FP["J13"])[0]).GetPosition().y) - Y0
+fy = TOMM(pad(fz, "2").GetPosition().y) - Y0
+put("F19", jbox[0] - 0.8 - (fr - fl), jy - (fy - ft), orient=lambda f: None)
 # the boost's status LED at the top-left of its area, locked so it stays where it can be seen
 led54 = next(r for r, f in FP.items() if f.GetSheetname().startswith("54 V boost") and "LED" in f.GetFPIDAsString())
 set_side(FP[led54], False)
 upright(FP[led54], tall=True)
 put(led54, 26.8, 104.5, orient=lambda f: None)
 FP[led54].SetLocked(True)
-# the boost's two 12.5 mm output electrolytics: placed before packing (the boost's SMD parts go under them),
-# stacked at the right of the boost area
-caps54 = sorted((r for r, f in FP.items() if "CP_Radial" in f.GetFPIDAsString()
-                 and any(p.GetNetname() == "OUT54" for p in f.Pads())), key=lambda r: int(r[1:]))
-y = 101.0
-for ref in caps54:
-    set_side(FP[ref], False)
-    FP[ref].SetOrientationDegrees(0)
-    l, t, r, bt = box(FP[ref])
-    y = put(ref, 50.0 - (r - l), y, orient=lambda f: None)[3] + 0.6     # 0.6 mm off the 24 V PTCs
 
 
 def opening(fp, d=(0, 1)):
@@ -432,6 +423,11 @@ for ref in power_rails.place(FP):            # 24 / 12 / 5 V blocks with their i
     fixed.add(ref)
 placed[False] += power_rails.KEEP_TOP
 placed[True] += power_rails.KEEP_BOTTOM
+for ref in power54.place(FP):                # the 54 V boost's power stage, its electrolytics and controller
+    claim(FP[ref])
+    fixed.add(ref)
+placed[False] += power54.KEEP_TOP
+placed[True] += power54.KEEP_BOTTOM
 
 
 # keep the label spots under the inputs free (battery label, polarity rule, + / - marks)

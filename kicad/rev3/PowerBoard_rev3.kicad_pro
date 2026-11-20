@@ -927,6 +927,10 @@
       "5 V rail eFuse"
     ],
     [
+      "63aa7a47-427f-5849-b294-7eba9b598769",
+      "54 V supply eFuse (input of the LM5122 boost)"
+    ],
+    [
       "fbaa1c03-ea4c-5d10-9beb-3af8a9702fdb",
       "Rail inputs, output connectors and per-output PTCs"
     ],

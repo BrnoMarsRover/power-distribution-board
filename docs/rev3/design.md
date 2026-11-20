@@ -1080,10 +1080,8 @@ layout.
          tongue, pad 2 in the L1 OUT5 area, so bypass current stays on 2 oz copper here too.
        - The XT30 footprints' own + / − texts moved to the fab layer: they landed on the PTC pads. The
          column header and the input's marks carry the polarity, as on the Deans and XT60 columns.
-     - **54 V boost (2026-11-20, after its eFuse was dropped):** under the converter XT90s, next to the
-       Zyxel output. Its SMD parts are on the bottom, packed at the 0.6 mm courtyard gap
-       (x 26–50 mm, spilling left under the brake corner); the two 12.5 mm output electrolytics stand
-       on top at the right of that area, and the fuse stands right above J13's + pin.
+     - **54 V boost (2026-11-20, after its eFuse was dropped):** under the converter XT90s, laid out by
+       hand (2d above); its small parts are packed around it (0.6 mm gap) and under the brake corner.
      - **Always-on aux supply** moved to the right, beside the ESP32 it powers (x 125.6–149.4 mm). Its
        42 V input is about 0.2 A, so a thin track from the BUS42 bar is enough.
      - **Through-hole parts and the far side:** connectors still block their whole outline on the
@@ -1099,6 +1097,25 @@ layout.
        sources and down the left edge. Under the output column L3 stays free for signals.
      - **Escapes:** both gates, the Kelvin pair and the LED go to vias whose bottom spots are reserved,
        as in the 42 V blocks.
+  2d. `gen/power54.py` (copper also run by `pcb_power42.py`) — the 54 V boost, designed by hand (2026-11-20),
+     under the converter XT90s. Every power part is on the bottom; the two 100 µF electrolytics, the fuse and
+     the Zyxel header are on top.
+     - **Input:** OUT42C comes down from the converter block (a via row under its XT90s, plus J12's + pin)
+       into the four input ceramics and R121, which stands upright right above L1's input pad (LIN pour).
+     - **Switch node:** L1's switch pad is on its left, straight above Q23's tab (low side); Q24's source
+       lead sits right under that tab. The SW pour holds only those three pads.
+     - **Hot loop:** the two DPAKs stack with opposite lead directions, so Q23's source (GND) and Q24's tab
+       (OUT54) both face right. The output ceramics stand there in two rows across GND | OUT54 | GND
+       stripes; the loop Q24 → ceramics → GND → Q23 → SW is about 12 × 14 mm. GND pours are stitched to
+       the L2 plane.
+     - **Electrolytics and fuse** join OUT54 through an L3 pour (kept out from under the switch node), so
+       their legs and vias stay out of the hot loop. The fuse and J13 sit on the bottom edge at the right
+       of the boost area.
+     - **Controller:** U10 sits left of the FET stack, under the brake corner, its pad vias clear of the
+       brake FET's tab. HO, SW and BST are a few mm long; LO reaches Q23's gate through a via (L3).
+       Bootstrap and VCC caps are in the strip under U10, the bootstrap diode just above it.
+     - The two gates are always on opposite sides of the stack (the price of the compact loop), so the
+       controller sits by the high-side gate and the ground-referenced LO takes the longer run.
   3. `gen/pcb_silk.py` — the silkscreen.
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after
      "Update footprints from library", which resets the board-side model replacements.

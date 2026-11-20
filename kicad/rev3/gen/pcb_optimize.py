@@ -28,6 +28,7 @@ import pcbnew
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import power42  # noqa: E402
 import power_rails  # noqa: E402
+import power54  # noqa: E402
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 X0, Y0, W, H = 50.0, 50.0, 150.0, 150.0
@@ -117,9 +118,9 @@ for f in FPS:
 for hx, hy in HOLES:
     for side in (False, True):
         fixed_boxes[side].append((hx - 4, hy - 4, hx + 4, hy + 4))
-for k in KEEP + power42.KEEP_TOP + power_rails.KEEP_TOP:
+for k in KEEP + power42.KEEP_TOP + power_rails.KEEP_TOP + power54.KEEP_TOP:
     fixed_boxes[False].append(k)
-for k in power42.KEEP_BOTTOM + power_rails.KEEP_BOTTOM:
+for k in power42.KEEP_BOTTOM + power_rails.KEEP_BOTTOM + power54.KEEP_BOTTOM:
     fixed_boxes[True].append(k)
 
 
