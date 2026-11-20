@@ -14,6 +14,7 @@ import power42  # noqa: E402
 import power_rails  # noqa: E402
 import power54  # noqa: E402
 import power_aux  # noqa: E402
+import power_logic  # noqa: E402
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 b = pcbnew.LoadBoard(BOARD)
@@ -25,5 +26,7 @@ zones, vias, tracks = power54.copper(b)
 print(f"54 V boost copper: {len(zones)} zones, {len(vias)} vias, {len(tracks)} track segments")
 zones, vias, tracks = power_aux.copper(b)
 print(f"aux supply copper: {len(zones)} zones, {len(vias)} vias")
+zones, vias, tracks, missed = power_logic.copper(b)                 # last: it clears everything above
+print(f"+3V3: L3 fill, {len(vias)} vias to it" + (f"; no via spot for {', '.join(missed)}" if missed else ""))
 pcbnew.ZONE_FILLER(b).Fill(b.Zones())
 b.Save(BOARD)

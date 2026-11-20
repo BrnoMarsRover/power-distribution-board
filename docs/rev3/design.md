@@ -1131,6 +1131,22 @@ layout.
        strip right of CHG_N, along y = 21.7 mm above the rail blocks' L3 copies (they start at 22.5 mm),
        down past the 5 V block and through a via into the input pour.
      - Top parts are kept off the via fields of both supplies (U10's and U11's pad vias, the input vias).
+  2f. `gen/power_logic.py` (run last by `pcb_power42.py`) — +3V3 distribution (decided 2026-11-20): a +3V3
+     fill over the whole of L3 at low priority, so it takes only what the power blocks' L3 copies leave free
+     (under the output columns, the right-hand column, the strip above the rail blocks). It sits right under
+     the bottom-side logic, so each 3.3 V pin is one short via away and the plane helps decoupling; signal
+     tracks routed on L3 later cut through it.
+     - **Fan-out:** every +3V3 pin gets a via to the fill with a short track (up to about 6 mm), at the
+       nearest spot clear of other nets on every layer, where L3 really is fill. 3.3 V vias may pass
+       through the 24 / 12 / 5 V pours but never through 42 / 54 V copper, a switch node or LIN. The
+       AP7361's tab gets a row of vias (it is the source). Pins over a power block's L3 copy with no fill
+       in reach (the INA228 corner under the 42 V bar, a few parts under the 5 V block) are left to
+       routing; the build lists them.
+     - **Switch-node shields:** L3 under the boost's and the aux buck's switch nodes (both on the bottom,
+       0.2 mm above L3) is a GND patch instead of +3V3, tied to nearby GND vias, so their edges couple into
+       their own return and not into the logic supply.
+     - +5V_LOGIC (the CAN transceiver, one pull-up) and USB VBUS (to its OR diode) are short and few:
+       routed as tracks.
   3. `gen/pcb_silk.py` — the silkscreen.
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after
      "Update footprints from library", which resets the board-side model replacements.

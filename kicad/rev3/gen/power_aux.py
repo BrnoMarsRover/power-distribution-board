@@ -235,6 +235,23 @@ def copper(b):
     zone(sw, [(pin8[0] - 0.3, pin8[1] + 0.4), (pin8[2] + 0.25, pin8[1] + 0.4), (pin8[2] + 0.25, l_sw[1] - 0.6),
               (l_sw[2] + 0.3, l_sw[1] - 0.6), (l_sw[2] + 0.3, l_sw[3] + 0.3), (l_sw[0] - 0.3, l_sw[3] + 0.3),
               (l_sw[0] - 0.3, l_sw[1] - 0.6), (pin8[0] - 0.3, l_sw[1] - 0.6)], "aux SW")
+    # L3 under the switch node: a GND shield over U11's pad vias (they tie it to GND), so the +3V3 fill does not
+    # sit 0.2 mm under the switch node
+    ex9 = pb(u, "9")
+    z = pcbnew.ZONE(b)
+    z.SetLayer(pcbnew.In2_Cu)
+    z.SetNet(net("GND"))
+    z.SetAssignedPriority(41)
+    z.SetLocalClearance(MM(0.3))
+    z.SetMinThickness(MM(0.3))
+    z.SetIslandRemovalMode(pcbnew.ISLAND_REMOVAL_MODE_ALWAYS)
+    z.SetZoneName("aux SW shield (L3)")
+    o = z.Outline()
+    o.NewOutline()
+    for x, y in rect(min(pin8[0], l_sw[0]) - 1.0, ex9[1] - 0.3, l_sw[2] + 1.0, l_sw[3] + 1.0):
+        o.Append(MM(X0 + x), MM(Y0 + y))
+    b.Add(z)
+    zones.append(z)
     # 5.3 V: L2's output pad down onto the row of output caps and straight right to D16's anode
     co = [pb(r, "1") for r in P["cout"]]
     da = pb(P["d_aux"], "2")

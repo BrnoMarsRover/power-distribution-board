@@ -289,6 +289,10 @@ def copper(b):
     for vx in (fz[0] + 1.0, fz[2] - 1.0):
         via("OUT54", vx, fz[3] + 1.0, force=True)
         track("OUT54", [(vx, (fz[1] + fz[3]) / 2), (vx, fz[3] + 1.0)], 1.2, F)
+    # L3 under the switch node: a GND shield (the +3V3 fill would otherwise sit 0.2 mm under 54 V edges);
+    # it reaches up over the input GND strip's last via row, which ties it to GND
+    zone("GND", IN2, rect(XL - 0.5, gnd_in[3] - 1.6, swr + 0.5, q24_s[3] + 1.0), "54 boost SW shield (L3)",
+         clear=0.3, prio=41)
     # stitching: GND A / GND B to the L2 plane, OUT54 bottom to L3
     for gx in (36.8, 39.4, 46.6, 49.2):
         for gy in (ga[1] + 1.2, ga[1] + 3.6, ga[1] + 6.0):
