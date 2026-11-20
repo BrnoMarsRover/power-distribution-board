@@ -11,10 +11,10 @@ room first. Board mm from the top-left corner, bottom side.
   brake           comparator, reference and divider by the brake FET's gate via
   battery monitor INA228 under the bar between the 42 V clusters, beside the input shunt's Kelvin vias
   CAN             transceiver and split termination beside the CAN connectors
-  ESP32 support   under the module (pull-ups, EN RC, LED resistors, NTC, USB and UART ESD), test pads in a
-                  field below the CAN block
+  ESP32 support   under the module (pull-ups, EN RC, LED resistors, NTC, USB and UART ESD), its four test
+                  pads (TXD0, RXD0, I2C) in a field below the CAN block
   switch control  ADCs, I/O expander and the motor-kill latch in the band under the rail eFuses, between
-                  everything they read and drive; test pads in the strip under the 12 V PTCs
+                  everything they read and drive; the MOTOR_KILL test pad left of the IMON ADC
   power button    PhotoMOS and button sense in the corner by the button and BMS connectors
 """
 import satellites
@@ -139,7 +139,7 @@ def place(FP, obstacles):
     ic("U19", 88.5, 70.0, lambda p: True, band)
     hub = _loose(FP, [r for r in sw if r not in button])
     run("switch control", "U17", band, hub, extra_ics=("U20", "U21", "U18", "U19"), decaps=True,
-        tp_area=bottom_band, tp_column=(52.4, 137.9))
+        tp_area=[(55.0, 61.0, 66.0, 74.6)] + bottom_band, tp_column=(56.4, 62.6))   # MOTOR_KILL, left of U20
 
     # ---- power button: PhotoMOS by the button and BMS connectors, with the motor switch's input resistors;
     # the test pads join the switch-control ones along the bottom edge

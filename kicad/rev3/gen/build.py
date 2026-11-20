@@ -843,7 +843,6 @@ def sheet_power_in():
     gnd((35.56, 116.84))
     W((35.56, 111.76), (43.18, 111.76))
     sh.mark("flag", (43.18, 111.76))
-    TP(sh, "VBAT", at=(45.72, Y))
     lab("VBAT", (162.56, Y), 90)
     sh.mark("flag", (53.34, Y))
     hang(sh, DZ(sh, "SMCJ45A", "VBAT", "GND", fp="SMC", rot=270, MPN="SMCJ45A"), (63.5, Y))
@@ -880,7 +879,6 @@ def sheet_power_in():
     for n, net in ((3, "INA_ALERT"), (4, "I2C_SDA"), (5, "I2C_SCL")):
         W(P(n), (215.9, P(n)[1]))
         lab(net, (215.9, P(n)[1]), 0)
-    TP(sh, "INA_ALERT", at=(210.82, P(3)[1]))
     ra = R(sh, 10e3, "+3V3", "INA_ALERT", rot=0)
     at_pin(ra, 2, (203.2, P(3)[1]))
     v33(PIN(ra, 1))
@@ -893,7 +891,6 @@ def sheet_power_in():
     # bus side: test point, flag, charger input, label
     W(PIN(rs, 4), (254.0, Y))
     lab("BUS42", (254.0, Y), 0)
-    TP(sh, "BUS42", at=(198.12, Y))
     sh.mark("flag", (205.74, Y))
     jc = CONN2(sh, "XT60PT-M (charger in)", "XT60M", "BUS42", "L:CHG_N")
     at_pin(jc, 1, (243.84, 114.3))
@@ -907,7 +904,6 @@ def sheet_power_in():
     W(PIN(jbc, 1), (50.8, 132.08), (50.8, Y))
     W(PIN(jbc, 2), (45.72, PIN(jbc, 2)[1]), (45.72, yc), (241.3, yc), (241.3, PIN(jc, 2)[1]), PIN(jc, 2))
     lab("L:CHG_N", (127.0, yc), 0)
-    TP(sh, "L:CHG_N", at=(88.9, yc))
     GTP(sh, (66.04, 124.46))
     sh.shift(0, -22.86)
     return sh
@@ -1180,7 +1176,6 @@ def sheet_brake():
     W(PIN(r2, 2), (129.54, yv), (83.82, yv))
     hang(sh, DZ(sh, "12V", "L:VBR", "GND", fp="SOD123", rot=270, MPN="MMSZ5242BT1G"), (109.22, yv))
     hang(sh, C(sh, 10e-6, "L:VBR", "GND", fp="C1206", volt=25, rot=0), (116.84, yv))
-    TP(sh, "L:VBR", at=(93.98, yv))
     sh.mark("flag", (124.46, yv))
 
     U = sh.add("PowerBoard_rev3:TLV1805", "U", "TLV1805DBVR", "Package_TO_SOT_SMD:SOT-23-6",
@@ -1225,7 +1220,6 @@ def sheet_brake():
     W(PIN(rs1, 2), (132.08, ys), (137.16, ys))
     hang(sh, R(sh, 36e3, "BRAKE_ACT", "GND", rot=0), (132.08, ys))
     lab("BRAKE_ACT", (137.16, ys), 0)
-    TP(sh, "BRAKE_ACT", at=(134.62, ys))
 
     # resistor connector with the freewheel diode across it
     ysw = 96.52
@@ -1619,10 +1613,10 @@ def sheet_mcu():
     W(P(36), (193.04, P(36)[1]), (193.04, 116.84))
     TP(sh, "L:RXD0", at=(193.04, 116.84))
 
-    # --- reset and boot: pull-up, (cap), button to GND, test point on each node
+    # --- reset and boot: pull-up, (cap), button to GND (probe on the button: no test pads since 2026-11-20)
     for net, y, cap in (("ESP_EN", 83.82, True), ("ESP_IO0", 116.84, False)):
         lab(net, (25.4, y), 180)
-        W((25.4, y), (66.04, y))
+        W((25.4, y), (55.88, y))
         r = R(sh, 10e3, "+3V3", net, rot=0)
         at_pin(r, 2, (35.56, y))
         v33(PIN(r, 1))
@@ -1632,7 +1626,6 @@ def sheet_mcu():
                     fields={"MPN": "TL3342F160QG"})
         hang(sh, sw, (55.88, y))
         sw.label_at = {"Reference": (2.54, -1.27), "Value": (2.54, 1.27)}
-        TP(sh, net, at=(66.04, y))
 
     # --- I2C pull-ups
     for x, net in ((30.48, "I2C_SDA"), (63.5, "I2C_SCL")):
@@ -1743,9 +1736,9 @@ def sheet_mcu():
         W(PIN(rfl, 2), (x, 218.44))
         lab(net, (x, 218.44), 270)
 
-    # --- test points for the buses and control lines
-    tp_panel(sh, ["I2C_SDA", "I2C_SCL", "INA_ALERT", "UART_TX", "UART_RX", "UART_SP",
-                  "CAN_TXD", "CAN_RXD", "CAN_STB"], 35.56, 215.9)
+    # --- test points: the I2C bus only (2026-11-20: UART on the host connector, CAN on the transceiver,
+    # INA_ALERT on its pull-up)
+    tp_panel(sh, ["I2C_SDA", "I2C_SCL"], 35.56, 215.9)
     GTP(sh, (127.0, 246.38))
 
     # --- status LEDs
@@ -1816,8 +1809,6 @@ def sheet_can():
     W((xt, 127.0), (165.1, 127.0))
     hang(sh, C(sh, 4.7e-9, "L:TMID", "GND", volt=50, rot=0), (165.1, 127.0))
 
-    TP(sh, "CANH", at=(170.18, yh))
-    TP(sh, "CANL", at=(170.18, yl))
     GTP(sh, (220.98, yh))
 
     # two connectors in parallel (CANH crosses CANL once, without a junction)
@@ -1888,14 +1879,13 @@ def sheet_io():
 
     # --- motor-switch latch: MOTOR_ARM clocks it, the switch loop clears it
     F = sh.add("74xGxx:74AUP1G74", "U", "SN74LVC1G74DCUT", FP["VSSOP8"],
-               {1: "MOTOR_ARM", 2: "+3V3", 3: "MOTOR_KILL", 4: "GND", 5: "L:LATCH_Q", 6: "L:CLR",
+               {1: "MOTOR_ARM", 2: "+3V3", 3: "MOTOR_KILL", 4: "GND", 5: None, 6: "L:CLR",
                 7: "+3V3", 8: "+3V3"}, fields={"MPN": "SN74LVC1G74DCUT"}, at=(152.4, 175.26))
     F.label_at = {"Reference": (5.08, 13.97), "Value": (5.08, 16.51)}
     Q = lambda n: PIN(F, n)
     arm = P(17)
     W(arm, (116.84, arm[1]), (116.84, Q(1)[1]), Q(1))
     hang(sh, R(sh, 100e3, "MOTOR_ARM", "GND", rot=0), (127.0, Q(1)[1]))
-    TP(sh, "MOTOR_ARM", at=(132.08, Q(1)[1]))
     TP(sh, "MOTOR_KILL", at=(168.91, Q(3)[1]))
     GTP(sh, (40.64, 160.02))
     yb = 157.48                                    # +3V3 bar over the flip-flop
@@ -1908,8 +1898,6 @@ def sheet_io():
     gnd(Q(4))
     W(Q(3), (172.72, Q(3)[1]))
     lab("MOTOR_KILL", (172.72, Q(3)[1]), 0)
-    W(Q(5), (180.34, Q(5)[1]))
-    TP(sh, "L:LATCH_Q", at=(180.34, Q(5)[1]))
 
     # --- motor-switch loop (JST-XH like the other harness headers; 2 oz rules out PH): +3V3 -> 1k -> switch (closed = run) -> 10k to GND; filtered into MOTOR_OK and the CLR RC
     yl = 198.12
@@ -1944,7 +1932,6 @@ def sheet_io():
     hang(sh, C(sh, 100e-9, "L:CLR_RC", "GND", rot=0), (101.6, yl))
     W((73.66, yl), (73.66, 182.88), (66.04, 182.88))
     lab("MOTOR_OK", (66.04, 182.88), 180)
-    TP(sh, "MOTOR_OK", at=(69.85, 182.88))
 
     # --- two ADCs: inputs from the left, I2C to the right, decoupling cap clear of the labels
     for i, (chans, yc) in enumerate(zip(ADC_MAP, (106.68, 177.8))):
@@ -2016,12 +2003,10 @@ def sheet_io():
     W(PIN(rk, 1), (68.58, yk))
     lab("PWR_HOLD", (68.58, yk), 180)
     hang(sh, R(sh, 100e3, "PWR_HOLD", "GND", rot=0), (76.2, yk))
-    TP(sh, "PWR_HOLD", at=(71.12, yk))
     gnd(PIN(k, 2))
     for n_, net in ((3, "L:SS_A"), (4, "L:SS_B")):
         W(PIN(k, n_), (116.84, PIN(k, n_)[1]))
         lab(net, (116.84, PIN(k, n_)[1]), 0)
-        TP(sh, net, at=(111.76, PIN(k, n_)[1]), rot=180 if n_ == 3 else 0)
 
     # button sense (pole 2): 10k pull-up, 1k / 100 nF filter; PWR_BTN low = button ON
     ys = 241.3
@@ -2035,7 +2020,6 @@ def sheet_io():
     W(PIN(rpu, 2), PIN(rf, 1))
     hang(sh, C(sh, 100e-9, "PWR_BTN", "GND", rot=0), (162.56, ys))
     W(PIN(rf, 2), (172.72, ys))
-    TP(sh, "PWR_BTN", at=(167.64, ys))
     lab("PWR_BTN", (172.72, ys), 0)
     return sh
 
