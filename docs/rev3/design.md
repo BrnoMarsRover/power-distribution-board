@@ -1127,7 +1127,9 @@ layout.
        aux OR diode. Both OR diodes (aux 5.3 V, USB VBUS) lie flat at the right edge with their cathodes on
        a +5V_LOGIC column, which also takes the 5 V cap and the AP7361's input pin. The LDO's 3.3 V tab and
        its cap sit under it; routing takes +3V3 to the ESP32 and the logic.
-     - **BUS42** reaches it as a thin track (about 0.1 A) from the 42 V bar.
+     - **BUS42** (about 0.1 A) reaches it on a 0.6 mm L3 track: from the 42 V bar's L3 copy up the free
+       strip right of CHG_N, along y = 21.7 mm above the rail blocks' L3 copies (they start at 22.5 mm),
+       down past the 5 V block and through a via into the input pour.
      - Top parts are kept off the via fields of both supplies (U10's and U11's pad vias, the input vias).
   3. `gen/pcb_silk.py` — the silkscreen.
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after

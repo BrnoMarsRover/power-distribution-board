@@ -11,13 +11,15 @@ Stack, top to bottom:
   right column: OR diodes lying flat, D16 (aux 5.3 V) level with L2's 5.3 V pad and D17 (USB VBUS) above it,
   cathodes on the right joined on +5V_LOGIC with the 5 V cap; the AP7361 under them, input pin up, tab down,
   its 3.3 V cap beside the tab.
-BUS42 arrives as a thin track (about 0.1 A) from the 42 V bar; the logic rails leave by routing.
+BUS42 arrives on an L3 track (about 0.1 A) from the 42 V bar, along y 21.7 above the rail blocks' L3
+copies; the logic rails leave by routing.
 """
 import pcbnew
 
 from power42 import MM, TOMM, X0, Y0, _at, _pad, _pxy
 
 U11_XY = (132.65, 39.6)
+BUS42_Y = 21.7                       # L3 feed from the 42 V bar runs along here (rail L3 copies start at 22.5)
 GAP = 0.6
 KEEP_BOTTOM = [(126.1, 31.9, 139.9, 67.0), (139.9, 44.8, 149.4, 67.0)]   # pocket right of U11 for its resistors
 KEEP_TOP = [(126.6, 31.6, 135.4, 43.4)]           # vias of U11's pad and the input cap's GND: no top parts on them
@@ -265,4 +267,18 @@ def copper(b):
         g = pb(ref, num)
         via("GND", (g[0] + g[2]) / 2, g[3] + 0.9) or via("GND", (g[0] + g[2]) / 2, g[1] - 0.9) or \
             via("GND", g[0] - 0.9, (g[1] + g[3]) / 2)
+    # BUS42 feed (about 0.1 A): from the 42 V bar's L3 copy up the free strip right of CHG_N, along y 21.7
+    # above the rail blocks' L3 copies (they start at 22.5), down past the 5 V block and through a via into
+    # the input pour. 0.6 mm: the HV classes ask 0.5 mm minimum.
+    feed = [(49.2, 30.6), (49.2, BUS42_Y), (131.0, BUS42_Y), (131.0, 30.5), (134.4, 30.5), (134.4, 33.2)]
+    for (x1, y1), (x2, y2) in zip(feed, feed[1:]):
+        t = pcbnew.PCB_TRACK(b)
+        t.SetStart(pcbnew.VECTOR2I(MM(X0 + x1), MM(Y0 + y1)))
+        t.SetEnd(pcbnew.VECTOR2I(MM(X0 + x2), MM(Y0 + y2)))
+        t.SetWidth(MM(0.6))
+        t.SetLayer(pcbnew.In2_Cu)
+        t.SetNet(net("BUS42"))
+        b.Add(t)
+        tracks.append(t)
+    via("BUS42", *feed[-1], force=True)
     return zones, vias, tracks

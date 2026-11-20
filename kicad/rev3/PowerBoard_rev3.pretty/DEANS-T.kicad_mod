@@ -7,7 +7,7 @@
 		(at 0 -10.7 0)
 		(unlocked yes)
 		(layer "F.SilkS")
-		(uuid "0a704125-7db6-49f2-a75b-37d721b2e73a")
+		(uuid "ef0d702f-790e-4ec9-bb46-4adfcc9dcdae")
 		(effects
 			(font
 				(size 1 1)
@@ -19,7 +19,7 @@
 		(at 0 -9.2 0)
 		(unlocked yes)
 		(layer "F.Fab")
-		(uuid "9c0570dd-5510-4164-85da-1da51b21a5e4")
+		(uuid "3634ff09-2509-454a-9775-820530a1d4d0")
 		(effects
 			(font
 				(size 1 1)
@@ -32,7 +32,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "5d8d72ae-5075-43ac-a82b-fe686f55b6a0")
+		(uuid "1808f40c-fdc6-4316-8478-f9c96f45ec38")
 		(effects
 			(font
 				(size 1 1)
@@ -45,7 +45,7 @@
 		(unlocked yes)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "48430127-7ad0-451f-a7c3-9a3fa9368b27")
+		(uuid "fea88906-c784-43bf-b759-259a3543351b")
 		(effects
 			(font
 				(size 1 1)
@@ -63,7 +63,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "c6e18a67-8c9c-4580-a7cd-16a6c1304cce")
+		(uuid "4edd7597-3953-4f4d-9fd7-220197168f3a")
 	)
 	(fp_line
 		(start -6.750185 3.25)
@@ -73,7 +73,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "bcf315dd-4c6f-4702-9c16-806590bebea1")
+		(uuid "56206b88-8fdd-4ff4-9b87-65df3d965000")
 	)
 	(fp_line
 		(start -6.75 -3.25)
@@ -83,7 +83,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "db7b8101-20be-472a-85c1-43a9d3e911c6")
+		(uuid "33a20e87-e931-4db1-bbfd-0e63f25d1490")
 	)
 	(fp_line
 		(start 0 -3.25)
@@ -93,7 +93,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "3dd33185-8686-4b87-9df3-7dfdb1540c74")
+		(uuid "8bf883a2-8f94-4af4-9249-1cba7bafce53")
 	)
 	(fp_line
 		(start 0 3.825)
@@ -103,7 +103,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "8131208e-13db-4b37-8bd7-136100ea4556")
+		(uuid "c297022f-6ea3-4c1f-86fe-247a68b3ab9f")
 	)
 	(fp_line
 		(start 0 3.825)
@@ -113,7 +113,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "3c938ac0-0a1a-428a-8233-d4e77077e51b")
+		(uuid "8fdec569-c12e-451b-997c-a08501e5b59b")
 	)
 	(fp_line
 		(start 6.75 -3.825)
@@ -123,7 +123,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "8a8fe624-1ef2-452f-bf7f-bfb5555e246e")
+		(uuid "0f28f891-17a9-417e-bcd1-d47154d47920")
 	)
 	(fp_line
 		(start 6.75 -3.825)
@@ -133,7 +133,7 @@
 			(type default)
 		)
 		(layer "F.SilkS")
-		(uuid "e51e5818-c412-4544-98c0-a9fe5ca1cd4a")
+		(uuid "886305c7-a9c9-4df0-b544-c36c611ce20c")
 	)
 	(fp_rect
 		(start -7.3 -4.38)
@@ -144,13 +144,13 @@
 		)
 		(fill no)
 		(layer "F.CrtYd")
-		(uuid "4a346248-ccd8-4c96-a8a0-5e75883d1c39")
+		(uuid "495b4c09-3012-40e5-82ab-8b8dc09f4336")
 	)
 	(fp_text user "${REFERENCE}"
 		(at 0 -7.7 0)
 		(unlocked yes)
 		(layer "F.Fab")
-		(uuid "be733099-0c57-4900-9bf0-1a0a671266cd")
+		(uuid "955bdf8f-e4d6-4bfc-b1c0-a2477d549413")
 		(effects
 			(font
 				(size 1 1)
@@ -164,7 +164,7 @@
 		(drill 4.5)
 		(layers "*.Cu" "*.Mask" "F.Adhes")
 		(remove_unused_layers no)
-		(uuid "55db65f1-aa2a-410c-bc6e-f46ef64a985f")
+		(uuid "9a5ad515-5143-4508-ac88-aee001688eb2")
 	)
 	(pad "2" thru_hole circle
 		(at 3.4 0)
@@ -172,7 +172,7 @@
 		(drill 4.5)
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
-		(uuid "729da42b-5cbb-4b88-a372-0f813cb5791b")
+		(uuid "833e396c-57d6-40e6-a6d3-271dff00f88d")
 	)
 	(embedded_fonts no)
 	(model "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes/T-Plug female - W.S Deans Co. Est. 1957.step"
