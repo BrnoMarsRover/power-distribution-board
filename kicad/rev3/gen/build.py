@@ -1490,9 +1490,10 @@ def sheet_aux():
     W((25.4, yr), P(2))
     for x in (35.56, 48.26):
         hang(sh, C(sh, 2.2e-6, "BUS42", "GND", fp="C1210", volt=100, rot=0, MPN="GRM32ER72A225KA35L"), (x, yr))
-    ron = hang(sh, R(sh, 150e3, "BUS42", "L:RON", fp="R1206", rot=0), (78.74, yr), gap=0, gnd=False)
+    # RON, UVLO-top and ripple resistors in 0805 (150 V rating; ~50 V across them): they fit the pocket at U11's pins
+    ron = hang(sh, R(sh, 150e3, "BUS42", "L:RON", fp="R0805", rot=0), (78.74, yr), gap=0, gnd=False)
     W(P(4), PIN(ron, 2))
-    rut = hang(sh, R(sh, 100e3, "BUS42", "L:UVLO", fp="R1206", rot=0), (63.5, yr), gap=P(3)[1] - yr - 7.62, gnd=False)
+    rut = hang(sh, R(sh, 100e3, "BUS42", "L:UVLO", fp="R0805", rot=0), (63.5, yr), gap=P(3)[1] - yr - 7.62, gnd=False)
     W(P(3), PIN(rut, 2))
     hang(sh, R(sh, 6.8e3, "L:UVLO", "GND", rot=0), PIN(rut, 2))
     W(P(1), (P(1)[0], P(1)[1] + 2.54), (P(9)[0], P(9)[1] + 2.54), P(9))
@@ -1519,7 +1520,7 @@ def sheet_aux():
 
     # ripple injection (Type 3): Rr from SW, Cr to VOUT, Cac into FB
     yn = 124.46
-    rr = hang(sh, R(sh, 100e3, "L:SW", "L:RIP", fp="R1206", rot=0), (132.08, yo), gap=7.62, gnd=False)
+    rr = hang(sh, R(sh, 100e3, "L:SW", "L:RIP", fp="R0805", rot=0), (132.08, yo), gap=7.62, gnd=False)
     W(PIN(rr, 2), (132.08, yn), (147.32, yn))
     cr = C(sh, 3.3e-9, "+5V3_AUX", "L:RIP", volt=50, rot=0)
     at_pin(cr, 2, (147.32, yn))

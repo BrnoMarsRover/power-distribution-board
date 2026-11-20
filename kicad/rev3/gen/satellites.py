@@ -30,7 +30,7 @@ SUPPLY = {"GND", "+3V3", "+5V_LOGIC", "+5V3_AUX", "BUS42", "VBAT", "OUT42D", "OU
           "VIN24", "VIN12", "VIN5", "OUT54"}
 GAP = 0.55                             # between courtyards (rule 0.5)
 GATE_PINS = 4                          # the first pins of a pin order drive gates: their nets weigh more
-ITERATIONS = 150000                    # annealing moves per run
+ITERATIONS = int(os.environ.get("SAT_ITER", 150000))   # annealing moves per run (SAT_ITER: quick debug runs)
 RUNS = 3                               # annealing runs per cluster (different seeds), the best is kept
 COMPACT = 0.15                         # cost per mm from a part to its IC: keeps the cluster round
 CAP_PULL = 2.0                         # cost per mm from a capacitor pad to the IC pin on its net (GND aside)
@@ -59,7 +59,7 @@ def _small(fp):
     lib = fp.GetFPIDAsString().split(":")[-1]
     if r.startswith(("R", "C", "TH")):
         return not any(k in lib for k in ("CP_", "2512", "Kelvin"))
-    return r.startswith(("D", "Q")) and lib.startswith(("SOT", "SOD", "D_SMA"))
+    return r.startswith(("D", "Q")) and lib.startswith(("SOT", "SOD", "D_SOD", "D_SMA"))
 
 
 def place_ic(fp, x, y, test):
@@ -109,10 +109,54 @@ class Part:
         _at(self.fp, *self.state, bottom=True)
 
 
+def _rects(area):
+    """An area is one rectangle (l, t, r, b) or a list of them."""
+    return [tuple(area)] if isinstance(area[0], (int, float)) else [tuple(a) for a in area]
+
+
+def _inside(box, area):
+    return any(box[0] >= a[0] and box[1] >= a[1] and box[2] <= a[2] and box[3] <= a[3] for a in _rects(area))
+
+
+def _bbox(area):
+    rs = _rects(area)
+    return min(a[0] for a in rs), min(a[1] for a in rs), max(a[2] for a in rs), max(a[3] for a in rs)
+
+
 def _legal(box, area, obstacles):
-    if box[0] < area[0] or box[1] < area[1] or box[2] > area[2] or box[3] > area[3]:
+    if not _inside(box, area):
         return False
     return not any(_overlap(box, o, GAP) for o in obstacles)
+
+
+def put_ic(fp, x, y, test, area, obstacles, rmax=12.0):
+    """Bottom side: the first quarter turn passing test(pad_xy_by_number), at the nearest legal spot to (x, y).
+    Locks it and adds its courtyard to obstacles."""
+    degs = []
+    for deg in (0, 90, 180, 270):
+        _at(fp, x, y, deg, bottom=True)
+        if test({p.GetNumber(): _pad_xy(p) for p in fp.Pads() if p.GetNumber()}):
+            degs.append(deg)
+    if not degs:
+        raise RuntimeError(f"{fp.GetReference()}: no orientation")
+    deg = degs[0]
+    _at(fp, 0.0, 0.0, deg, bottom=True)
+    ox, oy = _pos(fp)
+    l, t, r, b = _box(fp)
+    d = 0.0
+    while d <= rmax:
+        n = max(1, int(2 * math.pi * d / 0.35))
+        for k in range(n):
+            a = 2 * math.pi * k / n
+            cx, cy = x + d * math.cos(a), y + d * math.sin(a)
+            box = (cx + l - ox, cy + t - oy, cx + r - ox, cy + b - oy)
+            if _legal(box, area, obstacles):
+                _at(fp, cx, cy, deg, bottom=True)
+                fp.SetLocked(True)
+                obstacles.append(_box(fp))
+                return True
+        d += 0.25
+    raise RuntimeError(f"{fp.GetReference()}: no room near ({x}, {y})")
 
 
 def _nearest_spot(part, num, ax, ay, area, obstacles, rmax=16.0):
@@ -133,10 +177,27 @@ def _nearest_spot(part, num, ax, ay, area, obstacles, rmax=16.0):
     return None
 
 
-def place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, default_anchor=None, tp_column=None,
-                  supply_pull=None):
+def place_cluster(*args, gap=None, **kw):
+    """_place_cluster with another courtyard gap (the logic groups use 0.5 mm, the rule; the eFuses keep GAP)."""
+    global GAP
+    saved = GAP
+    GAP = gap or GAP
+    try:
+        return _place_cluster(*args, **kw)
+    finally:
+        GAP = saved
+
+
+def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, default_anchor=None, tp_column=None,
+                   supply_pull=None, members=None, extra_ics=(), locked_terminals=False, tp_area=None, decaps=False):
     """Place the small parts of ic_ref's sheet around it. obstacles: list of boxes (bottom side), extended in place.
     fixed_anchors: {net: (priority, (x, y))}; supply_pull: {supply net: f(x, y) -> cost of a pad there}.
+    area: a rectangle or a list of them. Options for the logic groups (all off for the eFuses):
+      members: the parts to place (default: the IC sheet's small parts and test pads);
+      extra_ics: more ICs of the group (their pins anchor after pin_order's, in pin-number order);
+      locked_terminals: pads of parts already placed (connectors, the ESP32, FET gates) count as terminals;
+      tp_area: where the test-pad columns go (default: area), a new column started when one is full;
+      decaps: capacitors on supplies only go one per IC supply pin, 100 nF first.
     Returns (placed refs, refs that found no spot)."""
     ic = FP[ic_ref]
     sheet = ic.GetSheetname()
@@ -146,37 +207,89 @@ def place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, de
         net = pins[num].GetNetname()
         if net not in SUPPLY and net not in anchors:
             anchors[net] = (i, _pad_xy(pins[num]))
+    all_pins = list(pins.values())
+    k = len(pin_order)
+    for ref in extra_ics:
+        for p in sorted((p for p in FP[ref].Pads() if p.GetNumber()), key=lambda p: (len(p.GetNumber()), p.GetNumber())):
+            all_pins.append(p)
+            if p.GetNetname() not in SUPPLY and p.GetNetname() not in anchors:
+                anchors[p.GetNetname()] = (k, _pad_xy(p))
+                k += 1
     terminals = {}                                        # net -> [(x, y)]: IC pins and fixed points
-    for p in pins.values():
+    for p in all_pins:
         terminals.setdefault(p.GetNetname(), []).append(_pad_xy(p))
     for net, (pr, pt) in (fixed_anchors or {}).items():    # a fixed point is the net's only target
         anchors[net] = (pr, pt)
         terminals[net] = [pt]
-    members = [r for r, f in FP.items() if f.GetSheetname() == sheet and r != ic_ref and not f.IsLocked()
-               and (_small(f) or r.startswith("TP"))]
+    if members is None:
+        members = [r for r, f in FP.items() if f.GetSheetname() == sheet and r != ic_ref and not f.IsLocked()
+                   and (_small(f) or r.startswith("TP"))]
+    else:
+        members = [r for r in members if not FP[r].IsLocked()]
+    if locked_terminals:                                  # pads already placed on the members' nets
+        mine = {p.GetNetname() for r in members for p in FP[r].Pads()} - SUPPLY
+        own = set(members) | {ic_ref, *extra_ics}
+        bx0, by0, bx1, by1 = _bbox(area)
+        mid = ((bx0 + bx1) / 2, (by0 + by1) / 2)
+        for ref in sorted(FP):
+            f = FP[ref]
+            if ref in own or not f.IsLocked():
+                continue
+            for p in f.Pads():
+                n = p.GetNetname()
+                if n in mine and n not in (fixed_anchors or {}):
+                    terminals.setdefault(n, []).append(_pad_xy(p))
+        for n in sorted(mine):
+            if n not in anchors and terminals.get(n):
+                anchors[n] = (k + 10, min(terminals[n], key=lambda q: math.dist(q, mid)))
+    cap_pin = {}                                          # decoupling cap -> (its supply pad, the IC pin)
+    if decaps:
+        supply_pins = [p for p in all_pins if p.GetNetname() in SUPPLY and p.GetNetname() != "GND"]
+        caps = sorted((r for r in members if r.startswith("C")
+                       and all(p.GetNetname() in SUPPLY for p in FP[r].Pads())),
+                      key=lambda r: (not FP[r].GetValue().startswith("100n"), int(r[1:])))
+        used = {}
+        for r in caps:
+            net = next(p.GetNetname() for p in FP[r].Pads() if p.GetNetname() != "GND")
+            cands = [p for p in supply_pins if p.GetNetname() == net]
+            if cands:
+                pin = min(cands, key=lambda p: used.get(id(p), 0))
+                used[id(pin)] = used.get(id(pin), 0) + 1
+                num = next(p.GetNumber() for p in FP[r].Pads() if p.GetNetname() == net)
+                cap_pin[r] = (num, _pad_xy(pin))
     done, missed = [], []
 
     # test pads first: one column, names to the right (pcb_silk.py writes the net name where the value sits)
-    tps = sorted((r for r in members if r.startswith("TP")), key=lambda r: FP[r].GetValue())
+    tps = sorted((r for r in members if r.startswith("TP") and "Keystone" not in FP[r].GetFPIDAsString()),
+                 key=lambda r: FP[r].GetValue())
+    t_area = tp_area or area
+    bottom_y = _bbox(t_area)[3]
     if tp_column and tps:
         x, y = tp_column
+        col_w = max(0.75 * len(FP[r].GetValue()) + 0.8 for r in tps) + 2.5 + GAP
         for r in tps:
             f = FP[r]
             label = 0.75 * len(f.GetValue()) + 0.8
+            x_was, y_was = x, y
             while True:
                 _at(f, x, y, 0, bottom=True)
                 l, t, rr, b = _box(f)
                 box = (l, t, rr + label, b)
-                if box[3] > area[3] or _legal(box, area, obstacles):
+                if box[3] > bottom_y and tp_area and x + col_w < _bbox(t_area)[2]:
+                    x, y = x + col_w, tp_column[1]            # next column
+                    continue
+                if box[3] > bottom_y or _legal(box, t_area, obstacles):
                     break
-                y += 0.25
-            if box[3] > area[3]:
+                y += 0.05 if tp_area else 0.25
+            if box[3] > bottom_y:
                 if os.environ.get("SAT_DEBUG"):
                     _at(f, x, tp_column[1], 0, bottom=True)
                     l, t, rr, b = _box(f)
                     bx = (l, t, rr + label, b)
-                    print("   TP blocked", r, [tuple(round(v, 2) for v in o) for o in obstacles if _overlap(bx, o, GAP)], area)
+                    print("   TP blocked", r, [tuple(round(v, 2) for v in o) for o in obstacles if _overlap(bx, o, GAP)], t_area)
                 missed.append(r)
+                if tp_area:                                   # the next pad starts where this one did
+                    x, y = x_was, y_was
                 continue
             obstacles.append(box)
             f.SetLocked(True)
@@ -185,7 +298,7 @@ def place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, de
             v.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_CENTER)
             py = _pad_xy(next(iter(f.Pads())))[1]
             v.SetPosition(pcbnew.VECTOR2I(MM(X0 + rr + 0.3 + (label - 0.8) / 2), MM(Y0 + py)))
-            y = box[3] + GAP + (b - t) / 2
+            y = box[3] + GAP + (b - t) / 2 + (1e-6 if tp_area else 0.0)    # (slack: exact fits)
 
     # greedy: pin-anchored parts by pin priority, each followed by what hangs on it
     parts = {r: Part(FP[r]) for r in members if not r.startswith("TP")}
@@ -197,6 +310,11 @@ def place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, de
         best = None
         for r in rest:
             pt = parts[r]
+            if r in cap_pin:                              # decoupling cap: at its IC supply pin, early
+                cand = (-0.5, False, pt.area, r, cap_pin[r][0], cap_pin[r][1])
+                if best is None or cand < best:
+                    best = cand
+                continue
             for num, n, _, _ in pt.shapes[0][0]:
                 if n in anchors:
                     pr, xy = anchors[n]
@@ -209,12 +327,17 @@ def place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, de
                     best = cand
         if best is None:                                  # nothing anchors the rest: default point, resistors first
             r = min(rest, key=lambda q: (not q.startswith("R"), int(q.lstrip("ABCDEFGHIJKLMNOPQRSTUVWXYZ") or 0)))
-            num = next(k for k, n, _, _ in parts[r].shapes[0][0] if n not in SUPPLY)
-            best = (len(pin_order) + 50, False, 0, r, num, default_anchor)
+            num = next((k for k, n, _, _ in parts[r].shapes[0][0] if n not in SUPPLY), parts[r].shapes[0][0][0][0])
+            cx0, cy0, cx1, cy1 = _bbox(area)
+            best = (len(pin_order) + 50, False, 0, r, num, default_anchor or ((cx0 + cx1) / 2, (cy0 + cy1) / 2))
         pr, _, _, r, num, (ax, ay) = best
         rest.remove(r)
         pt = parts[r]
         st = _nearest_spot(pt, num, ax, ay, area, obstacles, rmax=30.0)
+        if st is None and not _inside((ax, ay, ax, ay), area):   # anchor outside the area: from its nearest point
+            ax, ay = min(((min(max(ax, a[0]), a[2]), min(max(ay, a[1]), a[3])) for a in _rects(area)),
+                         key=lambda q: math.dist(q, (ax, ay)))
+            st = _nearest_spot(pt, num, ax, ay, area, obstacles, rmax=30.0)
         if st is None:                                    # no room yet: on its anchor, the annealing makes room
             dx, dy = pt.pad_offset(num, 0)
             pt.state = (ax - dx, ay - dy, 0)
@@ -243,7 +366,7 @@ def place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, de
             if n not in SUPPLY and r not in net_parts.setdefault(n, []):
                 net_parts[n].append(r)
     pin_pts = {}
-    for p in pins.values():
+    for p in all_pins:
         pin_pts.setdefault(p.GetNetname(), []).append(_pad_xy(p))
     pull = supply_pull or {}
 
@@ -274,8 +397,11 @@ def place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, de
     def part_cost(r, s):
         """Terms that depend on this part alone: decoupling distance, test-pad and supply pulls, compactness."""
         pt, c = parts[r], COMPACT * math.hypot(s[0] - cx, s[1] - cy)
-        for _, n, x, y in pt.pads(s):
-            if pt.ref.startswith("C") and n in pin_pts and n != "GND":
+        for num, n, x, y in pt.pads(s):
+            if r in cap_pin:
+                if num == cap_pin[r][0]:
+                    c += 2 * CAP_PULL * math.dist((x, y), cap_pin[r][1])
+            elif pt.ref.startswith("C") and n in pin_pts and n != "GND":
                 c += CAP_PULL * min(math.hypot(x - px, y - py) for px, py in pin_pts[n])
             if n in tp_pts:
                 c += 0.1 * min(math.hypot(x - px, y - py) for px, py in tp_pts[n])
@@ -287,7 +413,8 @@ def place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, de
     for r in parts:
         if r not in unfit:
             obstacles.remove(parts[r].box())
-    window = (area[0] - 1, area[1] - 1, area[2] + 1, area[3] + 1)
+    wx0, wy0, wx1, wy1 = _bbox(area)
+    window = (wx0 - 1, wy0 - 1, wx1 + 1, wy1 + 1)
     static = sorted(tuple(o) for o in obstacles if _overlap(o, window, 0.0))    # sorted: runs must repeat
     refs = sorted(parts)
 
@@ -298,7 +425,7 @@ def place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, de
         return w * h if w > 0 and h > 0 else 0.0
 
     def inside(bx):
-        return bx[0] >= area[0] and bx[1] >= area[1] and bx[2] <= area[2] and bx[3] <= area[3]
+        return _inside(bx, area)
 
     def total_cost(st):
         return sum(net_cost(n, st) for n in net_parts) + sum(part_cost(r, st[r]) for r in refs)
@@ -336,13 +463,18 @@ def place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, de
                     s = (st[r][0] + rng.gauss(0, sg), st[r][1] + rng.gauss(0, sg), deg)
                 else:
                     nets = [n for _, n, _, _ in pt.shapes[0][0] if n not in SUPPLY]
-                    n = rng.choice(nets)
-                    pts = list(terminals.get(n, [])) + [(x, y) for q in net_parts[n] if q != r
-                                                         for _, nn, x, y in parts[q].pads(st[q]) if nn == n]
-                    if not pts:
-                        continue
-                    tx, ty = rng.choice(pts)
-                    num = next(k for k, nn, _, _ in pt.shapes[deg][0] if nn == n)
+                    if not nets:                          # supply-only (a decoupling cap): next to its pin
+                        if r not in cap_pin:
+                            continue
+                        num, (tx, ty) = cap_pin[r]
+                    else:
+                        n = rng.choice(nets)
+                        pts = list(terminals.get(n, [])) + [(x, y) for q in net_parts[n] if q != r
+                                                             for _, nn, x, y in parts[q].pads(st[q]) if nn == n]
+                        if not pts:
+                            continue
+                        tx, ty = rng.choice(pts)
+                        num = next(k for k, nn, _, _ in pt.shapes[deg][0] if nn == n)
                     dx, dy = pt.pad_offset(num, deg)
                     s = (tx - dx + rng.gauss(0, 1.0), ty - dy + rng.gauss(0, 1.0), deg)
                 moved = {r: s}
@@ -386,7 +518,7 @@ def place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, de
                 continue
             num, _, px, py = next(((k, n, x, y) for k, n, x, y in pt.pads(st[r]) if n not in SUPPLY),
                                   pt.pads(st[r])[0])
-            s = _nearest_spot(pt, num, px, py, area, placed_boxes)
+            s = _nearest_spot(pt, num, px, py, area, placed_boxes, rmax=30.0 if locked_terminals else 16.0)
             if s is None:
                 left.append(r)
                 st[r] = greedy[r]
@@ -399,6 +531,8 @@ def place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, de
     start = total_cost(greedy)
     runs = [anneal(seed) for seed in range(1, RUNS + 1)]
     c0, st, left = min(runs, key=lambda t: t[0])
+    if not left and not unfit and c0 > start:            # annealing made it worse: keep the greedy result
+        c0, st = start, dict(greedy)
     if left:                                              # no legal spot after annealing: keep the greedy result,
         c0, st, left = start, dict(greedy), []            # without the parts it could not fit (the packer takes them)
         for r in unfit:

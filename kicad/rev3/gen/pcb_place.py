@@ -22,6 +22,7 @@ import power_rails  # noqa: E402  hand-designed 24 / 12 / 5 V blocks (the rails 
 import power54  # noqa: E402  hand-designed 54 V boost
 import power_aux  # noqa: E402  hand-designed always-on aux supply
 import satellites  # noqa: E402  template placement of the controllers' small parts
+import logic_place  # noqa: E402  the same for the logic and the supplies' control networks
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 if "--overwrite-placement" not in sys.argv:
@@ -444,6 +445,13 @@ for key in ("42D", "42C"):                   # 42C copies 42D where the parts ma
     refs, missed = satellites.efuse42(FP, key, placed[True], like=None if key == "42D" else "42D")
     fixed.update(refs)
     print(f"{key} eFuse template: {len(refs)} placed" + (f", no spot: {' '.join(missed)}" if missed else ""))
+for ref in fixed:                           # placed parts are terminals for the logic groups: lock them all
+    FP[ref].SetLocked(True)
+refs, _ = logic_place.place(FP, placed[True])
+fixed.update(refs)
+if "--dump-free" in sys.argv:                # bottom obstacles after the templates, for floorplanning
+    import json
+    json.dump({"bottom": placed[True], "top": placed[False]}, open("kicad/rev3/gen/out/obstacles.json", "w"))
 
 
 # keep the label spots under the inputs free (battery label, polarity rule, + / - marks)

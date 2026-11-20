@@ -21,7 +21,11 @@ from power42 import MM, TOMM, X0, Y0, _at, _pad, _pxy
 U11_XY = (132.65, 39.6)
 BUS42_Y = 21.7                       # L3 feed from the 42 V bar runs along here (rail L3 copies start at 22.5)
 GAP = 0.6
-KEEP_BOTTOM = [(126.1, 31.9, 139.9, 67.0), (139.9, 44.8, 149.4, 67.0)]   # pocket right of U11 for its resistors
+# the power stage's copper; the pocket right of U11 (x 135.3-149.4, y 38.2-44.8, and above it right of the input
+# caps) is left for U11's resistors (placed by logic_place.py)
+# and the GND-fill patch between L2 and the diodes (x 139.9-145.8, y 44.8-49.4)
+KEEP_BOTTOM = [(126.1, 31.9, 140.5, 38.2), (126.1, 38.2, 135.3, 67.0), (135.3, 49.4, 149.4, 67.0),
+               (135.3, 44.8, 139.9, 49.4), (145.8, 44.8, 149.4, 49.4)]
 KEEP_TOP = [(126.6, 31.6, 135.4, 43.4)]           # vias of U11's pad and the input cap's GND: no top parts on them
 
 
