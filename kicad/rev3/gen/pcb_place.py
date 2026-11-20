@@ -20,6 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import power42  # noqa: E402  hand-designed battery input and 42 V blocks
 import power_rails  # noqa: E402  hand-designed 24 / 12 / 5 V blocks (the rails it lists)
 import power54  # noqa: E402  hand-designed 54 V boost
+import power_aux  # noqa: E402  hand-designed always-on aux supply
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 if "--overwrite-placement" not in sys.argv:
@@ -297,7 +298,7 @@ put("F19", jbox[0] - 0.8 - (fr - fl), jy - (fy - ft), orient=lambda f: None)
 led54 = next(r for r, f in FP.items() if f.GetSheetname().startswith("54 V boost") and "LED" in f.GetFPIDAsString())
 set_side(FP[led54], False)
 upright(FP[led54], tall=True)
-put(led54, 26.8, 104.5, orient=lambda f: None)
+put(led54, 26.8, 114.0, orient=lambda f: None)       # below the input via field
 FP[led54].SetLocked(True)
 
 
@@ -428,6 +429,11 @@ for ref in power54.place(FP):                # the 54 V boost's power stage, its
     fixed.add(ref)
 placed[False] += power54.KEEP_TOP
 placed[True] += power54.KEEP_BOTTOM
+for ref in power_aux.place(FP):              # the always-on aux supply beside the ESP32
+    claim(FP[ref])
+    fixed.add(ref)
+placed[False] += power_aux.KEEP_TOP
+placed[True] += power_aux.KEEP_BOTTOM
 
 
 # keep the label spots under the inputs free (battery label, polarity rule, + / - marks)

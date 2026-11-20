@@ -1116,6 +1116,19 @@ layout.
        Bootstrap and VCC caps are in the strip under U10, the bootstrap diode just above it.
      - The two gates are always on opposite sides of the stack (the price of the compact loop), so the
        controller sits by the high-side gate and the ground-referenced LO takes the longer run.
+  2e. `gen/power_aux.py` (copper also run by `pcb_power42.py`) — the always-on aux supply, designed by hand
+     (2026-11-20), all on the bottom beside the ESP32 (x 126–149.4 mm, y 31–67 mm).
+     - **Buck (LM5017):** one input ceramic lies straight over U11's VIN / RTN pins (the buck's hot loop is
+       that cap and the IC, its internal FETs); the BUS42 pour runs above the pin row to the second input
+       cap, with a tab onto VIN, so UVLO and RON stay free to escape. U11's SW pin drops straight onto L2's
+       switch pad; L2 stands under U11. Bootstrap and VCC caps stand left of U11; its resistors (RON, UVLO,
+       ripple injection, FB) pack into a pocket right of it.
+     - **Output:** a 5.3 V strip from L2's lower pad onto three output ceramics and straight across to the
+       aux OR diode. Both OR diodes (aux 5.3 V, USB VBUS) lie flat at the right edge with their cathodes on
+       a +5V_LOGIC column, which also takes the 5 V cap and the AP7361's input pin. The LDO's 3.3 V tab and
+       its cap sit under it; routing takes +3V3 to the ESP32 and the logic.
+     - **BUS42** reaches it as a thin track (about 0.1 A) from the 42 V bar.
+     - Top parts are kept off the via fields of both supplies (U10's and U11's pad vias, the input vias).
   3. `gen/pcb_silk.py` — the silkscreen.
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after
      "Update footprints from library", which resets the board-side model replacements.
