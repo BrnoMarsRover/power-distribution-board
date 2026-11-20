@@ -1,5 +1,5 @@
 Quantity,Manufacturer Part,Manufacturer,Comment,Designator,Footprint
-6,5015,Keystone,GND,"TP5,TP56,TP60,TP77,TP80,TP83",TestPoint_Keystone_5015_Micro_Mini
+6,5015,Keystone,GND,"TP5,TP35,TP39,TP56,TP59,TP62",TestPoint_Keystone_5015_Micro_Mini
 1,0154003.DRT,Littelfuse,"0154003.DRT (3 A slow-blow, clip holder)",F19,Fuseholder_Littelfuse_Nano2_154x
 1,1N5819HW-7-F,Diodes Incorporated,1N5819HW,D21,D_SOD-123
 2,2N7002LT1G,onsemi,2N7002,"Q1,Q25",SOT-23

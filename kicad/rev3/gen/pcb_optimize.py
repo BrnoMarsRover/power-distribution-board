@@ -93,6 +93,8 @@ for f in FPS:
     pos = mm(f.GetPosition())
     l, t, r, bt = courtyard(f)
     if not movable(f):
+        if f.GetReference().startswith("TP") and "Keystone" not in lib(f):     # placed pads keep their label room
+            r += 0.75 * len(f.GetValue()) + 0.8
         both = through(f) and f.GetReference().startswith("J")   # connectors: whole outline (see pcb_place.py)
         for side in ((False, True) if both else (f.IsFlipped(),)):
             fixed_boxes[side].append((l, t, r, bt))

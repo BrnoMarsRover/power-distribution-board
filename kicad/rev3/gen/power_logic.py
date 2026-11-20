@@ -97,6 +97,9 @@ def copper(b):
             for sx1, sy1, sx2, sy2, hw, nn, sl in segs:
                 if nn != NET and sl == layer and seg_dist(x, y, sx1, sy1, sx2, sy2) < TRACK_W / 2 + hw + GAP_TRACK:
                     return False
+            for vx, vy, vr, nn in vpos:                   # other nets' vias go through every layer
+                if nn != NET and math.hypot(x - vx, y - vy) < TRACK_W / 2 + vr + GAP_TRACK:
+                    return False
         return True
 
     def add_via(x, y):

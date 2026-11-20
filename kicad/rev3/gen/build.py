@@ -995,7 +995,8 @@ def sheet_switch(r):
     gnd(PIN(reb, 2))
     enp = P(1)
     W(enp, (73.66, enp[1]), (73.66, 139.7), (66.04, 139.7))
-    TP(sh, en, at=(83.82, enp[1]))
+    # test pads per eFuse (2026-11-20): VOUT, IMON, FLT and GATE only; EN, INP, INP_G and VIN are probed on their
+    # resistors
     if r["name"] == "42V-D":
         qe = sh.add("Transistor_FET:2N7002", "Q", "2N7002", FP["SOT23"], {1: "MOTOR_KILL", 2: "GND", 3: en},
                     at=(53.34, 144.78))
@@ -1011,7 +1012,6 @@ def sheet_switch(r):
         y = pin_[1]
         W(pin_, (45.72, y))
         lab(net, (45.72, y), 180)
-        TP(sh, net, at=(50.8, y))
         rd = R(sh, 100e3, net, "GND", at=(60.96, y + 3.81), rot=0)
         gnd(PIN(rd, 2))
     # FLT_I / FLT_T are open-drain, wire-ORed; their pull-up sits on the mcu sheet by the ESP32 input
@@ -1140,7 +1140,6 @@ def sheet_switch(r):
     lab(vin, (22.86, yR), 180)
     W((22.86, yR), PIN(rs, 1))
     if r["name"] in TVS_IN:
-        TP(sh, vin, at=(25.4, yR))
         hang(sh, DZ(sh, TVS_IN[r["name"]], vin, "GND", rot=270, MPN=TVS_IN[r['name']]),
              (30.48, yR), gap=3.81)
         for x in (45.72, 58.42):

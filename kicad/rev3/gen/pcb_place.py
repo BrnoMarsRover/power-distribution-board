@@ -21,6 +21,7 @@ import power42  # noqa: E402  hand-designed battery input and 42 V blocks
 import power_rails  # noqa: E402  hand-designed 24 / 12 / 5 V blocks (the rails it lists)
 import power54  # noqa: E402  hand-designed 54 V boost
 import power_aux  # noqa: E402  hand-designed always-on aux supply
+import satellites  # noqa: E402  template placement of the controllers' small parts
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 if "--overwrite-placement" not in sys.argv:
@@ -434,6 +435,15 @@ for ref in power_aux.place(FP):              # the always-on aux supply beside t
     fixed.add(ref)
 placed[False] += power_aux.KEEP_TOP
 placed[True] += power_aux.KEEP_BOTTOM
+# controllers and their small parts by template (satellites.py), before the packer; what finds no spot is packed
+for key in ("24", "12", "5"):                # 12 and 5 V copy the 24 V cluster where it fits
+    refs, missed = satellites.efuse(FP, key, placed[True], like=None if key == "24" else "24")
+    fixed.update(refs)
+    print(f"{key} V eFuse template: {len(refs)} placed" + (f", no spot: {' '.join(missed)}" if missed else ""))
+for key in ("42D", "42C"):                   # 42C copies 42D where the parts match
+    refs, missed = satellites.efuse42(FP, key, placed[True], like=None if key == "42D" else "42D")
+    fixed.update(refs)
+    print(f"{key} eFuse template: {len(refs)} placed" + (f", no spot: {' '.join(missed)}" if missed else ""))
 
 
 # keep the label spots under the inputs free (battery label, polarity rule, + / - marks)
