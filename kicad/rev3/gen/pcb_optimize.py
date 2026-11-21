@@ -37,7 +37,7 @@ import flt_bus  # noqa: E402
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 X0, Y0, W, H = 50.0, 50.0, 150.0, 150.0
 GAP = 0.6
-HOLES = [(3.5, 3.5), (146.5, 3.5), (3.5, 146.5), (146.5, 146.5)]
+HOLES = [(3.5, 3.5), (146.5, 3.5), (3.5, 146.5), (146.5, 146.5), (75.0, 75.0)]   # as pcb_place.py
 KEEP = [(8.0, 12.4, 31.0, 16.3), (51.0, 9.6, 123.0, 12.0), (78.0, 140.0, 122.0, 146.0),   # label spots
         (49.0, 49.0, 92.0, 69.5),                                                           # logo + title
         (1.5, 71.8, 122.5, 74.8)]                                                           # column headers
@@ -124,8 +124,9 @@ for f in FPS:
         p.can_rotate = True
     parts.append(p)
 for hx, hy in HOLES:
+    k = 3.5 if (hx, hy) == (75.0, 75.0) else 4.0     # as pcb_place.py's HOLE_KEEP
     for side in (False, True):
-        fixed_boxes[side].append((hx - 4, hy - 4, hx + 4, hy + 4))
+        fixed_boxes[side].append((hx - k, hy - k, hx + k, hy + k))
 for k in KEEP + power42.KEEP_TOP + power_rails.KEEP_TOP + power54.KEEP_TOP + power_aux.KEEP_TOP:
     fixed_boxes[False].append(k)
 for k in (power42.KEEP_BOTTOM + power_rails.KEEP_BOTTOM + power54.KEEP_BOTTOM + power_aux.KEEP_BOTTOM

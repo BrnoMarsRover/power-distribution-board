@@ -27,7 +27,7 @@ Y_SHUNT = 22.0                      # shunt centre: VIN above, DRN below
 VIN_BOT, DRN_TOP, OUT_TOP = Y_SHUNT - 0.3, Y_SHUNT + 0.3, Y_SHUNT + 0.5
 FET_ROWS = (Y_SHUNT + 6.1, Y_SHUNT + 18.0)        # pre-charge, main (main nearest the outputs)
 DRN_BOT, WIDE_TOP, WIDE_BOT = 45.5, 46.3, 73.8    # DRN area bottom; full-width OUT area under the switch
-Y_OUT, ROW = 75.0, 10.2             # output connector courtyard tops (same rows as pcb_place.py)
+Y_OUT, ROW = 75.0, 10.2             # output connector courtyard tops (a rail may set its own y_out)
 LED_Y = 30.0
 TVS_Y, CAP_Y = 14.5, 16.0           # low enough to leave the input's + / - marks their spot
 BRIDGE_Y = 42.6                     # bridge pad 1 (DRN); pad 2 sits 5.08 mm lower, in the OUT area
@@ -36,10 +36,13 @@ CONN_GAP = 0.8                      # PTC courtyard to connector courtyard (a ra
 
 # per rail: column copper edges (xl, xr) and the parts; fets = (pre-charge, main). The bulk caps are found by net.
 RAILS = {
+    # 24 / 12 V: outputs 6.5 mm lower (decided 2026-11-21) for rev2's centre hole at (75, 75) on their boundary and
+    # the 42 V far-end bundle passing under it; their full-width OUT area reaches down to the outputs, so the 12 V
+    # current goes round the hole
     "24": dict(xl=50.8, xr=76.0, vin="VIN24", out="OUT24", j_in="J5", tvs="D5",
-               shunt="R41", fets=("Q11", "Q10"), bridge="JP3", led="D4"),
+               shunt="R41", fets=("Q11", "Q10"), bridge="JP3", led="D4", y_out=81.5),
     "12": dict(xl=76.5, xr=103.2, vin="VIN12", out="OUT12", j_in="J6", tvs="D7",
-               shunt="R59", fets=("Q14", "Q13"), bridge="JP4", led="D6"),
+               shunt="R59", fets=("Q14", "Q13"), bridge="JP4", led="D6", y_out=81.5),
     # L-shaped: full switch width (to xr, J38 starts at 131.6) only above band_bot; DRN, OUT and outputs end at col_r
     "5": dict(xl=104.1, xr=130.9, col_r=125.6, band_bot=34.6, vin="VIN5", out="OUT5", j_in="J7", tvs="D9",
               shunt="R77", fets=("Q17", "Q16"), bridge="JP5", led="D8",
@@ -53,8 +56,10 @@ def _geo(r):
     col_r = r.get("col_r", xr)
     bx = col_r - 2.2                                # bridge_below: upright under the main FET, right edge
     by = FET_ROWS[1] + 5.7 + 0.5 + 2.14             # its courtyard clears the FET's
+    y_out = r.get("y_out", Y_OUT)
+    wide_bot = WIDE_BOT + (y_out - Y_OUT)           # the full-width OUT area ends 1.2 mm above the outputs
     return dict(
-        col_r=col_r, band_bot=r.get("band_bot", WIDE_BOT),
+        y_out=y_out, wide_bot=wide_bot, col_r=col_r, band_bot=r.get("band_bot", wide_bot),
         bridge=(bx, by) if r.get("bridge_below") else (xr - 3.1, BRIDGE_Y),
         tongue=(bx - 2.2, by + 2.1) if r.get("bridge_below") else None,   # DRN tongue: left edge, bottom
         out_r=xl + 7.7, drn_l=xl + 8.5,            # OUT strip / DRN area split at the FET body
@@ -131,7 +136,7 @@ def place(FP):
             jf = FP[j]
             _flat(jf, 100.0, 100.0, plus, minus)
             l, t, _, _ = _box(jf)
-            _shift(jf, cl - l, Y_OUT + ROW * k - t)
+            _shift(jf, cl - l, g["y_out"] + ROW * k - t)
             yc = _pxy(jf, plus)[1]
             _flat(FP[f], g["ptc_x"], yc, rail, other)
             _hide_marks(jf)
@@ -178,8 +183,8 @@ def _escapes(r):
 KEEP_TOP, KEEP_BOTTOM = [], []
 for _r in RAILS.values():
     _g = _geo(_r)
-    KEEP_TOP += [(_r["xl"], 0.5, _r["xr"], _g["band_bot"]), (_r["xl"], _g["band_bot"], _g["col_r"], WIDE_BOT),
-                 (_r["xl"], WIDE_BOT, _g["strip_r"], 136.0)]
+    KEEP_TOP += [(_r["xl"], 0.5, _r["xr"], _g["band_bot"]), (_r["xl"], _g["band_bot"], _g["col_r"], _g["wide_bot"]),
+                 (_r["xl"], _g["wide_bot"], _g["strip_r"], 136.0 + _g["y_out"] - Y_OUT)]
     KEEP_BOTTOM += [(_r["xl"], OUT_TOP, _g["out_r"], WIDE_TOP),           # FET source via fields
                     (_r["xl"], WIDE_TOP, _r["xl"] + 3.7, WIDE_BOT)]       # stitching column
     KEEP_BOTTOM += [(x - 1.0, y - 1.0, x + 1.0, y + 1.0) for x, y in _escapes(_r)]
@@ -283,7 +288,8 @@ def copper(b):
             out_pts += [(tl - 0.5, WIDE_TOP), (tl - 0.5, tb + 0.5), (col_r, tb + 0.5)]
         else:
             out_pts += [(col_r, WIDE_TOP)]
-        zone(out, F, out_pts + [(col_r, WIDE_BOT), (g["strip_r"], WIDE_BOT), (g["strip_r"], y_end), (xl, y_end)],
+        wb = g["wide_bot"]
+        zone(out, F, out_pts + [(col_r, wb), (g["strip_r"], wb), (g["strip_r"], y_end), (xl, y_end)],
              40, f"{key} OUT", radius=OUT_RADIUS)
         # L3 copy only under the OUT strip, where the source vias are (decided 2026-11-20): beside it, under the DRN
         # area and the wide OUT area, it carried little current; there L3 is +3V3 fill that signals may cut

@@ -242,9 +242,12 @@ def _check_exact(R, segs):
             if p["net"] == net or l_ not in p["layers"]:
                 continue
             l, t, r, b = p["box"]
-            inside = lambda px, py: l <= px <= r and t <= py <= b
-            edges = ((l, t, r, t), (r, t, r, b), (l, b, r, b), (l, t, l, b))
-            d = 0.0 if inside(x1, y1) or inside(x2, y2) else min(route._seg_seg((x1, y1, x2, y2), e) for e in edges)
+            if p.get("round"):                 # a circle (test pads, mounting holes), not its box
+                d = max(0.0, route._pt_seg(p["c"][0], p["c"][1], (x1, y1, x2, y2)) - (r - l) / 2)
+            else:
+                inside = lambda px, py: l <= px <= r and t <= py <= b
+                edges = ((l, t, r, t), (r, t, r, b), (l, b, r, b), (l, t, l, b))
+                d = 0.0 if inside(x1, y1) or inside(x2, y2) else min(route._seg_seg((x1, y1, x2, y2), e) for e in edges)
             if d < hw + route.CLEAR - 1e-4:
                 out.append(f"{net} / {p['ref']}.{p['num']} {p['net']} pad {d:.3f} mm")
     return out

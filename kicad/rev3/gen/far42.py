@@ -9,9 +9,10 @@ where a line leaves the bundle, under the lines above it on L3 (a via down, a sh
   left of U20    VSNS_C rises from the bundle's top; VSNS_D hops. Both enter U20 under its body from the left,
                  between its pin rows (the input row faces up, the rails come in from above), their R / C pairs
                  hanging on the lines.
-  under U20      the other eight run between U20's pins and the 24 V output connector.
-  right of U20   IMON_C and IMON_D hop and enter U20 under its body from the right; R / C pairs and test pads on
-                 their lines.
+  under the hole the other eight drop below rev2's centre hole (75, 75), between it and the 24 V output connector
+                 (the 24 / 12 V outputs moved down 6.5 mm for it), from right after the VSNS lines leave.
+  right of it    IMON_C and IMON_D hop (east of the hole) and enter U20 under its body from the right; R / C pairs
+                 and test pads on their lines. The other six climb back to the U17 levels.
   under U17      six lines, between the expander's pins and the 12 V output connector.
   right of U17   INP_D, INP_C and INPG_D hop, INPG_C rises; all four enter U17 under its body from the right,
                  a pull-down between each riser and the next.
@@ -36,7 +37,7 @@ SPOTS = {
     ("imon_c", "D"): (73.75, 64.125, 90), ("imon_r", "D"): (75.85, 64.125, 90),    # above IMON_D's line
     ("imon_tp", "D"): (78.6, 64.3, 0),
     ("imon_c", "C"): (73.75, 67.975, -90), ("imon_r", "C"): (75.85, 67.975, -90),  # below IMON_C's line
-    ("imon_tp", "C"): (79.1, 69.0, 0),                                             # on IMON_C's riser
+    ("imon_tp", "C"): (79.1, 69.0, 0),                                             # on IMON_C's riser (x 79.3)
     ("inp_r", "D"): (102.9, 68.6, -90), ("inp_r", "C"): (105.1, 68.6, -90),         # beside their risers
     ("inpg_r", "D"): (107.3, 68.6, -90), ("inpg_r", "C"): (109.5, 68.6, -90),
     ("flt_tp", "C"): (110.5, 73.6, 90), ("flt_tp", "D"): (113.7, 76.0, 0),          # on their lines
@@ -49,10 +50,11 @@ DECAPS = {"C113": (65.4, 69.0, -90)}
 # kept for the lines (the parts block their own courtyards; the switch-control group packs around both)
 KEEP = [(50.8, 65.3, 54.2, 76.6),          # the risers and VSNS_D's hop, right after the ports
         (54.2, 65.3, 66.8, 66.8),          # VSNS's lines into U20
-        (50.8, 71.0, 66.8, 76.4),          # the bundle, left of U20
-        (66.8, 71.1, 72.4, 76.4),          # under U20
-        (72.4, 65.3, 82.0, 77.6),          # IMON's lines, risers and hops right of U20
-        (82.0, 71.8, 85.5, 76.4),          # the bundle closing again
+        (50.8, 71.0, 64.0, 83.0),          # the bundle dropping below the hole
+        (64.0, 78.0, 76.8, 82.6),          # below the hole (and above the 24 V output connector)
+        (72.4, 65.3, 82.0, 71.2),          # IMON's lines, risers, R / C pairs and test pads right of U20
+        (76.8, 71.2, 82.0, 83.2),          # IMON's hops
+        (82.0, 72.8, 90.0, 82.4),          # the bundle climbing back
         (85.5, 73.1, 99.6, 76.4),          # under U17
         (99.2, 65.3, 110.8, 76.4),         # right of U17: INP / INPG's lines, risers and hops
         (110.8, 73.1, 114.0, 76.4)]        # FLT on to its test pads
@@ -60,26 +62,27 @@ KEEP = [(50.8, 65.3, 54.2, 76.6),          # the risers and VSNS_D's hop, right 
 U20_AT, U17_AT = (69.5, 67.0), (95.0, 67.0)  # logic_place puts them there (input rows up)
 
 # the lines: each leg's band y (legs42 order) and its route east. Stations: (x, new y) = a 45-degree jog that
-# starts at x. Bundle levels: left of U20 the hop opens the bundle at 51.6 and closes it at 53.8; under U20
-# (72.5 ... 76.0); right of U20 it opens at 75.0 and closes at 82.6 to the U17 levels (73.5 ... 76.0); right of
-# U17 it opens to 0.8 mm at 99.6.
-L_OPEN, L_CLOSE, R_OPEN, R_CLOSE, S_OPEN = 51.6, 54.0, 75.0, 82.6, 99.6
+# starts at x. Bundle levels: left of U20 the hop opens the bundle at 51.6; at 54.0 it drops below the centre
+# hole (78.65 ... 82.15: the top line 3.65 mm from the hole's centre, its pad is 3.2 in radius; the bottom one
+# 0.66 mm clear of the 24 V connector's pads); east of the connector it opens around IMON's hop vias (76.5,
+# 77.0) and climbs back at 82.2 to the U17 levels (73.5 ... 76.0); right of U17 it opens to 0.8 mm at 99.6.
+L_OPEN, L_CLOSE, R_OPEN, R_CLOSE, S_OPEN = 51.6, 54.0, 76.5, 82.2, 99.6
 EVENTS = [   # (x, {net key: new y}): where the bundle opens or closes. Lines that move the same way together
              # are staggered (the leading one first, each next STAGGER later), so their parallel 45-degree jogs
              # keep 0.57 mm apart (not 0.5 / sqrt 2)
     (L_OPEN, {"G_C": 71.7, "P_C": 72.2, "F_C": 72.7, "I_C": 73.2, "G_D": 74.8, "P_D": 75.3, "F_D": 75.8, "I_D": 76.3}),
-    (L_CLOSE, {"G_C": 72.5, "P_C": 73.0, "F_C": 73.5, "I_C": 74.0, "G_D": 74.5, "P_D": 75.0, "F_D": 75.5,
-               "I_D": 76.0}),
-    (R_OPEN, {"G_C": 72.2, "P_C": 72.7, "F_C": 73.2, "G_D": 74.8, "P_D": 75.3, "F_D": 75.8, "I_D": 76.3}),
-    (79.0, {"I_D": 77.1}),
+    (L_CLOSE, {"G_C": 78.65, "P_C": 79.15, "F_C": 79.65, "I_C": 80.15, "G_D": 80.65, "P_D": 81.15, "F_D": 81.65,
+               "I_D": 82.15}),
+    (R_OPEN, {"G_D": 80.95, "P_D": 81.45, "F_D": 81.95, "I_D": 82.75}),
+    (R_OPEN + 0.5, {"G_C": 78.35, "P_C": 78.85, "F_C": 79.35}),
     (R_CLOSE, {"G_C": 73.5, "P_C": 74.0, "F_C": 74.5, "G_D": 75.0, "P_D": 75.5, "F_D": 76.0}),
     (S_OPEN, {"G_C": 72.0, "P_C": 72.8, "F_C": 73.6, "G_D": 74.4, "P_D": 75.2}),
 ]
 STAGGER = 0.3
 # hops: net key -> (x of the via in the bundle, y of the upper via). Risers: net -> (x, entry index, side)
-HOPS = {"V_D": (53.4, 70.9), "I_C": (77.0, 71.4), "I_D": (81.5, 71.4),
+HOPS = {"V_D": (53.4, 70.9), "I_C": (79.3, 71.4), "I_D": (81.5, 71.4),
         "P_D": (101.8, 71.2), "P_C": (104.0, 71.2), "G_D": (106.2, 71.2)}
-RISERS = {"V_C": (51.2, 0, "L"), "V_D": (53.4, 1, "L"), "I_D": (81.5, 0, "R"), "I_C": (77.0, 1, "R"),
+RISERS = {"V_C": (51.2, 0, "L"), "V_D": (53.4, 1, "L"), "I_D": (81.5, 0, "R"), "I_C": (79.3, 1, "R"),
           "G_C": (108.4, 0, "R"), "G_D": (106.2, 1, "R"), "P_C": (104.0, 2, "R"), "P_D": (101.8, 3, "R")}
 PINS = {"V_C": ("U20", "9"), "V_D": ("U20", "10"), "I_C": ("U20", "15"), "I_D": ("U20", "16"),
         "P_D": ("U17", "4"), "P_C": ("U17", "5"), "G_D": ("U17", "10"), "G_C": ("U17", "11")}

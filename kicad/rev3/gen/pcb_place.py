@@ -31,7 +31,10 @@ if "--overwrite-placement" not in sys.argv:
     raise SystemExit("pcb_place.py moves every footprint. Run it with --overwrite-placement, and only "
                      "before hand placement starts (or on a copy).")
 X0, Y0, W, H = 50.0, 50.0, 150.0, 150.0
-HOLES = [(3.5, 3.5), (146.5, 3.5), (3.5, 146.5), (146.5, 146.5)]   # rev2 corners; its centre hole would sit in a column
+HOLES = [(3.5, 3.5), (146.5, 3.5), (3.5, 146.5), (146.5, 146.5),   # rev2's five: the corners and the centre (the
+         (75.0, 75.0)]                                             # rover's middle standoff; 24 / 12 V outputs moved down)
+HOLE_KEEP = lambda hx, hy: 3.5 if (hx, hy) == (75.0, 75.0) else 4.0   # half-size of the box kept free around a hole:
+                                             # the centre one just its courtyard (the placers add their gap): no room
 MM, TOMM = pcbnew.FromMM, pcbnew.ToMM
 GAP = 0.6                                    # between packed parts (courtyard rule is 0.5)
 GAP_BOTTOM = 1.0                             # the bottom has room: a little air for labels and rework
@@ -237,8 +240,11 @@ while len(holes) < len(HOLES):
 hole_boxes = []
 for h, (hx, hy) in zip(holes, HOLES):
     h.SetPosition(pcbnew.VECTOR2I(MM(X0 + hx), MM(Y0 + hy)))
-    hole_boxes.append((hx - 4, hy - 4, hx + 4, hy + 4))
+    k = HOLE_KEEP(hx, hy)
+    hole_boxes.append((hx - k, hy - k, hx + k, hy + k))
     fixed.add(h.GetReference())
+placed[False] += hole_boxes                  # every placer keeps off them (screw head on top, standoff below)
+placed[True] += hole_boxes
 # resize the import's outline rectangle (BOARD.Remove() breaks SWIG typing for the rest of the run)
 rect = next(d for d in b.GetDrawings() if d.GetLayer() == pcbnew.Edge_Cuts)
 rect.SetStart(pcbnew.VECTOR2I(MM(X0), MM(Y0)))
