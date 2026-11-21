@@ -1302,8 +1302,30 @@ layout.
            42C's lane on; 42D's take its lower half (74.0–76.0 mm) all the way. Each block's
            output-divider VSNS joins at the top slot.
          - **Ports:** the legs end at x = 50.6 mm in band order, top to bottom: VSNS_OUT, INPG,
-           INP, FLT, IMON, 42C first. The bus routing takes them on to the ADC, expander and test
-           pads from there.
+           INP, FLT, IMON, 42C first. The far end (`far42.py`, run as `pcb_route.py 42bus`) takes
+           them on from there.
+       - **Far end (hand-planned, decided 2026-11-21):**
+         - **Why crossings:** the legs arrive as 42C's five above 42D's five. The far end wants them
+           pairwise, from west to east: VSNS at the ADC's (U20) left end, IMON at its right end,
+           INP and INPG at the I/O expander (U17), FLT on east. That makes about 20 crossings. The
+           negotiating router did it with about 40 vias spread over the logic area.
+         - **Hops:** the plan takes six, 12 vias. Each one is where a line leaves the bundle: a via
+           down, a short run on L3 under the lines above it, a via up.
+         - **Pin access:** both ICs' input rows face up, for the rails' lines from above. So the
+           42 V lines enter under the IC body, between the pin rows: VSNS from the ADC's left end,
+           IMON from its right end, INP and INPG from the expander's right end.
+         - **The bundle:** it runs on the bottom layer between the ICs' pins and the output
+           connectors, at a 0.5 mm pitch. It opens to 0.8 mm around each hop (a via needs
+           0.775 mm to the next line).
+         - **Staggered jogs:** lines that jog the same way together start 0.3 mm apart. Otherwise
+           their parallel 45° jogs come only 0.35 mm apart.
+         - **Parts:** the R/C parts hang on their lines with short stubs. The IMON test pads sit
+           on their lines, and the pull-downs sit between the expander's risers. Each part gets a
+           GND via after the lines are laid.
+         - **Reserved area:** the far end's parts and lines are reserved (`far42.KEEP`). The
+           switch-control group, the packer and the optimizer pack around them.
+         - **FLT:** it ends at its test pads, east of the expander. Its last stretch to the ESP32
+           and its pull-up comes with the ESP32 group, together with the rails' FLT lines.
          - The block plans keep the lanes, the band and the jog under the pins free of their own
            copper and vias.
          - 42C's lowest output-via row (y = 73.7 mm) is dropped, because 42D's legs pass below

@@ -18,8 +18,6 @@ only between their local parts here; the bus legs come with the bus routing.
 """
 import math
 
-import numpy as np
-
 import pcbnew
 
 import power42
@@ -142,14 +140,15 @@ def legs42(R, FP, log=print):
     log(f"   {len(new)} leg segments laid, {len(bad)} clearance problems")
 
 
+# The rails' way in from above to the measurement ICs' input rows (their legs come with the bus stage): the 42 V bus
+# keeps out of it, and out of the rail blocks.
 def _check_exact(R, segs):
     """Exact clearance of new bottom-layer segments against the other nets' tracks, vias and pads."""
     g, out = R.geo, []
-    ids = {id(s) for s in segs}
     for s in segs:
         net, l_, x1, y1, x2, y2, hw = s
         for o in g.segs:
-            if id(o) in ids or o[0] == net or o[1] != l_:
+            if o is s or o[0] == net or o[1] != l_:
                 continue
             d = route._seg_seg((x1, y1, x2, y2), o[2:6])
             if d < hw + o[6] + route.CLEAR - 1e-4:
@@ -371,9 +370,10 @@ def _efuse(R, FP, spec, log=print):
         N.report(log=log)
     N.polish(log=log)
 
-    # 4. GND: a via into the plane next to every GND pad where one fits (else the bottom GND fill takes it)
+    # 4. GND: a via into the plane next to every GND pad in the block where one fits (else the bottom GND fill
+    # takes it); the far-end parts of the 42 V blocks get theirs after the bus is laid (far42)
     for ref, num in parts.get("GND", []):
-        if FP[ref].IsFlipped():
+        if FP[ref].IsFlipped() and inside(ref):
             R.fanout(ref, num, SUP_W, zone_layers=(IN1,), optional=True)
     R.prune_stubs(log=log)
 

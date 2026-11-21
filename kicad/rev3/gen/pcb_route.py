@@ -27,6 +27,10 @@ quiet = lambda msg: None if msg.lstrip().startswith("round ") else print(msg)
 if key == "42legs":
     route_plan.legs42(R, FP, log=quiet)
     what = "42 V bus legs"
+elif key == "42bus":
+    import far42
+    far42.route(R, FP, log=quiet)
+    what = "42 V bus, far end"
 else:
     (route_plan.efuse42 if key.startswith("42") else route_plan.efuse_rail)(R, FP, key, log=quiet)
     what = f"{key} V eFuse"

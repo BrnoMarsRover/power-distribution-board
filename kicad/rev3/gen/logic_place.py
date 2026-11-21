@@ -137,6 +137,10 @@ def place(FP, obstacles):
     ic("U21", 118.5, 66.5, adc_in_up, band)           # the rails' input and output sense
     ic("U18", 85.0, 70.0, lambda p: True, band)       # motor-kill latch
     ic("U19", 88.5, 70.0, lambda p: True, band)
+    # the 42 V bus's far end (far42, decided 2026-11-21): its parts on their spots beside U20 and U17, its lines'
+    # way kept; the group packs around them
+    import far42
+    done.extend(far42.place(FP, obstacles))
     hub = _loose(FP, [r for r in sw if r not in button])
     # the 42 V eFuses' monitoring parts (no room in their blocks, decided 2026-11-21): IMON resistor + cap and the
     # output divider's lower half at the ADC, INP / INPG pull-downs at the expander, the FLT / IMON test pads in

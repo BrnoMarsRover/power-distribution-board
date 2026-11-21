@@ -457,6 +457,9 @@ for ref in fixed:                           # placed parts are terminals for the
     FP[ref].SetLocked(True)
 refs, _ = ([], []) if ONLY else logic_place.place(FP, placed[True])
 fixed.update(refs)
+if not ONLY:
+    import far42
+    placed[True] += far42.KEEP               # the 42 V bus's far end: the packer keeps out too
 if "--dump-free" in sys.argv:                # bottom obstacles after the templates, for floorplanning
     import json
     json.dump({"bottom": placed[True], "top": placed[False]}, open("kicad/rev3/gen/out/obstacles.json", "w"))
