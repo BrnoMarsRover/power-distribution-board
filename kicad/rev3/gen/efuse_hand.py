@@ -208,3 +208,12 @@ def place(FP, u, r, obstacles, slots=SLOTS):
                 problems.append(f"{ref} ({role}) overlaps obstacle {tuple(round(v, 2) for v in o)}")
     obstacles += [bx for _, _, bx in placed]
     return [ref for _, ref, _ in placed], problems
+
+
+def keep_bottom():
+    """The rail blocks placed by this template, reserved on the bottom for their own parts: from above the
+    input-sense divider to below the lowest test pads, across the block. Other sheets' parts (later templates,
+    the logic groups, the packer, the optimizer) stay out, so they cannot land in the cluster's routes."""
+    import power_rails
+    import satellites
+    return [(power_rails.RAILS[k]["xl"], 11.4, power_rails.RAILS[k]["xr"], 61.6) for k in sorted(satellites.HAND)]

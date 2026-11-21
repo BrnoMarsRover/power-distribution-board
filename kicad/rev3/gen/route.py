@@ -61,8 +61,8 @@ class Geometry:
 
     def __init__(self, b):
         self.b = b
-        self.pads = []          # dict per pad
-        for f in b.GetFootprints():
+        self.pads = []          # dict per pad, footprints by reference (the import order varies between builds)
+        for f in sorted(b.GetFootprints(), key=lambda f: f.GetReference()):
             fx, fy = _xy(f.GetPosition())
             for p in f.Pads():
                 bb = p.GetBoundingBox()

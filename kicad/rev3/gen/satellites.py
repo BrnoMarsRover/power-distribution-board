@@ -15,10 +15,13 @@ inside the area, clear of everything already there. Then simulated annealing sho
 jumps next to a terminal, swaps of same-size parts), always keeping the courtyards legal.
 The test pads go first, in one column with their names to the right, so the cluster grows around them.
 """
+import hashlib
+import json
 import math
 import os
 import random
 import time
+from pathlib import Path
 
 import pcbnew
 
@@ -229,13 +232,108 @@ def _nearest_spot(part, num, ax, ay, area, obstacles, rmax=16.0):
     return None
 
 
-def place_cluster(*args, gap=None, **kw):
-    """_place_cluster with another courtyard gap (the logic groups use 0.5 mm, the rule; the eFuses keep GAP)."""
+CACHE_DIR = Path(__file__).resolve().parent / "out" / "place_cache"
+SOURCES = ("satellites.py", "logic_place.py", "power_rails.py", "power42.py", "power54.py", "power_aux.py")
+
+
+def _members(FP, ic_ref, members):
+    """The parts _place_cluster will place (the same choice it makes)."""
+    if members is None:
+        sheet = FP[ic_ref].GetSheetname()
+        return sorted(r for r, f in FP.items() if f.GetSheetname() == sheet and r != ic_ref and not f.IsLocked()
+                      and (_small(f) or r.startswith("TP")))
+    return sorted(r for r in members if not FP[r].IsLocked())
+
+
+def _plain(v):
+    """Arguments as plain data for the cache key; functions count by the source code they come from."""
+    if callable(v):
+        return "<fn>"
+    if isinstance(v, dict):
+        return sorted((str(k), _plain(x)) for k, x in v.items())
+    if isinstance(v, (list, tuple, set, frozenset)):
+        return [_plain(x) for x in (sorted(v) if isinstance(v, (set, frozenset)) else v)]
+    return v
+
+
+def _cache_key(FP, ic_ref, area, obstacles, pin_order, kw):
+    """Everything a cluster's placement depends on: the placement and block-geometry code, the call's arguments,
+    the parts to place (footprint, value, pads and nets), the ICs' positions, the pads already placed on the
+    cluster's nets (its terminals), the obstacles near its area and the engine's parameters."""
+    here = Path(__file__).resolve().parent
+    src = hashlib.sha256(b"".join((here / n).read_bytes() for n in SOURCES if (here / n).exists())).hexdigest()
+    members = _members(FP, ic_ref, kw.get("members"))
+    ics = [ic_ref, *kw.get("extra_ics", ())]
+
+    def desc(r, where):
+        f = FP[r]
+        d = [r, f.GetFPIDAsString(), f.GetValue(), sorted((p.GetNumber(), p.GetNetname()) for p in f.Pads())]
+        if where:
+            d += [f.GetPosition().x, f.GetPosition().y, round(f.GetOrientationDegrees(), 4), f.IsFlipped()]
+        return d
+    nets = {p.GetNetname() for r in members + ics for p in FP[r].Pads()} - SUPPLY
+    own = set(members) | set(ics)
+    pads = sorted((r, p.GetNumber(), p.GetNetname(), p.GetPosition().x, p.GetPosition().y)
+                  for r in sorted(FP) if r not in own and FP[r].IsLocked()
+                  for p in FP[r].Pads() if p.GetNetname() in nets)
+    x0, y0, x1, y1 = _bbox(area)
+    near = sorted(tuple(round(v, 4) for v in o) for o in obstacles
+                  if o[2] > x0 - 3 and o[0] < x1 + 3 and o[3] > y0 - 3 and o[1] < y1 + 3)
+    kw = dict(kw, members=members)
+    key = dict(src=src, ic=ic_ref, area=_plain(area), pins=_plain(pin_order), kw=_plain(kw), near=near, pads=pads,
+               parts=[desc(r, False) for r in members] + [desc(r, True) for r in ics],
+               params=[GAP, ITERATIONS, RUNS, COMPACT, CAP_PULL, CROSS, FANOUT, VARIANT.get(ic_ref),
+                       os.environ.get("SAT_VARIANT")])
+    text = json.dumps(key, sort_keys=True, default=str)
+    if os.environ.get("SAT_KEY_DUMP"):                # development: the key's content, per cluster, in call order
+        d = Path(os.environ["SAT_KEY_DUMP"])
+        d.mkdir(parents=True, exist_ok=True)
+        n = len(list(d.glob("*.json")))
+        (d / f"{n:02d}_{ic_ref}.json").write_text(json.dumps(key, sort_keys=True, default=str, indent=1))
+    return hashlib.sha256(text.encode()).hexdigest()
+
+
+def _state(f):
+    v = f.GetField(pcbnew.FIELD_T_VALUE)
+    return dict(x=f.GetPosition().x, y=f.GetPosition().y, deg=f.GetOrientationDegrees(), flip=f.IsFlipped(),
+                locked=f.IsLocked(), vx=v.GetPosition().x, vy=v.GetPosition().y, vj=int(v.GetHorizJustify()))
+
+
+def _restore(f, s):
+    if f.IsFlipped() != s["flip"]:
+        f.Flip(f.GetPosition(), pcbnew.FLIP_DIRECTION_LEFT_RIGHT)
+    f.SetOrientationDegrees(s["deg"])
+    f.SetPosition(pcbnew.VECTOR2I(s["x"], s["y"]))
+    v = f.GetField(pcbnew.FIELD_T_VALUE)
+    v.SetHorizJustify(s["vj"])
+    v.SetPosition(pcbnew.VECTOR2I(s["vx"], s["vy"]))
+    f.SetLocked(s["locked"])
+
+
+def place_cluster(FP, ic_ref, area, obstacles, pin_order, gap=None, **kw):
+    """_place_cluster with another courtyard gap (the logic groups use 0.5 mm, the rule; the eFuses keep GAP),
+    and a cache: the placement is deterministic, so a cluster whose inputs are unchanged (_cache_key) gets its
+    recorded result back instead of being annealed again. The board is the same as a run from scratch; only
+    the clusters a change touches are re-annealed. SAT_NOCACHE=1 ignores the cache."""
     global GAP
     saved = GAP
     GAP = gap or GAP
     try:
-        return _place_cluster(*args, **kw)
+        members = _members(FP, ic_ref, kw.get("members"))
+        path = CACHE_DIR / f"{_cache_key(FP, ic_ref, area, obstacles, pin_order, kw)}.json"
+        if path.exists() and not os.environ.get("SAT_NOCACHE"):
+            rec = json.loads(path.read_text())
+            for r, st in rec["parts"].items():
+                _restore(FP[r], st)
+            obstacles.extend(tuple(o) for o in rec["added"])
+            print(f"  {ic_ref}: placement from cache")
+            return rec["done"], rec["missed"]
+        n0 = len(obstacles)
+        done, missed = _place_cluster(FP, ic_ref, area, obstacles, pin_order, **kw)
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(dict(done=done, missed=missed, added=[list(o) for o in obstacles[n0:]],
+                                        parts={r: _state(FP[r]) for r in members})))
+        return done, missed
     finally:
         GAP = saved
 
@@ -279,11 +377,9 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
     for net, pts in (via_terms or {}).items():            # escape vias from the top: terminals like pins
         if net not in (fixed_anchors or {}):
             terminals.setdefault(net, []).extend(pts)
-    if members is None:
-        members = [r for r, f in FP.items() if f.GetSheetname() == sheet and r != ic_ref and not f.IsLocked()
-                   and (_small(f) or r.startswith("TP"))]
-    else:
-        members = [r for r in members if not FP[r].IsLocked()]
+    # sorted: callers may build the list from sets, whose order changes from run to run (string hashing is
+    # randomised per process), and the placement must not depend on it
+    members = _members(FP, ic_ref, members)
     if locked_terminals:                                  # pads already placed on the members' nets
         mine = {p.GetNetname() for r in members for p in FP[r].Pads()} - SUPPLY
         own = set(members) | {ic_ref, *extra_ics}
@@ -720,7 +816,8 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
     t_start = time.time()
     start = total_cost(greedy)
     base = 1 + 10 * VARIANT.get(ic_ref, int(os.environ.get("SAT_VARIANT", 0)))
-    runs = [anneal(seed) for seed in range(base, base + RUNS)]
+    runs = ([anneal(seed) for seed in range(base, base + RUNS)] if refs   # nothing left to move: the greedy result
+            else [(start, dict(greedy), [])])
     c0, st, left = min(runs, key=lambda t: t[0])
     if not left and not unfit and c0 > start:            # annealing made it worse: keep the greedy result
         c0, st = start, dict(greedy)

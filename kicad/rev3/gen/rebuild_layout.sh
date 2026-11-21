@@ -14,11 +14,22 @@ cp $R/gen/empty_board.kicad_pcb $R/PowerBoard_rev3.kicad_pcb
 python3 $R/gen/board_rules.py > /dev/null
 $KCLI sch export netlist -o $R/gen/out/netlist.net $R/PowerBoard_rev3.kicad_sch > /dev/null
 $KPY $R/gen/pcb_import.py 2>&1 | grep -v swig/python
+echo "[$SECONDS s] placement"
 $KPY $R/gen/pcb_place.py --overwrite-placement 2>&1 | grep -v swig/python
+echo "[$SECONDS s] optimizer"
 $KPY $R/gen/pcb_optimize.py 2>&1 | grep -v swig/python
-$KPY $R/gen/pcb_power42.py 2>&1 | grep -v -i "swig/python\|debug"
+echo "[$SECONDS s] power copper"
+$KPY $R/gen/pcb_power42.py 2>&1 | grep -v -i "swig/python\|debug\|GetWidth called"
+echo "[$SECONDS s] routing"
+for block in 24 12; do                                            # signal routing, block by block
+    $KPY $R/gen/pcb_route.py $block 2>&1 | grep -v -i "swig/python\|debug\|GetWidth called" || true
+done
+echo "[$SECONDS s] +3V3"
+$KPY $R/gen/pcb_3v3.py 2>&1 | grep -v -i "swig/python\|debug\|GetWidth called"
+echo "[$SECONDS s] silkscreen"
 $KPY $R/gen/pcb_silk.py 2>&1 | grep -v swig/python
 $KPY $R/gen/pcb_models.py 2>&1 | grep -v swig/python | grep -i missing || true
+echo "[$SECONDS s] DRC"
 $KCLI pcb drc --schematic-parity --format json -o $R/gen/out/drc.json $R/PowerBoard_rev3.kicad_pcb | grep -i found
 (cd docs/rev3 && python3 rails.py > rails.md)
 $KCLI sch export bom --fields 'MPN,Value,Footprint,${QUANTITY},Reference' --labels 'MPN,Value,Footprint,Qty,References' \
@@ -26,3 +37,4 @@ $KCLI sch export bom --fields 'MPN,Value,Footprint,${QUANTITY},Reference' --labe
 python3 $R/gen/bom_lcsc.py
 $KCLI sch export pdf -o pdf/rev3/PowerBoard_rev3_schematic.pdf $R/PowerBoard_rev3.kicad_sch > /dev/null
 git checkout -- kicad/PowerBoard.kicad_pro 2>/dev/null || true
+echo "[$SECONDS s] done"

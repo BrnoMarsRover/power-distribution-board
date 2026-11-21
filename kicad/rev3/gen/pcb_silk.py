@@ -18,7 +18,7 @@ MM = pcbnew.FromMM
 IO = pcbnew.PCB_IO_KICAD_SEXPR()                  # load library parts before the board (SWIG quirk)
 LOGO = IO.FootprintLoad("kicad/rev3/PowerBoard_rev3.pretty", "BMR_Logo")   # rev2's BMR rover logo, 39 x 13 mm
 b = pcbnew.LoadBoard(BOARD)
-FP = {f.GetReference(): f for f in b.GetFootprints()}
+FP = {f.GetReference(): f for f in sorted(b.GetFootprints(), key=lambda f: f.GetReference())}   # import order varies
 L, C, R = pcbnew.GR_TEXT_H_ALIGN_LEFT, pcbnew.GR_TEXT_H_ALIGN_CENTER, pcbnew.GR_TEXT_H_ALIGN_RIGHT
 
 
@@ -32,7 +32,7 @@ def obstacles(bottom):
     through-hole parts block both sides."""
     out = []
     fab, silk = (pcbnew.B_Fab, pcbnew.B_SilkS) if bottom else (pcbnew.F_Fab, pcbnew.F_SilkS)
-    for f in b.GetFootprints():
+    for f in FP.values():
         pads = list(f.Pads())
         tht = sum(p.GetAttribute() == pcbnew.PAD_ATTRIB_PTH for p in pads) * 2 > len(pads)
         if f.IsFlipped() == bottom or tht:
@@ -156,7 +156,7 @@ def pins(ref):
 
 # ---------------------------------------------------------------- references to the fab layers
 tp_labels = []
-for f in b.GetFootprints():
+for f in FP.values():
     ref = f.GetField(pcbnew.FIELD_T_REFERENCE)
     ref.SetLayer(pcbnew.B_Fab if f.IsFlipped() else pcbnew.F_Fab)
     if f.GetReference().startswith("TP") and "Keystone" not in f.GetFPID().GetLibItemName().wx_str():
@@ -209,7 +209,7 @@ for ref, label in (("J34", "CAN 1"), ("J35", "CAN 2"), ("J32", "USB"), ("J33", "
     text(label, (x0 + x1) / 2, y0 - 1.0, h=1.0, bold=True)
 
 # ---------------------------------------------------------------- LEDs, bypass bridges
-for f in b.GetFootprints():
+for f in FP.values():
     lib = f.GetFPID().GetLibItemName().wx_str()
     x0, y0, x1, y1 = bbox(f.GetReference())
     if "LED" in lib and not f.IsFlipped():

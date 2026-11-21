@@ -1040,7 +1040,9 @@ layout.
        spots and the test-pad label room.
      - **Result:** 20 million steps in about 3.5 minutes cut the weighted net length from
        about 16,900 to 8,250 (−51 %). The running total is checked against a full recount
-       at the end.
+       at the end. Since the templates (2g, 2h) place nearly everything, it moves only a couple of
+       dozen parts. So it now takes 50 000 steps per movable part (2026-11-21): seconds instead of
+       minutes.
   2b. `gen/power42.py` + `gen/pcb_power42.py` — the battery input and both 42 V blocks, designed by hand
      (placement in `pcb_place.py`, before the packer; copper after the optimizer). The parts are locked,
      and their copper areas are kept clear on both sides.
@@ -1141,7 +1143,8 @@ layout.
        strip right of CHG_N, along y = 21.7 mm above the rail blocks' L3 copies (they start at 22.5 mm),
        down past the 5 V block and through a via into the input pour.
      - Top parts are kept off the via fields of both supplies (U10's and U11's pad vias, the input vias).
-  2f. `gen/power_logic.py` (run last by `pcb_power42.py`) — +3V3 distribution (decided 2026-11-20): a +3V3
+  2f. `gen/power_logic.py` (run by `pcb_3v3.py`, after the signal routing of 2i) — +3V3 distribution (decided
+     2026-11-20): a +3V3
      fill over the whole of L3 at low priority, so it takes only what the power blocks' L3 copies leave free
      (under the output columns, the right-hand column, the strip above the rail blocks). It sits right under
      the bottom-side logic, so each 3.3 V pin is one short via away and the plane helps decoupling; signal
@@ -1183,6 +1186,15 @@ layout.
        converter feed (no MOTOR_KILL transistor) are laid out on their own.
      - **Repeatable:** the same netlist gives the same placement on every rebuild (no dependence on
        footprint order or Python's hash seed), so an approved cluster stays where it was approved.
+     - **Cached (2026-11-21):** each cluster's result is stored in `gen/out/place_cache/`. The key is a
+       hash of what it depends on: the placement and block-geometry code, the call's arguments, the
+       parts and their nets, the pads already placed on those nets, and the obstacles near its area. A
+       rebuild re-anneals only the clusters a change touches, and the board is the same as one built
+       from scratch. `SAT_NOCACHE=1` ignores the cache. `SAT_KEY_DUMP=dir` writes each key's content, so two
+       runs can be compared when a cluster misses unexpectedly. Members are placed in sorted order:
+       callers build some lists from sets, whose order changed from run to run, so until 2026-11-21 the
+       logic groups were not repeatable. The packer, the optimizer and the silkscreen also take the parts
+       in reference order now, not in import order, which changes from build to build.
      - 42 V drive may use the bottom up to y = 20 mm (under and above the bar, where its BUS42-fed
        resistors belong); the converter feed stops at y = 29 mm.
   2h. `gen/logic_place.py` (run by `pcb_place.py` after the eFuse templates) — the same engine for the logic
@@ -1209,7 +1221,9 @@ layout.
        corner beside the button, BMS and motor-switch connectors (x 126–135.6 mm, y 0.6–18.3 mm).
      - **Test pads:** a labelled field under the CAN block for TXD0 / RXD0 and the I²C pair; MOTOR_KILL
        left of the IMON ADC.
-  2i. Signal routing, by intent, in code (started 2026-11-20; not in `rebuild_layout.sh` yet).
+  2i. Signal routing, by intent, in code (started 2026-11-20). `gen/pcb_route.py BLOCK` routes one block on the
+     board as `pcb_power42.py` left it, each block in its own process. `rebuild_layout.sh` runs it for 24
+     and 12 V, then `pcb_3v3.py`, whose +3V3 vias go around the routes.
      - **Placement for routing:** `gen/efuse_hand.py` gives every satellite of a 24 / 12 V eFuse a set
        spot relative to its IC. Parts are found by what they connect to. The spots are chosen so that
        each pin's route reaches its parts without crossing another route: pin order kept around the IC,
@@ -1221,6 +1235,10 @@ layout.
          to the 100 Ω feed and the 1 µF in the VIN area.
        - Bottom row: a ribbon in pin order (temperature diode, TMR, IWRN, IMON, GND, FLT, INP, INPG)
          down to the parts below the tab. EN goes out to the right, to its divider.
+       - **Kept clear:** each templated block is reserved on the bottom for its own parts, from
+         y = 11.4 to 61.6 mm across the block. Later templates, the logic groups, the packer and the
+         optimizer keep out, so no stray part can land in the cluster's routes. Once, the optimizer
+         dropped one there and the 24 V routing failed.
      - **Router:** `gen/route.py`, a 0.1 mm grid A* on L4 and L3 (L1 is power copper, L2 the GND
        plane).
        - Exact clearances to fixed copper; turn costs (45° cheap, 90° dear); a via price; L3 dearer

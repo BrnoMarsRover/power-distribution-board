@@ -22,6 +22,7 @@ import power42  # noqa: E402  hand-designed battery input and 42 V blocks
 import power_rails  # noqa: E402  hand-designed 24 / 12 / 5 V blocks (the rails it lists)
 import power54  # noqa: E402  hand-designed 54 V boost
 import power_aux  # noqa: E402  hand-designed always-on aux supply
+import efuse_hand  # noqa: E402
 import satellites  # noqa: E402  template placement of the controllers' small parts
 import logic_place  # noqa: E402  the same for the logic and the supplies' control networks
 
@@ -44,7 +45,9 @@ Y_CTRL = 137.4                               # control-connector strip along the
 ROW90 = 12.5                                 # output pitch for the XT90 columns
 
 b = pcbnew.LoadBoard(BOARD)
-FP = {f.GetReference(): f for f in b.GetFootprints()}
+# by reference: the order the import leaves them in changes from build to build, and ties in the packing
+# order (and the templates' part lists) must not depend on it
+FP = {f.GetReference(): f for f in sorted(b.GetFootprints(), key=lambda f: f.GetReference())}
 
 
 def pad(fp, num):
@@ -200,7 +203,7 @@ SPILL = (1, 13, 149, 149)                    # never into the inputs row
 
 def pack(refs, zone, bottom, spill=False, gap=None):
     left = []
-    for ref in sorted(refs, key=lambda r: -area(r)):
+    for ref in sorted(refs, key=lambda r: (-area(r), r)):
         fp = FP[ref]
         set_side(fp, bottom)
         ok = fit(fp, zone, bottom, gap)
@@ -443,6 +446,7 @@ for key in (ONLY,) if ONLY else ("24", "12", "5"):   # 12 and 5 V copy the 24 V 
     refs, missed = satellites.efuse(FP, key, placed[True], like=None if key == "24" else "24")
     fixed.update(refs)
     print(f"{key} V eFuse template: {len(refs)} placed" + (f", no spot: {' '.join(missed)}" if missed else ""))
+placed[True] += efuse_hand.keep_bottom()      # the hand-placed rail clusters keep their blocks to themselves
 for key in () if ONLY else ("42D", "42C"):   # 42C copies 42D where the parts match
     refs, missed = satellites.efuse42(FP, key, placed[True], like=None if key == "42D" else "42D")
     fixed.update(refs)
@@ -477,7 +481,8 @@ for r, f in FP.items():
     groups.setdefault((key, is_bottom(f)), []).append(r)
 left = {False: [], True: []}
 FIRST = ("Brake chopper",)                   # packed before the larger groups that share their corner
-for (key, bottom), refs in sorted(groups.items(), key=lambda kv: (kv[0][0] not in FIRST, -sum(area(r) for r in kv[1]))):
+for (key, bottom), refs in sorted(groups.items(), key=lambda kv: (kv[0][0] not in FIRST, -sum(area(r) for r in kv[1]),
+                                                                  kv[0])):
     left[bottom] += pack(refs, ZONES[key][1 if bottom else 0], bottom, gap=TIGHT.get(key) if bottom else None)
 for bottom in (False, True):
     pack(left[bottom], SPILL, bottom, spill=True)

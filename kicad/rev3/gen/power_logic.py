@@ -28,7 +28,7 @@ def copper(b):
 
     # every pad and track on the board, by layer, for clearance checks (mm, board-relative)
     pads = []
-    for f in b.GetFootprints():
+    for f in sorted(b.GetFootprints(), key=lambda f: f.GetReference()):   # not import order
         for p in f.Pads():
             bb = p.GetBoundingBox()
             pads.append((TOMM(bb.GetLeft()) - X0, TOMM(bb.GetTop()) - Y0, TOMM(bb.GetRight()) - X0,
@@ -125,7 +125,7 @@ def copper(b):
 
     # the LDO's tab: a row of vias across it (it is the source)
     missed = []
-    for f in b.GetFootprints():
+    for f in sorted(b.GetFootprints(), key=lambda f: f.GetReference()):   # not import order
         if "AP7361" in f.GetValue():
             tab = max((p for p in f.Pads() if p.GetNetname() == NET), key=lambda p: p.GetSize().x * p.GetSize().y)
             bb = tab.GetBoundingBox()
@@ -136,7 +136,7 @@ def copper(b):
                 if via_ok(x, (t + bt) / 2):
                     add_via(x, (t + bt) / 2)
     # every other +3V3 pin: nearest legal via spot, rings of candidates around the pad
-    for f in b.GetFootprints():
+    for f in sorted(b.GetFootprints(), key=lambda f: f.GetReference()):   # not import order
         for p in f.Pads():
             if p.GetNetname() != NET or "AP7361" in f.GetValue():
                 continue

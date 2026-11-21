@@ -30,6 +30,7 @@ import power42  # noqa: E402
 import power_rails  # noqa: E402
 import power54  # noqa: E402
 import power_aux  # noqa: E402
+import efuse_hand  # noqa: E402
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 X0, Y0, W, H = 50.0, 50.0, 150.0, 150.0
@@ -38,7 +39,9 @@ HOLES = [(3.5, 3.5), (146.5, 3.5), (3.5, 146.5), (146.5, 146.5)]
 KEEP = [(8.0, 12.4, 31.0, 16.3), (51.0, 9.6, 123.0, 12.0), (78.0, 140.0, 122.0, 146.0),   # label spots
         (49.0, 49.0, 92.0, 69.5),                                                           # logo + title
         (1.5, 71.8, 122.5, 74.8)]                                                           # column headers
-ITER = int(sys.argv[sys.argv.index("--iterations") + 1]) if "--iterations" in sys.argv else 20000000
+# moves: --iterations N, else 50 000 per movable part (at most 20 million); the templates place nearly everything,
+# so the optimizer is left with a couple of dozen parts, which settle long before 20 million moves
+ITER = int(sys.argv[sys.argv.index("--iterations") + 1]) if "--iterations" in sys.argv else None
 SEED = 7
 HEAVY = ("SW", "HO", "LO", "BST", "CSP", "CSN", "SNS", "GATE", "L:G", "RON", "FB", "RIP", "VCC", "COMP",
          "SLOPE", "PU", "TMR", "IWRN", "ISCP", "LIN")
@@ -46,7 +49,7 @@ MM, TOMM = pcbnew.FromMM, pcbnew.ToMM
 
 random.seed(SEED)
 b = pcbnew.LoadBoard(BOARD)
-FPS = list(b.GetFootprints())
+FPS = sorted(b.GetFootprints(), key=lambda f: f.GetReference())   # by reference: the import order varies
 
 
 def mm(v):
@@ -123,7 +126,8 @@ for hx, hy in HOLES:
         fixed_boxes[side].append((hx - 4, hy - 4, hx + 4, hy + 4))
 for k in KEEP + power42.KEEP_TOP + power_rails.KEEP_TOP + power54.KEEP_TOP + power_aux.KEEP_TOP:
     fixed_boxes[False].append(k)
-for k in power42.KEEP_BOTTOM + power_rails.KEEP_BOTTOM + power54.KEEP_BOTTOM + power_aux.KEEP_BOTTOM:
+for k in (power42.KEEP_BOTTOM + power_rails.KEEP_BOTTOM + power54.KEEP_BOTTOM + power_aux.KEEP_BOTTOM
+          + efuse_hand.keep_bottom()):
     fixed_boxes[True].append(k)
 
 
@@ -158,7 +162,7 @@ for p in parts:
     for i, (n, _, _) in enumerate(p.pads):
         pins_on.setdefault(n, []).append((p, i))
 nets = {}
-for n in set(pins_on) | set(fixed_pads):
+for n in sorted(set(pins_on) | set(fixed_pads)):           # sorted: set order changes from run to run
     count = len(pins_on.get(n, [])) + len(fixed_pads.get(n, []))
     if not n or n == "GND" or n.startswith("unconnected") or count < 2 or count > 12 or n not in pins_on:
         continue
@@ -222,7 +226,7 @@ def dec_cost(entry):
     return 3.0 * best
 
 
-nets_of = {id(p): [n for n in {pn for pn, _, _ in p.pads} if n in nets] for p in parts}
+nets_of = {id(p): [n for n in sorted({pn for pn, _, _ in p.pads}) if n in nets] for p in parts}
 decs_of = {}
 for e in dec_targets:                       # each decoupling entry once per part that moves it
     for q in [e[0]] + [q for q, _, _ in e[2] if q is not None]:
@@ -278,6 +282,7 @@ cache_dec = {id(e): dec_cost(e) for e in dec_targets}
 total = sum(cache_net.values()) + sum(cache_dec.values())
 start = total
 T0, T1 = 3.0, 0.02
+ITER = ITER or min(20000000, 50000 * len(parts))
 t_start = time.time()
 accepted = 0
 for it in range(ITER):
