@@ -73,6 +73,11 @@ def place(FP, obstacles):
         done.extend(d)
         missed.extend(m)
 
+    # ---- the FLT bus's pull-ups (flt_bus, decided 2026-11-21): on their spots by the ESP32's pin vias (and
+    # FLT_42D's by its test pad), before any group; their room and the bus's bottom-side copper kept
+    import flt_bus
+    done.extend(flt_bus.place(FP, obstacles))
+
     # ---- aux network: the pocket right of U11 (the aux test pads stay on top, with the packer)
     aux_all = _loose(FP, _sheet(FP, "Always-on aux"), tps=False)
     aux_3v3 = [r for r in aux_all if not _nets(FP, r)]        # the sheet's spare +3V3 cap: with the ESP32's parts

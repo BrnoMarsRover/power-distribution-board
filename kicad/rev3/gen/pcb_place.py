@@ -459,7 +459,9 @@ refs, _ = ([], []) if ONLY else logic_place.place(FP, placed[True])
 fixed.update(refs)
 if not ONLY:
     import far42
+    import flt_bus
     placed[True] += far42.KEEP               # the 42 V bus's far end: the packer keeps out too
+    placed[True] += flt_bus.KEEP             # and the FLT bus
 if "--dump-free" in sys.argv:                # bottom obstacles after the templates, for floorplanning
     import json
     json.dump({"bottom": placed[True], "top": placed[False]}, open("kicad/rev3/gen/out/obstacles.json", "w"))

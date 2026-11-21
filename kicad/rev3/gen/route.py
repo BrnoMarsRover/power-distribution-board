@@ -72,9 +72,10 @@ class Geometry:
                 npth = p.GetAttribute() == pcbnew.PAD_ATTRIB_NPTH
                 layers = frozenset(COPPER) if (npth or p.GetAttribute() == pcbnew.PAD_ATTRIB_PTH) else \
                     frozenset(l_ for l_ in COPPER if p.IsOnLayer(l_))
+                rnd = p.GetShape(F) == pcbnew.PAD_SHAPE_CIRCLE if hasattr(pcbnew, "PAD_SHAPE_CIRCLE") else False
                 self.pads.append(dict(net="" if npth else p.GetNetname(), layers=layers, box=(l, t, r, bt),
                                       c=_xy(p.GetPosition()), ref=f.GetReference(), num=p.GetNumber(),
-                                      fc=(fx, fy), npth=npth, pad=p))
+                                      fc=(fx, fy), npth=npth, pad=p, round=rnd))
             for g in f.GraphicalItems():    # copper shapes in a footprint (the Kelvin shunts' net ties): no net
                 if g.GetLayer() not in COPPER:
                     continue
@@ -363,13 +364,15 @@ class Window:
 
 
 # ---------------------------------------------------------------- A*
-def astar(win, starts, targets, via_targets=frozenset(), max_expand=250000):
+def astar(win, starts, targets, via_targets=frozenset(), max_expand=None):
     """starts: [(layer, iy, ix)]; targets: set of (layer, iy, ix); via_targets: cells (iy, ix) where a via ends the
     route. Returns [(layer, iy, ix, via_here)] or None.
     A node is (layer, cell); the heading it was reached with is kept per node for the turn price (the usual
     approximation: a node keeps the heading of its best arrival)."""
     L = win.layers
     nL = len(L)
+    if max_expand is None:                         # a long leg in a big window needs more than a block's routes
+        max_expand = max(250000, win.nx * win.ny * nL // 2)
     li = {l_: k for k, l_ in enumerate(L)}
     nx, ny = win.nx, win.ny
     n = nx * ny
@@ -648,6 +651,9 @@ class Router:
             if not s:
                 continue
             m = _dist_box(win.X[s], win.Y[s], inner) <= PITCH * 0.6
+            if p.get("round"):                     # a round pad: its box's corners are not copper
+                rad = (r - l) / 2 - hw * 0.5
+                m &= np.hypot(win.X[s] - p["c"][0], win.Y[s] - p["c"][1]) <= max(rad, PITCH * 0.6)
             for l_ in win.layers:
                 if l_ in p["layers"]:
                     ys, xs = np.nonzero(m)
@@ -675,7 +681,9 @@ class Router:
             q = self.pad(ref, num)
             if layer in q["layers"]:
                 l, t, r, b = q["box"]
-                if l - 1e-6 <= x <= r + 1e-6 and t - 1e-6 <= y <= b + 1e-6:
+                inside = math.hypot(x - q["c"][0], y - q["c"][1]) <= (r - l) / 2 + 1e-6 if q.get("round") else \
+                    l - 1e-6 <= x <= r + 1e-6 and t - 1e-6 <= y <= b + 1e-6
+                if inside:
                     return None                           # inside its pad: connected
         for v in tree["vias"]:
             vx, vy = (v[1], v[2]) if len(v) == 4 else v

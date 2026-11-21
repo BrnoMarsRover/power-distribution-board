@@ -142,6 +142,88 @@ def legs42(R, FP, log=print):
 
 # The rails' way in from above to the measurement ICs' input rows (their legs come with the bus stage): the 42 V bus
 # keeps out of it, and out of the rail blocks.
+def u21_fan(R):
+    """U21 (the second ADC: the rails' input and output sense, the 54 V output) takes seven inputs on one row at
+    0.65 mm, from every direction. Each gets a via in a row above the input row, 1.2 mm apart (centred on pin 13),
+    and a straight 45-degree stub down into its pin; the legs then come to the vias on either layer (rails_legs
+    takes out the vias no L3 leg uses). Returns {pin: via point}."""
+    y_via = 61.75
+    out = {}
+    for num in map(str, range(10, 17)):
+        p = R.pad("U21", num)
+        px, py = p["c"]
+        vx = R.pad("U21", "13")["c"][0] + 1.2 * (int(num) - 13)
+        R.via(p["net"], vx, y_via)
+        dy = abs(vx - px)
+        R.track(p["net"], B, [(vx, y_via), (px, y_via + dy), (px, py)], SIG_W)
+        out[num] = (vx, y_via)
+    return out
+
+
+def rails_legs(R, FP, log=print):
+    """The rails' bus legs, on the bottom layer and L3 (in the logic area L3 is the +3V3 fill, which flows
+    around; L2 stays whole: it carries the outputs' return current): IMON to the ADC U20, INP / INPG to the I/O
+    expander U17, the input and output sense dividers (and the 54 V one) to U21's via fan. Each joins its
+    block-side copper at the pad nearest its destination. The long legs from far away go first, as fixed copper
+    (the shortest corridors are theirs); the rest are negotiated (decided 2026-11-21: the router's legs take
+    about two vias each, as few as a plan would)."""
+    R.geo.route_keep, R.geo.via_keep, R.geo.hv_ok = [], [], {}
+    fan = u21_fan(R)                               # U21's inputs: a via each, fanned out above its input row
+    ics = {"U20", "U17", "U21", "U13"}
+    nets = [f"{k}_{r}" for r in ("24", "12", "5") for k in ("IMON", "INP", "INPG", "VSNS_OUT", "VSNS_IN")]
+    nets += ["VSNS_OUT_54"]                        # (the FLT lines: their own plan, flt_bus)
+    jobs = []
+    for net in nets:
+        pads = [q for q in R.geo.pads if q["net"] == net and q["num"] != "~g"]
+        far = [q for q in pads if q["ref"] in ics]
+        if not far:
+            log(f"   {net}: no IC pin")
+            continue
+        terms = []
+        for q in far:                              # the IC pins (a via beside the ESP32's; U21's fan via)
+            if q["ref"] == "U21" and q["num"] in fan:
+                terms.append(R.t_via(*fan[q["num"]]))
+            elif B in q["layers"]:
+                terms.append(R.t_pad(q["ref"], q["num"]))
+            elif R.fanout(q["ref"], q["num"], SIG_W, rmax=2.5, label=f"{q['ref']}.{q['num']} via"):
+                _, vx, vy, _ = R.geo.vias[-1]
+                terms.append(R.t_via(vx, vy))
+        if net.startswith("FLT"):                  # FLT: its pull-up (beside the ESP32) too
+            terms += [R.t_pad(q["ref"], q["num"]) for q in pads if q["ref"].startswith("R") and q["c"][0] > 125]
+            near = [q for q in pads if q["ref"].startswith("TP")]
+        else:
+            near = [q for q in pads if q["ref"] not in ics]
+        if not near:
+            log(f"   {net}: nothing to join")
+            continue
+        tx, ty = terms[0]["points"][0][1:]
+        src = min(near, key=lambda q: math.dist(q["c"], (tx, ty)))
+        jobs.append((net, [R.t_pad(src["ref"], src["num"])] + terms))
+    box = (50.6, 10.0, 149.0, 149.0)
+    first = {"VSNS_IN_5", "VSNS_IN_12", "VSNS_IN_24", "VSNS_OUT_54", "IMON_5"}   # the long ones: fixed first,
+    for net, terms in [j for j in jobs if j[0] in first]:             # the shortest corridors are theirs
+        if not R.route_net(net, terms, SIG_W, box, label=f"{net} leg"):
+            R.failed.append(f"{net} leg")
+    N = route.Negotiator(R, box, origin=(51.0, 44.0))
+    for net, terms in [j for j in jobs if j[0] not in first]:
+        N.add(net, terms, SIG_W, f"{net} leg")
+    bad = N.run(log=log)
+    N.polish(log=log)
+    bad = sorted(set(bad) | set(N._exact(log)))
+    if bad:
+        R.failed += bad
+        log(f"   unrouted: {', '.join(bad)}")
+        N.report(log=log)
+    dropped = []                                   # fan vias whose leg came on the bottom layer: not needed
+    for num, (vx, vy) in fan.items():
+        v = next(v for v in R.geo.vias if abs(v[1] - vx) < 1e-6 and abs(v[2] - vy) < 1e-6)
+        if not any(s[0] == v[0] and s[1] == IN2 and route._pt_seg(vx, vy, s[2:6]) <= v[3] for s in R.geo.segs):
+            R.remove([], [v])
+            dropped.append(v[0])
+    if dropped:
+        log(f"   U21 fan: {len(dropped)} vias not needed (their legs came on the bottom layer): {', '.join(dropped)}")
+
+
 def _check_exact(R, segs):
     """Exact clearance of new bottom-layer segments against the other nets' tracks, vias and pads."""
     g, out = R.geo, []
