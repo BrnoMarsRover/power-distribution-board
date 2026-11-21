@@ -1382,6 +1382,32 @@ layout.
          U12 and C103 fill the bottom at the module.
        - **Reserved area:** the pull-ups are placed before the logic groups, and their room and the
          bus's bottom-side copper are reserved (`flt_bus.KEEP`).
+     - **Switch-control group, 2026-11-21** (`route_plan.sw_control`, run as `pcb_route.py sw`, after the
+       rails' legs):
+       - **MOTOR_KILL rides with the 42 V legs.** It goes from the drive group's EN switch (Q_EN, in
+         42D's block) east to the 1 mm gap between the 42 V blocks, down it, and east in its own band slot
+         between 42C's legs and 42D's. 42C's five moved up 0.5 mm for it, and 42C's TMR resistor (R40)
+         now lies flat at the foot of its timer column, because upright its GND pad reached the slot.
+         MOTOR_KILL crosses nothing in the 42 V area: L3 there is 42 V copper, so no hop would have been
+         possible.
+       - **At the far end** it runs in the bundle between 42C's lines and 42D's. East of the centre
+         hole it hops under 42D's lines on L3 (2 vias, between IMON's hops and between the 12 V PTC's
+         pads). It then runs east under them, north-east beside their climb, and through its test pad
+         TP43 into the latch. The 24 V / 12 V outputs moved down 7 mm in all, so that the bundle's
+         ninth line fits.
+       - **The latch** (U18, U19, the hold-off network C115 / D21 / R169 and their 100 nF) moved out of
+         the crowded band to the free bottom side under U17, below the bundle and above the lowered
+         12 V connectors (whose outline sets its row). The Schmitt buffer's output faces /CLR on the
+         same row, so /CLR is one straight line. MOTOR_ARM comes from the expander's pin 17 through
+         one L3 hop under the bundle. The latch's tied-high D pin, boxed in by MOTOR_KILL and
+         MOTOR_ARM, runs under the body to /PRE on the same row.
+       - **Decoupling:** each ADC has its 100 nF and 1 µF beside its supply pin (the template engine
+         had put both 1 µF caps in the latch's corner), and the expander has its 100 nF at pin 24.
+         Each cap is tied to its pin at 0.4 mm, necked to pin width at the pin.
+       - **Routed:** the address strap, the hold-off node, MOTOR_OK to its filter cap, MOTOR_ARM's
+         pull-down, and for now the I²C trunk between the three ICs. That trunk is the router's: 12
+         vias, threading past the centre hole, IMON's hops and the far end's risers. It gets a plan
+         with the ESP32 group, once its ESP32 end and the INA228's branch are fixed.
      - **Router additions (rails):** the A* expansion limit grows with the window, and round pads (the
        test pads) are modelled as circles, so a route ends inside the copper.
   3. `gen/pcb_silk.py` — the silkscreen.

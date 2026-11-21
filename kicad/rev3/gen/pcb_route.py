@@ -6,7 +6,8 @@ own process (pcbnew objects come back untyped after removals within one process)
     flatpak run --command=python3 org.kicad.KiCad kicad/rev3/gen/pcb_route.py 24 [board]
 
 Blocks: the rail eFuses 24, 12, 5, the 42 V eFuses 42D, 42C, 42legs (the 42 V bus legs, after both), 42bus
-(their far end), flt (the FLT bus to the ESP32) and rails (the rails' bus legs). Prints what could not be routed;
+(their far end), flt (the FLT bus to the ESP32), rails (the rails' bus legs) and sw (the switch-control
+group). Prints what could not be routed;
 exits 1 if anything failed.
 """
 import sys
@@ -36,6 +37,9 @@ elif key == "42bus":
     import far42
     far42.route(R, FP, log=quiet)
     what = "42 V bus, far end"
+elif key == "sw":
+    route_plan.sw_control(R, FP, log=quiet)
+    what = "switch control"
 elif key == "flt":
     import flt_bus
     flt_bus.route(R, FP, log=quiet)

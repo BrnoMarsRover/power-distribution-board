@@ -76,8 +76,9 @@ def efuse42(R, FP, key, log=print):
         src_in=(key == "42C"),
         g_avoid=(cx + 2.2 - 6.4, 32.45, cx + 2.2 - 2.1, 37.5) if key == "42C" else None,
         # the bus legs' corridor (both blocks'): nothing else in it, and no via near it
-        route_keep=[b for k in BLOCKS42 for b in corridor42(k)["keep"]],
-        via_keep_more=[(l - 0.5, t - 0.5, r + 0.5, b_ + 0.5) for k in BLOCKS42 for l, t, r, b_ in corridor42(k)["keep"]],
+        route_keep=[b for k in BLOCKS42 for b in corridor42(k)["keep"]] + MK_KEEP,
+        via_keep_more=[(l - 0.5, t - 0.5, r + 0.5, b_ + 0.5)
+                       for l, t, r, b_ in [b for k in BLOCKS42 for b in corridor42(k)["keep"]] + MK_KEEP],
         # the output divider and test pad above 42C's band reach the output copper through the drain copper, as
         # GND does (agreed 2026-11-21: same column, same 0.5 mm clearance)
         out_ok=[(cx + 6.2 + 0.6, power42.DRN_TOP, blk["drn_r"] - 0.2, power42.DRN_BOT)]), log)
@@ -92,7 +93,13 @@ BLOCKS42 = ("42D", "42C")
 # under both blocks, above the XT90 pads: 42C's legs in its upper half (from 42C's lane on), 42D's in the lower
 # half all the way. They end at ports at x = 50.6, in band order, where the bus routing takes them on.
 LEG_W, LEG_PITCH, PORT_X = 0.25, 0.5, 50.6         # 0.5: the router's 0.2 mm + slack, on its grid
-BAND_TOP = {"42C": 71.5, "42D": 74.0}         # each block's top band slot; the next ones LEG_PITCH lower
+BAND_TOP = {"42C": 71.0, "42D": 74.0}         # each block's top band slot; the next ones LEG_PITCH lower
+# MOTOR_KILL rides with them (decided 2026-11-21): from the drive group's EN switch (Q_EN, 42D) east to the gap
+# between the blocks, down it and east in its own slot between 42C's legs and 42D's (42C's moved up 0.5 mm for it),
+# so it crosses nothing; the far end (far42) takes it on to the latch with the 42 V lines
+MK_X, MK_Y = 25.45, 73.5
+MK_KEEP = [(20.2, 62.85, MK_X + 0.4, 63.65), (MK_X - 0.4, 62.85, MK_X + 0.4, MK_Y + 0.4),
+           (MK_X - 0.4, MK_Y - 0.4, PORT_X + 0.4, MK_Y + 0.4)]
 LEGS42 = (("VSNS_OUT", None), ("INPG", "2"), ("INP", "3"), ("FLT", "4"), ("IMON", "7"))   # band order, top first
 
 
@@ -112,8 +119,8 @@ def corridor42(key):
 def legs42(R, FP, log=print):
     """Lay the 42 V bus legs (both blocks) as planned, on the bottom layer (no vias in the 42 V blocks): from each
     pin's escape stub (IMON with a 45-degree jog to its lane) straight down the lane, a 45-degree turn into the
-    band, east to the port; VSNS_OUT from the output divider's pad down into the band's top slot. Then every new
-    segment is checked exactly against the other nets' copper."""
+    band, east to the port; VSNS_OUT from the output divider's pad down into the band's top slot; MOTOR_KILL from
+    Q_EN's gate to its own slot. Then every new segment is checked exactly against the other nets' copper."""
     TURN = 1.0
     new = []
     for key in BLOCKS42:
@@ -132,6 +139,10 @@ def legs42(R, FP, log=print):
                 net, (px, py) = p["net"], p["c"]
                 pts = [(px, py), (px, y - 0.5), (px + 0.5, y), (PORT_X, y)]
             new += R.track(net, B, pts, LEG_W)
+    gate = next(q for q in R.geo.pads if q["net"] == "MOTOR_KILL" and q["c"][0] < BLOCK42_R["42D"])   # Q_EN's gate
+    gx, gy = gate["c"]
+    assert MK_KEEP[0][0] < gx and MK_KEEP[0][1] < gy < MK_KEEP[0][3], f"Q_EN's gate at ({gx}, {gy}), off MOTOR_KILL's way"
+    new += R.track("MOTOR_KILL", B, [(gx, gy), (MK_X, gy), (MK_X, MK_Y), (PORT_X, MK_Y)], LEG_W)
     bad = _check_exact(R, new)
     for msg in bad:
         log(f"   leg clearance: {msg}")
@@ -222,6 +233,82 @@ def rails_legs(R, FP, log=print):
             dropped.append(v[0])
     if dropped:
         log(f"   U21 fan: {len(dropped)} vias not needed (their legs came on the bottom layer): {', '.join(dropped)}")
+
+
+# the switch-control group (decided 2026-11-21): the latch under U17 (logic_place), MOTOR_ARM's hop, the ICs' ties
+ARM_UP_Y, ARM_LOW = 71.5, (93.3, 81.7)          # MOTOR_ARM's vias: below U17's pin 17, beside U18's clock pin
+SW_DECAPS = [("U20", "5", "C113"), ("U20", "5", "C117"), ("U21", "5", "C119"), ("U21", "5", "C118"),
+             ("U17", "24", "C112"), ("U18", "8", "C116"), ("U19", "5", "C116")]
+
+
+def sw_control(R, FP, log=print):
+    """The switch-control group's own nets; the 42 V far end and MOTOR_KILL come with far42, the FLT lines with
+    flt_bus, and the ESP32's end of I2C and MOTOR_OK, the INA228's branch of I2C and BOOST_DIS with their groups.
+    Planned: /CLR straight across from the Schmitt buffer to the latch, MOTOR_ARM from the expander's pin 17 down
+    through one L3 hop under the 42 V bundle to the latch's clock pin, each IC's decoupling tied to its supply
+    pin, then GND vias. Routed: the address strap, the hold-off node, MOTOR_OK to its filter cap, MOTOR_ARM's
+    pull-down and the I2C trunk between the three ICs."""
+    import far42
+    R.geo.route_keep, R.geo.via_keep, R.geo.hv_ok = [], [], {}
+    W, segs, vias = SIG_W, [], []
+
+    def lay(net, layer, pts, w=W):
+        segs.extend(R.track(net, layer, pts, w))
+
+    c = lambda ref, num: R.pad(ref, num)["c"]
+    a, b_ = c("U19", "4"), c("U18", "6")             # /CLR
+    assert abs(a[1] - b_[1]) < 1e-6, "the buffer's output is off /CLR's row"
+    lay(R.pad("U18", "6")["net"], B, [a, b_])
+    arm = R.pad("U17", "17")["net"]                  # MOTOR_ARM
+    (px, py), (lx, ly), (kx, ky) = c("U17", "17"), ARM_LOW, c("U18", "1")
+    vias += [R.via(arm, px, ARM_UP_Y), R.via(arm, lx, ly)]
+    lay(arm, B, [(px, py), (px, ARM_UP_Y)])
+    lay(arm, IN2, [(px, ARM_UP_Y), (px, ly - (px - lx)), (lx, ly)])
+    lay(arm, B, [(lx, ly), (lx + ly - ky, ky), (kx, ky)])
+    # the latch's tied-high pins: D (pin 2, boxed in by MOTOR_KILL and MOTOR_ARM on the left) straight under the
+    # body to /PRE (pin 7) on the same row, and on to VCC (pin 8)
+    lay("+3V3", B, [c("U18", "2"), c("U18", "7"), c("U18", "8")])
+    bad = _check_exact(R, segs) + far42._check_vias(R, vias)
+    # decoupling: each cap's +3V3 pad to its IC's supply pin, 0.4 mm, at pin width near the pins
+    for ic, num, cap in SW_DECAPS:
+        p = R.pad(ic, num)
+        l, t, r, b2 = p["box"]
+        neck = ((l - 1.0, t - 1.0, r + 1.0, b2 + 1.0), NECK_W)
+        cp = next(q["num"] for q in R.geo.pads if q["ref"] == cap and q["net"] == "+3V3")
+        if not R.route_net("+3V3", [R.t_pad(ic, num), R.t_pad(cap, cp)], 0.4,
+                           (min(l, R.pad(cap, cp)["box"][0]) - 3, min(t, R.pad(cap, cp)["box"][1]) - 3,
+                            max(r, R.pad(cap, cp)["box"][2]) + 3, max(b2, R.pad(cap, cp)["box"][3]) + 3),
+                           label=f"{cap} to {ic}.{num}", layers=(B,), neck=neck):
+            R.failed.append(f"{cap} to {ic}.{num}")
+    # routed: short nets and the I2C trunk, negotiated
+    jobs = [
+        ("I2C_SCL", [R.t_pad("U20", "3"), R.t_pad("U17", "22"), R.t_pad("U21", "3")]),
+        ("I2C_SDA", [R.t_pad("U20", "2"), R.t_pad("U17", "23"), R.t_pad("U21", "2")]),
+        (R.pad("U21", "7")["net"], [R.t_pad("U21", "7"), R.t_pad("R170", "1"), R.t_pad("R171", "2")]),
+        (R.pad("U19", "2")["net"], [R.t_pad("U19", "2"), R.t_pad("C115", "1"), R.t_pad("D21", "2"),
+                                    R.t_pad("R169", "2")]),
+        ("MOTOR_OK", [R.t_pad("D21", "1"), R.t_pad("R169", "1"), R.t_pad("C114", "1")]),
+        (arm, [R.t_pad("R165", "1"), R.t_via(px, ARM_UP_Y)]),
+    ]
+    box = (55.0, 49.5, 128.0, 83.5)
+    N = route.Negotiator(R, box, origin=(55.0, 50.0))
+    for net, terms in jobs:
+        N.add(net, terms, W, f"{net}")
+    failed = N.run(log=log)
+    N.polish(log=log)
+    failed = sorted(set(failed) | set(N._exact(log)))
+    # GND: a via beside every GND pad of the group's parts (at pin width out of fine-pitch rows)
+    refs = ["U17", "U18", "U19", "U20", "U21", "C112", "C113", "C115", "C116", "C117", "C118", "C119", "C114",
+            "R165", "R170"]
+    for ref in refs:
+        for q in [q for q in R.geo.pads if q["ref"] == ref and q["net"] == "GND"]:
+            R.fanout(ref, q["num"], NECK_W if ref.startswith("U") else 0.4, zone_layers=(IN1,), optional=True)
+    for msg in bad[:20]:
+        log(f"   switch-control clearance: {msg}")
+    if bad or failed:
+        R.failed += (["switch control (planned)"] if bad else []) + failed
+    log(f"   switch control: planned {len(segs)} segments, {len(vias)} vias, {len(bad)} clearance problems"
+        + (f"; unrouted: {', '.join(failed)}" if failed else ""))
 
 
 def _check_exact(R, segs):

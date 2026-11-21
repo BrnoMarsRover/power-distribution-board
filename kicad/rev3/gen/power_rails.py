@@ -36,13 +36,13 @@ CONN_GAP = 0.8                      # PTC courtyard to connector courtyard (a ra
 
 # per rail: column copper edges (xl, xr) and the parts; fets = (pre-charge, main). The bulk caps are found by net.
 RAILS = {
-    # 24 / 12 V: outputs 6.5 mm lower (decided 2026-11-21) for rev2's centre hole at (75, 75) on their boundary and
-    # the 42 V far-end bundle passing under it; their full-width OUT area reaches down to the outputs, so the 12 V
-    # current goes round the hole
+    # 24 / 12 V: outputs 7 mm lower (decided 2026-11-21) for rev2's centre hole at (75, 75) on their boundary and
+    # the 42 V far-end bundle (nine lines) passing under it; their full-width OUT area reaches down to the outputs,
+    # so the 12 V current goes round the hole
     "24": dict(xl=50.8, xr=76.0, vin="VIN24", out="OUT24", j_in="J5", tvs="D5",
-               shunt="R41", fets=("Q11", "Q10"), bridge="JP3", led="D4", y_out=81.5),
+               shunt="R41", fets=("Q11", "Q10"), bridge="JP3", led="D4", y_out=82.0),
     "12": dict(xl=76.5, xr=103.2, vin="VIN12", out="OUT12", j_in="J6", tvs="D7",
-               shunt="R59", fets=("Q14", "Q13"), bridge="JP4", led="D6", y_out=81.5),
+               shunt="R59", fets=("Q14", "Q13"), bridge="JP4", led="D6", y_out=82.0),
     # L-shaped: full switch width (to xr, J38 starts at 131.6) only above band_bot; DRN, OUT and outputs end at col_r
     "5": dict(xl=104.1, xr=130.9, col_r=125.6, band_bot=34.6, vin="VIN5", out="OUT5", j_in="J7", tvs="D9",
               shunt="R77", fets=("Q17", "Q16"), bridge="JP5", led="D8",

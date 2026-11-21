@@ -175,6 +175,9 @@ SLOTS42_KEY = {"42C": {
     # whose VSNS pad goes straight down into the band, its output pad up to a via through the drain copper
     "out_tp": (4.0, 30.0, 90),
     "vout_r": (3.2, 34.4, -90),
+    # the TMR resistor lies flat at the foot of the timer column (TMR pad right, towards the lane): upright, its GND
+    # pad reached the band, where MOTOR_KILL now runs under 42C's legs (route_plan.MK_Y)
+    "tmr_r": (-1.8, 38.28, 180),
 }}
 
 

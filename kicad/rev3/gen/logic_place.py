@@ -57,6 +57,20 @@ def _row(a, b, horizontal=True):
     return abs(a[1] - b[1]) < 0.05 if horizontal else abs(a[0] - b[0]) < 0.05
 
 
+# switch control's spots (decided 2026-11-21): the latch's network and the ICs' decoupling, each at its pins. Bottom
+# side; rot 90 = pad 1 below, -90 = pad 1 above, 0 / 180 = pad 1 left / right
+SW_SPOTS = {
+    "C115": (105.25, 78.9, -90),           # the hold-off cap: its RC node on top, by the buffer's input
+    "D21": (107.8, 78.9, 90),              # Schottky: anode (RC node) on top, MOTOR_OK below
+    "R169": (110.4, 78.9, 90),             # 1 M: RC node on top, MOTOR_OK below
+    "C116": (96.3, 77.1, 0),               # the latch's 100 nF, above it
+    "C117": (68.9, 72.4, 0),               # U20's 1 uF, under it beside its supply pin (its 100 nF: far42.DECAPS)
+    "C119": (114.6, 72.3, 0),              # U21's 1 uF and 100 nF under it, either side of its supply pin
+    "C118": (118.55, 72.3, 0),
+    "C112": (89.4, 69.7, 90),              # U17's 100 nF, left of its supply pin (pin 24, bottom left)
+}
+
+
 def place(FP, obstacles):
     """Place every group. obstacles: the bottom side's boxes, extended in place. Returns (placed, missed)."""
     done, missed = [], []
@@ -140,8 +154,20 @@ def place(FP, obstacles):
     ic("U20", 69.5, 67.0, adc_in_up, band)            # IMON and the 42 V output sense
     ic("U17", 95.0, 67.0, lambda p: _row(p["1"], p["12"]) and p["1"][1] < p["13"][1] - 1.0, band)
     ic("U21", 118.5, 66.5, adc_in_up, band)           # the rails' input and output sense
-    ic("U18", 85.0, 70.0, lambda p: True, band)       # motor-kill latch
-    ic("U19", 88.5, 70.0, lambda p: True, band)
+    # the motor-kill latch (decided 2026-11-21): under U17, below the 42 V bundle and above the lowered 12 V
+    # connectors (their outline blocks both sides and sets the row); MOTOR_KILL comes in from the left (far42),
+    # MOTOR_ARM from the expander through one L3 hop, MOTOR_OK from the ESP32 side on the right. The Schmitt
+    # buffer's output faces /CLR on the same row, the hold-off network (C115, D21 // R169) stands on its right
+    latch = [(92.5, 76.0, 112.0, 82.7)]
+    ic("U18", 96.3, 80.1, lambda p: p["3"][0] < p["6"][0] - 1.0 and p["4"][1] < p["1"][1], latch)
+    ic("U19", 101.8, 78.9, lambda p: p["4"][0] < p["2"][0] - 1.0 and p["5"][1] < p["4"][1], latch)
+    import power42
+    for ref, (x, y, deg) in SW_SPOTS.items():
+        f = FP[ref]
+        power42._at(f, x, y, deg, bottom=True)
+        f.SetLocked(True)
+        obstacles.append(satellites._box(f))
+        done.append(ref)
     # the 42 V bus's far end (far42, decided 2026-11-21): its parts on their spots beside U20 and U17, its lines'
     # way kept; the group packs around them
     import far42
@@ -154,7 +180,7 @@ def place(FP, obstacles):
     hub += _loose(FP, [r for r in _sheet(FP, "42 V") if r not in hub and not FP[r].IsLocked()
                        and any(p.GetNetname().startswith(far_nets) for p in FP[r].Pads())])
     run("switch control", "U17", band, hub, extra_ics=("U20", "U21", "U18", "U19"), decaps=True,
-        tp_area=[(55.0, 61.0, 66.0, 74.6)] + bottom_band, tp_column=(56.4, 62.6))   # MOTOR_KILL, left of U20
+        tp_area=[(55.0, 61.0, 66.0, 74.6)] + bottom_band, tp_column=(56.4, 62.6))   # (MOTOR_KILL's is far42's)
 
     # ---- power button: PhotoMOS by the button and BMS connectors, with the motor switch's input resistors;
     # the test pads join the switch-control ones along the bottom edge

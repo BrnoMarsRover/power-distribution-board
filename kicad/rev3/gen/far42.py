@@ -12,7 +12,10 @@ where a line leaves the bundle, under the lines above it on L3 (a via down, a sh
   under the hole the other eight drop below rev2's centre hole (75, 75), between it and the 24 V output connector
                  (the 24 / 12 V outputs moved down 6.5 mm for it), from right after the VSNS lines leave.
   right of it    IMON_C and IMON_D hop (east of the hole) and enter U20 under its body from the right; R / C pairs
-                 and test pads on their lines. The other six climb back to the U17 levels.
+                 and test pads on their lines. MOTOR_KILL (with the legs from Q_EN's gate, between 42C's and
+                 42D's) hops under 42D's lines and runs on to the latch U18 below the bundle (logic_place: under
+                 U17, above the 12 V connectors), its test pad on the way. The other six climb back to the U17
+                 levels, 42C's first.
   under U17      six lines, between the expander's pins and the 12 V output connector.
   right of U17   INP_D, INP_C and INPG_D hop, INPG_C rises; all four enter U17 under its body from the right,
                  a pull-down between each riser and the next.
@@ -42,6 +45,8 @@ SPOTS = {
     ("inpg_r", "D"): (107.3, 68.6, -90), ("inpg_r", "C"): (109.5, 68.6, -90),
     ("flt_tp", "C"): (110.5, 73.6, 90), ("flt_tp", "D"): (113.7, 76.0, 0),          # on their lines
 }
+MK_TP = (90.5, 79.85, 0)                   # MOTOR_KILL's test pad, on its way to the latch
+MK_DIAG = 167.9                            # x + y of MOTOR_KILL's run beside 42D's lowest line's climb (167.15)
 
 # U20's decoupling cap, beside its left end (its supply pin faces the bundle, so not below it); the group's
 # packer would find no room for it near U20 any more
@@ -50,37 +55,40 @@ DECAPS = {"C113": (65.4, 69.0, -90)}
 # kept for the lines (the parts block their own courtyards; the switch-control group packs around both)
 KEEP = [(50.8, 65.3, 54.2, 76.6),          # the risers and VSNS_D's hop, right after the ports
         (54.2, 65.3, 66.8, 66.8),          # VSNS's lines into U20
-        (50.8, 71.0, 64.0, 83.0),          # the bundle dropping below the hole
-        (64.0, 78.0, 76.8, 82.6),          # below the hole (and above the 24 V output connector)
+        (50.8, 70.6, 64.5, 83.0),          # the bundle dropping below the hole
+        (64.0, 78.2, 76.8, 83.0),          # below the hole (and above the 24 V output connector)
         (72.4, 65.3, 82.0, 71.2),          # IMON's lines, risers, R / C pairs and test pads right of U20
-        (76.8, 71.2, 82.0, 83.2),          # IMON's hops
-        (82.0, 72.8, 90.0, 82.4),          # the bundle climbing back
+        (76.8, 71.2, 84.0, 83.6),          # IMON's and MOTOR_KILL's hops
+        (82.0, 72.0, 93.5, 85.0),          # the bundle climbing back, MOTOR_KILL's hop, line and test pad
         (85.5, 73.1, 99.6, 76.4),          # under U17
         (99.2, 65.3, 110.8, 76.4),         # right of U17: INP / INPG's lines, risers and hops
         (110.8, 73.1, 114.0, 76.4)]        # FLT on to its test pads
 
-U20_AT, U17_AT = (69.5, 67.0), (95.0, 67.0)  # logic_place puts them there (input rows up)
+U20_AT, U17_AT, U18_AT = (69.5, 67.0), (95.0, 67.0), (96.3, 80.1)  # logic_place puts them there
 
-# the lines: each leg's band y (legs42 order) and its route east. Stations: (x, new y) = a 45-degree jog that
-# starts at x. Bundle levels: left of U20 the hop opens the bundle at 51.6; at 54.0 it drops below the centre
-# hole (78.65 ... 82.15: the top line 3.65 mm from the hole's centre, its pad is 3.2 in radius; the bottom one
-# 0.66 mm clear of the 24 V connector's pads); east of the connector it opens around IMON's hop vias (76.5,
-# 77.0) and climbs back at 82.2 to the U17 levels (73.5 ... 76.0); right of U17 it opens to 0.8 mm at 99.6.
+# the lines: each leg's band y (legs42 order; MOTOR_KILL, "K", in its slot between 42C's and 42D's) and its route
+# east. Stations: (x, new y) = a 45-degree jog that starts at x. Bundle levels: left of U20 the hop opens the
+# bundle at 51.6; at 54.0 it drops below the centre hole (78.65 ... 82.65: the top line 3.65 mm from the hole's
+# centre, its pad is 3.2 in radius; the bottom one 0.65 mm clear of the 24 V connector's pads); east of the
+# connector it opens around IMON's and MOTOR_KILL's hop vias (76.5, 77.0); 42C's lines climb back at 82.2, 42D's at
+# 83.8 to the U17 levels (73.5 ... 76.0); right of U17 it opens to 0.8 mm at 99.6.
 L_OPEN, L_CLOSE, R_OPEN, R_CLOSE, S_OPEN = 51.6, 54.0, 76.5, 82.2, 99.6
 EVENTS = [   # (x, {net key: new y}): where the bundle opens or closes. Lines that move the same way together
              # are staggered (the leading one first, each next STAGGER later), so their parallel 45-degree jogs
              # keep 0.57 mm apart (not 0.5 / sqrt 2)
-    (L_OPEN, {"G_C": 71.7, "P_C": 72.2, "F_C": 72.7, "I_C": 73.2, "G_D": 74.8, "P_D": 75.3, "F_D": 75.8, "I_D": 76.3}),
-    (L_CLOSE, {"G_C": 78.65, "P_C": 79.15, "F_C": 79.65, "I_C": 80.15, "G_D": 80.65, "P_D": 81.15, "F_D": 81.65,
-               "I_D": 82.15}),
-    (R_OPEN, {"G_D": 80.95, "P_D": 81.45, "F_D": 81.95, "I_D": 82.75}),
+    (L_OPEN, {"G_C": 71.2, "P_C": 71.7, "F_C": 72.2, "I_C": 72.7, "K": 73.2,
+              "G_D": 74.8, "P_D": 75.3, "F_D": 75.8, "I_D": 76.3}),
+    (L_CLOSE, {"G_C": 78.65, "P_C": 79.15, "F_C": 79.65, "I_C": 80.15, "K": 80.65,
+               "G_D": 81.15, "P_D": 81.65, "F_D": 82.15, "I_D": 82.65}),
+    (R_OPEN, {"K": 80.95, "G_D": 81.75, "P_D": 82.25, "F_D": 82.75, "I_D": 83.55}),
     (R_OPEN + 0.5, {"G_C": 78.35, "P_C": 78.85, "F_C": 79.35}),
-    (R_CLOSE, {"G_C": 73.5, "P_C": 74.0, "F_C": 74.5, "G_D": 75.0, "P_D": 75.5, "F_D": 76.0}),
+    (R_CLOSE, {"G_C": 73.5, "P_C": 74.0, "F_C": 74.5}),
+    (83.8, {"G_D": 75.0, "P_D": 75.5, "F_D": 76.0}),
     (S_OPEN, {"G_C": 72.0, "P_C": 72.8, "F_C": 73.6, "G_D": 74.4, "P_D": 75.2}),
 ]
 STAGGER = 0.3
 # hops: net key -> (x of the via in the bundle, y of the upper via). Risers: net -> (x, entry index, side)
-HOPS = {"V_D": (53.4, 70.9), "I_C": (79.3, 71.4), "I_D": (81.5, 71.4),
+HOPS = {"V_D": (53.4, 70.4), "I_C": (79.3, 71.4), "I_D": (81.5, 71.4), "K": (80.4, 84.6),
         "P_D": (101.8, 71.2), "P_C": (104.0, 71.2), "G_D": (106.2, 71.2)}
 RISERS = {"V_C": (51.2, 0, "L"), "V_D": (53.4, 1, "L"), "I_D": (81.5, 0, "R"), "I_C": (79.3, 1, "R"),
           "G_C": (108.4, 0, "R"), "G_D": (106.2, 1, "R"), "P_C": (104.0, 2, "R"), "P_D": (101.8, 3, "R")}
@@ -91,8 +99,16 @@ NAMES = {"V": "VSNS_OUT", "G": "INPG", "P": "INP", "F": "FLT", "I": "IMON"}
 
 
 def net_of(key):
+    if key == "K":
+        return "MOTOR_KILL"
     kind, blk = key.split("_")
     return f"{NAMES[kind]}_42{blk}"
+
+
+def mk_tp(FP):
+    """MOTOR_KILL's test pad."""
+    return next(r for r, f in sorted(FP.items()) if r.startswith("TP")
+                and {p.GetNetname() for p in f.Pads()} == {"MOTOR_KILL"})
 
 
 def roles(FP):
@@ -120,9 +136,14 @@ def place(FP, obstacles):
     from satellites import _box
     at = lambda f: (round(pcbnew.ToMM(f.GetPosition().x) - power42.X0, 2),
                     round(pcbnew.ToMM(f.GetPosition().y) - power42.Y0, 2))
-    got = [at(FP["U20"]), at(FP["U17"])]
-    assert got == [U20_AT, U17_AT], f"far42 expects U20 / U17 at {U20_AT} / {U17_AT}, not {got}"
+    got = [at(FP["U20"]), at(FP["U17"]), at(FP["U18"])]
+    assert got == [U20_AT, U17_AT, U18_AT], f"far42 expects U20 / U17 / U18 at {U20_AT} / {U17_AT} / {U18_AT}, not {got}"
     done = []
+    tp = mk_tp(FP)                            # MOTOR_KILL's test pad
+    power42._at(FP[tp], MK_TP[0], MK_TP[1], 0, bottom=True)
+    FP[tp].SetLocked(True)
+    obstacles.append(_box(FP[tp]))
+    done.append(tp)
     for key, ref in sorted(roles(FP).items()):
         x, y, deg = SPOTS[key]
         f = FP[ref]
@@ -180,6 +201,7 @@ def route(R, FP, log=print):
         for (name, _), y in zip(route_plan.LEGS42, route_plan.corridor42(key)["slots"]):
             kind = {"VSNS_OUT": "V", "INPG": "G", "INP": "P", "FLT": "F", "IMON": "I"}[name]
             slots[f"{kind}_{blk}"] = y
+    slots["K"] = route_plan.MK_Y
     pad = lambda ref, num: R.pad(ref, num)
     entry0 = {ic: pad(ic, PINS[k][1])["box"][3] + 0.92 for k, (ic, _) in PINS.items() for ic in [ic]}
     segs, vias = [], []
@@ -229,6 +251,16 @@ def route(R, FP, log=print):
             continue
         pts, y = _path(y0, BUNDLE[key], FLT_END[key])   # FLT: east to its test pad
         lay(net, pts)
+    # MOTOR_KILL: east in the bundle, a hop under 42D's lines (between IMON's hops and between the 12 V PTC's top-side
+    # pads), east under them, north-east beside them (0.53 mm off the lowest one's climb) and east through its test
+    # pad into the latch's pin 3 (its neighbours leave 0.2 mm)
+    x, yl = HOPS["K"]
+    pts, y = _path(slots["K"], BUNDLE["K"], x)
+    lay("MOTOR_KILL", pts)
+    hop("MOTOR_KILL", x, y, yl)
+    p3 = R.pad("U18", "3")["c"]
+    assert abs(p3[1] - MK_TP[1]) < 1e-6, "MOTOR_KILL's test pad is off its line"
+    lay("MOTOR_KILL", [(x, yl), (MK_DIAG - yl, yl), (MK_DIAG - p3[1], p3[1]), p3])
     # the parts on the lines: a straight stub from the line to each signal pad
     stubs = {("vsns_c", "C"): "V_C", ("vsns_r", "C"): "V_C", ("vsns_c", "D"): "V_D", ("vsns_r", "D"): "V_D",
              ("imon_c", "D"): "I_D", ("imon_r", "D"): "I_D", ("imon_tp", "D"): "I_D",
