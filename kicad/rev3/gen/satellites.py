@@ -30,10 +30,14 @@ SUPPLY = {"GND", "+3V3", "+5V_LOGIC", "+5V3_AUX", "BUS42", "VBAT", "OUT42D", "OU
           "VIN24", "VIN12", "VIN5", "OUT54"}
 GAP = 0.55                             # between courtyards (rule 0.5)
 GATE_PINS = 4                          # the first pins of a pin order drive gates: their nets weigh more
+VARIANT = {}                           # IC ref -> annealing seed set chosen because its placement routes completely
+HAND = {"24", "12"}                    # rail eFuses placed by the hand template (efuse_hand.py), not by annealing
 ITERATIONS = int(os.environ.get("SAT_ITER", 150000))   # annealing moves per run (SAT_ITER: quick debug runs)
 RUNS = 3                               # annealing runs per cluster (different seeds), the best is kept
 COMPACT = 0.15                         # cost per mm from a part to its IC: keeps the cluster round
 CAP_PULL = 2.0                         # cost per mm from a capacitor pad to the IC pin on its net (GND aside)
+CROSS = 15.0                           # cost of two nets' straight connections crossing (routing them needs a via,
+                                       # and under the FET tabs, where the eFuse ICs sit, no via fits)
 
 
 def _box(fp):
@@ -62,6 +66,38 @@ def _small(fp):
     return r.startswith(("D", "Q")) and lib.startswith(("SOT", "SOD", "D_SOD", "D_SMA"))
 
 
+FANOUT = 1.6                           # clear band beyond a fine-pitch pin row: room for the tracks to fan out
+
+
+def fanout_keep(fp, depth=FANOUT):
+    """Boxes beyond each fine-pitch pin row of fp (pads <= 0.36 mm wide) where no part goes, only tracks."""
+    rows = {}
+    fx, fy = _pos(fp)
+    for p in fp.Pads():
+        bb = p.GetBoundingBox()
+        l, t = TOMM(bb.GetLeft()) - X0, TOMM(bb.GetTop()) - Y0
+        r, b = TOMM(bb.GetRight()) - X0, TOMM(bb.GetBottom()) - Y0
+        if min(r - l, b - t) > 0.36 or not p.GetNumber():
+            continue
+        if (b - t) >= (r - l):
+            key = ("y", 1 if (t + b) / 2 >= fy else -1)
+            rows.setdefault(key, []).append((l, t, r, b))
+        else:
+            key = ("x", 1 if (l + r) / 2 >= fx else -1)
+            rows.setdefault(key, []).append((l, t, r, b))
+    boxes = []
+    for (ax, sgn), pads in rows.items():
+        l = min(q[0] for q in pads) - 0.3
+        t = min(q[1] for q in pads) - 0.3
+        r = max(q[2] for q in pads) + 0.3
+        b = max(q[3] for q in pads) + 0.3
+        if ax == "y":
+            boxes.append((l, b, r, b + depth) if sgn > 0 else (l, t - depth, r, t))
+        else:
+            boxes.append((r, t, r + depth, b) if sgn > 0 else (l - depth, t, l, b))
+    return boxes
+
+
 def place_ic(fp, x, y, test):
     """Bottom side, centre at (x, y), first quarter turn for which test(pad_xy_by_number) holds."""
     for deg in (0, 90, 180, 270):
@@ -74,15 +110,21 @@ def place_ic(fp, x, y, test):
 class Part:
     """A satellite on the bottom: pads and courtyard per rotation (relative to the origin), and its state."""
 
-    def __init__(self, fp):
-        self.fp, self.ref = fp, fp.GetReference()
+    def __init__(self, fp, label=0.0):
+        """label: room to the right of the courtyard kept free (a test pad's net name)."""
+        self.fp, self.ref, self.label = fp, fp.GetReference(), label
         self.shapes = {}
-        for deg in (0, 90, 180, 270):
+        for deg in ((0,) if label else (0, 90, 180, 270)):
             _at(fp, 0.0, 0.0, deg, bottom=True)
             ox, oy = _pos(fp)
             pads = [(p.GetNumber(), p.GetNetname(), _pad_xy(p)[0] - ox, _pad_xy(p)[1] - oy) for p in fp.Pads()]
             l, t, r, b = _box(fp)
             self.shapes[deg] = (pads, (l - ox, t - oy, r - ox, b - oy))
+        if label:                                          # a test pad (round): its "rotations" are where its name
+            pads, (l, t, r, b) = self.shapes[0]            # goes: right, above, left, below
+            hw = max((label - 0.8) / 2 + 0.2, (r - l) / 2)
+            self.shapes = {0: (pads, (l, t, r + label, b)), 90: (pads, (-hw, t - 1.5, hw, b)),
+                           180: (pads, (l - label, t, r, b)), 270: (pads, (-hw, t, hw, b + 1.5))}
         self.decoupling = self.ref.startswith("C") and any(n == "GND" for _, n, _, _ in self.shapes[0][0])
         l, t, r, b = self.shapes[0][1]
         self.area = (r - l) * (b - t)
@@ -106,7 +148,10 @@ class Part:
         return (left - l, top - t, deg)
 
     def apply(self):
-        _at(self.fp, *self.state, bottom=True)
+        if self.label:                                     # a test pad stays upright; its state says where its name goes
+            _at(self.fp, self.state[0], self.state[1], 0, bottom=True)
+        else:
+            _at(self.fp, *self.state, bottom=True)
 
 
 def _rects(area):
@@ -156,7 +201,14 @@ def put_ic(fp, x, y, test, area, obstacles, rmax=12.0):
                 obstacles.append(_box(fp))
                 return True
         d += 0.25
-    raise RuntimeError(f"{fp.GetReference()}: no room near ({x}, {y})")
+    box = (x + l - ox, y + t - oy, x + r - ox, y + b - oy)
+    hits = [tuple(round(v, 2) for v in o) for o in obstacles if _overlap(box, o, GAP)]
+    if os.environ.get("SAT_DEBUG"):                   # development: everything it had to avoid
+        import json
+        json.dump(dict(box=box, area=_rects(area), obstacles=[list(o) for o in obstacles]),
+                  open(os.path.join(os.path.dirname(__file__), "out", "put_ic_fail.json"), "w"))
+    raise RuntimeError(f"{fp.GetReference()}: no room near ({x}, {y}); "
+                       f"{'blocked there by ' + str(hits) if hits else 'outside its area there'}")
 
 
 def _nearest_spot(part, num, ax, ay, area, obstacles, rmax=16.0):
@@ -189,7 +241,10 @@ def place_cluster(*args, gap=None, **kw):
 
 
 def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, default_anchor=None, tp_column=None,
-                   supply_pull=None, members=None, extra_ics=(), locked_terminals=False, tp_area=None, decaps=False):
+                   supply_pull=None, members=None, extra_ics=(), locked_terminals=False, tp_area=None, decaps=False,
+                   via_terms=None, supply_edge=None, part_areas=None, tp_free=False):
+    """supply_edge: {supply net: f(x, y) -> the nearest point of its pour}: each such pad's way to its pour is a
+    straight connection in the crossing count (it is routed, maybe on L3, but it must get there)."""
     """Place the small parts of ic_ref's sheet around it. obstacles: list of boxes (bottom side), extended in place.
     fixed_anchors: {net: (priority, (x, y))}; supply_pull: {supply net: f(x, y) -> cost of a pad there}.
     area: a rectangle or a list of them. Options for the logic groups (all off for the eFuses):
@@ -221,6 +276,9 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
     for net, (pr, pt) in (fixed_anchors or {}).items():    # a fixed point is the net's only target
         anchors[net] = (pr, pt)
         terminals[net] = [pt]
+    for net, pts in (via_terms or {}).items():            # escape vias from the top: terminals like pins
+        if net not in (fixed_anchors or {}):
+            terminals.setdefault(net, []).extend(pts)
     if members is None:
         members = [r for r, f in FP.items() if f.GetSheetname() == sheet and r != ic_ref and not f.IsLocked()
                    and (_small(f) or r.startswith("TP"))]
@@ -301,7 +359,9 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
             y = box[3] + GAP + (b - t) / 2 + (1e-6 if tp_area else 0.0)    # (slack: exact fits)
 
     # greedy: pin-anchored parts by pin priority, each followed by what hangs on it
-    parts = {r: Part(FP[r]) for r in members if not r.startswith("TP")}
+    parts = {r: Part(FP[r], label=(0.75 * len(FP[r].GetValue()) + 0.8) if r.startswith("TP") else 0.0)
+             for r in members if tp_free or not r.startswith("TP")}
+    aof = lambda r: (part_areas or {}).get(r, area)       # where each part may go
     rest = list(parts)
     prio = {}
     unfit = []                                            # no legal spot in the greedy pass
@@ -333,11 +393,24 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
         pr, _, _, r, num, (ax, ay) = best
         rest.remove(r)
         pt = parts[r]
-        st = _nearest_spot(pt, num, ax, ay, area, obstacles, rmax=30.0)
-        if st is None and not _inside((ax, ay, ax, ay), area):   # anchor outside the area: from its nearest point
-            ax, ay = min(((min(max(ax, a[0]), a[2]), min(max(ay, a[1]), a[3])) for a in _rects(area)),
+        st = _nearest_spot(pt, num, ax, ay, aof(r), obstacles, rmax=30.0)
+        if st is None and not _inside((ax, ay, ax, ay), aof(r)):   # anchor outside the area: from its nearest point
+            ax, ay = min(((min(max(ax, a[0]), a[2]), min(max(ay, a[1]), a[3])) for a in _rects(aof(r))),
                          key=lambda q: math.dist(q, (ax, ay)))
-            st = _nearest_spot(pt, num, ax, ay, area, obstacles, rmax=30.0)
+            st = _nearest_spot(pt, num, ax, ay, aof(r), obstacles, rmax=30.0)
+        if st is None and os.environ.get("SAT_DEBUG"):
+            print(f"   greedy: no room for {r} in {aof(r)}; shape box {pt.shapes[0][1]}, label {pt.label}")
+            a0 = _rects(aof(r))[0]
+            ok = 0
+            for xx in range(int(a0[0] * 2), int(a0[2] * 2)):
+                for yy in range(int(a0[1] * 2), int(a0[3] * 2)):
+                    st_ = (xx / 2, yy / 2, 0)
+                    if _legal(pt.box(st_), aof(r), obstacles):
+                        ok += 1
+            print(f"      legal spots on a 0.5 mm scan: {ok}")
+            cxm, cym = (a0[0] + a0[2]) / 2, (a0[1] + a0[3]) / 2
+            probe = (cxm - 1, cym - 1, cxm + 1, cym + 1)
+            print("      over the middle:", [tuple(round(v, 1) for v in o) for o in obstacles if _overlap(probe, o, GAP)][:8])
         if st is None:                                    # no room yet: on its anchor, the annealing makes room
             dx, dy = pt.pad_offset(num, 0)
             pt.state = (ax - dx, ay - dy, 0)
@@ -365,32 +438,124 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
         for _, n, _, _ in parts[r].shapes[0][0]:
             if n not in SUPPLY and r not in net_parts.setdefault(n, []):
                 net_parts[n].append(r)
+    # a capacitor between an IC pin's net and the supply on another IC pin (the bootstrap cap: BST and SRC = the
+    # output): its supply pad is tied to that pin, so its orientation shows in the crossing count
+    pin_on = {}
+    for p in all_pins:
+        if p.GetNetname() in SUPPLY and p.GetNetname() != "GND":
+            pin_on.setdefault(p.GetNetname(), []).append(_pad_xy(p))
+    sup_keys = {}                                         # ("SUP", ref, pad) -> (net, f)
+    for r in sorted(parts):
+        for num, n, _, _ in parts[r].shapes[0][0]:
+            if n in (supply_edge or {}):
+                key = ("SUP", r, num)
+                sup_keys[key] = (n, supply_edge[n])
+                net_parts[key] = [r]
     pin_pts = {}
     for p in all_pins:
         pin_pts.setdefault(p.GetNetname(), []).append(_pad_xy(p))
     pull = supply_pull or {}
 
     def mst(pts):
+        """Spanning tree length and its edges."""
         if len(pts) < 2:
-            return 0.0
+            return 0.0, []
         dist = [math.hypot(pts[0][0] - x, pts[0][1] - y) for x, y in pts]
+        frm = [0] * len(pts)
         used = [False] * len(pts)
         used[0] = True
-        total = 0.0
+        total, edges = 0.0, []
         for _ in range(len(pts) - 1):
             j = min((k for k in range(len(pts)) if not used[k]), key=lambda k: dist[k])
             total += dist[j]
+            edges.append((pts[frm[j]][0], pts[frm[j]][1], pts[j][0], pts[j][1]))
             used[j] = True
             xj, yj = pts[j]
             for k in range(len(pts)):
                 if not used[k]:
-                    dist[k] = min(dist[k], math.hypot(xj - pts[k][0], yj - pts[k][1]))
-        return total
+                    d = math.hypot(xj - pts[k][0], yj - pts[k][1])
+                    if d < dist[k]:
+                        dist[k], frm[k] = d, j
+        return total, edges
+
+    # for the crossing count every IC pin on a net is a terminal, fixed points included (a fixed point replaces
+    # the pin as the cost target, but the route still leaves from the pin)
+    # fine-pitch pins can only leave along their pad: for crossings a pin is its outward escape point, and the
+    # stub from the pin to it is part of the net (another net's connection may not cut through it)
+    def _escape(p):
+        bb = p.GetBoundingBox()
+        l, t = TOMM(bb.GetLeft()) - X0, TOMM(bb.GetTop()) - Y0
+        r, b = TOMM(bb.GetRight()) - X0, TOMM(bb.GetBottom()) - Y0
+        if min(r - l, b - t) > 0.36:
+            return None
+        cx, cy = _pad_xy(p)
+        fx, fy = _pos(p.GetParentFootprint())
+        if (b - t) >= (r - l):
+            return cx, (b + 0.6 if cy >= fy else t - 0.6)
+        return (r + 0.6 if cx >= fx else l - 0.6), cy
+    esc_pt = {}
+    for p in all_pins:
+        e = _escape(p)
+        if e:
+            esc_pt[_pad_xy(p)] = e
+    pin_nets = {q.GetNetname() for q in all_pins}
+    for r in sorted(parts):                               # (the bootstrap cap's tie, see pin_on above)
+        pads_r = parts[r].shapes[0][0]
+        if r.startswith("C") and any(n not in SUPPLY and n in pin_nets for _, n, _, _ in pads_r):
+            for num, n, _, _ in pads_r:
+                if n in pin_on:
+                    pin_xy = pin_on[n][0]
+                    key = ("PIN", r, num)
+                    sup_keys[key] = (n, lambda x, y, q=esc_pt.get(pin_xy, pin_xy): q)
+                    net_parts[key] = [r]
+    stub_edges = {}
+    for p in all_pins:
+        c = _pad_xy(p)
+        if c in esc_pt and p.GetNetname() not in SUPPLY:
+            stub_edges.setdefault(p.GetNetname(), []).append((c[0], c[1], esc_pt[c][0], esc_pt[c][1]))
+    xterms = {n: [esc_pt.get(q, q) for q in v] for n, v in terminals.items()}
+    for p in all_pins:
+        if (fixed_anchors or {}).get(p.GetNetname()):
+            c = _pad_xy(p)
+            xterms.setdefault(p.GetNetname(), []).append(esc_pt.get(c, c))
+    for n, pts in tp_pts.items():                          # the placed test pads are routed to as well
+        if n in net_parts:
+            xterms.setdefault(n, list(terminals.get(n, []))).extend(pts)
+
+    def net_eval(n, st):
+        """(cost, edges) of a net: its spanning-tree length (weighted) and the straight connections that the
+        crossing count uses."""
+        if n in sup_keys:                                 # a supply pad's way to its pour: crossings only
+            _, r_, num_ = n
+            net_, f_ = sup_keys[n]
+            if r_ not in parts:
+                return 0.0, []
+            x, y = next((x, y) for k, nn, x, y in parts[r_].pads(st[r_]) if k == num_)
+            ex, ey = f_(x, y)
+            return 0.0, ([(x, y, ex, ey)] if math.hypot(ex - x, ey - y) > 0.3 else [])
+        own = [(x, y) for r in net_parts[n] if r in parts for _, nn, x, y in parts[r].pads(st[r]) if nn == n]
+        c, e = mst(list(terminals.get(n, [])) + own)
+        if xterms.get(n) != terminals.get(n):
+            e = mst(list(xterms.get(n, [])) + own)[1]
+        return weight.get(n, 1.0) * c, e + stub_edges.get(n, [])
 
     def net_cost(n, st):
-        pts = list(terminals.get(n, [])) + [(x, y) for r in net_parts[n] if r in parts
-                                            for _, nn, x, y in parts[r].pads(st[r]) if nn == n]
-        return weight.get(n, 1.0) * mst(pts)
+        return net_eval(n, st)[0]
+
+    def _x(a, b):
+        """Do two straight connections cross (properly)?"""
+        if max(a[0], a[2]) < min(b[0], b[2]) or max(b[0], b[2]) < min(a[0], a[2]) or \
+                max(a[1], a[3]) < min(b[1], b[3]) or max(b[1], b[3]) < min(a[1], a[3]):
+            return False
+        o = lambda px, py, qx, qy, rx, ry: (qx - px) * (ry - py) - (qy - py) * (rx - px)
+        d1 = o(b[0], b[1], b[2], b[3], a[0], a[1])
+        d2 = o(b[0], b[1], b[2], b[3], a[2], a[3])
+        d3 = o(a[0], a[1], a[2], a[3], b[0], b[1])
+        d4 = o(a[0], a[1], a[2], a[3], b[2], b[3])
+        return d1 * d2 < 0 and d3 * d4 < 0
+
+    def crossings(E1, E2):
+        return sum(1 for a in E1 for b in E2 if _x(a, b))
 
     cx, cy = _pos(ic)
 
@@ -413,7 +578,8 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
     for r in parts:
         if r not in unfit:
             obstacles.remove(parts[r].box())
-    wx0, wy0, wx1, wy1 = _bbox(area)
+    all_areas = _rects(area) + [a for r in parts for a in _rects(aof(r))]
+    wx0, wy0, wx1, wy1 = _bbox(all_areas)
     window = (wx0 - 1, wy0 - 1, wx1 + 1, wy1 + 1)
     static = sorted(tuple(o) for o in obstacles if _overlap(o, window, 0.0))    # sorted: runs must repeat
     refs = sorted(parts)
@@ -428,7 +594,15 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
         return _inside(bx, area)
 
     def total_cost(st):
-        return sum(net_cost(n, st) for n in net_parts) + sum(part_cost(r, st[r]) for r in refs)
+        ev = {n: net_eval(n, st) for n in net_parts}
+        nn = sorted(ev, key=str)
+        x = sum(crossings(ev[a][1], ev[b][1]) for i, a in enumerate(nn) for b in nn[i + 1:])
+        return sum(c for c, _ in ev.values()) + sum(part_cost(r, st[r]) for r in refs) + CROSS * x
+
+    def crossing_total(st):
+        ev = {n: net_eval(n, st)[1] for n in net_parts}
+        nn = sorted(ev, key=str)
+        return sum(crossings(ev[a], ev[b]) for i, a in enumerate(nn) for b in nn[i + 1:])
 
     same = [(a, b) for i, a in enumerate(refs) for b in refs[i + 1:] if abs(parts[a].area - parts[b].area) < 0.05]
 
@@ -436,9 +610,12 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
         """One annealing run from the greedy placement, then legalised. Returns (cost, states, refs left out)."""
         rng = random.Random(seed)
         st = dict(greedy)
-        ncost = {n: net_cost(n, st) for n in net_parts}
+        ev0 = {n: net_eval(n, st) for n in net_parts}
+        ncost = {n: c for n, (c, e) in ev0.items()}
+        nedge = {n: e for n, (c, e) in ev0.items()}
         pcost = {r: part_cost(r, st[r]) for r in refs}
         boxes = {r: parts[r].box(st[r]) for r in refs}
+        all_nets = sorted(net_parts, key=str)
 
         def overlap_of(r, bx):
             return sum(ov(bx, o) for o in static) * 4.0 + sum(ov(bx, boxes[q]) for q in refs if q != r)
@@ -448,7 +625,7 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
         for it in range(ITERATIONS):
             f = it / ITERATIONS
             T = T0 * (T1 / T0) ** f
-            lam = 0.3 * (200.0 ** f)                      # overlap price per mm2, 0.3 -> 60
+            lam = 0.3 * (1000.0 ** f)                     # overlap price per mm2, 0.3 -> 300: ends overlap-free
             if same and rng.random() < 0.2:               # swap two same-size parts, each maybe half a turn
                 a, b = rng.choice(same)
                 ba, bb = boxes[a], boxes[b]
@@ -479,12 +656,22 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
                     s = (tx - dx + rng.gauss(0, 1.0), ty - dy + rng.gauss(0, 1.0), deg)
                 moved = {r: s}
             nb = {q: parts[q].box(s) for q, s in moved.items()}
-            if not all(inside(bx) for bx in nb.values()):
+            if not all(_inside(bx, aof(q)) for q, bx in nb.items()):
                 continue
             trial = dict(st)
             trial.update(moved)
-            nets = sorted({n for q in moved for _, n, _, _ in parts[q].shapes[0][0] if n in net_parts})
-            dn = {n: net_cost(n, trial) for n in nets}
+            nets = sorted({n for q in moved for _, n, _, _ in parts[q].shapes[0][0] if n in net_parts}
+                          | {k for k in sup_keys if k[1] in moved}, key=str)
+            evn = {n: net_eval(n, trial) for n in nets}
+            dn = {n: c for n, (c, e) in evn.items()}
+            de = {n: e for n, (c, e) in evn.items()}
+            others = [m for m in all_nets if m not in evn]
+            x_old = sum(crossings(nedge[n], nedge[m]) for n in nets for m in others)
+            x_new = sum(crossings(de[n], nedge[m]) for n in nets for m in others)
+            for i_, a_ in enumerate(nets):
+                for b_ in nets[i_ + 1:]:
+                    x_old += crossings(nedge[a_], nedge[b_])
+                    x_new += crossings(de[a_], de[b_])
             dp = {q: part_cost(q, trial[q]) for q in moved}
             old_o = sum(over[q] for q in moved)           # overlap change, each pair counted once
             saved = {q: boxes[q] for q in moved}
@@ -496,10 +683,11 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
                 old_o -= ov(saved[a], saved[b])
                 new_sum -= ov(nb[a], nb[b])
             delta = (sum(dn[n] - ncost[n] for n in nets) + sum(dp[q] - pcost[q] for q in moved)
-                     + lam * (new_sum - old_o))
+                     + lam * (new_sum - old_o) + CROSS * (x_new - x_old))
             if delta < 0 or rng.random() < math.exp(-delta / T):
                 st = trial
                 ncost.update(dn)
+                nedge.update(de)
                 pcost.update(dp)
                 for q in moved:                           # the others' overlap totals change with them
                     for o in refs:
@@ -513,23 +701,26 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
         for r in sorted(refs, key=lambda r: prio[r]):
             pt = parts[r]
             bx = pt.box(st[r])
-            if inside(bx) and not any(_overlap(bx, o, GAP) for o in placed_boxes):
+            if _inside(bx, aof(r)) and not any(_overlap(bx, o, GAP) for o in placed_boxes):
                 placed_boxes.append(bx)
                 continue
             num, _, px, py = next(((k, n, x, y) for k, n, x, y in pt.pads(st[r]) if n not in SUPPLY),
                                   pt.pads(st[r])[0])
-            s = _nearest_spot(pt, num, px, py, area, placed_boxes, rmax=30.0 if locked_terminals else 16.0)
+            s = _nearest_spot(pt, num, px, py, aof(r), placed_boxes, rmax=30.0)
             if s is None:
                 left.append(r)
                 st[r] = greedy[r]
                 continue
             st[r] = s
             placed_boxes.append(pt.box(s))
+        if os.environ.get("SAT_DEBUG") and left:
+            print(f"   run {seed}: no legal spot for {', '.join(left)}")
         return total_cost(st) + 1000.0 * len(left), st, left
 
     t_start = time.time()
     start = total_cost(greedy)
-    runs = [anneal(seed) for seed in range(1, RUNS + 1)]
+    base = 1 + 10 * VARIANT.get(ic_ref, int(os.environ.get("SAT_VARIANT", 0)))
+    runs = [anneal(seed) for seed in range(base, base + RUNS)]
     c0, st, left = min(runs, key=lambda t: t[0])
     if not left and not unfit and c0 > start:            # annealing made it worse: keep the greedy result
         c0, st = start, dict(greedy)
@@ -541,12 +732,21 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
     for r, pt in parts.items():
         pt.state = st[r]
         obstacles.append(pt.box())
-    print(f"  {ic_ref}: cost {start:.0f} -> {c0:.0f}, runs {' '.join(f'{c:.0f}' for c, _, _ in runs)} "
-          f"({time.time() - t_start:.0f} s)")
+    print(f"  {ic_ref}: cost {start:.0f} -> {c0:.0f}, runs {' '.join(f'{c:.0f}' for c, _, _ in runs)}, "
+          f"{crossing_total(st)} crossings ({time.time() - t_start:.0f} s)")
     for r, pt in parts.items():
         pt.apply()
         pt.fp.SetLocked(True)
         done.append(r)
+        if pt.label:                                       # a placed test pad: its name where the state says
+            f = pt.fp
+            l, t, rr, b = _box(f)
+            v = f.GetField(pcbnew.FIELD_T_VALUE)
+            v.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_CENTER)
+            px, py = _pad_xy(next(iter(f.Pads())))
+            w = (pt.label - 0.8) / 2
+            at = {0: (rr + 0.3 + w, py), 180: (l - 0.3 - w, py), 90: (px, t - 0.75), 270: (px, b + 0.75)}[pt.state[2]]
+            v.SetPosition(pcbnew.VECTOR2I(MM(X0 + at[0]), MM(Y0 + at[1])))
     return done, missed
 
 
@@ -614,6 +814,72 @@ def replicate(FP, src_ic, dst_ic, dx, dy, area, obstacles):
     return [dst_ic] + [d for _, d in pairs]
 
 
+def _rail_regions(FP, u, r, g, sheet):
+    """Where each satellite of a rail eFuse may go, by its role (found by net). The plan, so that everything routes
+    on the bottom layer alone (no via fits under the FET tabs, where the IC sits):
+      bootstrap cap above pins 12-13; the pre-charge gate's RC at the gate's via, above the source-via field
+      (pin 11 runs left under the cap); the CS+ filter above pins 17-19, under the Kelvin vias; the VS filter right
+      of the IC, below the Kelvin pair (its VIN end drops to L3); PD / PU leave under the body to the bottom-left,
+      where R48 / R49 sit level with the main gate's via; the bottom row's parts below the fan-out band (the
+      crossing count keeps them in pin order); the LED resistor at the LED's vias; the dividers at their ends
+      (input sense in the VIN area, output sense below the switch); each test pad with its net."""
+    ux, uy = _pos(u)
+    pn = {p.GetNumber(): p.GetNetname() for p in u.Pads() if p.GetNumber()}
+    ytop, ybot = uy - 3.275 - FANOUT, uy + 3.275 + FANOUT
+    xl, xr = r["xl"], r["xr"]
+    reg = {"bst": [(ux - 6.6, 20.6, ux + 0.3, ytop)],
+           "pre": [(xl + 0.2, 17.9, xl + 8.2, 22.4)],
+           "cs": [(ux + 0.3, 20.0, ux + 4.6, ytop)],
+           "vs": [(ux + 2.9, ytop + 0.3, xr - 0.2, uy + 9.0)],
+           "gd": [(g["out_r"] + 0.6, uy + 2.9, ux + 0.5, uy + 13.0)],
+           "bottom_l": [(ux - 5.5, ybot, ux - 0.4, 60.0)],          # pins 10, 9, 8: temperature, timer, IWRN
+           "bottom_m": [(ux - 2.6, ybot, ux + 3.6, 60.0)],          # pins 7, 5, 4: IMON, FLT (+ test pads)
+           "bottom_r": [(ux + 1.0, ybot, xr - 0.2, 60.0)],          # pins 3, 2, 1: INP, INPG, EN
+           "led": [(xr - 4.2, power_rails.LED_Y + 1.4, xr - 0.2, 41.0)],
+           "vsns_in": [(xl + 6.6, 12.0, xr - 0.2, 21.3)],
+           "vsns_out": [(xl + 4.0, 56.5, xr - 0.2, 71.5)]}
+    led_a = next(p.GetNetname() for p in FP[r["led"]].Pads() if p.GetNetname() != "GND")
+    main_g = next(p.GetNetname() for p in FP[r["fets"][1]].Pads() if p.GetNumber() == "1")
+    kelvin = next(p.GetNetname() for p in FP[r["shunt"]].Pads() if p.GetNumber() == "2")
+    nets_of = lambda f: {p.GetNetname() for p in f.Pads()} - SUPPLY
+    rc = set()
+    for f in FP.values():                                  # the pre-charge gate's RC node: behind pin 11's resistor
+        if f.GetSheetname() == sheet and pn["11"] in nets_of(f) and f.GetReference() != u.GetReference():
+            rc |= nets_of(f) - {pn["11"]}
+    out = {}
+    for ref, f in FP.items():
+        if f.GetSheetname() != sheet or f.IsLocked() or f.GetReference() == u.GetReference():
+            continue
+        ns = nets_of(f)
+        allnets = {p.GetNetname() for p in f.Pads()}
+        if pn["12"] in ns:
+            role = "bst"
+        elif pn["11"] in ns or ns & rc:
+            role = "pre"
+        elif pn["18"] in ns or kelvin in ns:
+            role = "cs"
+        elif pn["20"] in ns:
+            role = "vs"
+        elif ns & {pn["14"], pn["15"], main_g}:
+            role = "gd"
+        elif led_a in ns:
+            role = "led"
+        elif any(n.startswith("VSNS_IN") for n in ns):
+            role = "vsns_in"
+        elif any(n.startswith("VSNS_OUT") for n in ns) or (ref.startswith("TP") and r["out"] in allnets):
+            role = "vsns_out"
+        else:                                              # the bottom row, by the pin it serves
+            pins_of = {k for k, n in pn.items() if n in ns}
+            if pins_of & {"10", "9", "8"}:
+                role = "bottom_l"
+            elif pins_of & {"7", "5", "4"}:
+                role = "bottom_m"
+            else:
+                role = "bottom_r"
+        out[ref] = reg[role]
+    return out
+
+
 def efuse(FP, key, obstacles, like=None):
     """TPS48111 of one rail block (power_rails.RAILS[key]) and its satellites, on the bottom under the switch.
     The IC sits right of the FET source-via field with its gate-drive pins (G, BST, SRC, PD, PU) in the top row on
@@ -640,17 +906,33 @@ def efuse(FP, key, obstacles, like=None):
              lambda p: abs(p["11"][1] - p["20"][1]) < 0.05 and p["11"][0] < p["20"][0] and p["11"][1] < p["1"][1])
     u.SetLocked(True)
     obstacles.append(_box(u))
+    obstacles.extend(fanout_keep(u))
+    if key in HAND:                               # the hand-designed cluster (efuse_hand.py)
+        import efuse_hand
+        done, problems = efuse_hand.place(FP, u, r, obstacles)
+        print(f"  {u.GetReference()}: hand template, {len(done)} parts" + "".join(f"\n    {p}" for p in problems))
+        return [u.GetReference()] + done, []
     pnet = lambda fp, num: next(p.GetNetname() for p in fp.Pads() if p.GetNumber() == num)
     led_a = next(p.GetNetname() for p in FP[r["led"]].Pads() if p.GetNetname() != "GND")
     led_y = [y for x, y in power_rails._escapes(r)[4:]]
     fixed = {                                     # net: (priority, point); priorities count in TPS_PINS
         pnet(FP[r["fets"][1]], "1"): (-1, (g["fet_cx"] - 10.85, main - 2.54)),  # main gate resistor at its via
         led_a: (-1, (g["side_x"] + 1.7, max(led_y))),                           # LED resistor at the anode via
-        pnet(u, "10"): (-1, (g["fet_cx"] + 3.4, main + 3.0)),  # temperature transistor under the tab's corner
-    }
+        pnet(u, "10"): (-1, (g["fet_cx"] + 0.4, main + 3.0)),  # temperature transistor under the tab, left:
+    }                                                                  # pin 10 is the bottom row's leftmost
+    part_areas = _rail_regions(FP, u, r, g, u.GetSheetname())
+    shunt_net = lambda num: pnet(FP[r["shunt"]], num)
+    vias = {pnet(u, "11"): [(g["fet_cx"] - 10.85, pre - 2.54)],                  # pre-charge gate via
+            shunt_net("2"): [(g["shunt_x"] + 2.7, power_rails.Y_SHUNT - 2.2)],   # Kelvin pair
+            shunt_net("3"): [(g["shunt_x"] + 2.7, power_rails.Y_SHUNT + 2.7)]}
     done, missed = place_cluster(FP, u.GetReference(), area, obstacles, TPS_PINS, fixed_anchors=fixed,
-                                 default_anchor=(g["fet_cx"], 60.0), tp_column=(r["xl"] + 5.6, 49.0),
-                                 supply_pull={r["vin"]: lambda x, y: 0.5 * max(0.0, y - power_rails.VIN_BOT)})
+                                 default_anchor=(g["fet_cx"], 60.0), via_terms=vias, part_areas=part_areas,
+                                 tp_free=True,
+                                 supply_pull={r["vin"]: lambda x, y: 0.5 * max(0.0, y - power_rails.VIN_BOT)},
+                                 supply_edge={r["vin"]: lambda x, y: (x, min(y, power_rails.VIN_BOT - 0.5)),
+                                              r["out"]: lambda x, y: min(((min(x, g["out_r"]), y),
+                                                                          (x, max(y, power_rails.WIDE_TOP + 0.5))),
+                                                                         key=lambda q: math.dist(q, (x, y)))})
     return [u.GetReference()] + done, missed
 
 
@@ -682,6 +964,7 @@ def efuse42(FP, key, obstacles, like=None):
     place_ic(u, fet_cx + 3.4, pre + 2.9, EFUSE_TEST)
     u.SetLocked(True)
     obstacles.append(_box(u))
+    obstacles.extend(fanout_keep(u))
     pnet = lambda fp, num: next(p.GetNetname() for p in fp.Pads() if p.GetNumber() == num)
     anode = next(p for p in FP[blk["led"]].Pads() if p.GetNetname() != "GND")
     ax, ay = _pad_xy(anode)
@@ -692,7 +975,11 @@ def efuse42(FP, key, obstacles, like=None):
         pnet(u, "10"): (-1, (fet_cx + 3.4, main1 + 3.0)),  # temperature transistor under the first main FET's tab
     }
     bar = power42.BAR[3]
-    done, missed = place_cluster(FP, u.GetReference(), area, obstacles, TPS_PINS, fixed_anchors=fixed,
+    shunt_net = lambda num: pnet(FP[blk["shunt"]], num)
+    vias = {pnet(u, "11"): [(fet_cx - 10.85, pre - 2.54)],
+            shunt_net("2"): [(power42.SHUNT_X + dx + 2.7, 34.0)],
+            shunt_net("3"): [(power42.SHUNT_X + dx + 2.7, 38.9)]}
+    done, missed = place_cluster(FP, u.GetReference(), area, obstacles, TPS_PINS, fixed_anchors=fixed, via_terms=vias,
                                  default_anchor=(fet_cx + 4.0, 68.0), tp_column=(blk["drn_l"] + 1.8, 61.5),
                                  supply_pull={"BUS42": lambda x, y: 0.5 * max(0.0, y - bar)})
     return [u.GetReference()] + done, missed

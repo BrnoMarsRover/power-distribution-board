@@ -285,7 +285,10 @@ def copper(b):
             out_pts += [(col_r, WIDE_TOP)]
         zone(out, F, out_pts + [(col_r, WIDE_BOT), (g["strip_r"], WIDE_BOT), (g["strip_r"], y_end), (xl, y_end)],
              40, f"{key} OUT", radius=OUT_RADIUS)
-        zone(out, IN2, rect(xl, OUT_TOP, col_r, WIDE_BOT), 40, f"{key} OUT (L3)", clear=0.3, radius=OUT_RADIUS)
+        # L3 copy only under the OUT strip, where the source vias are (decided 2026-11-20): beside it, under the DRN
+        # area and the wide OUT area, it carried little current; there L3 is +3V3 fill that signals may cut
+        zone(out, IN2, rect(xl, OUT_TOP, g["out_r"] + 0.6, WIDE_TOP + 1.2), 40, f"{key} OUT (L3)", clear=0.3,
+             radius=OUT_RADIUS)
         # each output: PTC output pad -> connector + pin, one patch per row
         for j, f, rail, other, plus, minus in rows:
             p = _pad(FP[f], other).GetBoundingBox()
@@ -321,11 +324,4 @@ def copper(b):
                 for vx in (xl + 1.1, xl + 2.9, xl + 4.7, xl + 6.5):
                     if clear_of_pads(vx, vy, out):
                         via(out, vx, vy)
-        # stitching down the left of the full-width OUT area
-        y = WIDE_TOP + 1.7
-        while y < WIDE_BOT - 1.0:
-            for vx in (xl + 0.9, xl + 2.7):
-                if clear_of_pads(vx, y, out):
-                    via(out, vx, y)
-            y += 4.0
     return zones, vias, tracks

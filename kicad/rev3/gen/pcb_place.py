@@ -11,6 +11,7 @@ Columns, left to right: 42 V DRIVE | 42 V CONVERTERS | 24 V | 12 V | 5 V | 54 V 
 Under the short XT90 columns: brake-resistor output, aux supply and the control connectors.
 Power parts on top; control and logic on the bottom, under their own power stage. All connectors on top.
 """
+import os
 import sys
 from pathlib import Path
 
@@ -437,17 +438,18 @@ for ref in power_aux.place(FP):              # the always-on aux supply beside t
 placed[False] += power_aux.KEEP_TOP
 placed[True] += power_aux.KEEP_BOTTOM
 # controllers and their small parts by template (satellites.py), before the packer; what finds no spot is packed
-for key in ("24", "12", "5"):                # 12 and 5 V copy the 24 V cluster where it fits
+ONLY = os.environ.get("PLACE_ONLY")          # development: only this rail's template (the packer does the rest)
+for key in (ONLY,) if ONLY else ("24", "12", "5"):   # 12 and 5 V copy the 24 V cluster where it fits
     refs, missed = satellites.efuse(FP, key, placed[True], like=None if key == "24" else "24")
     fixed.update(refs)
     print(f"{key} V eFuse template: {len(refs)} placed" + (f", no spot: {' '.join(missed)}" if missed else ""))
-for key in ("42D", "42C"):                   # 42C copies 42D where the parts match
+for key in () if ONLY else ("42D", "42C"):   # 42C copies 42D where the parts match
     refs, missed = satellites.efuse42(FP, key, placed[True], like=None if key == "42D" else "42D")
     fixed.update(refs)
     print(f"{key} eFuse template: {len(refs)} placed" + (f", no spot: {' '.join(missed)}" if missed else ""))
 for ref in fixed:                           # placed parts are terminals for the logic groups: lock them all
     FP[ref].SetLocked(True)
-refs, _ = logic_place.place(FP, placed[True])
+refs, _ = ([], []) if ONLY else logic_place.place(FP, placed[True])
 fixed.update(refs)
 if "--dump-free" in sys.argv:                # bottom obstacles after the templates, for floorplanning
     import json

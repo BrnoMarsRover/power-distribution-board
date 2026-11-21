@@ -69,3 +69,10 @@
 (rule "Power: tracks >= 0.5 mm"
   (constraint track_width (min 0.5mm))
   (condition "A.Type == 'Track' && (A.hasNetclass('HV_Bus') || A.hasNetclass('HV_Power') || A.hasNetclass('Power'))"))
+
+# ...except where a power net meets a fine-pitch IC pin (the TPS48111's SRC pin, 0.3 mm at 0.5 mm pitch): the
+# track leaves the pin at its width and widens once clear of the row, inside the IC's "Pin escape" rule area
+# (route_plan.py: the pin rows plus 1.2 mm, the router's neck). Later rules win.
+(rule "Power: fine-pitch pin escapes"
+  (constraint track_width (min 0.25mm))
+  (condition "A.Type == 'Track' && (A.hasNetclass('HV_Bus') || A.hasNetclass('HV_Power') || A.hasNetclass('Power')) && A.intersectsArea('Pin escape*')"))

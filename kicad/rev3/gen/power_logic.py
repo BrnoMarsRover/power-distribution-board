@@ -49,7 +49,7 @@ def copper(b):
                      or any(n.startswith(f"/{v} V rail eFuse") for v in ("24", "12", "5")))
     l3_other, pours = [], []
     for z in b.Zones():
-        if z.GetNetname() in (NET, "GND"):
+        if z.GetNetname() in (NET, "GND") or z.GetIsRuleArea():
             continue
         o = z.Outline()
         o.BuildBBoxCaches()
