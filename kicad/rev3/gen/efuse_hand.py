@@ -111,6 +111,105 @@ RAIL_SLOTS = {"5": {
 }}
 
 
+# ---- 42 V blocks (power42.py): the IC sits on the bottom under the BUS42 bar, so the VS, ISCP and EN resistors
+# take BUS42 through vias right beside them; nothing else can have a via anywhere in the block (its copper is 42 V)
+IC42_DX, IC42_Y = 2.2, 33.0                  # IC centre: right of the FET centre line, in the middle of the bar
+SLOTS42 = {   # relative to the IC (42D: (15.0, 33.0)); 42C is the same block shifted 25 mm
+    # gate drive: G, SRC, PD and PU leave under the body to the left; BST and SRC also go up to the bootstrap caps,
+    # upright side by side above the bar, left of the input electrolytics' holes
+    "bst_cap": (-5.0, -13.8, 90),           # BST pad below, SRC on top
+    "bst_cap2": (-9.0, -13.8, 90),
+    "pre_r": (-13.0, 1.5, 90),              # gate pad below, straight above the pre-charge gate's via
+    "pre_c": (-9.1, 0.4, 0),                # RC pad left, GND right
+    "pu_r": (-4.4, 5.5, 90),                # PU pad below, PD on top; PD then runs down the left edge
+    "gate_tp": (-3.85, 11.5, 90),
+    "gate_r": (-4.6, 18.0, -90),            # PD pad on top, the first main gate below (its via level)
+    "gate_r2": (-4.6, 30.0, -90),           # the second main gate
+    # sense: the CS pair goes up and right above everything and down the block's right edge to the Kelvin vias
+    # (CS- on the outside); ISCP and VS turn down right of the IC to their BUS42-fed resistors (vias into the bar)
+    "iscp_c": (4.2, -0.6, -90),             # at the right end of the IC: ISCP on top, CS- below
+    "cs_r": (8.9, -2.4, 90),                # Kelvin + below (to its via), CS+ on top
+    "iscp_r": (6.4, -2.8, -90),             # ISCP on top, BUS42 below (CS+ passes over it)
+    "vs_r": (6.4, 1.2, -90),                # VS on top, BUS42 below
+    "vs_c1": (4.2, 3.4, -90),               # 100 nF at the pin, VS on top
+    # the bus legs (IMON, FLT, INP, INPG; route_plan.corridor42) run straight down a lane under their pins to the
+    # bus band at the block's foot: the temperature transistor, IWRN's resistor and the timer parts stack in a
+    # column on its left (TMR passes right of the transistor), the rest stays right of it.
+    # the bottom-row lines run straight down beside the bypass bridge; below it, the temperature transistor and
+    # the timer / IWRN parts stack on the left, the VS bulk cap, the EN divider and the motor-switch FET, the LED
+    # resistor, the output test pad and the output divider's top resistor on the right (GND vias in the drain
+    # copper's right column). IMON, INP / INPG and FLT only pass through: their parts sit at the far end.
+    "q_t": (-2.0, 23.6, 90),
+    "tmr_c1": (-1.4, 28.7, -90),
+    "tmr_c2": (-1.4, 34.3, -90),
+    "tmr_r": (-1.8, 39.2, -90),
+    "iwrn_r": (-0.7, 15.4, -90),            # first in the left column; temperature and TMR pass on its left
+    "vs_c2": (4.8, 24.0, -90),
+    "en_top": (7.4, 23.3, -90),             # BUS42 on top, EN below
+    "en_bot": (8.0, 27.5, -90),             # EN on top, GND below
+    "q_en": (4.6, 29.3, 90),
+    "led_r": (6.0, 34.4, -90),              # output on top, LED anode below (level with its via)
+    "out_tp": (6.15, 39.9, 180),             # clear of the bus band below; its label on its left, over the lane
+    "vout_r": (8.8, 39.3, -90),             # output on top, VSNS below: straight down into the bus band
+    # at the far end, next to the ICs their nets feed (logic_place.py: the switch-control group): the IMON
+    # resistor and cap at the ADC, the INP / INPG pull-downs at the I/O expander, the output divider's lower half
+    # at the ADC, the FLT and IMON test pads in the test-pad field (decided 2026-11-21: no room in the block)
+    "imon_r": None, "imon_c": None, "imon_tp": None, "flt_tp": None, "inp_r": None, "inpg_r": None,
+    "vout_bot": None, "vout_c": None,
+}
+
+
+SLOTS42_KEY = {"42C": {
+    # 42C has no room above: the input ceramics and the battery shunt's Kelvin pair are there. Its bootstrap caps
+    # stand upright left of the IC instead (BST on top, fed over the top; the output pads below, where SRC comes
+    # in from under the body); the pre-charge gate runs left between the caps' pads, and its RC sits above the
+    # output via field, next to the gate's via
+    "bst_cap": (-6.75, -1.075, -90),
+    "bst_cap2": (-11.05, -1.075, -90),      # 1 mm apart: the pre-charge gate goes down between them
+    "pre_r": (-10.7, 6.6, -90),             # upright beside the gate's via: gate pad on top, RC below
+    "pre_c": (-6.65, 7.6, -90),              # RC pad on top, GND below, clear of the field's top via row
+    "pu_r": (-4.05, 5.85, 90),              # 0.35 mm right of and lower than 42D's: PD runs down between it and
+                                            # the RC cap
+    "gate_tp": (-3.2, 11.5, 90),               # its label's room clear of the RC cap
+    # above 42C's band, where 42D's EN switch sits (42C has none): the output test pad and the output divider,
+    # whose VSNS pad goes straight down into the band, its output pad up to a via through the drain copper
+    "out_tp": (4.0, 30.0, 90),
+    "vout_r": (3.2, 34.4, -90),
+}}
+
+
+def slots42(key):
+    """The 42 V template for one block: SLOTS42 with that block's changes."""
+    return dict(SLOTS42, **SLOTS42_KEY.get(key, {}))
+
+
+def keep_bottom42():
+    """The 42 V blocks, reserved on the bottom like the rails (keep_bottom): from the bar band down to the end of
+    the output via fields, across the block (42D with the channel on its right, where the BUS42 feed for the parts
+    below the bar runs), and above the bar where 42D's bootstrap caps stand, with their way down to the IC."""
+    import power42
+    out = []
+    for key, blk in sorted(power42.BLOCKS.items()):
+        right = {"42D": 25.8, "42C": 50.8}[key]       # 42D with its channel up to 42C; 42C up to the 24 V block
+        out.append((blk["out_l"], 28.5, right, 76.4))    # down to the XT90s: the bus band
+        s, (ix, iy) = slots42(key), ic42(key)
+        up = [s[k] for k in ("bst_cap", "bst_cap2") if s.get(k) and s[k][1] < -5]
+        if up:
+            out.append((ix + min(d[0] for d in up) - 2.0, iy + min(d[1] for d in up) - 2.8, ix + 1.0, 28.5))
+    return out
+
+
+def block42(key):
+    """A 42 V block (power42.BLOCKS) described like a rail block for roles(): its input is the BUS42 bar."""
+    import power42
+    return dict(power42.BLOCKS[key], vin="BUS42", out={"42D": "OUT42D", "42C": "OUT42C"}[key])
+
+
+def ic42(key):
+    import power42
+    return power42.FET_CX + power42.BLOCKS[key]["dx"] + IC42_DX, IC42_Y
+
+
 def slots(key):
     """The template for one rail: SLOTS with that rail's changes."""
     return dict(SLOTS, **RAIL_SLOTS.get(key, {}))
@@ -125,6 +224,7 @@ def roles(FP, u, r):
     sheet = u.GetSheetname()
     pn = {p.GetNumber(): p.GetNetname() for p in u.Pads() if p.GetNumber()}
     main_g = _net(FP[r["fets"][1]], "1")
+    main_g2 = _net(FP[r["fets"][2]], "1") if len(r["fets"]) > 2 else None   # 42 V: two main FETs
     led_a = next(p.GetNetname() for p in FP[r["led"]].Pads() if p.GetNetname() != "GND")
     vin, out = r["vin"], r["out"]
     num = lambda ref: int(ref.lstrip("ABCDEFGHIJKLMNOPQRSTUVWXYZ") or 0)
@@ -140,13 +240,19 @@ def roles(FP, u, r):
         sense_out = any(n.startswith("VSNS_OUT") for n in nets)
         role = None
         if kind == "C" and has(pn["12"]):
-            role = "bst_cap"
+            role = "bst_cap" if "bst_cap" not in found else "bst_cap2"
+        elif pn["19"] != pn["17"] and has(pn["19"]) and kind in ("R", "C"):   # ISCP of its own (42 V)
+            role = "iscp_r" if kind == "R" else "iscp_c"
         elif kind == "R" and has(pn["11"]):
             role = "pre_r"
         elif kind == "R" and has(pn["14"], pn["15"]):
             role = "pu_r"
         elif kind == "R" and has(pn["14"], main_g):
             role = "gate_r"
+        elif kind == "R" and main_g2 and has(pn["14"], main_g2):
+            role = "gate_r2"
+        elif kind == "Q" and has(pn["1"]):                                    # EN pull-down (motor switch)
+            role = "q_en"
         elif kind == "TP" and has(pn["14"]):
             role = "gate_tp"
         elif kind == "R" and has(pn["18"]):
@@ -221,6 +327,8 @@ def place(FP, u, r, obstacles, slots=SLOTS):
     for role, ref in found.items():
         if role not in slots:
             problems.append(f"{ref}: no slot for {role}")
+            continue
+        if slots[role] is None:                       # placed elsewhere on purpose (see the template)
             continue
         dx, dy, deg = slots[role]
         f = FP[ref]

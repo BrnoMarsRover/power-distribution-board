@@ -451,6 +451,8 @@ for key in () if ONLY else ("42D", "42C"):   # 42C copies 42D where the parts ma
     refs, missed = satellites.efuse42(FP, key, placed[True], like=None if key == "42D" else "42D")
     fixed.update(refs)
     print(f"{key} eFuse template: {len(refs)} placed" + (f", no spot: {' '.join(missed)}" if missed else ""))
+if not ONLY:
+    placed[True] += efuse_hand.keep_bottom42()   # and the 42 V blocks theirs
 for ref in fixed:                           # placed parts are terminals for the logic groups: lock them all
     FP[ref].SetLocked(True)
 refs, _ = ([], []) if ONLY else logic_place.place(FP, placed[True])

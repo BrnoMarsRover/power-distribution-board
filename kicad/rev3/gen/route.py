@@ -9,7 +9,8 @@ How a net is routed:
   - a cell is free when a track of this width there keeps CLEAR (+ SLACK for the grid) from every other net's
     pad, track, via and power pour on that layer. GND and +3V3 fills are not obstacles: they flow around tracks;
   - a via is legal where it keeps clear of other nets' copper on every layer and of pads, and does not pierce
-    42 / 54 V copper (its own net's pours are fine; low-voltage pours of other nets clear around it);
+    42 / 54 V copper (its own net's pours are fine; low-voltage pours of other nets clear around it). The one
+    exception: GND vias in areas a plan names (geo.hv_gnd_ok), where the 42 V pour clears around them (0.5 mm);
   - A* over (layer, cell, heading): length, a price per turn (45 deg cheap, 90 deg dear, sharper never), a price
     per via, L3 dearer than L4, optional per-cell cost fields (keep sense lines off gate drive, pull a pair
     together);
@@ -74,6 +75,15 @@ class Geometry:
                 self.pads.append(dict(net="" if npth else p.GetNetname(), layers=layers, box=(l, t, r, bt),
                                       c=_xy(p.GetPosition()), ref=f.GetReference(), num=p.GetNumber(),
                                       fc=(fx, fy), npth=npth, pad=p))
+            for g in f.GraphicalItems():    # copper shapes in a footprint (the Kelvin shunts' net ties): no net
+                if g.GetLayer() not in COPPER:
+                    continue
+                bb = g.GetBoundingBox()
+                l, t = _xy(pcbnew.VECTOR2I(bb.GetLeft(), bb.GetTop()))
+                r, bt = _xy(pcbnew.VECTOR2I(bb.GetRight(), bb.GetBottom()))
+                self.pads.append(dict(net="", layers=frozenset([g.GetLayer()]), box=(l, t, r, bt),
+                                      c=((l + r) / 2, (t + bt) / 2), ref=f.GetReference(), num="~g",
+                                      fc=(fx, fy), npth=False, pad=None))
         self.segs = []          # (net, layer, x1, y1, x2, y2, half width)
         self.vias = []          # (net, x, y, radius)
         for t in b.GetTracks():
@@ -83,6 +93,10 @@ class Geometry:
             else:
                 (x1, y1), (x2, y2) = _xy(t.GetStart()), _xy(t.GetEnd())
                 self.segs.append((t.GetNetname(), t.GetLayer(), x1, y1, x2, y2, TOMM(t.GetWidth()) / 2))
+        self.hv_gnd_ok = []     # areas where a GND via may go through 42 / 54 V copper (set by a routing plan)
+        self.via_keep = []      # areas no new via may go in (set by a routing plan: lanes it keeps for signals)
+        self.hv_ok = {}         # net -> areas where its vias may pierce 42 V drain copper too (like hv_gnd_ok)
+        self.route_keep = []    # areas no copper of the plan's nets may enter (corridors kept for later routes)
         self.zones = []         # (net, layers, priority, outline points, clearance)
         for z in b.Zones():
             o = z.Outline()
@@ -281,6 +295,9 @@ class Window:
                 (xa, ya), (xb, yb) = pts[i], pts[(i + 1) % len(pts)]
                 z |= _dist_seg(X, Y, xa, ya, xb, yb) <= r
             m[s] |= z
+        for l, t, r_, b in g.route_keep:                  # kept corridors: nothing of this plan's nets in them
+            d = w / 2 + 0.05
+            m |= (self.X >= l - d) & (self.X <= r_ + d) & (self.Y >= t - d) & (self.Y <= b + d)
         e = EDGE + w / 2
         m |= (self.X < e) | (self.X > 150 - e) | (self.Y < e) | (self.Y > 150 - e)
         return m
@@ -310,6 +327,9 @@ class Window:
             s = self._near((x, y, x, y), r)
             if s:
                 bad[s] |= np.hypot(self.X[s] - x, self.Y[s] - y) <= r
+        ok_gnd = np.zeros((self.ny, self.nx), bool)      # GND (and nets a plan names) may pierce 42 V copper in
+        for l, t, r_, b in (g.hv_gnd_ok if net == "GND" else []) + g.hv_ok.get(net, []):   # the plan's areas only
+            ok_gnd |= (self.X >= l) & (self.X <= r_) & (self.Y >= t) & (self.Y <= b)
         for n, layers, prio, pts, zc in g.zones:          # never through 42 / 54 V copper of another net
             if n == net or n in FILLS or not _hv(n):
                 continue
@@ -323,7 +343,10 @@ class Window:
             for i in range(len(pts)):
                 (xa, ya), (xb, yb) = pts[i], pts[(i + 1) % len(pts)]
                 z |= _dist_seg(X, Y, xa, ya, xb, yb) <= r
-            bad[s] |= z
+            pierce = n.endswith("/DRN") or n.startswith("OUT42")   # drain copper and the output's L3 copy only
+            bad[s] |= (z & ~ok_gnd[s]) if pierce else z
+        for l, t, r_, b in g.via_keep:
+            bad |= (self.X >= l) & (self.X <= r_) & (self.Y >= t) & (self.Y <= b)
         e = EDGE + VIA_D / 2
         bad |= (self.X < e) | (self.X > 150 - e) | (self.Y < e) | (self.Y > 150 - e)
         return ~bad
@@ -491,6 +514,7 @@ class Router:
         self.failed = []
         self.objs = {}                                    # id(seg / via tuple) -> the board item, for undo
         self.last = ([], [])                              # copper added by the last route_net (undo)
+        self.stubs = []                                   # escape stubs: (segment, (layer, x, y) of its free end)
 
     def remove(self, segs, vias):
         """Take routed copper off the board again (rip-up)."""
@@ -570,7 +594,41 @@ class Router:
             sgn = (1 if cx >= fx else -1) * (-1 if inward else 1)
             ex, ey, sw = (r if sgn > 0 else l) + sgn * length, cy, min(w, b - t)
         segs = self.track(p["net"], layer, [(cx, cy), (ex, ey)], sw)
+        self.stubs += [(sg, (layer, ex, ey)) for sg in segs]
         return dict(points=[(layer, ex, ey)], pads={(ref, num)}, segs=segs, vias=[])
+
+    def prune_stubs(self, log=print):
+        """Escape stubs whose free end nothing covers: trimmed back to the farthest point where the net's other
+        copper joins them (a route may end anywhere on a stub, or on the pad itself), or removed when nothing
+        joins them (a pin with no route here yet: its bus leg comes later). Returns the nets changed."""
+        changed, keep = [], []
+        for sg, (layer, x, y) in self.stubs:
+            if not any(s is sg for s in self.geo.segs):
+                continue
+            net, _, x1, y1, x2, y2, hw = sg
+            others = [s for s in self.geo.segs if s is not sg and s[0] == net and s[1] == layer]
+            vias = [v for v in self.geo.vias if v[0] == net]
+            if any(_pt_seg(x, y, s[2:6]) <= s[6] + 1e-4 for s in others) or \
+                    any(math.hypot(v[1] - x, v[2] - y) <= v[3] + 1e-4 for v in vias) or \
+                    any(n == net and l_ == layer and _inside_poly(np.array([x]), np.array([y]), pts)[0]
+                        for n, l_, pts in self.geo.fills):
+                keep.append((sg, (layer, x, y)))
+                continue
+            dx, dy = x2 - x1, y2 - y1
+            L2 = dx * dx + dy * dy
+            ends = [(s[2], s[3]) for s in others] + [(s[4], s[5]) for s in others] + [(v[1], v[2]) for v in vias]
+            u = max([((px - x1) * dx + (py - y1) * dy) / L2 for px, py in ends
+                     if _pt_seg(px, py, (x1, y1, x2, y2)) <= hw + 1e-4] or [0.0])
+            self.remove([sg], [])
+            changed.append(net)
+            if u * math.sqrt(L2) > 0.05:
+                ex, ey = x1 + u * dx, y1 + u * dy
+                for s2 in self.track(net, layer, [(x1, y1), (ex, ey)], 2 * hw):
+                    keep.append((s2, (layer, ex, ey)))
+        self.stubs = keep
+        if changed:
+            log(f"   escape stubs trimmed or removed (nothing at their end): {', '.join(sorted(set(changed)))}")
+        return changed
 
     def t_via(self, x, y):
         """An existing via (an escape via from the top) as a terminal."""

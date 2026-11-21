@@ -38,14 +38,16 @@ BRK_GND = (0.5, 129.5, 10.4, 141.5)  # brake FET source lead -> GND (top patch +
 
 # regions other parts must stay out of (top, bottom); pcb_place.py and pcb_optimize.py honour them
 KEEP_TOP = [(0.5, 12.4, 50.5, 100.0), (0.5, 100.0, 26.0, 141.5)]
-KEEP_BOTTOM = [(0.5, 36.8, 8.9, 74.6), (25.3, 36.8, 33.9, 74.6),          # OUT via fields under the strips
+KELVIN_P, KELVIN_M = (34.0, 27.75), (35.3, 27.75)   # the input shunt's Kelvin vias: VBAT side, BUS42 side
+KEEP_BOTTOM = [(0.5, 36.8, 8.9, 74.6), (25.3, 44.0, 33.9, 74.6),          # OUT via fields under the strips (42C:
+                                                                            # its pre-charge RC at the field's top)
                (28.0, 19.5, 44.5, 27.0),                                    # input ceramics C3..C6
                (0.5, 135.0, 4.4, 141.5)]                                    # brake FET source vias
 
 
 def _escapes():
     """Fixed positions of the escape vias (gates, Kelvin pairs, LEDs, brake gate), for reserving the bottom."""
-    pts = [(34.0, 27.9), (34.0, 31.7)]                                       # input shunt Kelvin pair
+    pts = [KELVIN_P, KELVIN_M]                                               # input shunt Kelvin pair
     pts += [(45.5, 24.3), (45.5, 25.7)]                                      # TVS ground vias
     for blk in BLOCKS.values():
         dx = blk["dx"]
@@ -231,10 +233,12 @@ def copper(b):
         track("VBAT", [(px, py), (px, py - 2.2)], 1.4, B)
     # input shunt Kelvin pair -> vias for the INA228 on the bottom
     k2, k3 = _pxy(FP["R1"], "2"), _pxy(FP["R1"], "3")
-    via(pnet("R1", "2"), 34.0, 27.9, ESC_D, ESC_DRILL)
-    track(pnet("R1", "2"), [k2, (34.0, k2[1]), (34.0, 27.9)], 0.25)
-    via(pnet("R1", "3"), 34.0, 31.7, ESC_D, ESC_DRILL)
-    track(pnet("R1", "3"), [k3, (34.0, k3[1]), (34.0, 31.7)], 0.25)
+    via(pnet("R1", "2"), KELVIN_P[0], KELVIN_P[1], ESC_D, ESC_DRILL)
+    track(pnet("R1", "2"), [k2, (KELVIN_P[0], k2[1]), KELVIN_P], 0.25)
+    # both sense vias go up, side by side, not one up and one down: the Kelvin lines then leave above the 42C
+    # block (y < 29), whose IC's left side holds its bootstrap caps and gate drive
+    via(pnet("R1", "3"), KELVIN_M[0], KELVIN_M[1], ESC_D, ESC_DRILL)
+    track(pnet("R1", "3"), [k3, (KELVIN_M[0], k3[1]), KELVIN_M], 0.25)
 
     # -------------------------------------------- the two switch blocks
     for key, blk in BLOCKS.items():
@@ -299,6 +303,8 @@ def copper(b):
                 if clear_of_pads(vx, cy + 0.1, out, gap_same=0.3):
                     via(out, vx, cy + 0.1)
             for vy in (cy + 4.2, cy + 5.9, cy + 7.6):
+                if key == "42C" and vy > 73.0:        # 42D's bus legs pass below 42C's field (route_plan.LEGS42)
+                    continue
                 for vx in (ol + 1.1, ol + 2.9, ol + 4.7, ol + 6.5):
                     if clear_of_pads(vx, vy, out):
                         via(out, vx, vy)

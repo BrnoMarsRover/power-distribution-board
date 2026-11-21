@@ -138,6 +138,12 @@ def place(FP, obstacles):
     ic("U18", 85.0, 70.0, lambda p: True, band)       # motor-kill latch
     ic("U19", 88.5, 70.0, lambda p: True, band)
     hub = _loose(FP, [r for r in sw if r not in button])
+    # the 42 V eFuses' monitoring parts (no room in their blocks, decided 2026-11-21): IMON resistor + cap and the
+    # output divider's lower half at the ADC, INP / INPG pull-downs at the expander, the FLT / IMON test pads in
+    # the test-pad field; the template (efuse_hand.SLOTS42) leaves them for this group
+    far_nets = ("IMON_42", "INP_42", "INPG_42", "FLT_42", "VSNS_OUT_42")
+    hub += _loose(FP, [r for r in _sheet(FP, "42 V") if r not in hub and not FP[r].IsLocked()
+                       and any(p.GetNetname().startswith(far_nets) for p in FP[r].Pads())])
     run("switch control", "U17", band, hub, extra_ics=("U20", "U21", "U18", "U19"), decaps=True,
         tp_area=[(55.0, 61.0, 66.0, 74.6)] + bottom_band, tp_column=(56.4, 62.6))   # MOTOR_KILL, left of U20
 

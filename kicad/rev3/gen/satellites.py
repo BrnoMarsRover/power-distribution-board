@@ -35,6 +35,7 @@ GAP = 0.55                             # between courtyards (rule 0.5)
 GATE_PINS = 4                          # the first pins of a pin order drive gates: their nets weigh more
 VARIANT = {}                           # IC ref -> annealing seed set chosen because its placement routes completely
 HAND = {"24", "12", "5"}               # rail eFuses placed by the hand template (efuse_hand.py), not by annealing
+HAND42 = {"42D", "42C"}                # the same for the 42 V blocks (efuse_hand.SLOTS42)
 ITERATIONS = int(os.environ.get("SAT_ITER", 150000))   # annealing moves per run (SAT_ITER: quick debug runs)
 RUNS = 3                               # annealing runs per cluster (different seeds), the best is kept
 COMPACT = 0.15                         # cost per mm from a part to its IC: keeps the cluster round
@@ -233,7 +234,23 @@ def _nearest_spot(part, num, ax, ay, area, obstacles, rmax=16.0):
 
 
 CACHE_DIR = Path(__file__).resolve().parent / "out" / "place_cache"
-SOURCES = ("satellites.py", "logic_place.py", "power_rails.py", "power42.py", "power54.py", "power_aux.py")
+SOURCES = ("logic_place.py", "power_rails.py", "power42.py", "power54.py", "power_aux.py")
+# this module's functions that do not place annealed clusters: editing them leaves the cache valid
+NOT_ENGINE = {"efuse", "efuse42", "replicate", "_rail_regions", "place_ic", "put_ic", "_sheet_parts", "_signature"}
+
+
+def _engine_source():
+    """The source of the placement engine in this module (functions and classes, the callers left out), and the
+    module-level settings it reads."""
+    import inspect
+    import sys
+    mod = sys.modules[__name__]
+    out = [repr(sorted(SUPPLY))]
+    for name, obj in sorted(vars(mod).items()):
+        if (inspect.isfunction(obj) or inspect.isclass(obj)) and obj.__module__ == __name__ \
+                and name not in NOT_ENGINE:
+            out.append(inspect.getsource(obj))
+    return out
 
 
 def _members(FP, ic_ref, members):
@@ -261,7 +278,10 @@ def _cache_key(FP, ic_ref, area, obstacles, pin_order, kw):
     the parts to place (footprint, value, pads and nets), the ICs' positions, the pads already placed on the
     cluster's nets (its terminals), the obstacles near its area and the engine's parameters."""
     here = Path(__file__).resolve().parent
-    src = hashlib.sha256(b"".join((here / n).read_bytes() for n in SOURCES if (here / n).exists())).hexdigest()
+    h = hashlib.sha256(b"".join((here / n).read_bytes() for n in SOURCES if (here / n).exists()))
+    for text in _engine_source():                     # this module: the placement engine only, not its callers
+        h.update(text.encode())
+    src = h.hexdigest()
     members = _members(FP, ic_ref, kw.get("members"))
     ics = [ic_ref, *kw.get("extra_ics", ())]
 
@@ -1052,6 +1072,16 @@ def efuse42(FP, key, obstacles, like=None):
     # bottom of the block, under and above the BUS42 bar too; 42C stops below the input shunt's Kelvin vias,
     # where the battery monitor (INA228) belongs
     area = (blk["drn_l"], AREA42_TOP[key], blk["drn_r"] - 0.2, 74.0)
+    if key in HAND42:                             # the hand-designed cluster (efuse_hand.py), IC in the bar
+        import efuse_hand
+        place_ic(u, *efuse_hand.ic42(key), EFUSE_TEST)
+        u.SetLocked(True)
+        obstacles.append(_box(u))
+        obstacles.extend(fanout_keep(u))
+        done, problems = efuse_hand.place(FP, u, efuse_hand.block42(key), obstacles,
+                                          slots=efuse_hand.slots42(key))
+        print(f"  {u.GetReference()}: hand template, {len(done)} parts" + "".join(f"\n    {p}" for p in problems))
+        return [u.GetReference()] + done, []
     if like:
         done = replicate(FP, tps(like).GetReference(), u.GetReference(), dx - power42.BLOCKS[like]["dx"], 0.0,
                          area, obstacles)
