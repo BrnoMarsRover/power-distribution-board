@@ -34,7 +34,7 @@ SUPPLY = {"GND", "+3V3", "+5V_LOGIC", "+5V3_AUX", "BUS42", "VBAT", "OUT42D", "OU
 GAP = 0.55                             # between courtyards (rule 0.5)
 GATE_PINS = 4                          # the first pins of a pin order drive gates: their nets weigh more
 VARIANT = {}                           # IC ref -> annealing seed set chosen because its placement routes completely
-HAND = {"24", "12"}                    # rail eFuses placed by the hand template (efuse_hand.py), not by annealing
+HAND = {"24", "12", "5"}               # rail eFuses placed by the hand template (efuse_hand.py), not by annealing
 ITERATIONS = int(os.environ.get("SAT_ITER", 150000))   # annealing moves per run (SAT_ITER: quick debug runs)
 RUNS = 3                               # annealing runs per cluster (different seeds), the best is kept
 COMPACT = 0.15                         # cost per mm from a part to its IC: keeps the cluster round
@@ -992,7 +992,7 @@ def efuse(FP, key, obstacles, like=None):
     notch = (g["col_r"] - 0.2, g["band_bot"], r["xr"] + 1.0, 72.0) if g["col_r"] < r["xr"] else None
     if notch:                                     # L-shaped block (5 V): full width only above the band
         obstacles.append(notch)
-    if like:
+    if like and key not in HAND:                  # (a hand-placed rail takes its own template, with its changes)
         dx = g["fet_cx"] - power_rails._geo(power_rails.RAILS[like])["fet_cx"]
         done = replicate(FP, tps(like).GetReference(), u.GetReference(), dx, 0.0, area, obstacles)
         if done:
@@ -1006,7 +1006,7 @@ def efuse(FP, key, obstacles, like=None):
     obstacles.extend(fanout_keep(u))
     if key in HAND:                               # the hand-designed cluster (efuse_hand.py)
         import efuse_hand
-        done, problems = efuse_hand.place(FP, u, r, obstacles)
+        done, problems = efuse_hand.place(FP, u, r, obstacles, slots=efuse_hand.slots(key))
         print(f"  {u.GetReference()}: hand template, {len(done)} parts" + "".join(f"\n    {p}" for p in problems))
         return [u.GetReference()] + done, []
     pnet = lambda fp, num: next(p.GetNetname() for p in fp.Pads() if p.GetNumber() == num)

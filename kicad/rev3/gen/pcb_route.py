@@ -3,9 +3,9 @@
 left it (the power copper's fills are the supply targets). Run with KiCad's Python, once per block, each in its
 own process (pcbnew objects come back untyped after removals within one process):
 
-    flatpak run --command=python3 org.kicad.KiCad kicad/rev3/gen/pcb_route.py 24
+    flatpak run --command=python3 org.kicad.KiCad kicad/rev3/gen/pcb_route.py 24 [board]
 
-Blocks: the rail eFuses 24, 12. Prints what could not be routed; exits 1 if anything failed.
+Blocks: the rail eFuses 24, 12, 5. Prints what could not be routed; exits 1 if anything failed.
 """
 import sys
 import time
@@ -17,8 +17,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import route  # noqa: E402
 import route_plan  # noqa: E402
 
-BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 key = sys.argv[1]
+BOARD = sys.argv[2] if len(sys.argv) > 2 else "kicad/rev3/PowerBoard_rev3.kicad_pcb"   # (another board: development)
 b = pcbnew.LoadBoard(BOARD)
 FP = {f.GetReference(): f for f in b.GetFootprints()}
 t0 = time.time()

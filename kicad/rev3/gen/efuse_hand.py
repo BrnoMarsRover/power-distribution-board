@@ -84,6 +84,38 @@ SLOTS = {
 }
 
 
+# per rail: slots that differ from SLOTS (positions are relative to the IC, which every rail block puts at the same
+# spot in its own geometry). The 5 V block is L-shaped: only the switch is full width (above y = 34.6 mm); below,
+# the block ends at its column (col_r, 5.8 mm right of the IC), and its bypass bridge stands under the main FET.
+RAIL_SLOTS = {"5": {
+    # the bottom ribbon passes left of the bypass bridge (x 121.3-125.5 from y 46.2): the temperature transistor
+    # moves left under the tab, IWRN's resistor sits right of the timer caps, IMON turns left below it to its
+    # resistor, cap and test pad, and the output-sense divider stands in a column at the left
+    "q_t": (-4.9, 13.2, 90),
+    "iwrn_r": (-1.35, 18.9, -90),
+    "imon_r": (-4.2, 23.1, 180),
+    "imon_c": (-4.2, 25.3, 180),
+    "imon_tp": (-4.2, 28.4, 270),
+    "vout_r": (-9.7, 23.4, 0),
+    "vout_bot": (-9.7, 25.6, 0),
+    "vout_c": (-9.7, 27.8, 0),
+    # INPG, INP and FLT end below the bridge, in that order from the top (their bus legs leave from there)
+    "inpg_r": (2.5, 26.0, 0),
+    "inp_r": (2.5, 28.2, 0),
+    "flt_tp": (2.2, 31.0, 270),
+    # the output test pad at the bottom left, on the wide output copper with a via of its own (above the bridge
+    # its way to the output copper cut through the ribbon); the LED resistor in the full-width band right of the
+    # VS cap, by the LED's vias
+    "out_tp": (-9.3, 30.45, 270),
+    "led_r": (6.95, -1.6, -90),
+}}
+
+
+def slots(key):
+    """The template for one rail: SLOTS with that rail's changes."""
+    return dict(SLOTS, **RAIL_SLOTS.get(key, {}))
+
+
 def _net(fp, num):
     return next(p.GetNetname() for p in fp.Pads() if p.GetNumber() == num)
 
@@ -212,8 +244,16 @@ def place(FP, u, r, obstacles, slots=SLOTS):
 
 def keep_bottom():
     """The rail blocks placed by this template, reserved on the bottom for their own parts: from above the
-    input-sense divider to below the lowest test pads, across the block. Other sheets' parts (later templates,
+    input-sense divider to below the lowest test pads, across the block (L-shaped where the block is). Other sheets' parts (later templates,
     the logic groups, the packer, the optimizer) stay out, so they cannot land in the cluster's routes."""
     import power_rails
     import satellites
-    return [(power_rails.RAILS[k]["xl"], 11.4, power_rails.RAILS[k]["xr"], 61.6) for k in sorted(satellites.HAND)]
+    out = []
+    for k in sorted(satellites.HAND):
+        r = power_rails.RAILS[k]
+        g = power_rails._geo(r)
+        if g["col_r"] < r["xr"]:                      # L-shaped block: full width only above the band
+            out += [(r["xl"], 11.4, r["xr"], g["band_bot"]), (r["xl"], g["band_bot"], g["col_r"], 61.6)]
+        else:
+            out.append((r["xl"], 11.4, r["xr"], 61.6))
+    return out

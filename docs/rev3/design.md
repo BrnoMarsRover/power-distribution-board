@@ -1163,9 +1163,9 @@ layout.
   2g. `gen/satellites.py` (run by `pcb_place.py` after the power blocks, before the packer) — template
      placement of each controller's small parts (decided 2026-11-20), so they sit around their IC
      instead of wherever the packer finds room. Done for the five TPS48111 eFuses. **Since 2026-11-21
-     the 24 V and 12 V clusters use a hand template instead** (`gen/efuse_hand.py`, see 2i): the
+     the 24, 12 and 5 V clusters use a hand template instead** (`gen/efuse_hand.py`, see 2i): the
      annealing below never routed completely, because it can't see which way each pin's route must
-     go. 5 V and 42 V still use the engine below until they get their own templates.
+     go. The 42 V blocks still use the engine below until they get their own template.
      - **The IC** goes in a fixed spot: right of its block's FET source-via field, gate-drive pins (G,
        BST, SRC, PD, PU) in the top row on the left, towards the gate vias, and the sense pins (CS, VS)
        on the right, towards the shunt's Kelvin vias.
@@ -1224,8 +1224,8 @@ layout.
   2i. Signal routing, by intent, in code (started 2026-11-20). `gen/pcb_route.py BLOCK` routes one block on the
      board as `pcb_power42.py` left it, each block in its own process. `rebuild_layout.sh` runs it for 24
      and 12 V, then `pcb_3v3.py`, whose +3V3 vias go around the routes.
-     - **Placement for routing:** `gen/efuse_hand.py` gives every satellite of a 24 / 12 V eFuse a set
-       spot relative to its IC. Parts are found by what they connect to. The spots are chosen so that
+     - **Placement for routing:** `gen/efuse_hand.py` gives every satellite of a 24 / 12 / 5 V eFuse a
+       set spot relative to its IC. Parts are found by what they connect to. The spots are chosen so that
        each pin's route reaches its parts without crossing another route: pin order kept around the IC,
        and a via spot for every GND pad. The IC sits under the FET drain tabs, where no via fits, so its
        routes stay on the bottom layer until they are clear of the tabs.
@@ -1235,8 +1235,14 @@ layout.
          to the 100 Ω feed and the 1 µF in the VIN area.
        - Bottom row: a ribbon in pin order (temperature diode, TMR, IWRN, IMON, GND, FLT, INP, INPG)
          down to the parts below the tab. EN goes out to the right, to its divider.
+       - **5 V** (`RAIL_SLOTS`): the block narrows to its column below y = 34.6 mm, and its bypass
+         bridge stands under the main FET. So the ribbon passes left of the bridge. The temperature
+         transistor, IWRN's resistor and IMON's parts shift left, the output-sense divider stands in a
+         column at the left, and INPG, INP and FLT end at their parts below the bridge. The output test
+         pad sits on the wide output copper at the bottom left: above the bridge, its way to the output
+         copper cut through the ribbon. The LED resistor sits in the full-width band beside the LED's vias.
        - **Kept clear:** each templated block is reserved on the bottom for its own parts, from
-         y = 11.4 to 61.6 mm across the block. Later templates, the logic groups, the packer and the
+         y = 11.4 to 61.6 mm across the block (L-shaped for 5 V). Later templates, the logic groups, the packer and the
          optimizer keep out, so no stray part can land in the cluster's routes. Once, the optimizer
          dropped one there and the 24 V routing failed.
      - **Router:** `gen/route.py`, a 0.1 mm grid A* on L4 and L3 (L1 is power copper, L2 the GND

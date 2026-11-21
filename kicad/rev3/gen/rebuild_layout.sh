@@ -4,7 +4,10 @@
 #   kicad/rev3/gen/rebuild_layout.sh --yes
 set -euo pipefail
 [ "${1:-}" = "--yes" ] || { echo "rebuilds schematic and board from the generators; pass --yes"; exit 1; }
-KPY="flatpak run --command=python3 org.kicad.KiCad"
+# development switches reach KiCad's Python through the sandbox: HAND_DUMP (efuse_hand.py), SAT_NOCACHE,
+# SAT_KEY_DUMP and SAT_DEBUG (satellites.py)
+KPY="flatpak run --env=HAND_DUMP=${HAND_DUMP:-} --env=SAT_NOCACHE=${SAT_NOCACHE:-} --env=SAT_KEY_DUMP=${SAT_KEY_DUMP:-}
+     --env=SAT_DEBUG=${SAT_DEBUG:-} --command=python3 org.kicad.KiCad"
 KCLI="flatpak run --command=kicad-cli org.kicad.KiCad"
 R=kicad/rev3
 python3 $R/gen/build.py --force | tail -3
@@ -21,7 +24,8 @@ $KPY $R/gen/pcb_optimize.py 2>&1 | grep -v swig/python
 echo "[$SECONDS s] power copper"
 $KPY $R/gen/pcb_power42.py 2>&1 | grep -v -i "swig/python\|debug\|GetWidth called"
 echo "[$SECONDS s] routing"
-for block in 24 12; do                                            # signal routing, block by block
+cp $R/PowerBoard_rev3.kicad_pcb $R/gen/out/stage_copper.kicad_pcb    # for development: placed + power copper
+for block in 24 12 5; do                                          # signal routing, block by block
     $KPY $R/gen/pcb_route.py $block 2>&1 | grep -v -i "swig/python\|debug\|GetWidth called" || true
 done
 echo "[$SECONDS s] +3V3"
