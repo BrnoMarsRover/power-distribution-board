@@ -1441,6 +1441,22 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
          tips. Past the lower one they run at a 0.48 mm pitch (the gate via and 42C's CS- via leave 1.45 mm).
        - **Order:** the link is laid before the blocks, so their plans route around it with exact clearances.
        - ALERT's pull-up moved to the ESP32 end, where +3V3 is everywhere.
+       - **The sense pair** (`ina_link.sense`, decided 2026-11-22, by hand). The packer had put the IN−
+         filter resistor west of the IC, where IN− would have crossed the I²C lines. Now IN− / IN+ leave
+         pins 9 / 10 east, in line:
+         - C7 stands across them right beside the pins, then R3 / R2 lie in series;
+         - the Kelvin pair runs east and down between the VBAT vias and between C3 / C4, at a 0.55 mm pitch,
+           0.25 mm from each;
+         - it turns east into the shunt's Kelvin vias.
+
+         The pair stays side by side from the shunt to the filter, so it encloses almost no area. R2 keeps
+         0.5 mm from the wide VBAT track's end, as the high-voltage rule requires. Pin 6's decap C8 moved up,
+         out of the pins' way, and still sits next to pin 6; the +3V3 lane starts at it. Its GND pad ties to
+         pin 7 and a via, and pins 1 / 2 get their own via.
+       - **VBUS (pin 8).** Under the IC, L3 is the +3V3 fill. BUS42 on L3 is only the strip down from the
+         charger XT60 (x 31 ... 40.5). So VBUS runs east between C8 and C7 and past R3, to a via in that
+         strip. It is 0.25 mm wide inside a "Sense INA228 VBUS" rule area, which the power-net width rule
+         allows (it carries microamps).
      - **I²C bus (decided 2026-11-22, `i2c_plan.py`, run as `pcb_route.py i2c` after the FLT bus and before
        the rails' legs):** SCL and SDA reach seven devices (the INA228, ADCs U20 / U21, expander U17, the
        ESP32, the pull-ups and two test pads); ALERT runs from the INA228 to ESP32 pin 18. The router's

@@ -61,6 +61,7 @@ elif key == "espnet":
 elif key == "ina":
     import ina_link
     ina_link.route(R, FP, log=quiet)
+    ina_link.sense(R, log=quiet)
     what = "INA228 link"
 elif key == "boost":
     import boost_plan

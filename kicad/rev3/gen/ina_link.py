@@ -93,3 +93,118 @@ def route(R, FP, log=print):
         R.failed.append("INA228 link")
     log(f"   INA228 link: {len(segs)} segments, {len(vias)} vias, {len(bad)} clearance problems")
     return segs, vias
+
+
+# ---- the shunt's sense pair (decided 2026-11-22, by hand). IN- / IN+ leave pins 9 / 10 east, in line: C7 across
+# them right beside the pins, R3 / R2 in series, then the Kelvin pair east and down between the VBAT vias and between
+# C3 / C4 (0.55 mm pitch, 0.25 mm from each) to the shunt's Kelvin vias (power42, y 27.75). R2 keeps 0.5 mm from the
+# wide VBAT track's end (HV rule). C8 (pin 6's decap) moves up beside pin 6, out of the pins' way (the +3V3 lane
+# starts at it); its GND pad ties to pin 7 and a via. VBUS (pin 8) runs east between C8 and C7, past R3, to a via in
+# the L3 BUS42 strip (x 31 ... 40.5, down from the charger XT60), at signal width inside a "Sense" rule area.
+FILTER = {"C8": ((27.0, 14.3), ("+3V3", "GND"), True),             # upright: first net up / left
+          "C7": ((27.0, 18.3), ("Net-(U1-IN-)", "Net-(U1-IN+)"), True),
+          "R3": ((30.0, 16.84), ("Net-(U1-IN-)", "Net-(R1-Pad3)"), False),
+          "R2": ((30.0, 18.9), ("Net-(U1-IN+)", "Net-(R1-Pad2)"), False)}
+KELVIN_X = {"Net-(R1-Pad2)": 31.725, "Net-(R1-Pad3)": 32.275}       # down between the VBAT vias and C3 / C4
+KELVIN_Y = {"Net-(R1-Pad2)": 27.55, "Net-(R1-Pad3)": 26.95}         # east to the vias (Pad3 above Pad2's via)
+C8_GND_VIA = (28.6, 14.0)
+U1_GND_VIA = (19.0, 18.75)                                           # pins 1 / 2
+VBUS_PATH = [(25.9, 17.0), (26.6, 16.3), (27.95, 16.3), (29.4, 14.85), (31.0, 14.85)]
+VBUS_VIA = (31.9, 13.95)
+VBUS_AREA = (24.3, 13.3, 32.5, 17.3)                                 # "Sense INA228 VBUS"
+
+
+def place_filter(FP, obstacles):
+    """The INA228's input filter and decap by hand (locked). Returns the references placed."""
+    import power54
+    from power42 import _upright
+    from satellites import _box
+    short = lambda p: p.GetNetname().split("/")[-1]
+    done = []
+    for ref, ((x, y), (a, b), upright) in FILTER.items():
+        assert {short(p) for p in FP[ref].Pads()} == {a, b}, f"INA228 filter: {ref} changed"
+        pa = next(p.GetNumber() for p in FP[ref].Pads() if short(p) == a)
+        pb = next(p.GetNumber() for p in FP[ref].Pads() if short(p) == b)
+        if upright:
+            _upright(FP[ref], x, y, pa, pb, bottom=True)
+        else:
+            power54._flat_bottom(FP[ref], x, y, pa, pb)
+        FP[ref].SetLocked(True)
+        obstacles.append(_box(FP[ref]))
+        done.append(ref)
+    return done
+
+
+def sense(R, log=print):
+    """The input filter's copper, the Kelvin pair to the shunt, VBUS and the IC's GND, planned (checked exactly)."""
+    import far42
+    import route_plan
+    from route import B
+    W = route_plan.SIG_W
+    short = lambda q: q["net"].split("/")[-1]
+    P = lambda ref, n: next(q for q in R.geo.pads if q["ref"] == ref and short(q) == n)
+    u = {q["num"]: q for q in R.geo.pads if q["ref"] == "U1"}
+    inn, inp, k2, k3 = "Net-(U1-IN-)", "Net-(U1-IN+)", "Net-(R1-Pad2)", "Net-(R1-Pad3)"
+    segs, vias = [], []
+
+    def lay(net, pts, w=W):
+        segs.extend(R.track(net, B, pts, w))
+
+    # IN-: pin 9 east into C7's top pad, on to R3; IN+: pin 10 east, down into C7's bottom pad, on to R2
+    p9, p10 = u["9"]["c"], u["10"]["c"]
+    ct, cb, r3, r2 = P("C7", inn)["c"], P("C7", inp)["c"], P("R3", inn)["c"], P("R2", inp)["c"]
+    lay(u["9"]["net"], [p9, (ct[0], p9[1]), (r3[0] - abs(p9[1] - r3[1]), p9[1]), r3])
+    xd = cb[0] - 0.1 - (cb[1] - p10[1])
+    lay(u["10"]["net"], [p10, (xd, p10[1]), (cb[0] - 0.1, cb[1]), cb, (r2[0] - abs(r2[1] - cb[1]), cb[1]), r2])
+    # the Kelvin pair: east out of R3 / R2, down, east into the shunt's vias
+    for ref, n in (("R3", k3), ("R2", k2)):
+        q = P(ref, n)
+        (x0, y0), x, y = q["c"], KELVIN_X[n], KELVIN_Y[n]
+        v = next(v for v in R.geo.vias if v[0].split("/")[-1] == n)
+        lay(q["net"], [(x0, y0), (x - 0.4, y0), (x, y0 + 0.4), (x, y - 0.2), (x + 0.2, y),
+                       (v[1] - abs(v[2] - y), y), (v[1], v[2])])
+    # GND: pin 7 into C8's GND pad, on to a via; pins 1 / 2 to their own via
+    g7, gc = u["7"]["c"], P("C8", "GND")["c"]
+    xg = gc[0] - 0.06 - (g7[1] - gc[1])                 # its diagonal between pin 6's corner and VBUS's
+    lay("GND", [g7, (xg, g7[1]), (gc[0] - 0.06, gc[1]), gc, (gc[0] + 0.44, gc[1]), C8_GND_VIA], W)
+    vias.append(R.via("GND", *C8_GND_VIA))
+    g1, g2 = u["1"]["c"], u["2"]["c"]
+    lay("GND", [g2, (g2[0] - 0.45, g2[1]), (g1[0] - 0.45, g1[1])], W)
+    lay("GND", [g1, (g1[0] - 0.6, g1[1]), U1_GND_VIA], W)
+    vias.append(R.via("GND", *U1_GND_VIA))
+    # VBUS into the L3 BUS42 strip
+    lay(u["8"]["net"], [u["8"]["c"]] + VBUS_PATH + [VBUS_VIA])
+    vias.append(R.via(u["8"]["net"], *VBUS_VIA))
+    _vbus_area(R.b)
+    bad = route_plan._check_exact(R, segs) + far42._check_vias(R, vias)
+    for msg in bad[:20]:
+        log(f"   INA228 sense clearance: {msg}")
+    if bad:
+        R.failed.append("INA228 sense")
+    log(f"   INA228 sense pair, filter, VBUS and GND: {len(segs)} segments, {len(vias)} vias, "
+        f"{len(bad)} clearance problems")
+
+
+def _vbus_area(b):
+    """A named rule area (no restrictions) over VBUS's narrow line: the "Power: sense taps" rule lets it be signal
+    width there (board_rules.py)."""
+    import pcbnew
+    from power42 import X0, Y0
+    for z in list(b.Zones()):
+        if z.GetIsRuleArea() and z.GetZoneName() == "Sense INA228 VBUS":
+            b.Remove(z)
+    z = pcbnew.ZONE(b)
+    z.SetIsRuleArea(True)
+    z.SetDoNotAllowTracks(False)
+    z.SetDoNotAllowVias(False)
+    z.SetDoNotAllowPads(False)
+    z.SetDoNotAllowFootprints(False)
+    z.SetDoNotAllowZoneFills(False)
+    z.SetLayerSet(pcbnew.LSET.AllCuMask())
+    z.SetZoneName("Sense INA228 VBUS")
+    l, t, r, bt = VBUS_AREA
+    o = z.Outline()
+    o.NewOutline()
+    for x, y in ((l, t), (r, t), (r, bt), (l, bt)):
+        o.Append(pcbnew.VECTOR2I(pcbnew.FromMM(X0 + x), pcbnew.FromMM(Y0 + y)))
+    b.Add(z)

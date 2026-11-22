@@ -135,7 +135,9 @@ def place(FP, obstacles):
     # (the band below the battery XT90: about 15 mm of Kelvin route from the vias at x 34)
     ina = [(13.0, 12.6, 28.0, 22.3)]
     ic("U1", 22.5, 17.0, lambda p: p["10"][0] > p["1"][0] + 1.0, ina)
-    # (the INA228's ALERT pull-up: i2c_plan, by the ESP32 end of the line)
+    # (the INA228's ALERT pull-up: i2c_plan, by the ESP32 end of the line); its input filter and decap by hand
+    import ina_link
+    done.extend(ina_link.place_filter(FP, obstacles))
     batt = _loose(FP, _sheet(FP, "Battery input"))
     run("battery monitor", "U1", ina, batt, pin_order=["10", "9", "3", "4", "5"], decaps=True,
         tp_area=[(0.6, 12.4, 13.0, 22.6), (0.6, 26.9, 9.0, 36.6)], tp_column=(1.9, 14.04))
