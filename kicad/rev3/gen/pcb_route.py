@@ -50,6 +50,7 @@ elif key == "esp":
     esp_plan.route(R, FP, log=quiet)
     esp_plan.corner(R, FP, log=quiet)
     esp_plan.escapes(R, FP, log=quiet)
+    esp_plan.brake(R, FP, log=quiet)
     what = "ESP32 group (host UART, north bundle)"
 elif key == "espnet":
     import esp_plan

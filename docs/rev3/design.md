@@ -1510,7 +1510,12 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
          get top-side stubs from their vias. The escapes are laid with the bundle, before the rails' legs
          and the switch-control group. After those, the router takes CAN (to U16), the LEDs, EN, IO0, the
          spare input, AUX5 / NTC sense and UART0 (to its test pads) from the escapes to their parts: one to
-         three vias each, escape included. USB and BRAKE_ACT get plans of their own.
+         three vias each, escape included. USB gets a plan of its own.
+       - **BRAKE_ACT** (`esp_plan.brake`, laid with the escapes): about 160 mm from pin 32 to the brake
+         comparator in the bottom-left corner, on L3. It runs south beside the ESP32's group, east of the I²C
+         trunk's end, then west in the one long free L3 lane (y 102, between output rows 2 and 3), then south
+         in the free strip at x 27 to a port at the corner's edge. The router takes it on to its two pads
+         (the brake group packs itself). It is a slow comparator output, shielded on L3 between the planes.
        - **ALERT** now runs north under the module at x 132.45 (it had taken the left-column pins' edge-via
          spots), jogging over south of the module; its hop and R4 stay beside SW2.
      - **Router additions (rails):** the A* expansion limit grows with the window, and round pads (the

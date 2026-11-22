@@ -240,6 +240,11 @@ EN_VIA, EN_SW_VIA = (145.38, 62.55), (136.9, 84.5)   # EN: under the module edge
 V3_VIA = (148.4, 63.05)                          # +3V3: pin 2 east under the module edge, right of the north
 GND_VIAS = {"1": (148.4, 61.9), "40": (147.92, 80.4)}   # bundle's L3 columns, then a bottom stub to U12's tab
 KEEP_ESC = [(130.95, 67.2, 132.25, 76.2), (129.45, 79.75, 147.5, 81.05), (136.25, 83.85, 137.55, 85.15)]
+# BRAKE_ACT (pin 32) to the brake comparator in the bottom-left corner, about 160 mm on L3: south beside the ESP32's
+# group (east of the I2C trunk's end), west in the one long free L3 lane, between output rows 2 and 3 (y 102), south
+# in the free strip at x 27 to a port at the corner's edge; the router takes it on to its two pads there
+BRAKE_Y, BRAKE_COL, BRAKE_PORT = 102.0, 27.0, (27.0, 113.5)   # (the run starts at pin 32's x)
+BRAKE_BOX = (0.6, 100.0, 40.0, 149.4)
 LOCAL_BOX = (120.0, 58.0, 149.4, 126.0)
 
 
@@ -322,6 +327,30 @@ def escape_points(R):
     esc[pin["27"]["net"]] = [IO0_VIA]
     esc[pin["3"]["net"]] = [EN_VIA, EN_SW_VIA]
     return esc
+
+
+def brake(R, FP, log=print):
+    """BRAKE_ACT: pin 32's escape, the planned L3 run to the corner's port, the router from there to its pads."""
+    import route_plan
+    import far42
+    from route import F, IN2
+    q = next(q for q in R.geo.pads if q["ref"] == "U13" and q["net"] == "BRAKE_ACT")
+    (px, py) = q["c"]
+    segs = R.track("BRAKE_ACT", F, [(px, py), (px, ESC_BOTTOM_Y)], W)
+    v = R.via("BRAKE_ACT", px, ESC_BOTTOM_Y)
+    x, y = BRAKE_PORT
+    segs += R.track("BRAKE_ACT", IN2, [(px, ESC_BOTTOM_Y), (px, BRAKE_Y - 0.5), (px - 0.5, BRAKE_Y),
+                                       (BRAKE_COL + 0.5, BRAKE_Y), (BRAKE_COL, BRAKE_Y + 0.5), (x, y)], W)
+    bad = route_plan._check_exact(R, segs) + far42._check_vias(R, [v])
+    for msg in bad[:20]:
+        log(f"   BRAKE_ACT clearance: {msg}")
+    if bad:
+        R.failed.append("BRAKE_ACT")
+    port = dict(points=[(IN2, x, y)], pads=set(), segs=[], vias=[])
+    pads = [R.t_pad(p["ref"], p["num"]) for p in R.geo.pads if p["net"] == "BRAKE_ACT" and p["ref"] != "U13"]
+    if not R.route_net("BRAKE_ACT", pads + [port], W, BRAKE_BOX, label="BRAKE_ACT in the brake corner"):
+        log("   BRAKE_ACT: no way from its port to its pads")
+    log(f"   BRAKE_ACT: {len(segs)} planned segments, {len(bad)} clearance problems")
 
 
 def local(R, FP, log=print):
