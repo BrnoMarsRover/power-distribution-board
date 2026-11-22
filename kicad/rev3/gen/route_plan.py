@@ -61,13 +61,13 @@ def efuse42(R, FP, key, log=print):
         out={"42D": "OUT42D", "42C": "OUT42C"}[key],
         box=(blk["out_l"] - 0.4, 12.0, BLOCK42_R[key], 76.0),
         gate_vias={gate(ref): (cx - 10.85, cy - 2.54) for ref, cy in zip(blk["fets"], power42.FET_ROWS)},
-        kelvin=((power42.SHUNT_X + dx + 2.7, 34.0), (power42.SHUNT_X + dx + 2.7, 38.9)),
+        kelvin=((power42.kelvin_x(blk), 34.0), (power42.kelvin_x(blk), 38.9)),
         led_via=(power42.LED_X + dx + 1.7, power42.LED_Y + 1.02),
         gnd_ok=[(cx + 6.2 + 0.6, power42.DRN_TOP, blk["drn_r"] - 0.2, power42.DRN_BOT)],
         bar=True, keep_cs_out=(cx + 5.5, 28.6, cx + 10.4, 40.6),
         # the Kelvin corner: no supply via between the Kelvin + via and the channel right of the shunt, where CS-
         # comes down to its own via (0.25 mm track, 0.2 mm each side of it)
-        via_keep=[(power42.SHUNT_X + dx + 1.2, 31.0, power42.SHUNT_X + dx + 4.25, 36.3)],
+        via_keep=[(power42.kelvin_x(blk) - 1.5, 31.0, power42.kelvin_x(blk) + 1.55, 36.3)],
         # the parts below the bar (the EN divider's top) take BUS42 from the lowest BUS42 pad in the bar (the VS
         # resistor's), up the channel right of the drain copper and left under the CS- via: no via of their own
         vin_join=True,
@@ -171,6 +171,31 @@ def u21_fan(R):
     return out
 
 
+def u17_fan(R, log=print):
+    """U17's three south-row inputs (INPG_24 / 12 / 5, pins 13-15) between MOTOR_ARM's escape on their left, the
+    42 V far end's lines below and its INP_42D riser on the right: each a via of its own, so the negotiated legs
+    come to fixed points and none boxes in another (they did, after the I2C bus took U21's way down). Pin 15
+    straight down, pin 14 under pin 13 to the right, pin 13 up to the right. Returns {pin: via point}."""
+    out = {}
+    (x13, y), (x14, _), (x15, _) = (R.pad("U17", n)["c"] for n in ("13", "14", "15"))
+    spec = {"15": [(x15, y), (x15, 72.25)],
+            "14": [(x14, y), (x14, 71.0), (100.0, 71.0)],
+            "13": [(x13, y), (x13 + y - 69.3, 69.3), (99.6, 69.3)]}
+    segs, vias = [], []
+    for num, pts in spec.items():
+        net = R.pad("U17", num)["net"]
+        segs += R.track(net, B, pts, SIG_W)
+        vias.append(R.via(net, *pts[-1]))
+        out[num] = pts[-1]
+    import far42
+    bad = _check_exact(R, segs) + far42._check_vias(R, vias)
+    for msg in bad:
+        log(f"   U17 fan clearance: {msg}")
+    if bad:
+        R.failed.append("U17 fan")
+    return out
+
+
 def rails_legs(R, FP, log=print):
     """The rails' bus legs, on the bottom layer and L3 (in the logic area L3 is the +3V3 fill, which flows
     around; L2 stays whole: it carries the outputs' return current): IMON to the ADC U20, INP / INPG to the I/O
@@ -178,8 +203,14 @@ def rails_legs(R, FP, log=print):
     block-side copper at the pad nearest its destination. The long legs from far away go first, as fixed copper
     (the shortest corridors are theirs); the rest are negotiated (decided 2026-11-21: the router's legs take
     about two vias each, as few as a plan would)."""
-    R.geo.route_keep, R.geo.via_keep, R.geo.hv_ok = [], [], {}
+    R.geo.route_keep, R.geo.via_keep, R.geo.hv_ok = [U17_ESC_KEEP], [], {}
     fan = u21_fan(R)                               # U21's inputs: a via each, fanned out above its input row
+    fan17 = u17_fan(R, log)                        # U17's south-row inputs: a via each
+    # block-side pads walled in by their own block's lines: their leg's via first, before any leg takes the spot.
+    # 5 V's INP / INPG pull-downs (R82 / R83, one above the other; INP_5's lane on their left, their GND pads on
+    # the right): INPG_5's via in the one spot between the two, INP_5's below R82 (clear of FLT_5's diagonal)
+    ESC = {"INPG_5": (0.91, 1.1), "INP_5": (0.21, 1.2)}
+    esc = []
     ics = {"U20", "U17", "U21", "U13"}
     nets = [f"{k}_{r}" for r in ("24", "12", "5") for k in ("IMON", "INP", "INPG", "VSNS_OUT", "VSNS_IN")]
     nets += ["VSNS_OUT_54"]                        # (the FLT lines: their own plan, flt_bus)
@@ -194,6 +225,8 @@ def rails_legs(R, FP, log=print):
         for q in far:                              # the IC pins (a via beside the ESP32's; U21's fan via)
             if q["ref"] == "U21" and q["num"] in fan:
                 terms.append(R.t_via(*fan[q["num"]]))
+            elif q["ref"] == "U17" and q["num"] in fan17:
+                terms.append(R.t_via(*fan17[q["num"]]))
             elif B in q["layers"]:
                 terms.append(R.t_pad(q["ref"], q["num"]))
             elif R.fanout(q["ref"], q["num"], SIG_W, rmax=2.5, label=f"{q['ref']}.{q['num']} via"):
@@ -209,6 +242,20 @@ def rails_legs(R, FP, log=print):
             continue
         tx, ty = terms[0]["points"][0][1:]
         src = min(near, key=lambda q: math.dist(q["c"], (tx, ty)))
+        if net in ESC:
+            (sx, sy), (dx, dy) = src["c"], ESC[net]
+            vx, vy = sx + dx, sy + dy
+            segs = R.track(net, B, [(sx, sy), (sx, vy - dx), (vx, vy)], SIG_W)
+            v = R.via(net, vx, vy)
+            import far42
+            bad = _check_exact(R, segs) + far42._check_vias(R, [v])
+            for msg in bad:
+                log(f"   {net} escape clearance: {msg}")
+            if bad:
+                R.failed.append(f"{net} escape")
+            esc.append((vx, vy))
+            jobs.append((net, [R.t_via(vx, vy)] + terms))
+            continue
         jobs.append((net, [R.t_pad(src["ref"], src["num"])] + terms))
     box = (50.6, 10.0, 149.0, 149.0)
     first = {"VSNS_IN_5", "VSNS_IN_12", "VSNS_IN_24", "VSNS_OUT_54", "IMON_5"}   # the long ones: fixed first,
@@ -226,28 +273,30 @@ def rails_legs(R, FP, log=print):
         log(f"   unrouted: {', '.join(bad)}")
         N.report(log=log)
     dropped = []                                   # fan vias whose leg came on the bottom layer: not needed
-    for num, (vx, vy) in fan.items():
+    for vx, vy in list(fan.values()) + list(fan17.values()) + esc:
         v = next(v for v in R.geo.vias if abs(v[1] - vx) < 1e-6 and abs(v[2] - vy) < 1e-6)
         if not any(s[0] == v[0] and s[1] == IN2 and route._pt_seg(vx, vy, s[2:6]) <= v[3] for s in R.geo.segs):
             R.remove([], [v])
             dropped.append(v[0])
     if dropped:
-        log(f"   U21 fan: {len(dropped)} vias not needed (their legs came on the bottom layer): {', '.join(dropped)}")
+        log(f"   U21 / U17 fans: {len(dropped)} vias not needed (their legs came on the bottom layer): {', '.join(dropped)}")
 
 
 # the switch-control group (decided 2026-11-21): the latch under U17 (logic_place), MOTOR_ARM's hop, the ICs' ties
 ARM_UP_Y, ARM_LOW = 71.5, (93.3, 81.7)          # MOTOR_ARM's vias: below U17's pin 17, beside U18's clock pin
-SW_DECAPS = [("U20", "5", "C113"), ("U20", "5", "C117"), ("U21", "5", "C119"), ("U21", "5", "C118"),
+U17_ESC_KEEP = (93.75, 70.6, 96.9, 73.4)        # under U17's pins 16-20: MOTOR_ARM's stub and via, BOOST_DIS's
+                                                # escape (kept from the rails' legs, which come before them)
+SW_DECAPS = [("U20", "5", "C113"), ("U20", "5", "C117"), ("U21", "5", "C118"),      # (U21's 1 uF: the planes)
              ("U17", "24", "C112"), ("U18", "8", "C116"), ("U19", "5", "C116")]
 
 
 def sw_control(R, FP, log=print):
     """The switch-control group's own nets; the 42 V far end and MOTOR_KILL come with far42, the FLT lines with
-    flt_bus, and the ESP32's end of I2C and MOTOR_OK, the INA228's branch of I2C and BOOST_DIS with their groups.
+    flt_bus, I2C with the bus (i2c_plan, with U21's address strap A0), the ESP32's end of MOTOR_OK and BOOST_DIS with their groups.
     Planned: /CLR straight across from the Schmitt buffer to the latch, MOTOR_ARM from the expander's pin 17 down
     through one L3 hop under the 42 V bundle to the latch's clock pin, each IC's decoupling tied to its supply
-    pin, then GND vias. Routed: the address strap, the hold-off node, MOTOR_OK to its filter cap, MOTOR_ARM's
-    pull-down and the I2C trunk between the three ICs."""
+    pin, then GND vias. Routed: the hold-off node, MOTOR_OK to its filter cap and MOTOR_ARM's
+    pull-down."""
     import far42
     R.geo.route_keep, R.geo.via_keep, R.geo.hv_ok = [], [], {}
     W, segs, vias = SIG_W, [], []
@@ -280,11 +329,8 @@ def sw_control(R, FP, log=print):
                             max(r, R.pad(cap, cp)["box"][2]) + 3, max(b2, R.pad(cap, cp)["box"][3]) + 3),
                            label=f"{cap} to {ic}.{num}", layers=(B,), neck=neck):
             R.failed.append(f"{cap} to {ic}.{num}")
-    # routed: short nets and the I2C trunk, negotiated
+    # routed: the short nets, negotiated
     jobs = [
-        ("I2C_SCL", [R.t_pad("U20", "3"), R.t_pad("U17", "22"), R.t_pad("U21", "3")]),
-        ("I2C_SDA", [R.t_pad("U20", "2"), R.t_pad("U17", "23"), R.t_pad("U21", "2")]),
-        (R.pad("U21", "7")["net"], [R.t_pad("U21", "7"), R.t_pad("R170", "1"), R.t_pad("R171", "2")]),
         (R.pad("U19", "2")["net"], [R.t_pad("U19", "2"), R.t_pad("C115", "1"), R.t_pad("D21", "2"),
                                     R.t_pad("R169", "2")]),
         ("MOTOR_OK", [R.t_pad("D21", "1"), R.t_pad("R169", "1"), R.t_pad("C114", "1")]),

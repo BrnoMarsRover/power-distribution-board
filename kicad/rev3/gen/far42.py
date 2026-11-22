@@ -315,7 +315,10 @@ def _check_vias(R, vias):
             if p["net"] == net:
                 continue
             l, t, rr, b = p["box"]
-            d = math.hypot(max(l - x, 0, x - rr), max(t - y, 0, y - b))
+            if p.get("round"):                 # a circle (test pads, mounting holes), not its box
+                d = math.hypot(x - p["c"][0], y - p["c"][1]) - (rr - l) / 2
+            else:
+                d = math.hypot(max(l - x, 0, x - rr), max(t - y, 0, y - b))
             if d < r + route.CLEAR - 1e-4:
                 out.append(f"{net} via ({x:.2f}, {y:.2f}) / {p['ref']}.{p['num']} pad")
     return out

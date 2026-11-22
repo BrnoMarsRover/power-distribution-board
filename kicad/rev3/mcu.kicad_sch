@@ -9760,7 +9760,7 @@
 				)
 			)
 		)
-		(property "Value" "4.7k"
+		(property "Value" "2.2k"
 			(at 30.48 148.59 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9803,7 +9803,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC0603FR-074K7L"
+		(property "MPN" "RC0603FR-072K2L"
 			(at 30.48 148.59 0)
 			(hide yes)
 			(show_name no)
@@ -12223,7 +12223,7 @@
 				)
 			)
 		)
-		(property "Value" "4.7k"
+		(property "Value" "2.2k"
 			(at 63.5 148.59 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12266,7 +12266,7 @@
 				)
 			)
 		)
-		(property "MPN" "RC0603FR-074K7L"
+		(property "MPN" "RC0603FR-072K2L"
 			(at 63.5 148.59 0)
 			(hide yes)
 			(show_name no)

@@ -468,6 +468,10 @@ if not ONLY:
     import flt_bus
     placed[True] += far42.KEEP               # the 42 V bus's far end: the packer keeps out too
     placed[True] += flt_bus.KEEP             # and the FLT bus
+    import ina_link
+    placed[True] += ina_link.KEEP            # and the INA228's link
+    import i2c_plan
+    placed[True] += i2c_plan.KEEP            # and the I2C bus
 if "--dump-free" in sys.argv:                # bottom obstacles after the templates, for floorplanning
     import json
     json.dump({"bottom": placed[True], "top": placed[False]}, open("kicad/rev3/gen/out/obstacles.json", "w"))

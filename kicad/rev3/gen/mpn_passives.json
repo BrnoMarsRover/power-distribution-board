@@ -46,6 +46,7 @@
  "Device:R|18k|R_0603_1608Metric_Pad0.98x0.95mm_HandSolder": "RC0603FR-0718KL",
  "Device:R|1M|R_0603_1608Metric_Pad0.98x0.95mm_HandSolder": "RC0603FR-071ML",
  "Device:R|1k|R_0603_1608Metric_Pad0.98x0.95mm_HandSolder": "RC0603FR-071KL",
+ "Device:R|2.2k|R_0603_1608Metric_Pad0.98x0.95mm_HandSolder": "RC0603FR-072K2L",
  "Device:R|2.2|R_0603_1608Metric_Pad0.98x0.95mm_HandSolder": "RC0603FR-072R2L",
  "Device:R|200k|R_0603_1608Metric_Pad0.98x0.95mm_HandSolder": "RC0603FR-07200KL",
  "Device:R|20k|R_0603_1608Metric_Pad0.98x0.95mm_HandSolder": "RC0603FR-0720KL",

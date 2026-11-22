@@ -64,9 +64,9 @@ SW_SPOTS = {
     "D21": (107.8, 78.9, 90),              # Schottky: anode (RC node) on top, MOTOR_OK below
     "R169": (110.4, 78.9, 90),             # 1 M: RC node on top, MOTOR_OK below
     "C116": (96.3, 77.1, 0),               # the latch's 100 nF, above it
-    "C117": (68.9, 72.4, 0),               # U20's 1 uF, under it beside its supply pin (its 100 nF: far42.DECAPS)
-    "C119": (114.6, 72.3, 0),              # U21's 1 uF and 100 nF under it, either side of its supply pin
-    "C118": (118.55, 72.3, 0),
+    "C117": (68.3, 72.65, 180),            # U20's 1 uF, under it, its supply pad right below the supply pin (the
+                                           # bus pins' vias beside it, i2c_plan; its 100 nF: far42.DECAPS)
+    "C119": (122.6, 71.3, 0),              # U21's 1 uF, right of it on the planes (its 100 nF: i2c_plan, under it)
     "C112": (89.4, 69.7, 90),              # U17's 100 nF, left of its supply pin (pin 24, bottom left)
 }
 
@@ -91,6 +91,10 @@ def place(FP, obstacles):
     # FLT_42D's by its test pad), before any group; their room and the bus's bottom-side copper kept
     import flt_bus
     done.extend(flt_bus.place(FP, obstacles))
+    import ina_link                                       # the INA228's link to the logic (decided 2026-11-21)
+    obstacles += ina_link.KEEP
+    import i2c_plan                                       # the I2C bus (decided 2026-11-22): its pull-ups by the
+    done.extend(i2c_plan.place(FP, obstacles))            # trunk, ALERT's on its hop, the bus's way kept
 
     # ---- aux network: the pocket right of U11 (the aux test pads stay on top, with the packer)
     aux_all = _loose(FP, _sheet(FP, "Always-on aux"), tps=False)
@@ -124,6 +128,7 @@ def place(FP, obstacles):
     # (the band below the battery XT90: about 15 mm of Kelvin route from the vias at x 34)
     ina = [(13.0, 12.6, 28.0, 22.3)]
     ic("U1", 22.5, 17.0, lambda p: p["10"][0] > p["1"][0] + 1.0, ina)
+    # (the INA228's ALERT pull-up: i2c_plan, by the ESP32 end of the line)
     batt = _loose(FP, _sheet(FP, "Battery input"))
     run("battery monitor", "U1", ina, batt, pin_order=["10", "9", "3", "4", "5"], decaps=True,
         tp_area=[(0.6, 12.4, 13.0, 22.6), (0.6, 26.9, 9.0, 36.6)], tp_column=(1.9, 14.04))
@@ -172,6 +177,7 @@ def place(FP, obstacles):
     # way kept; the group packs around them
     import far42
     done.extend(far42.place(FP, obstacles))
+    done.extend(i2c_plan.place_sw(FP, obstacles))         # U21's address strap and 100 nF, the bus pins' way
     hub = _loose(FP, [r for r in sw if r not in button])
     # the 42 V eFuses' monitoring parts (no room in their blocks, decided 2026-11-21): IMON resistor + cap and the
     # output divider's lower half at the ADC, INP / INPG pull-downs at the expander, the FLT / IMON test pads in

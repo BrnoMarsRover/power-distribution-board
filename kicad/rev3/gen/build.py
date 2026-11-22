@@ -1627,9 +1627,10 @@ def sheet_mcu():
         hang(sh, sw, (55.88, y))
         sw.label_at = {"Reference": (2.54, -1.27), "Value": (2.54, 1.27)}
 
-    # --- I2C pull-ups
+    # --- I2C pull-ups: 2.2k, for 400 kHz on the routed bus (about 85 pF: about 160 ns rise time, 1.5 mA sink;
+    # 4.7k gave about 340 ns, over Fast mode's 300 ns; design.md D20, decided 2026-11-22)
     for x, net in ((30.48, "I2C_SDA"), (63.5, "I2C_SCL")):
-        r = R(sh, 4.7e3, "+3V3", net, rot=0)
+        r = R(sh, 2.2e3, "+3V3", net, rot=0)
         at_pin(r, 1, (x, 144.78))
         v33(PIN(r, 1))
         W(PIN(r, 2), (x, 154.94), (x + 7.62, 154.94))

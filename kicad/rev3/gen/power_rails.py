@@ -40,7 +40,8 @@ RAILS = {
     # the 42 V far-end bundle (nine lines) passing under it; their full-width OUT area reaches down to the outputs,
     # so the 12 V current goes round the hole
     "24": dict(xl=50.8, xr=76.0, vin="VIN24", out="OUT24", j_in="J5", tvs="D5",
-               shunt="R41", fets=("Q11", "Q10"), bridge="JP3", led="D4", y_out=82.0),
+               shunt="R41", fets=("Q11", "Q10"), bridge="JP3", led="D4", y_out=82.0,
+               seam=True),     # no source vias in its leftmost column: the INA228's link runs there (ina_link)
     "12": dict(xl=76.5, xr=103.2, vin="VIN12", out="OUT12", j_in="J6", tvs="D7",
                shunt="R59", fets=("Q14", "Q13"), bridge="JP4", led="D6", y_out=82.0),
     # L-shaped: full switch width (to xr, J38 starts at 131.6) only above band_bot; DRN, OUT and outputs end at col_r
@@ -327,7 +328,7 @@ def copper(b):
                 if clear_of_pads(vx, cy + 0.1, out, gap_same=0.3):
                     via(out, vx, cy + 0.1)
             for vy in (cy + 4.2, cy + 5.9):
-                for vx in (xl + 1.1, xl + 2.9, xl + 4.7, xl + 6.5):
+                for vx in (xl + 1.1, xl + 2.9, xl + 4.7, xl + 6.5)[1 if r.get("seam") else 0:]:
                     if clear_of_pads(vx, vy, out):
                         via(out, vx, vy)
     return zones, vias, tracks

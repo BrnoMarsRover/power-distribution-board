@@ -26,8 +26,14 @@ BLOCKS = {                           # dx, FETs (pre, main, main), shunt, bridge
     "42D": dict(dx=0.0, fets=("Q4", "Q2", "Q3"), shunt="R5", bridge="JP1", led="D2", out_r=8.2, drn_l=9.0,
                 drn_r=25.0, out_l=0.5, col_bot=113.2),
     "42C": dict(dx=25.0, fets=("Q8", "Q6", "Q7"), shunt="R23", bridge="JP2", led="D3", out_r=33.2, drn_l=34.0,
-                drn_r=50.3, out_l=25.8, col_bot=100.0),
-}
+                drn_r=50.3, out_l=25.8, col_bot=100.0,
+                kelvin_dx=-0.35),    # Kelvin vias 0.35 mm left, as far as the shunt's pads allow: the INA228's link
+}                                    # passes right of them (ina_link)
+
+
+def kelvin_x(blk):
+    """x of a block shunt's Kelvin vias."""
+    return SHUNT_X + blk["dx"] + 2.7 + blk.get("kelvin_dx", 0.0)
 FET_CX = 12.8                         # FET origin x in the 42D block (leads at -7.65, tab at +1.5)
 SHUNT_X, SHUNT_Y = 21.9, 36.2         # block shunt centre (42D); pad 1 (BUS42) up in the bar, pad 4 (DRN) below
 BRIDGE_X, BRIDGE_Y = 22.6, 43.2       # bypass bridge pad 1 (DRN); pad 2 (OUT) 7.62 mm below, reaches L3
@@ -52,7 +58,7 @@ def _escapes():
     for blk in BLOCKS.values():
         dx = blk["dx"]
         pts += [(FET_CX + dx - 10.85, cy - 2.54) for cy in FET_ROWS]         # gates
-        pts += [(SHUNT_X + dx + 2.7, 34.0), (SHUNT_X + dx + 2.7, 38.9)]      # Kelvin pair
+        pts += [(kelvin_x(blk), 34.0), (kelvin_x(blk), 38.9)]                # Kelvin pair
         pts += [(LED_X + dx + 1.7, LED_Y - 1.02), (LED_X + dx + 1.7, LED_Y + 1.02)]
     qx, qy = BRAKE["Q22"]
     pts.append((qx - 7.65 - 3.2, qy - 2.54))                                 # brake FET gate
@@ -267,7 +273,7 @@ def copper(b):
         # block shunt Kelvin pair -> vias; on the bottom they run to the TPS48111 CS+ / CS-
         sh = FP[blk["shunt"]]
         (k2x, k2y), (k3x, k3y) = _pxy(sh, "2"), _pxy(sh, "3")
-        vx = SHUNT_X + dx + 2.7
+        vx = kelvin_x(blk)
         via(pnet(blk["shunt"], "2"), vx, 34.0, ESC_D, ESC_DRILL)
         track(pnet(blk["shunt"], "2"), [(k2x, k2y), (vx, k2y), (vx, 34.0)], 0.25)
         via(pnet(blk["shunt"], "3"), vx, 38.9, ESC_D, ESC_DRILL)
