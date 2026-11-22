@@ -113,31 +113,23 @@ def place(FP, obstacles):
         pin_order=["5", "3", "4", "6", "8"], extra_ics=("U12",), decaps=True,
         supply_pull={"BUS42": lambda x, y: 0.5 * max(0.0, y - 37.5)})
 
-    # ---- boost network: the control loop left of U10 in the brake corner (its signal pins face left); the parts
-    # that need not be there (the 54 V sense divider for the ADC, BOOST_DIS's pull-up, the LED resistor) go to
-    # the free strip under the 24 V PTCs and beside the LED
-    boost = _loose(FP, _sheet(FP, "54 V boost"), tps=False)
-    away_nets = {"VSNS_OUT_54", "BOOST_DIS"}
-    away = [r for r in boost if (_nets(FP, r) & away_nets and not r.startswith("Q"))
-            or any(n.startswith("Net-(D15") for n in _nets(FP, r))]
-    # the loop network north of U10 and the sense filter at pins 3 / 4 by hand (boost_plan, 2026-11-22: the
-    # analog lines peel off the band over U10's top in order, the Kelvin pair arrives side by side); the rest packs
-    # west of U10, clear of the brake corner
+    # ---- boost network: the control loop left of U10 in the brake corner (its signal pins face left). By hand
+    # (boost_plan, 2026-11-22): the loop network north of U10 and the sense filter at pins 3 / 4 (the analog lines
+    # peel off the band over U10's top in order, the Kelvin pair arrives side by side), BOOST_DIS's pull-up under
+    # Q25, the LED's resistor beside the LED, the 54 V ADC divider under the 24 V PTCs; the rest packs west of U10,
+    # clear of the brake corner
     import boost_plan
     done.extend(boost_plan.place(FP, obstacles))
     boost = _loose(FP, _sheet(FP, "54 V boost"), tps=False)
-    run("boost network", "U10", boost_plan.BOOST_AREA, [r for r in boost if r not in away],
-        pin_order=["5", "6", "7", "8"])                  # VIN's 1206 cap first, by its pin
-    run("boost, outer parts", "U10", [(50.5, 100.0, 61.0, 149.4)], away)
+    run("boost network", "U10", boost_plan.BOOST_AREA, boost, pin_order=["5", "6", "7", "8"])   # VIN's cap first
 
     bottom_band = [(51.0, 136.6, 123.5, 149.4)]                    # test pads along the bottom edge
-    # ---- brake comparator: the rest of the corner, by the brake FET's gate via (x 4.2, y 132.5); its test pads
-    # go to the bottom-edge field (no room left in the corner)
-    corner = [(0.6, 124.3, 26.0, 142.4), (19.9, 111.8, 24.0, 123.4)]   # below and beside the brake XT60
-    ic("U8", 9.0, 128.0, lambda p: True, corner)
-    ic("U9", 13.0, 128.0, lambda p: True, corner)
+    # ---- brake comparator: the rest of the corner, below the brake XT60, by hand (boost_plan.CMP, 2026-11-22)
+    done.extend(boost_plan.place_comparator(FP, obstacles))
     brake = _loose(FP, _sheet(FP, "Brake chopper"))
-    run("brake", "U8", corner, brake, extra_ics=("U9",), decaps=True, tp_area=bottom_band, tp_column=(52.4, 137.9))
+    if brake:
+        print(f"brake: not placed by plan: {' '.join(brake)}")
+        missed.extend(brake)
 
     # ---- battery monitor: INA228 with IN+ / IN- facing the input shunt's Kelvin vias (x 34)
     # (the band below the battery XT90: about 15 mm of Kelvin route from the vias at x 34)

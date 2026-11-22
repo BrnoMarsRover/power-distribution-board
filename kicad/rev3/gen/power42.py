@@ -290,10 +290,10 @@ def copper(b):
     zone(brk, F, rect(*BRK_ZONE), 40, "BRK_SW")
     zone("GND", F, rect(*BRK_GND), 40, "brake GND")
     sx, sy = _pxy(FP["Q22"], "3")
-    for vx in (1.4, 2.9):
-        for vy in (sy - 0.8, sy + 0.8, sy + 2.4):
-            if clear_of_pads(vx, vy, "GND"):
-                via("GND", vx, vy)
+    for vx, vy in ((1.25, sy - 3.84), (1.25, sy - 2.29), (1.25, sy - 0.74), (2.9, sy - 0.8), (1.4, sy + 0.8),
+                   (2.9, sy + 0.8), (1.4, sy + 2.4), (2.9, sy + 2.4)):   # (the edge column: west of the boost's
+        if clear_of_pads(vx, vy, "GND"):                                    # UVLO FET under the patch)
+            via("GND", vx, vy)
     gate = pnet("Q22", "1")
     gx, gy = _pxy(FP["Q22"], "1")
     via(gate, gx - 3.2, gy, ESC_D, ESC_DRILL)

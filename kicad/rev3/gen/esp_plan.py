@@ -240,11 +240,14 @@ EN_VIA, EN_SW_VIA = (145.38, 62.55), (136.9, 84.5)   # EN: under the module edge
 V3_VIA = (148.4, 63.05)                          # +3V3: pin 2 east under the module edge, right of the north
 GND_VIAS = {"1": (148.4, 61.9), "40": (147.92, 80.4)}   # bundle's L3 columns, then a bottom stub to U12's tab
 KEEP_ESC = [(130.95, 67.2, 132.25, 76.2), (129.45, 79.75, 147.5, 81.05), (136.25, 83.85, 137.55, 85.15)]
-# BRAKE_ACT (pin 32) to the brake comparator in the bottom-left corner, about 160 mm on L3: south beside the ESP32's
-# group (east of the I2C trunk's end), west in the one long free L3 lane, between output rows 2 and 3 (y 102), south
-# in the free strip at x 27 to a port at the corner's edge; the router takes it on to its two pads there
-BRAKE_Y, BRAKE_COL, BRAKE_PORT = 102.0, 27.0, (27.0, 113.5)   # (the run starts at pin 32's x)
-BRAKE_BOX = (0.6, 100.0, 40.0, 149.4)
+# BRAKE_ACT (pin 32) to the brake comparator in the bottom-left corner, about 170 mm on L3, all planned: south beside
+# the ESP32's group (east of the I2C trunk's end), west in the one long free L3 lane, between output rows 2 and 3
+# (y 101.4, BOOST_DIS beside it at y 102.0, boost_plan), down the 42D plane's east edge and beside the switch-node
+# shield (BOOST_DIS east of it), west above the comparator's south row to a via between its status divider's
+# resistors (boost_plan.CMP: R120 above, R119 below), a bottom-side stub into the link between them
+BRAKE_Y = 101.4                                  # (the run starts at pin 32's x)
+BRAKE_PATH = [(24.8, 101.4), (24.4, 101.8), (24.4, 109.35), (23.0, 110.75), (23.0, 129.5), (22.6, 129.9), (3.7, 129.9)]
+BRAKE_VIA = (3.0, 129.2)
 LOCAL_BOX = (120.0, 58.0, 149.4, 126.0)
 
 
@@ -330,26 +333,27 @@ def escape_points(R):
 
 
 def brake(R, FP, log=print):
-    """BRAKE_ACT: pin 32's escape, the planned L3 run to the corner's port, the router from there to its pads."""
+    """BRAKE_ACT: pin 32's escape and the planned L3 run to the comparator's status divider."""
     import route_plan
     import far42
-    from route import F, IN2
+    from route import B, F, IN2
     q = next(q for q in R.geo.pads if q["ref"] == "U13" and q["net"] == "BRAKE_ACT")
     (px, py) = q["c"]
     segs = R.track("BRAKE_ACT", F, [(px, py), (px, ESC_BOTTOM_Y)], W)
-    v = R.via("BRAKE_ACT", px, ESC_BOTTOM_Y)
-    x, y = BRAKE_PORT
-    segs += R.track("BRAKE_ACT", IN2, [(px, ESC_BOTTOM_Y), (px, BRAKE_Y - 0.5), (px - 0.5, BRAKE_Y),
-                                       (BRAKE_COL + 0.5, BRAKE_Y), (BRAKE_COL, BRAKE_Y + 0.5), (x, y)], W)
-    bad = route_plan._check_exact(R, segs) + far42._check_vias(R, [v])
+    vias = [R.via("BRAKE_ACT", px, ESC_BOTTOM_Y)]
+    segs += R.track("BRAKE_ACT", IN2, [(px, ESC_BOTTOM_Y), (px, BRAKE_Y - 0.5), (px - 0.5, BRAKE_Y)] + BRAKE_PATH
+                    + [BRAKE_VIA], W)
+    vias.append(R.via("BRAKE_ACT", *BRAKE_VIA))
+    div = [p for p in R.geo.pads if p["net"] == "BRAKE_ACT" and p["ref"] != "U13"]
+    xd = div[0]["c"][0]
+    assert all(abs(p["c"][0] - xd) < 0.05 for p in div) and min(p["c"][1] for p in div) < BRAKE_VIA[1] \
+        < max(p["c"][1] for p in div), "BRAKE_ACT: the status divider's resistors moved"
+    segs += R.track("BRAKE_ACT", B, [BRAKE_VIA, (xd, BRAKE_VIA[1])], W)
+    bad = route_plan._check_exact(R, segs) + far42._check_vias(R, vias)
     for msg in bad[:20]:
         log(f"   BRAKE_ACT clearance: {msg}")
     if bad:
         R.failed.append("BRAKE_ACT")
-    port = dict(points=[(IN2, x, y)], pads=set(), segs=[], vias=[])
-    pads = [R.t_pad(p["ref"], p["num"]) for p in R.geo.pads if p["net"] == "BRAKE_ACT" and p["ref"] != "U13"]
-    if not R.route_net("BRAKE_ACT", pads + [port], W, BRAKE_BOX, label="BRAKE_ACT in the brake corner"):
-        log("   BRAKE_ACT: no way from its port to its pads")
     log(f"   BRAKE_ACT: {len(segs)} planned segments, {len(bad)} clearance problems")
 
 

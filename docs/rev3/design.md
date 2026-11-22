@@ -1515,11 +1515,15 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
          and the switch-control group. After those, the router takes CAN (to U16), the LEDs, EN, IO0, the
          spare input, AUX5 / NTC sense and UART0 (to its test pads) from the escapes to their parts: one to
          three vias each, escape included. USB has its own plan (below).
-       - **BRAKE_ACT** (`esp_plan.brake`, laid with the escapes): about 160 mm from pin 32 to the brake
-         comparator in the bottom-left corner, on L3. It runs south beside the ESP32's group, east of the I²C
-         trunk's end, then west in the one long free L3 lane (y 102, between output rows 2 and 3), then south
-         in the free strip at x 27 to a port at the corner's edge. The router takes it on to its two pads
-         (the brake group packs itself). It is a slow comparator output, shielded on L3 between the planes.
+       - **BRAKE_ACT** (`esp_plan.brake`, laid with the escapes): about 170 mm from pin 32 to the brake
+         comparator in the bottom-left corner, on L3, all planned. It runs:
+         - south beside the ESP32's group, east of the I²C trunk's end;
+         - west in the one long free L3 lane (y 101.4, between output rows 2 and 3), with BOOST_DIS beside
+           it at y 102.0;
+         - down the 42D plane's east edge and beside the switch-node shield (west of BOOST_DIS);
+         - west above the comparator's south row, to a via between its status divider's resistors.
+
+         It is a slow comparator output, shielded on L3 between the planes.
        - **ALERT** now runs north under the module at x 132.45 (it had taken the left-column pins' edge-via
          spots), jogging over south of the module; its hop and R4 stay beside SW2.
        - **USB-C** (`esp_plan.usb`, laid with the escapes, before everything else that crosses the area).
@@ -1592,7 +1596,44 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
          to the VIN and UVLO resistors and never touches the Kelvin line. All three run over the L2 GND
          plane. The OUT42C and switch-node test pads moved off the strip (the switch node's has its own
          via into the SW pour), and the strip is kept from the packer on the top side.
-       - **Still to do:** BOOST_DIS, the output's LED and fuse link, the brake comparator.
+       - **BOOST_DIS** (`boost_plan.outer`), about 130 mm from the expander U17's pin 18 to Q25's gate. It
+         is a DC line. U17's pocket is closed on L3 by the I²C trunk and MOTOR_ARM's hop, so the route is:
+         - a via beside pin 18;
+         - L3 south-west beside I2C_SCL's diagonal, to a via above the 12 V XT60 J20;
+         - the bottom side down between J20 / J21's left pins and I2C_SDA's hop vias;
+         - L3 again, west beside BRAKE_ACT (y 102.0), down the corner east of it, west under the
+           comparator's south edge, and down past the brake FET's gate via;
+         - a via under Q25.
+
+         The pull-up R135 moved from the strip under the PTCs to the bottom-side column below J21. Its
+         +3V3 comes from the L3 fill north of the lanes. The corner under Q25 is full with the UVLO and SS
+         parts.
+       - **Brake FET's GND.** Its source reaches GND through the top-side patch west of it. Only two vias
+         had fitted there, for up to 10 A while braking. A column of three more now runs along the board
+         edge west of the boost's UVLO FET (`power42`, "brake GND").
+       - **The status LED.** D15 stays where it can be seen (top side, below the input via field). Its
+         resistor R132 lies beside it on the anode's line. R132's OUT54 comes up on L3 from the output plane,
+         because the plane is south of y 121 there and the sense strips close the top side to the east. The
+         cathode runs to the input field's GND via.
+       - **The output.** The fuse's output pad reaches J13's + on the top side, 1.5 mm wide. TP30 (OUT54)
+         sits on top right above the fuse's input pad, with a short stub. The 54 V ADC divider (R133 / R134 /
+         C92) stands in one bottom-side column under the 24 V PTCs: OUT54 west into the output pour's via,
+         VSNS down its east side for U21's leg, GND down its west side to a via.
+       - **The brake comparator** (`boost_plan.CMP`, placed by hand and laid by `boost_plan.comparator`,
+         key `brake`, after the ESP32 group). The packer had put the IN+ parts beside U8's IN- pin and the
+         reference beside its IN+ pin. U8 (TLV1805, bottom side) keeps its pins: inputs on top (IN− left,
+         IN+ right), OUT bottom-left, V+ bottom-right.
+         - The IN+ network stands north of U8: R115 from OUT42D, R116 to GND, and R117 from OUT on U8's
+           west side. R115's OUT42D pad runs straight up into the brake XT60's OUT42D pin.
+         - OUT goes west to the gate resistor R118 and the brake FET's gate via. The status divider (R119
+           from the gate, R120 to GND) stands at the west edge, and BRAKE_ACT's via sits between its two
+           resistors.
+         - V+ goes east to its cap C71, the 12 V zener D11 and the feed R112 / R113. R112 taps the 42D
+           planes through a via right above it.
+         - OUT-to-IN+ and V+-to-IN− must cross. IN− is the LM4040's low-impedance node, so it takes the
+           0.96 mm gap between U8's pin columns, south to U9 (the reference) and R114.
+         - Each GND pin has its own via. No via goes in BRAKE_ACT's or BOOST_DIS's L3 bands, or near the
+           brake FET's tab and gate pads (top side).
      - **Router additions (rails):** the A* expansion limit grows with the window, and round pads (the
        test pads) are modelled as circles, so a route ends inside the copper.
   3. `gen/pcb_silk.py` — the silkscreen.
