@@ -11,6 +11,7 @@ Connector models are rev2's STEP files in kicad/ext (same footprints, same offse
 Stand-ins (scaled or neighbouring packages) are marked in STAND_IN; bare pads, test points, holes
 and wire bridges have no body and no model.
 """
+import sys
 import os
 import pcbnew
 
@@ -105,3 +106,9 @@ for fp in board.GetFootprints():
 board.Save(f"{PROJ}/PowerBoard_rev3.kicad_pcb")
 for k, v in sorted(done.items()):
     print(f"{v:3d} x {k}")
+
+# the native pcbnew (KiCad 10.0.8) can crash tearing itself down at interpreter exit, after the work is saved,
+# which would stop the rebuild: leave at once
+sys.stdout.flush()
+sys.stderr.flush()
+os._exit(0)

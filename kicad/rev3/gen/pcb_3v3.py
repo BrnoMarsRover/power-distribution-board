@@ -5,6 +5,7 @@ after pcb_route.py:
 
     python3 kicad/rev3/gen/pcb_3v3.py
 """
+import os
 import sys
 from pathlib import Path
 
@@ -19,3 +20,9 @@ zones, vias, tracks, missed = power_logic.copper(b)
 print(f"+3V3: L3 fill, {len(vias)} vias to it" + (f"; no via spot for {', '.join(missed)}" if missed else ""))
 pcbnew.ZONE_FILLER(b).Fill(b.Zones())
 b.Save(BOARD)
+
+# the native pcbnew (KiCad 10.0.8) can crash tearing itself down at interpreter exit, after the work is saved,
+# which would stop the rebuild: leave at once
+sys.stdout.flush()
+sys.stderr.flush()
+os._exit(0)

@@ -11,7 +11,7 @@ room first. Board mm from the top-left corner, bottom side.
   brake           comparator, reference and divider by the brake FET's gate via
   battery monitor INA228 under the bar between the 42 V clusters, beside the input shunt's Kelvin vias
   CAN             transceiver and split termination beside the CAN connectors
-  ESP32 support   under the module (pull-ups, EN RC, LED resistors, NTC, USB and UART ESD), its four test
+  ESP32 support   under the module (pull-ups, EN RC, LED resistors, NTC, USB ESD; the UART's ESD at J33), its four test
                   pads (TXD0, RXD0, I2C) in a field below the CAN block
   switch control  ADCs, I/O expander and the motor-kill latch in the band under the rail eFuses, between
                   everything they read and drive; the MOTOR_KILL test pad left of the IMON ADC
@@ -96,6 +96,13 @@ def place(FP, obstacles):
     import i2c_plan                                       # the I2C bus (decided 2026-11-22): its pull-ups by the
     done.extend(i2c_plan.place(FP, obstacles))            # trunk, ALERT's on its hop, the bus's way kept
 
+    # ---- the host UART's ESD array at its connector (decided 2026-11-22: a cable discharge is shunted at the board
+    # edge; the series resistors stay at the module, the textbook order): below J33's pins 1 / 2, right of the aux
+    # input cap, its connector-side pins up and in J33's pin order (bottom side: pin 4 left of pin 6). Before the
+    # aux network, which packs around it
+    ic("U15", 142.85, 37.35, lambda p: p["4"][1] < p["1"][1] - 1.0 and p["4"][0] < p["6"][0] - 1.0,
+       [(140.9, 35.0, 145.5, 40.2)])                  # (the corner J33's outline and the aux power stage leave)
+
     # ---- aux network: the pocket right of U11 (the aux test pads stay on top, with the packer)
     aux_all = _loose(FP, _sheet(FP, "Always-on aux"), tps=False)
     aux_3v3 = [r for r in aux_all if not _nets(FP, r)]        # the sheet's spare +3V3 cap: with the ESP32's parts
@@ -143,7 +150,6 @@ def place(FP, obstacles):
     # UART pins (the aux supply fills the bottom under the host-UART connector)
     esp_area = [(125.6, 67.2, 149.4, 92.5)]
     ic("U14", 138.3, 87.0, lambda p: p["1"][0] > p["4"][0] + 1.0, esp_area)
-    ic("U15", 135.5, 69.5, lambda p: p["4"][1] < p["1"][1] - 1.0, esp_area)
     esp = _loose(FP, _sheet(FP, "ESP32-S3")) + aux_3v3
     tp_field = [(125.6, 112.5, 149.4, 142.0)]
     run("ESP32 support", "U14", esp_area, esp, extra_ics=("U15",), decaps=True,

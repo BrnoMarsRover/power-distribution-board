@@ -1691,24 +1691,26 @@ def sheet_mcu():
         hang(sh, R(sh, 5.1e3, net, "GND", rot=0), (x, 124.46))
 
     # --- host UART to the Orin: 1k series, ESD on TX/RX, JST-XH 4p (same family as the power-button header)
+    # (the ESD array's channels: RX on pins 1/6, TX on 3/4, so that on the board, the part on the bottom side at
+    # J33, its connector-side pins come out in J33's pin order; joined to J33 by labels)
     x0, yt = 220.98, 152.4
-    lab("UART_TX", (x0, yt), 180)
-    lab("UART_RX", (x0, yt + 2.54), 180)
-    rtx = R(sh, 1e3, "UART_TX", "L:TX_R")
-    at_pin(rtx, 1, (x0 + 5.08, yt))
-    rrx = R(sh, 1e3, "L:RX_R", "UART_RX", rot=270)
-    at_pin(rrx, 2, (x0 + 5.08, yt + 2.54))
-    rtx.label_at = {"Reference": (-3.81, -5.08), "Value": (-3.81, -2.54)}
-    rrx.label_at = {"Reference": (-3.81, 5.08), "Value": (-3.81, 7.62)}
-    W((x0, yt), PIN(rtx, 1))
-    W((x0, yt + 2.54), PIN(rrx, 2))
+    lab("UART_RX", (x0, yt), 180)
+    lab("UART_TX", (x0, yt + 2.54), 180)
+    rtx = R(sh, 1e3, "L:TX_R", "UART_TX", rot=270)
+    at_pin(rtx, 2, (x0 + 5.08, yt + 2.54))
+    rrx = R(sh, 1e3, "UART_RX", "L:RX_R")
+    at_pin(rrx, 1, (x0 + 5.08, yt))
+    rrx.label_at = {"Reference": (-3.81, -5.08), "Value": (-3.81, -2.54)}
+    rtx.label_at = {"Reference": (-3.81, 5.08), "Value": (-3.81, 7.62)}
+    W((x0, yt), PIN(rrx, 1))
+    W((x0, yt + 2.54), PIN(rtx, 2))
     e2 = sh.add("Power_Protection:USBLC6-2SC6", "U", "USBLC6-2SC6", sot236,
-                {1: "L:TX_R", 6: "L:TX_C", 3: "L:RX_R", 4: "L:RX_C", 5: "+3V3", 2: "GND"},
+                {1: "L:RX_R", 6: "L:RX_C", 3: "L:TX_R", 4: "L:TX_C", 5: "+3V3", 2: "GND"},
                 fields={"MPN": "USBLC6-2SC6"})
     at_pin(e2, 1, (x0 + 17.78, yt))
     e2.label_at = {"Reference": (7.62, -7.62), "Value": (7.62, -5.08)}
-    W(PIN(rtx, 2), PIN(e2, 1))
-    W(PIN(rrx, 1), PIN(e2, 3))
+    W(PIN(rrx, 2), PIN(e2, 1))
+    W(PIN(rtx, 1), PIN(e2, 3))
     v33(PIN(e2, 5))
     gnd(PIN(e2, 2))
     gh = sh.add("Connector_Generic:Conn_01x04", "J", "B4B-XH-A(LF)(SN) (host UART to Orin)",
@@ -1717,8 +1719,10 @@ def sheet_mcu():
     xg = x0 + 50.8
     at_pin(gh, 1, (xg, yt))
     gh.label_at = {"Reference": (3.81, -5.08), "Value": (3.81, -2.54)}
-    W(PIN(e2, 6), PIN(gh, 1))
-    W(PIN(e2, 4), PIN(gh, 2))
+    lab("L:RX_C", PIN(e2, 6), 0)
+    lab("L:TX_C", PIN(e2, 4), 0)
+    lab("L:TX_C", PIN(gh, 1), 180)
+    lab("L:RX_C", PIN(gh, 2), 180)
     W(PIN(gh, 3), (xg - 5.08, yt + 5.08), (xg - 5.08, yt + 15.24))
     gnd((xg - 5.08, yt + 15.24))
     rsp = R(sh, 1e3, "L:SP_C", "UART_SP", rot=0)

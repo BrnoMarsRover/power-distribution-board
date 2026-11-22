@@ -3989,16 +3989,6 @@
 	)
 	(wire
 		(pts
-			(xy 248.92 152.4) (xy 271.78 152.4)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "14f4cce0-fb64-5ce7-aa18-f07170ce4a19")
-	)
-	(wire
-		(pts
 			(xy 271.78 86.36) (xy 281.94 86.36)
 		)
 		(stroke
@@ -4256,16 +4246,6 @@
 			(type default)
 		)
 		(uuid "504d0423-71c7-5225-aba5-4a91dfd0873d")
-	)
-	(wire
-		(pts
-			(xy 248.92 154.94) (xy 271.78 154.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5112ad90-aeed-5213-9934-ea642e30eb26")
 	)
 	(wire
 		(pts
@@ -4967,6 +4947,26 @@
 		)
 		(uuid "fe680191-daab-5e51-813a-90ccf493ef6e")
 	)
+	(label "TX_C"
+		(at 248.92 154.94 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "04da729c-6e77-5ae8-82eb-6d209a57cb76")
+	)
+	(label "TX_C"
+		(at 271.78 152.4 180)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify right bottom)
+		)
+		(uuid "04e4b94f-7c14-514d-a3ea-3c0e3b2a13aa")
+	)
 	(label "CC1"
 		(at 259.08 91.44 0)
 		(effects
@@ -4976,6 +4976,16 @@
 			(justify left bottom)
 		)
 		(uuid "58806685-6241-53ef-ab1e-f0ac23910fc7")
+	)
+	(label "RX_C"
+		(at 248.92 152.4 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left bottom)
+		)
+		(uuid "862ab680-76d0-512a-b92e-a0f247696d22")
 	)
 	(label "CC2"
 		(at 287.02 124.46 180)
@@ -4996,6 +5006,16 @@
 			(justify left bottom)
 		)
 		(uuid "d1648fb5-aede-5103-a9f0-a218050597ff")
+	)
+	(label "RX_C"
+		(at 271.78 154.94 180)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify right bottom)
+		)
+		(uuid "d4fdaac9-b07a-5c14-9ef7-c8587bdb9ec2")
 	)
 	(label "CC1"
 		(at 266.7 124.46 180)
@@ -5319,30 +5339,6 @@
 			)
 		)
 	)
-	(global_label "UART_RX"
-		(shape passive)
-		(at 220.98 154.94 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify right)
-		)
-		(uuid "363e1cd8-f026-51d9-9e75-d874fb682f2a")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 220.98 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-	)
 	(global_label "USB_DP"
 		(shape passive)
 		(at 185.42 142.24 0)
@@ -5364,30 +5360,6 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
-			)
-		)
-	)
-	(global_label "UART_TX"
-		(shape passive)
-		(at 220.98 152.4 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify right)
-		)
-		(uuid "3fdb6d59-171f-598f-8746-47371ba5297e")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 220.98 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
 			)
 		)
 	)
@@ -5764,6 +5736,30 @@
 		(uuid "871f4a29-89df-5700-b832-aa67fc0ee3a4")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 25.4 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+	)
+	(global_label "UART_TX"
+		(shape passive)
+		(at 220.98 154.94 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify right)
+		)
+		(uuid "87d46577-e3b7-5caf-b3c2-8230980fba61")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 220.98 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6244,6 +6240,30 @@
 		(uuid "f5fae0dc-46e8-5391-bd96-4624223b6702")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 172.72 218.44 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+	)
+	(global_label "UART_RX"
+		(shape passive)
+		(at 220.98 152.4 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify right)
+		)
+		(uuid "f82dfdee-2dc3-5069-9adb-562bf71e0dc4")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 220.98 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6837,7 +6857,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 229.87 154.94 270)
+		(at 229.87 152.4 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6847,29 +6867,29 @@
 		(dnp no)
 		(uuid "16d497b7-5a3e-5c4d-86e4-dda89f6ec1e5")
 		(property "Reference" "R152"
-			(at 226.06 160.02 90)
+			(at 226.06 147.32 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Value" "1k"
-			(at 226.06 162.56 90)
+			(at 226.06 149.86 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 229.87 154.94 0)
+			(at 229.87 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6880,7 +6900,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 229.87 154.94 0)
+			(at 229.87 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6891,7 +6911,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 229.87 154.94 0)
+			(at 229.87 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6902,7 +6922,7 @@
 			)
 		)
 		(property "MPN" "RC0603FR-071KL"
-			(at 229.87 154.94 0)
+			(at 229.87 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12035,7 +12055,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 229.87 152.4 90)
+		(at 229.87 154.94 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -12045,29 +12065,29 @@
 		(dnp no)
 		(uuid "eab9af0a-4e26-5954-9368-7cd2aa3e5ade")
 		(property "Reference" "R151"
-			(at 226.06 147.32 90)
+			(at 226.06 160.02 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(property "Value" "1k"
-			(at 226.06 149.86 90)
+			(at 226.06 162.56 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder"
-			(at 229.87 152.4 0)
+			(at 229.87 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12078,7 +12098,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 229.87 152.4 0)
+			(at 229.87 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12089,7 +12109,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 229.87 152.4 0)
+			(at 229.87 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -12100,7 +12120,7 @@
 			)
 		)
 		(property "MPN" "RC0603FR-071KL"
-			(at 229.87 152.4 0)
+			(at 229.87 154.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

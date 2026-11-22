@@ -1224,8 +1224,14 @@ layout.
        the input shunt's Kelvin vias (about 15 mm of Kelvin pair); its test pads at the left edge.
      - **CAN:** the transceiver with CANH / CANL facing the CAN connectors, split termination beside it.
      - **ESP32 support:** under the module (EN RC, strapping and I²C pull-ups, FLT pull-ups, LED resistors,
-       NTC, AUX5 divider), the USB ESD array by the receptacle, the host-UART ESD array at the module's
-       UART pins (the aux supply fills the bottom under the host-UART connector).
+       NTC, AUX5 divider), the USB ESD array by the receptacle.
+     - **Host-UART ESD at J33 (decided 2026-11-22):** the ESD array U15 sits on the bottom right below
+       J33's pins 1 / 2, beside the aux buck's input cap, its connector-side pins facing them. A cable
+       discharge is then shunted at the board edge, instead of running 35 mm across the board (through
+       the aux buck's area) to an array at the module. The 1 kΩ series resistors stay at the module:
+       connector, ESD, trace, series resistor at the MCU, MCU, the textbook order. The array's channels
+       were swapped in the schematic (RX on pins 1 / 6, TX on 3 / 4; electrically the same) so that,
+       mirrored on the bottom side, its pins come out in J33's order with no crossing.
      - **Switch control:** ADC for IMON and the 42 V output sense (U20) under the 24 V block, the I/O
        expander (U17) and the motor-kill latch (U18, U19) under the 12 V block, the ADC for the rails' input
        and output sense (U21) under the 5 V block: between everything they read and drive.

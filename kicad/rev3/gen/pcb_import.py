@@ -9,6 +9,7 @@ it), assigns pad nets, and drops each sheet's parts in its own cluster to the ri
 Refuses to run on a board that already has footprints: after this, placement is done by hand and
 changes come from the schematic with Update PCB from Schematic (F8).
 """
+import os
 import math
 import sys
 from pathlib import Path
@@ -147,3 +148,9 @@ def main():
 
 
 main()
+
+# the native pcbnew (KiCad 10.0.8) can crash tearing itself down at interpreter exit, after the work is saved,
+# which would stop the rebuild: leave at once
+sys.stdout.flush()
+sys.stderr.flush()
+os._exit(0)

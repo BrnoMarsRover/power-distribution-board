@@ -10,6 +10,7 @@ Blocks: ina (the INA228's link, first: the blocks route around it), the rail eFu
 legs, around it) and sw (the switch-control group). Prints what could not be routed;
 exits 1 if anything failed.
 """
+import os
 import sys
 import time
 from pathlib import Path
@@ -58,4 +59,8 @@ else:
 print(f"{what} routed in {time.time() - t0:.0f} s" + (f"; unrouted: {', '.join(R.failed)}" if R.failed else ""))
 pcbnew.ZONE_FILLER(b).Fill(b.Zones())
 b.Save(BOARD)
-sys.exit(1 if R.failed else 0)
+# the native pcbnew (KiCad 10.0.8) can crash tearing itself down at interpreter exit, after the work is saved,
+# which would stop the rebuild: leave at once
+sys.stdout.flush()
+sys.stderr.flush()
+os._exit(1 if R.failed else 0)

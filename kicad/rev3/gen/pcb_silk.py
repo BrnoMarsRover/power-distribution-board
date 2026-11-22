@@ -10,6 +10,8 @@
   signal test pads show their net name on the bottom silkscreen, where they are.
 Text is at least 1.0 mm high and 0.15 mm thick (JLC minimum).
 """
+import sys
+import os
 import pcbnew
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
@@ -248,3 +250,9 @@ for v, bottom in tp_labels:                                  # test-pad names la
 
 b.Save(BOARD)
 print(f"silkscreen added; {len(missed)} items found no free spot: {missed[:20]}")
+
+# the native pcbnew (KiCad 10.0.8) can crash tearing itself down at interpreter exit, after the work is saved,
+# which would stop the rebuild: leave at once
+sys.stdout.flush()
+sys.stderr.flush()
+os._exit(0)

@@ -10,6 +10,8 @@
   facing the plastic locating pegs, which brings them from 0.194 to 0.24 mm off the NPTH (JLC 0.2 mm).
 """
 from pathlib import Path
+import sys
+import os
 import pcbnew
 
 LIB = Path(__file__).resolve().parent.parent / "PowerBoard_rev3.pretty"
@@ -76,3 +78,8 @@ fp.SetLibDescription("ESP32-S3-WROOM-1U; ground pad with one 1.2 mm plated hole 
 IO.FootprintSave(str(LIB), fp)
 print("ESP32-S3-WROOM-1U_HandSolder saved, ground-pad hole at", [round(pcbnew.ToMM(v), 2) for v in (centre.x, centre.y)])
 
+# the native pcbnew (KiCad 10.0.8) can crash tearing itself down at interpreter exit, after the work is saved,
+# which would stop the rebuild: leave at once
+sys.stdout.flush()
+sys.stderr.flush()
+os._exit(0)

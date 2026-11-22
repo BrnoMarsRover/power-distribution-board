@@ -16,6 +16,7 @@ Every accepted state is legal: courtyards keep 0.6 mm apart (through-hole parts 
 stay on the board, off the mounting holes and off the silkscreen spots pcb_place.py reserved. Signal test
 pads keep their label room to the right.
 """
+import os
 import math
 import random
 import sys
@@ -35,6 +36,7 @@ import far42  # noqa: E402
 import flt_bus  # noqa: E402
 import ina_link  # noqa: E402
 import i2c_plan  # noqa: E402
+import esp_plan  # noqa: E402
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 X0, Y0, W, H = 50.0, 50.0, 150.0, 150.0
@@ -129,7 +131,8 @@ for hx, hy in HOLES:
     k = 3.5 if (hx, hy) == (75.0, 75.0) else 4.0     # as pcb_place.py's HOLE_KEEP
     for side in (False, True):
         fixed_boxes[side].append((hx - k, hy - k, hx + k, hy + k))
-for k in KEEP + power42.KEEP_TOP + power_rails.KEEP_TOP + power54.KEEP_TOP + power_aux.KEEP_TOP:
+for k in (KEEP + power42.KEEP_TOP + power_rails.KEEP_TOP + power54.KEEP_TOP + power_aux.KEEP_TOP
+          + esp_plan.KEEP_TOP):
     fixed_boxes[False].append(k)
 for k in (power42.KEEP_BOTTOM + power_rails.KEEP_BOTTOM + power54.KEEP_BOTTOM + power_aux.KEEP_BOTTOM
           + efuse_hand.keep_bottom() + efuse_hand.keep_bottom42() + far42.KEEP + flt_bus.KEEP + ina_link.KEEP
@@ -344,3 +347,9 @@ b.Save(BOARD)
 print(f"optimized {len(parts)} parts, {len(nets)} nets, {len(dec_targets)} decoupling caps: "
       f"cost {start:.0f} -> {total:.0f} ({100 * (1 - total / start):.0f} % lower), "
       f"{accepted} of {ITER} moves accepted, {time.time() - t_start:.0f} s")
+
+# the native pcbnew (KiCad 10.0.8) can crash tearing itself down at interpreter exit, after the work is saved,
+# which would stop the rebuild: leave at once
+sys.stdout.flush()
+sys.stderr.flush()
+os._exit(0)

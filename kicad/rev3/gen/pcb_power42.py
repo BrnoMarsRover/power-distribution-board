@@ -5,6 +5,7 @@ pcb_optimize.py; the signal routing (pcb_route.py) and the +3V3 distribution (pc
 
     python3 kicad/rev3/gen/pcb_power42.py
 """
+import os
 import sys
 from pathlib import Path
 
@@ -28,3 +29,9 @@ zones, vias, tracks = power_aux.copper(b)
 print(f"aux supply copper: {len(zones)} zones, {len(vias)} vias")
 pcbnew.ZONE_FILLER(b).Fill(b.Zones())
 b.Save(BOARD)
+
+# the native pcbnew (KiCad 10.0.8) can crash tearing itself down at interpreter exit, after the work is saved,
+# which would stop the rebuild: leave at once
+sys.stdout.flush()
+sys.stderr.flush()
+os._exit(0)

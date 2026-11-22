@@ -445,6 +445,8 @@ for ref in power_aux.place(FP):              # the always-on aux supply beside t
     claim(FP[ref])
     fixed.add(ref)
 placed[False] += power_aux.KEEP_TOP
+import esp_plan  # noqa: E402
+placed[False] += esp_plan.KEEP_TOP           # the module's top-row escapes
 placed[True] += power_aux.KEEP_BOTTOM
 # controllers and their small parts by template (satellites.py), before the packer; what finds no spot is packed
 ONLY = os.environ.get("PLACE_ONLY")          # development: only this rail's template (the packer does the rest)
@@ -508,3 +510,9 @@ b.Save(BOARD)
 top = sum(1 for f in b.GetFootprints() if not f.IsFlipped())
 print(f"placed: {top} top, {len(FP) - top} bottom; outside their zone ({len(spilled)}): {' '.join(sorted(spilled))}")
 print(f"no room on the board ({len(overflow)}): {' '.join(sorted(overflow))}")
+
+# the native pcbnew (KiCad 10.0.8) can crash tearing itself down at interpreter exit, after the work is saved,
+# which would stop the rebuild: leave at once
+sys.stdout.flush()
+sys.stderr.flush()
+os._exit(0)
