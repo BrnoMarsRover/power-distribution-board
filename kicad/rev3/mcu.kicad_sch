@@ -3713,7 +3713,7 @@
 		)
 		(uuid "159f1dfc-d538-52ce-a24e-66c90a995f40")
 	)
-	(text "Host UART1 (IO17 TX, IO18 RX) goes to the Jetson AGX Orin 40-pin header (pins 10 / 8, GND pin 6)."
+	(text "Host UART1 (IO8 TX, IO17 RX) goes to the Jetson AGX Orin 40-pin header (pins 10 / 8, GND pin 6)."
 		(exclude_from_sim no)
 		(at 20 30 0)
 		(effects
@@ -5171,9 +5171,9 @@
 			)
 		)
 	)
-	(global_label "UART_TX"
+	(global_label "FLT_24"
 		(shape passive)
-		(at 185.42 134.62 0)
+		(at 185.42 137.16 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -5181,9 +5181,9 @@
 			)
 			(justify left)
 		)
-		(uuid "2789cecd-011d-538b-b561-93dd8d3ae183")
+		(uuid "28955a1a-001f-5bd3-9d60-df534fd67098")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 185.42 134.62 0)
+			(at 185.42 137.16 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5408,6 +5408,30 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+			)
+		)
+	)
+	(global_label "UART_RX"
+		(shape passive)
+		(at 185.42 134.62 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "4b2783e0-5cd5-5d90-b044-6360a98d9b7c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 185.42 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 	)
@@ -5651,6 +5675,30 @@
 			)
 		)
 	)
+	(global_label "UART_TX"
+		(shape passive)
+		(at 144.78 154.94 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify right)
+		)
+		(uuid "7a6b68c7-ac16-5ce3-a53b-2b05c3163551")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 144.78 154.94 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+	)
 	(global_label "FLT_5"
 		(shape passive)
 		(at 182.88 218.44 270)
@@ -5792,30 +5840,6 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
-			)
-		)
-	)
-	(global_label "FLT_24"
-		(shape passive)
-		(at 144.78 154.94 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify right)
-		)
-		(uuid "9533a50f-7812-5eac-b348-9d8466fe675e")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 144.78 154.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
 			)
 		)
 	)
@@ -6152,30 +6176,6 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
-			)
-		)
-	)
-	(global_label "UART_RX"
-		(shape passive)
-		(at 185.42 137.16 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "e6b25afd-22b0-5cd7-9eaf-8ff5bbba7fc1")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 185.42 137.16 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
 			)
 		)
 	)

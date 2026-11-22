@@ -45,6 +45,10 @@ elif key == "i2c":
     import i2c_plan
     i2c_plan.route(R, FP, log=quiet)
     what = "I2C bus"
+elif key == "esp":
+    import esp_plan
+    esp_plan.route(R, FP, log=quiet)
+    what = "ESP32 group (host UART)"
 elif key == "ina":
     import ina_link
     ina_link.route(R, FP, log=quiet)

@@ -797,19 +797,21 @@ Pins that stay unused:
   instead.
 
 TWAI and UART are routed through the GPIO matrix, so these assignments can move during
-layout.
+layout. Moved so far (2026-11-22): UART1 TX to GPIO8, RX to GPIO17 and FLT 24V to GPIO18
+(module pins 12, 10, 11), so that the UART's lines run straight north on the top side in J33's
+order, clear of FLT_24's pin via.
 
 | Function | GPIO |
 |----------|------|
 | I2C SDA / SCL | 4 / 5 |
 | Board NTC, aux 5 V sense (ADC1) | 1, 2 |
-| FLT inputs: 42V-D, 42V-C, 24V, 12V, 5V | 6, 7, 8, 9, 16 |
+| FLT inputs: 42V-D, 42V-C, 24V, 12V, 5V | 6, 7, 18, 9, 16 |
 | Spare input, 10 k pull-up (was FLT 54V) | 38 |
 | INA228 ALERT | 10 |
 | CAN TX / RX | 11 / 12 |
 | CAN transceiver standby | 13 |
 | Motor switch sense (MOTOR_OK) | 14 |
-| Host UART1 TX / RX | 17 / 18 |
+| Host UART1 TX / RX | 8 / 17 |
 | Host UART1 spare (RTS or reset) | 15 |
 | USB D− / D+ | 19 / 20 |
 | Status LEDs | 21, 47, 48 |

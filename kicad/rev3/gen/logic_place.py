@@ -102,6 +102,8 @@ def place(FP, obstacles):
     # aux network, which packs around it
     ic("U15", 142.85, 37.35, lambda p: p["4"][1] < p["1"][1] - 1.0 and p["4"][0] < p["6"][0] - 1.0,
        [(140.9, 35.0, 145.5, 40.2)])                  # (the corner J33's outline and the aux power stage leave)
+    import esp_plan                                       # its vias south of it: kept from the aux network
+    obstacles += esp_plan.KEEP_BOTTOM
 
     # ---- aux network: the pocket right of U11 (the aux test pads stay on top, with the packer)
     aux_all = _loose(FP, _sheet(FP, "Always-on aux"), tps=False)
@@ -146,8 +148,11 @@ def place(FP, obstacles):
     can = _loose(FP, _sheet(FP, "CAN bus"))
     run("CAN", "U16", can_area, can, decaps=True, tp_column=(127.6, 106.5))
 
-    # ---- ESP32 support: under the module and around USB; USB ESD by the receptacle, UART ESD at the module's
-    # UART pins (the aux supply fills the bottom under the host-UART connector)
+    # ---- the host UART's series resistors on the top side, north of their module pins (esp_plan, 2026-11-22)
+    import esp_plan
+    done.extend(esp_plan.place(FP, obstacles))
+
+    # ---- ESP32 support: under the module and around USB; USB ESD by the receptacle (the UART's ESD: at J33, above)
     esp_area = [(125.6, 67.2, 149.4, 92.5)]
     ic("U14", 138.3, 87.0, lambda p: p["1"][0] > p["4"][0] + 1.0, esp_area)
     esp = _loose(FP, _sheet(FP, "ESP32-S3")) + aux_3v3

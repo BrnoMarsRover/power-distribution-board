@@ -1570,7 +1570,7 @@ def sheet_aux():
 
 
 ESP_PINS = {"1": "GND", "2": "+3V3", "3": "ESP_EN", "4": "I2C_SDA", "5": "I2C_SCL", "6": "FLT_42D",
-            "7": "FLT_42C", "8": "UART_SP", "9": "FLT_5", "10": "UART_TX", "11": "UART_RX", "12": "FLT_24",
+            "7": "FLT_42C", "8": "UART_SP", "9": "FLT_5", "10": "UART_RX", "11": "FLT_24", "12": "UART_TX",
             "13": "USB_DN", "14": "USB_DP", "15": None, "16": None, "17": "FLT_12", "18": "INA_ALERT",
             "19": "CAN_TXD", "20": "CAN_RXD", "21": "CAN_STB", "22": "MOTOR_OK", "23": "LED_1",
             "24": "LED_2", "25": "LED_3", "26": None, "27": "ESP_IO0", "28": None, "29": None, "30": None,
@@ -1581,7 +1581,7 @@ ESP_PINS = {"1": "GND", "2": "+3V3", "3": "ESP_EN", "4": "I2C_SDA", "5": "I2C_SC
 def sheet_mcu():
     sh = Sheet("mcu", "ESP32-S3-WROOM-1U, USB, host UART, LEDs", [
         "Pin map from docs/rev3/design.md section 6.6. Strapping pins IO0/3/45/46 are not used for I/O.",
-        "Host UART1 (IO17 TX, IO18 RX) goes to the Jetson AGX Orin 40-pin header (pins 10 / 8, GND pin 6).",
+        "Host UART1 (IO8 TX, IO17 RX) goes to the Jetson AGX Orin 40-pin header (pins 10 / 8, GND pin 6).",
         "USB-C is for flashing and debug only (built-in USB-Serial/JTAG). VBUS only feeds the logic OR in aux_power.",
         "N8 module variant (no octal PSRAM). u.FL antenna: route the cable out of the rover body.",
         "USBLC6 arrays are flow-through: pins 1/6 and 3/4 are joined inside the part. Route each line across its pad pair.",

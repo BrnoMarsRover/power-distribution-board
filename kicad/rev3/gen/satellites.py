@@ -34,7 +34,12 @@ SUPPLY = {"GND", "+3V3", "+5V_LOGIC", "+5V3_AUX", "BUS42", "VBAT", "OUT42D", "OU
           "VIN24", "VIN12", "VIN5", "OUT54"}
 GAP = 0.55                             # between courtyards (rule 0.5)
 GATE_PINS = 4                          # the first pins of a pin order drive gates: their nets weigh more
-VARIANT = {}                           # IC ref -> annealing seed set chosen because its placement routes completely
+VARIANT = {"U11": 1}                   # IC ref -> annealing seed set chosen because its placement routes completely
+# (U11, the aux network, 2026-11-22: since the host UART's ESD array U15 and its vias took part of its pocket, only
+# some seed sets fit all eight parts; set 1 does, with no crossings)
+for _kv in filter(None, os.environ.get("SAT_VARIANTS", "").split(",")):   # development: "U11:2,U14:1"
+    _k, _v = _kv.split(":")
+    VARIANT[_k] = int(_v)
 HAND = {"24", "12", "5"}               # rail eFuses placed by the hand template (efuse_hand.py), not by annealing
 HAND42 = {"42D", "42C"}                # the same for the 42 V blocks (efuse_hand.SLOTS42)
 ITERATIONS = int(os.environ.get("SAT_ITER", 150000))   # annealing moves per run (SAT_ITER: quick debug runs)
@@ -256,7 +261,7 @@ def _nearest_spot(part, num, ax, ay, area, obstacles, rmax=16.0):
 
 CACHE_DIR = Path(__file__).resolve().parent / "out" / "place_cache"
 SOURCES = ("logic_place.py", "power_rails.py", "power42.py", "power54.py", "power_aux.py", "far42.py", "flt_bus.py", "ina_link.py",
-           "i2c_plan.py")
+           "i2c_plan.py", "esp_plan.py")
 # this module's functions that do not place annealed clusters: editing them leaves the cache valid
 NOT_ENGINE = {"efuse", "efuse42", "replicate", "_rail_regions", "place_ic", "put_ic", "_sheet_parts", "_signature"}
 
