@@ -171,6 +171,12 @@ DRU = """(version 1)
 (rule "Power: fine-pitch pin escapes"
   (constraint track_width (min 0.25mm))
   (condition "A.Type == 'Track' && (A.hasNetclass('HV_Bus') || A.hasNetclass('HV_Power') || A.hasNetclass('Power')) && A.intersectsArea('Pin escape*')"))
+
+# ...and sense taps: a Kelvin line or a controller's supply feed on a power net carries no current (or milliamps);
+# they run at signal width inside the plans' "Sense*" rule areas (boost_plan.py: the LM5122's sense pair and feed).
+(rule "Power: sense taps"
+  (constraint track_width (min 0.25mm))
+  (condition "A.Type == 'Track' && (A.hasNetclass('HV_Bus') || A.hasNetclass('HV_Power') || A.hasNetclass('Power')) && A.intersectsArea('Sense*')"))
 """
 
 # ---------------------------------------------------------------- board

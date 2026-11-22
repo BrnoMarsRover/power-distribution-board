@@ -49,7 +49,10 @@ KEEP_BOTTOM = [(XL, 92.0, XR, 104.0),                 # OUT42C feed and input ce
                (XL, 109.2, 41.2, 149.4),               # L1, LIN, SW, FET stack, left ceramic row
                (41.2, 120.5, XR, 149.4)]               # GND / OUT54 stripes, ceramics, J13's legs
 KEEP_BOTTOM += [(U10_XY[0] + 3.45, 133.3, XL, 149.4)]   # U10's gate-drive corridor up to Q24's leads (boost_plan)
-KEEP_TOP = [(XL, 97.8, 45.0, 113.2),                   # OUT42C via row, input GND vias: no top parts on them
+KEEP_TOP = [(34.0, 99.0, 36.9, 121.9), (25.2, 119.5, 36.9, 121.9),   # the controller's sense pair and feed on top
+            (25.2, 119.5, 27.6, 147.0), (14.5, 144.6, 27.6, 147.0),   # (boost_plan.KEEP_TOP)
+            (28.3, 122.5, 31.6, 124.1),                                 # the SW test pad and its via
+            (XL, 97.8, 45.0, 113.2),                   # OUT42C via row, input GND vias: no top parts on them
             (U10_XY[0] - 1.6, U10_XY[1] - 3.0, U10_XY[0] + 1.6, U10_XY[1] + 3.0)]   # U10's pad vias
 
 

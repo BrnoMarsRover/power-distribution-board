@@ -84,6 +84,29 @@ OUT54_FB_VIA_DY = -1.235                         # R130's OUT54 via, above its p
 FB_L3_Y = 133.9
 
 
+# ---- the long lines on the top side: the sense pair (Kelvin, from the shunt R121's pads) and the OUT42C feed for the
+# VIN and UVLO resistors (from the input via row). Down the top side east of the input GND via field, west above the
+# GND vias at y 122, down the free strip east of the brake pour, west under U10's south edge (its pad vias leave only
+# y > 145.1 there) into the filter column. West to east in the strips: feed, OUT42C (Kelvin), LIN (Kelvin).
+KELVIN_VIA = {"OUT42C": (36.2, 103.0), "LIN": (36.2, 106.4)}       # beside R121's pads (bottom side links; the
+                                                                   # OUT42C one clear of BRAKE_ACT's L3 at y 102)
+FEED_VIA = (34.5, 99.2)                                            # the input row's OUT42C via the feed starts at
+STRIP1_X = {"feed": 34.7, "OUT42C": 35.3, "LIN": 36.2}
+RUN1_Y = {"feed": 120.1, "OUT42C": 120.7, "LIN": 121.3}
+STRIP2_X = {"feed": 25.8, "OUT42C": 26.4, "LIN": 27.0}
+RUN2_Y = {"feed": 145.2, "OUT42C": 145.8, "LIN": 146.4}
+COL_IN_X = {"feed": 15.0, "OUT42C": 14.9, "LIN": 15.5}             # where each turns into the filter column
+TP28_XY = (33.4, 118.5)                                            # OUT42C test pad, on the feed
+TP26_XY, TP26_VIA = (30.5, 123.3), (29.1, 123.3)                   # SW test pad, its via into the SW pour
+# the "Sense boost" rule areas over the sense pair and feed: power-net tracks may be signal width inside them
+SENSE_AREAS = [(34.0, 98.6, 37.4, 108.0), (34.0, 98.6, 37.0, 122.0), (25.3, 119.3, 37.0, 122.0),
+               (25.3, 119.3, 27.7, 147.2), (13.3, 141.4, 27.7, 147.2), (13.3, 141.4, 16.0, 149.0),
+               (32.4, 117.4, 35.2, 119.6)]
+# top side kept from the packer: the strips and runs
+KEEP_TOP = [(34.0, 99.0, 36.9, 121.9), (25.2, 119.5, 36.9, 121.9), (25.2, 119.5, 27.6, 147.0),
+            (14.5, 144.6, 27.6, 147.0), (28.3, 122.5, 31.6, 124.1)]
+
+
 def place_keep(obstacles):
     obstacles += KEEP
 
@@ -134,6 +157,12 @@ def place(FP, obstacles):
     _at(FP[tp], *TP27_XY, 0)
     FP[tp].SetLocked(True)
     done.append(tp)
+    for n, xy in (("OUT42C", TP28_XY), ("SW", TP26_XY)):                   # the input / switch-node test pads
+        t = next(r for r, f in FP.items() if r.startswith("TP") and f.GetSheetname() == sheet
+                 and {p.GetNetname().split("/")[-1] for p in f.Pads()} == {n})
+        _at(FP[t], *xy, 0)
+        FP[t].SetLocked(True)
+        done.append(t)
     obstacles += KEEP + KEEP_VIAS
     return done
 
@@ -275,9 +304,73 @@ def route(R, FP, log=print):
     if bad:
         R.failed.append("boost controller")
     log(f"   boost controller: {len(segs)} planned segments, {len(vias)} vias, {len(bad)} clearance problems")
+    # ---- the long lines on top: Kelvin taps at R121 (bottom), the feed from the input via row, TP28 / TP26
+    r121 = {q["net"].split("/")[-1]: q for q in R.geo.pads if q["ref"] == "R121"}
+    col = {"feed": (pad_of("OUT42C", ("R125",))["c"], pad_of("OUT42C", ("R122",))["c"]),
+           "OUT42C": pad_of("OUT42C", ("R123",))["c"], "LIN": pad_of(next(q["net"] for q in R.geo.pads
+                                                                          if q["ref"] == "R124" and q["net"].endswith("LIN")), ("R124",))["c"]}
+    lin = next(q["net"] for q in R.geo.pads if q["ref"] == "R121" and q["net"].endswith("LIN"))
+    fsegs, fvias = [], []
+    for k, n in (("OUT42C", "OUT42C"), ("LIN", lin)):
+        p = r121[k]
+        inner = (p["box"][0] + 0.25, p["box"][3] - 0.2) if k == "OUT42C" else (p["box"][0] + 0.25, p["box"][1] + 0.2)
+        fsegs += R.track(n, B, [inner, KELVIN_VIA[k]], W)
+        fvias.append(R.via(n, *KELVIN_VIA[k]))
+    starts = {"feed": [FEED_VIA, (STRIP1_X["feed"], FEED_VIA[1] + 0.5)],
+              "OUT42C": [KELVIN_VIA["OUT42C"], (STRIP1_X["OUT42C"], KELVIN_VIA["OUT42C"][1])],
+              "LIN": [KELVIN_VIA["LIN"]]}
+    for k, n in (("feed", "OUT42C"), ("OUT42C", "OUT42C"), ("LIN", lin)):
+        pts = starts[k] + [(STRIP1_X[k], RUN1_Y[k]), (STRIP2_X[k], RUN1_Y[k]), (STRIP2_X[k], RUN2_Y[k]),
+                           (COL_IN_X[k], RUN2_Y[k])]
+        if k == "feed":
+            pts += [(COL_IN_X[k], col[k][0][1]), col[k][0]]
+            fsegs += R.track(n, F, [(COL_IN_X[k], col[k][1][1]), col[k][1]], W)
+        elif k == "OUT42C":
+            pts += [(col[k][0] + 0.3, col[k][1])]
+        else:
+            pts += [(COL_IN_X[k], col[k][1]), col[k]]
+        fsegs += R.track(n, F, pts, W)
+    tp28 = next(q["c"] for q in R.geo.pads if q["ref"].startswith("TP") and q["net"] == "OUT42C"
+                and abs(q["c"][0] - TP28_XY[0]) < 0.1)
+    fsegs += R.track("OUT42C", F, [tp28, (STRIP1_X["feed"], tp28[1])], W)
+    tp26 = next(q for q in R.geo.pads if q["ref"].startswith("TP") and q["net"] == sw)
+    fsegs += R.track(sw, F, [tp26["c"], TP26_VIA], 0.5)
+    fvias.append(R.via(sw, *TP26_VIA))
+    _sense_areas(R.b)
+    bad = route_plan._check_exact(R, fsegs) + far42._check_vias(R, fvias)
+    for msg in bad[:20]:
+        log(f"   boost sense / feed clearance: {msg}")
+    if bad:
+        R.failed.append("boost sense / feed")
+    log(f"   boost sense pair and feed: {len(fsegs)} segments, {len(fvias)} vias, {len(bad)} clearance problems")
     # ---- the router: UVLO's pull-downs (R126, Q25) to the UVLO node
     r126 = pad_of(uvlo, ("R126",))
     q25 = next(q for q in R.geo.pads if q["net"] == uvlo and q["ref"].startswith("Q"))
     if not R.route_net(uvlo, [R.t_pad(r126["ref"], r126["num"]), R.t_pad(q25["ref"], q25["num"]),
                               R.t_via(*tv["UVLO"])], W, (1.0, 130.0, 14.0, 145.0), label="UVLO (boost)"):
         log("   UVLO: no route")
+
+
+def _sense_areas(b):
+    """Named rule areas (no restrictions) over the sense pair and the feed: the design rules let power-net tracks be
+    signal width inside them only ("Power: sense taps", board_rules.py)."""
+    import pcbnew
+    from power42 import X0, Y0
+    for z in list(b.Zones()):
+        if z.GetIsRuleArea() and z.GetZoneName().startswith("Sense boost"):
+            b.Remove(z)
+    for k, (l, t, r, bt) in enumerate(SENSE_AREAS):
+        z = pcbnew.ZONE(b)
+        z.SetIsRuleArea(True)
+        z.SetDoNotAllowTracks(False)
+        z.SetDoNotAllowVias(False)
+        z.SetDoNotAllowPads(False)
+        z.SetDoNotAllowFootprints(False)
+        z.SetDoNotAllowZoneFills(False)
+        z.SetLayerSet(pcbnew.LSET.AllCuMask())
+        z.SetZoneName(f"Sense boost {k + 1}")
+        o = z.Outline()
+        o.NewOutline()
+        for x, y in ((l, t), (r, t), (r, bt), (l, bt)):
+            o.Append(pcbnew.VECTOR2I(pcbnew.FromMM(X0 + x), pcbnew.FromMM(Y0 + y)))
+        b.Add(z)

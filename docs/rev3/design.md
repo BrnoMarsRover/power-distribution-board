@@ -1580,9 +1580,19 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
        - **Brake FET Q22.** It is a TO-263 on the top side, and its tab pad covers x 11.8 ... 21.2,
          y 129.6 ... 140.4, so no via goes there. C79's GND via sits just east of it. U10's exposed-pad
          vias moved in to +-1.5 mm, so the top one keeps 0.5 mm from the tab.
-       - **Still to do:** the Kelvin pair and the OUT42C feed from the shunt R121 (top side, down the
-         free strip east of the brake column, then west under U10's south edge), BOOST_DIS, and the
-         output's small parts.
+       - **The sense pair and the OUT42C feed** (top side, 0.6 mm pitch, about 65 mm each). The Kelvin
+         taps are vias beside the shunt R121's pads, joined on the bottom side. The feed starts at an
+         input-row OUT42C via. The lines run:
+         - down the top side east of the input GND via field;
+         - west above the GND vias at y 122;
+         - down the free strip east of the brake pour (0.65 mm from its 42 V copper);
+         - west under U10's south edge into the filter column.
+
+         West to east they are the feed, OUT42C (Kelvin) and LIN (Kelvin), so the feed turns off first
+         to the VIN and UVLO resistors and never touches the Kelvin line. All three run over the L2 GND
+         plane. The OUT42C and switch-node test pads moved off the strip (the switch node's has its own
+         via into the SW pour), and the strip is kept from the packer on the top side.
+       - **Still to do:** BOOST_DIS, the output's LED and fuse link, the brake comparator.
      - **Router additions (rails):** the A* expansion limit grows with the window, and round pads (the
        test pads) are modelled as circles, so a route ends inside the copper.
   3. `gen/pcb_silk.py` — the silkscreen.
