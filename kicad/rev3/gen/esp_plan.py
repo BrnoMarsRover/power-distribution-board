@@ -28,7 +28,8 @@ the resistors with their tracks; KEEP_BOTTOM: the vias south of U15, in the aux 
 W, ESD_W = 0.25, 0.4
 KEEP_TOP = [(129.2, 55.5, 149.4, 60.3),          # above the module's top pin row (pads from y 60.3)
             (133.0, 49.3, 142.4, 55.5),          # the UART resistors and their tracks to the corridor vias
-            (139.8, 37.2, 141.1, 38.6), (140.85, 39.95, 142.15, 41.25), (143.15, 39.3, 144.45, 40.6)]  # U15's vias
+            (139.8, 37.2, 141.1, 38.6), (140.85, 39.95, 142.15, 41.25), (143.15, 39.3, 144.45, 40.6),  # U15's vias
+            (129.45, 79.75, 147.5, 81.05)]       # the module's bottom-row escape vias, just outside it
 KEEP_MODULE = [(138.4, 72.4, 146.2, 78.3)]       # the bundle's vias, PWR_BTN's RC and stubs, under the module
 KEEP_BOTTOM = [(139.8, 37.2, 141.1, 38.6),       # U15's vias: TX beside pin 3 (in the power stage's kept area),
                (140.85, 39.95, 142.15, 41.25),   # GND down-left of pin 2,
@@ -96,7 +97,7 @@ def place(FP, obstacles):
         FP[ref].SetLocked(True)
         obstacles.append(_box(FP[ref]))
         done.append(ref)
-    obstacles += KEEP_MODULE
+    obstacles += KEEP_MODULE + KEEP_ESC
     return done
 
 
@@ -228,3 +229,119 @@ def corner(R, FP, log=print):
                 if q["net"] == net and q["ref"].startswith("R") and q["c"][1] < CORNER_BOX[3]]
         if not R.route_net(net, pads + [port], W, CORNER_BOX, label=f"{net} in the corner"):   # (pads seed the
             log(f"   {net}: no way from the bundle's port to its pads")                           # tree, the port joins)
+
+
+# ---- the group's own nets (pcb_route.py espnet, after the switch-control group): planned escapes, then the router
+ESC_LEFT_X, ESC_BOTTOM_Y = 131.6, 80.4           # the left column's vias just inside the edge, the bottom row's outside
+LEFT_PINS = ("19", "20", "21", "23", "24", "25")  # CAN x3, LED x3
+BOTTOM_PINS = ("31", "36", "37", "38", "39")      # spare, RXD0, TXD0, AUX5 and NTC sense (32 BRAKE_ACT: its own plan)
+IO0_VIA = (130.1, 80.4)                          # IO0: beside pin 27, a top-side stub on to the BOOT switch
+EN_VIA, EN_SW_VIA = (145.38, 62.55), (136.9, 84.5)   # EN: under the module edge; at the RESET switch (under its body)
+V3_VIA = (148.4, 63.05)                          # +3V3: pin 2 east under the module edge, right of the north
+GND_VIAS = {"1": (148.4, 61.9), "40": (147.92, 80.4)}   # bundle's L3 columns, then a bottom stub to U12's tab
+KEEP_ESC = [(130.95, 67.2, 132.25, 76.2), (129.45, 79.75, 147.5, 81.05), (136.25, 83.85, 137.55, 85.15)]
+LOCAL_BOX = (120.0, 58.0, 149.4, 126.0)
+
+
+def escapes(R, FP, log=print):
+    """Each of the group's module pins a planned escape (laid with the north bundle, before the rails' legs and the
+    switch-control group, which route around them). Returns {net: [escape via points]} (also escape_points())."""
+    import math
+    import route_plan
+    from route import B, F, IN2
+    segs, vias = [], []
+
+    def lay(net, layer, pts, w=W):
+        segs.extend(R.track(net, layer, pts, w))
+
+    def via(net, x, y):
+        vias.append(R.via(net, x, y))
+
+    pin = {q["num"]: q for q in R.geo.pads if q["ref"] == "U13"}
+    esc = {}                                                      # net -> escape via
+    for num in LEFT_PINS:
+        q = pin[num]
+        (px, py), net = q["c"], q["net"]
+        lay(net, F, [(px, py), (ESC_LEFT_X, py)])
+        via(net, ESC_LEFT_X, py)
+        esc[net] = [(ESC_LEFT_X, py)]
+    for num in BOTTOM_PINS:
+        q = pin[num]
+        (px, py), net = q["c"], q["net"]
+        lay(net, F, [(px, py), (px, ESC_BOTTOM_Y)])
+        via(net, px, ESC_BOTTOM_Y)
+        esc[net] = [(px, ESC_BOTTOM_Y)]
+    # IO0: pin -> via -> the BOOT switch's pad (top side); the router brings its pull-up to the via
+    q = pin["27"]
+    (px, py), net = q["c"], q["net"]
+    vx, vy = IO0_VIA
+    lay(net, F, [(px, py), (px, vy - (px - vx)), (vx, vy)])
+    via(net, vx, vy)
+    sw = min((s for s in R.geo.pads if s["net"] == net and s["ref"].startswith("SW")), key=lambda s: math.dist(s["c"], (vx, vy)))
+    sx, sy = sw["c"]
+    lay(net, F, [(vx, vy), (sx, vy + (vx - sx)), (sx, sy)])
+    esc[net] = [(vx, vy)]
+    # EN: pin 3 -> a via under the module edge; a via at the RESET switch with a top-side stub to its pad
+    q = pin["3"]
+    (px, py), net = q["c"], q["net"]
+    lay(net, F, [(px, py), EN_VIA])
+    via(net, *EN_VIA)
+    sw = min((s for s in R.geo.pads if s["net"] == net and s["ref"].startswith("SW")), key=lambda s: math.dist(s["c"], EN_SW_VIA))
+    (sx, sy), (vx, vy) = sw["c"], EN_SW_VIA
+    via(net, vx, vy)
+    lay(net, F, [(vx, vy), (vx, sy + (vx - sx)), (sx, sy)])
+    esc[net] = [EN_VIA, EN_SW_VIA]
+    # +3V3: pin 2 straight down to U12's tab (0.5 mm); GND pins 1 / 40: a via each
+    q = pin["2"]
+    (px, py) = q["c"]
+    tab = max((s for s in R.geo.pads if s["ref"] == "U12" and s["net"] == "+3V3"), key=lambda s: s["box"][1])  # (the tab)
+    vx, vy = V3_VIA
+    lay("+3V3", F, [(px, py), (px, vy - 0.9), (px + 0.9, vy), (vx, vy)], 0.5)
+    via("+3V3", vx, vy)
+    tx = min(vx, tab["box"][2] - 0.4)
+    lay("+3V3", B, [(vx, vy), (vx, tab["box"][1] + 0.4), (tx, tab["box"][1] + 0.4)], 0.5)
+    for num, (gx, gy) in GND_VIAS.items():
+        (qx, qy) = pin[num]["c"]
+        lay("GND", F, [(qx, qy), (qx, gy - abs(gx - qx)), (gx, gy)] if abs(gx - qx) > 1e-6 else [(qx, qy), (gx, gy)], 0.4)
+        via("GND", gx, gy)
+    import far42
+    bad = route_plan._check_exact(R, segs) + far42._check_vias(R, vias)
+    for msg in bad[:20]:
+        log(f"   ESP32 escapes clearance: {msg}")
+    if bad:
+        R.failed.append("ESP32 escapes")
+    log(f"   ESP32 escapes: {len(segs)} segments, {len(vias)} vias, {len(bad)} clearance problems")
+    return esc
+
+
+def escape_points(R):
+    """{net: [escape via points]}, as escapes() laid them."""
+    pin = {q["num"]: q for q in R.geo.pads if q["ref"] == "U13"}
+    esc = {pin[n]["net"]: [(ESC_LEFT_X, pin[n]["c"][1])] for n in LEFT_PINS}
+    esc.update({pin[n]["net"]: [(pin[n]["c"][0], ESC_BOTTOM_Y)] for n in BOTTOM_PINS})
+    esc[pin["27"]["net"]] = [IO0_VIA]
+    esc[pin["3"]["net"]] = [EN_VIA, EN_SW_VIA]
+    return esc
+
+
+def local(R, FP, log=print):
+    """The ESP32 group's own nets, by the router from their escapes to the group's parts (bottom-side pads; the
+    switches' pads are reached by the escapes' top-side stubs)."""
+    import route
+    from route import B
+    esc = escape_points(R)
+    R.geo.route_keep, R.geo.via_keep, R.geo.hv_ok = [], [], {}
+    N = route.Negotiator(R, LOCAL_BOX, origin=LOCAL_BOX[:2])
+    for net, pts in esc.items():
+        terms = [R.t_via(x, y) for x, y in pts]
+        terms += [R.t_pad(q["ref"], q["num"]) for q in R.geo.pads
+                  if q["net"] == net and q["ref"] != "U13" and not q["ref"].startswith("SW") and B in q["layers"]]
+        N.add(net, terms, W, net)
+    failed = N.run(log=log)
+    N.polish(log=log)
+    failed = sorted(set(failed) | set(N._exact(log)))
+    if failed:
+        R.failed += failed
+        log(f"   unrouted: {', '.join(failed)}")
+    n_v = {net: sum(1 for v in R.geo.vias if v[0] == net) for net in esc}
+    log("   ESP32 nets, vias each: " + ", ".join(f"{k.split('/')[-1]} {v}" for k, v in sorted(n_v.items())))

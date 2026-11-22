@@ -49,7 +49,12 @@ elif key == "esp":
     import esp_plan
     esp_plan.route(R, FP, log=quiet)
     esp_plan.corner(R, FP, log=quiet)
+    esp_plan.escapes(R, FP, log=quiet)
     what = "ESP32 group (host UART, north bundle)"
+elif key == "espnet":
+    import esp_plan
+    esp_plan.local(R, FP, log=quiet)
+    what = "ESP32 group's own nets"
 elif key == "ina":
     import ina_link
     ina_link.route(R, FP, log=quiet)

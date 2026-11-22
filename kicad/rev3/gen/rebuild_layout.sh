@@ -24,7 +24,7 @@ echo "[$SECONDS s] power copper"
 $KPY $R/gen/pcb_power42.py 2>&1 | grep -v -i "swig/python\|debug\|GetWidth called"
 echo "[$SECONDS s] routing"
 cp $R/PowerBoard_rev3.kicad_pcb $R/gen/out/stage_copper.kicad_pcb    # for development: placed + power copper
-for block in ina 24 12 5 42D 42C 42legs 42bus flt i2c esp rails sw; do                        # signal routing, block by block
+for block in ina 24 12 5 42D 42C 42legs 42bus flt i2c esp rails sw espnet; do                        # signal routing, block by block
     $KPY $R/gen/pcb_route.py $block 2>&1 | grep -v -i "swig/python\|debug\|GetWidth called" || true
 done
 echo "[$SECONDS s] +3V3"

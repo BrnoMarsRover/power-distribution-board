@@ -1503,6 +1503,14 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
          by the router, to their pads (the corner group packs itself). PWR_BTN's RC filter (R175, C120) moved
          from the corner to the ESP32's pin, so the long line is the button's sense line. MOTOR_OK's latch
          side joins the bundle's via at pin 35 along the module's south side.
+       - **The group's own nets (hybrid, `esp_plan.escapes` / `local`):** every remaining module pin gets
+         a planned escape via. The left column's vias sit just inside the module edge, the bottom row's
+         just outside it, and EN / +3V3 / GND go under the top edge. +3V3 runs east under the edge, clear of
+         the bundle, to a via and a bottom stub onto U12's tab. The BOOT / RESET switches' pads (top side)
+         get top-side stubs from their vias. The escapes are laid with the bundle, before the rails' legs
+         and the switch-control group. After those, the router takes CAN (to U16), the LEDs, EN, IO0, the
+         spare input, AUX5 / NTC sense and UART0 (to its test pads) from the escapes to their parts: one to
+         three vias each, escape included. USB and BRAKE_ACT get plans of their own.
        - **ALERT** now runs north under the module at x 132.45 (it had taken the left-column pins' edge-via
          spots), jogging over south of the module; its hop and R4 stay beside SW2.
      - **Router additions (rails):** the A* expansion limit grows with the window, and round pads (the
