@@ -1502,7 +1502,11 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
          off in order: the sense line into J37's pin 3, MOTOR_OK and PWR_HOLD from ports at the corner's edge,
          by the router, to their pads (the corner group packs itself). PWR_BTN's RC filter (R175, C120) moved
          from the corner to the ESP32's pin, so the long line is the button's sense line. MOTOR_OK's latch
-         side joins the bundle's via at pin 35 along the module's south side.
+         side reaches pin 35 on the top side (`esp_plan.motor_ok_link`). The lane runs from the pin's pad south,
+         then west along the module's south edge, between the bottom row's escape vias and the BOOT / RESET
+         pads, to a via by BOOT. The switch-control group routes from that via to the latch. On the bottom
+         side it would have had to cross the USB pair, and no L3 hop fits there: the bundle's L3 lines and
+         BRAKE_ACT's via leave no window.
        - **The group's own nets (hybrid, `esp_plan.escapes` / `local`):** every remaining module pin gets
          a planned escape via. The left column's vias sit just inside the module edge, the bottom row's
          just outside it, and EN / +3V3 / GND go under the top edge. +3V3 runs east under the edge, clear of
@@ -1510,7 +1514,7 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
          get top-side stubs from their vias. The escapes are laid with the bundle, before the rails' legs
          and the switch-control group. After those, the router takes CAN (to U16), the LEDs, EN, IO0, the
          spare input, AUX5 / NTC sense and UART0 (to its test pads) from the escapes to their parts: one to
-         three vias each, escape included. USB gets a plan of its own.
+         three vias each, escape included. USB has its own plan (below).
        - **BRAKE_ACT** (`esp_plan.brake`, laid with the escapes): about 160 mm from pin 32 to the brake
          comparator in the bottom-left corner, on L3. It runs south beside the ESP32's group, east of the I²C
          trunk's end, then west in the one long free L3 lane (y 102, between output rows 2 and 3), then south
@@ -1518,6 +1522,28 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
          (the brake group packs itself). It is a slow comparator output, shielded on L3 between the planes.
        - **ALERT** now runs north under the module at x 132.45 (it had taken the left-column pins' edge-via
          spots), jogging over south of the module; its hop and R4 stay beside SW2.
+       - **USB-C** (`esp_plan.usb`, laid with the escapes, before everything else that crosses the area).
+         J32's pads stand in one 0.5 mm column. Its D+ / D− pads alternate in it, and the pairs must be
+         joined because a cable can be flipped. No 0.9 mm via fits between the pads, and none goes under the
+         receptacle's body. So:
+         - D+ is joined just behind the pads and D− just in front. Every line leaves west on the top side to
+           its own via, in the 1.3 mm band between the pads and RESET's pads. North to south: VBUS, CC2,
+           D+, D−, CC1, VBUS.
+         - On the bottom side, CC1 / CC2 go east to their 5.1 kΩ resistors under the pads. D+ runs through
+           the ESD array U14's channel (between its pin rows) into pin 3, and D− round it into pin 1.
+         - The two VBUS pads are joined on L3 under the pad column. U14's VBUS pin reaches the north VBUS via
+           on L3, from a via between the DP / DN exits. U14's GND pin has its own via south of it.
+         - J32's GND pads run into the shield tabs, which are plated through to the GND plane.
+         - The module's USB pins have top-side stubs to vias under its corner. From there USB_DP / USB_DN run
+           as a planned pair on the bottom side, 0.5 mm apart, to U14's pins 4 / 6. They pass between the
+           left-column escapes and R156, west of the module's decap C105, and through the bottom row's escapes
+           east of BRAKE_ACT's via. They cross the I²C rows on L3 but never run along an L3 line. The
+           router had found a path, but DP sat right on top of the SCL / SDA columns for 13 mm, and the two
+           lines could not stay together past C105.
+         - The packer keeps out of the via band, U14's way north and its GND via (`esp_plan.USB_KEEP`). The
+           AUX5 divider's R147 / R148 moved away.
+         - VBUS_USB still has to reach the OR diode D17 in the aux block (y 51). That crossing of the
+           module's area belongs with +5V_LOGIC's way south to the CAN transceiver (step 3).
      - **Router additions (rails):** the A* expansion limit grows with the window, and round pads (the
        test pads) are modelled as circles, so a route ends inside the copper.
   3. `gen/pcb_silk.py` — the silkscreen.

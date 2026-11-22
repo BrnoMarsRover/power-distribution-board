@@ -374,3 +374,131 @@ def local(R, FP, log=print):
         log(f"   unrouted: {', '.join(failed)}")
     n_v = {net: sum(1 for v in R.geo.vias if v[0] == net) for net in esc}
     log("   ESP32 nets, vias each: " + ", ".join(f"{k.split('/')[-1]} {v}" for k, v in sorted(n_v.items())))
+
+
+# ---- USB-C (J32) and its ESD array U14 (decided 2026-11-22). J32's pads stand in one 0.5 mm column (top side, x
+# 142.07-143.22), the receptacle's body behind them (east); no 0.9 mm via fits between the pads, and none goes under
+# the body. North to south: GND, VBUS, CC2, SBU1, D+ B6, D- A7, D+ A6, D- B7, CC1, SBU2, VBUS, GND. Plan:
+#  - D+ joined behind the pads (in the strip before the body), D- in front; so D+ leaves from B6 and D- from the
+#    middle of its join, and every line leaves west on the top side to its own via, in the 1.3 mm band between the
+#    pads and RESET's (SW1's) pads: VBUS north, CC2, D+, D-, CC1, VBUS south;
+#  - bottom side: CC2 / CC1 east to their 5.1 k resistors under the pads, D+ through U14's channel (between its pin
+#    rows) into pin 3, D- round it into pin 1; U14's GND pin to a via south of it, its VBUS pin to a via north of it
+#    (between the DP / DN exits) and L3 to the north VBUS via;
+#  - both VBUS pads joined on L3, under the pad column;
+#  - GND pads into the shield tabs (top side; the tabs are plated through to the GND plane);
+#  - USB_DP / USB_DN: the module's pins 14 / 13 to vias under its corner, the router from there to U14's pins 4 / 6.
+# VBUS_USB on to the OR diode D17 (aux block, y 51) crosses the module's area with +5V_LOGIC's way south: step 3.
+USB_J32 = {"A9": (142.645, 84.365), "B5": (142.645, 85.015), "B6": (142.645, 86.015), "A7": (142.645, 86.515),
+           "A6": (142.645, 87.015), "B7": (142.645, 87.515), "A5": (142.645, 88.015), "A4": (142.645, 89.165),
+           "A12": (142.62, 83.565), "A1": (142.62, 89.965)}
+USB_U14 = {"1": (139.696, 89.033), "3": (137.796, 89.033), "4": (137.796, 86.758), "6": (139.696, 86.758)}
+USB_JOIN_DP_X = 143.55                            # D+ behind the pads (0.33 past their far ends)
+USB_JOIN_DN_X = 141.64                            # D- in front (0.43 before their near ends)
+USB_VIA = {"VBUS_N": (141.4, 83.85), "CC2": (141.35, 85.015), "D+": (140.75, 86.015), "D-": (141.25, 87.2),
+           "CC1": (141.4, 88.55), "VBUS_S": (141.3, 90.35), "U14_VBUS": (138.75, 85.2), "U14_GND": (138.75, 90.6),
+           "DP": (131.75, 64.15), "DN": (132.9, 64.6)}
+USB_DP_B = [(140.33, 86.435), (140.33, 87.6), (140.03, 87.9), (138.1, 87.9), (137.8, 88.2), (137.8, 88.6)]
+USB_DN_B = [(140.82, 87.63), (140.82, 88.0), (140.32, 88.5), (139.7, 88.5)]
+USB_VBUS_W = 0.3                                  # the VBUS stubs out of the pad column (0.4 on L3)
+USB_VBUS_L3 = [(142.55, 83.85), (142.55, 89.4), (141.6, 90.35)]
+# USB_DP / USB_DN as a pair on the bottom side, 0.5 mm apart (DN on the east side): from the module's vias south-east
+# between the left-column escapes and R156, south west of the module's decap C105 (crossing the I2C rows, never
+# along an L3 line), south-east under the module's bottom row, west of the PWR_HOLD via, through the escape row east
+# of BRAKE_ACT's via, then DP west and DN east round U14's VBUS via into pins 4 / 6
+USB_DP_PATH = [(131.75, 64.15), (131.75, 64.81), (134.9, 67.96), (134.9, 73.3), (137.4, 75.8), (137.4, 77.5),
+               (138.6, 78.7), (138.6, 84.0), (137.8, 84.8), (137.8, 86.5)]
+USB_DN_PATH = [(132.9, 64.6), (132.9, 65.253), (135.4, 67.753), (135.4, 73.093), (137.9, 75.593), (137.9, 77.293),
+               (139.1, 78.493), (139.1, 84.0), (139.7, 84.6), (139.7, 86.5)]
+# MOTOR_OK's latch side (C114 / D21 / R169, west of the module) to pin 35: on the top side, from pin 35's pad south and
+# west along the module's south edge (between the bottom row's escape vias and the BOOT / RESET pads) to a via by
+# BOOT; the router (switch control) takes it on from there. So it crosses neither the USB pair nor the I2C lines
+MOK_LANE_Y = 81.3
+MOK_VIA = (130.9, 81.4)
+# bottom side kept from the packer (after U14 is placed): the via band, U14's way north, its GND via
+USB_KEEP = [(140.2, 82.9, 141.95, 91.0), (137.2, 81.1, 140.2, 86.0), (138.2, 90.0, 139.3, 91.2)]
+
+
+def usb_keep(obstacles):
+    """After U14 is placed (logic_place): the bottom-side spots of the USB plan, kept from the packer."""
+    obstacles += USB_KEEP
+
+
+def usb(R, FP, log=print):
+    """J32's fan-out, U14's links and the USB pair to the module (planned), USB_DP / USB_DN by the router."""
+    import math
+    import far42
+    import route_plan
+    from route import B, F, IN2
+    pad = {q["num"]: q for q in R.geo.pads if q["ref"] == "J32" and q["num"]}
+    for num, (x, y) in USB_J32.items():
+        assert math.hypot(pad[num]["c"][0] - x, pad[num]["c"][1] - y) < 0.01, f"ESP plan: J32 pad {num} moved"
+    u14 = {q["num"]: q for q in R.geo.pads if q["ref"] == "U14"}
+    for num, (x, y) in USB_U14.items():
+        assert math.hypot(u14[num]["c"][0] - x, u14[num]["c"][1] - y) < 0.01, f"ESP plan: U14 pin {num} moved"
+    net = {k: pad[n]["net"] for k, n in (("D+", "B6"), ("D-", "A7"), ("CC1", "A5"), ("CC2", "B5"))}
+    vbus, gnd = pad["A9"]["net"], "GND"
+    c = {n: pad[n]["c"] for n in USB_J32}
+    v = USB_VIA
+    segs, vias = [], []
+    # top side: the joins, the stubs to the band's vias, the GND pads into the shield tabs
+    segs += R.track(net["D+"], F, [c["B6"], (USB_JOIN_DP_X, c["B6"][1]), (USB_JOIN_DP_X, c["A6"][1]), c["A6"]], W)
+    segs += R.track(net["D-"], F, [c["A7"], (USB_JOIN_DN_X, c["A7"][1]), (USB_JOIN_DN_X, v["D-"][1]),
+                                   (USB_JOIN_DN_X, c["B7"][1]), c["B7"]], W)
+    segs += R.track(net["D-"], F, [(USB_JOIN_DN_X, v["D-"][1]), v["D-"]], W)
+    segs += R.track(net["D+"], F, [c["B6"], v["D+"]], W)
+    segs += R.track(net["CC2"], F, [c["B5"], v["CC2"]], W)
+    segs += R.track(net["CC1"], F, [c["A5"], (141.75, c["A5"][1]), (v["CC1"][0], 88.365), v["CC1"]], W)
+    segs += R.track(vbus, F, [c["A9"], (141.85, c["A9"][1]), v["VBUS_N"]], USB_VBUS_W)
+    segs += R.track(vbus, F, [c["A4"], (142.05, c["A4"][1]), (v["VBUS_S"][0], 89.915), v["VBUS_S"]], USB_VBUS_W)
+    for num, ty in (("A12", 82.45), ("A1", 91.1)):
+        segs += R.track(gnd, F, [c[num], (c[num][0], ty)], 0.5)
+    for k, n in (("VBUS_N", vbus), ("CC2", net["CC2"]), ("D+", net["D+"]), ("D-", net["D-"]), ("CC1", net["CC1"]),
+                 ("VBUS_S", vbus), ("U14_VBUS", vbus), ("U14_GND", gnd)):
+        vias.append(R.via(n, *v[k]))
+    # bottom side: D+ through U14's channel into pin 3, D- round it into pin 1, U14's VBUS and GND pins to their vias
+    segs += R.track(net["D+"], B, [v["D+"]] + USB_DP_B, W)
+    segs += R.track(net["D-"], B, [v["D-"]] + USB_DN_B, W)
+    segs += R.track(vbus, B, [u14["5"]["c"], v["U14_VBUS"]], W)
+    segs += R.track(gnd, B, [u14["2"]["c"], v["U14_GND"]], 0.4)
+    # L3: U14's VBUS via to the north VBUS via; the two VBUS vias joined under the pad column
+    segs += R.track(vbus, IN2, [v["U14_VBUS"], (140.1, v["VBUS_N"][1]), v["VBUS_N"]], W)
+    segs += R.track(vbus, IN2, [v["VBUS_N"]] + USB_VBUS_L3 + [v["VBUS_S"]], 0.4)
+    # the module's USB pins: top-side stubs south under its corner to their vias; the pair on the bottom side to U14
+    for key, net_, path in (("DP", "USB_DP", USB_DP_PATH), ("DN", "USB_DN", USB_DN_PATH)):
+        q = next(q for q in R.geo.pads if q["ref"] == "U13" and q["net"] == net_)
+        (px, py), (vx, vy) = q["c"], v[key]
+        assert path[0] == (vx, vy), "ESP plan: the USB pair starts at the module's vias"
+        segs += R.track(net_, F, [(px, py), (px, vy - (vx - px)), (vx, vy)], W)
+        vias.append(R.via(net_, vx, vy))
+        segs += R.track(net_, B, path, W)
+    bad = route_plan._check_exact(R, segs) + far42._check_vias(R, vias)
+    for msg in bad[:20]:
+        log(f"   USB-C clearance: {msg}")
+    if bad:
+        R.failed.append("USB-C fan-out")
+    # the router: CC1 / CC2 from their vias to the resistors
+    for k in ("CC2", "CC1"):
+        r = next(q for q in R.geo.pads if q["net"] == net[k] and q["ref"] != "J32")
+        if not R.route_net(net[k], [R.t_pad(r["ref"], r["num"]), R.t_via(*v[k])], W, (139.5, 83.0, 146.0, 91.0),
+                           label=f"{k} (USB-C)"):
+            log(f"   {k}: no route")
+    log(f"   USB-C: {len(segs)} planned segments, {len(vias)} vias, {len(bad)} clearance problems")
+
+
+
+def motor_ok_link(R, log=print):
+    """MOTOR_OK's top-side lane from pin 35 to its via by BOOT (the switch-control group routes the rest)."""
+    import far42
+    import route_plan
+    from route import F
+    q = next(q for q in R.geo.pads if q["ref"] == "U13" and q["net"] == "MOTOR_OK")
+    (px, py) = q["c"]
+    segs = R.track("MOTOR_OK", F, [(px, py), (px, MOK_LANE_Y), (MOK_VIA[0] + 0.1, MOK_LANE_Y), MOK_VIA], W)
+    vias = [R.via("MOTOR_OK", *MOK_VIA)]
+    bad = route_plan._check_exact(R, segs) + far42._check_vias(R, vias)
+    for msg in bad[:10]:
+        log(f"   MOTOR_OK lane clearance: {msg}")
+    if bad:
+        R.failed.append("MOTOR_OK lane")
+    log(f"   MOTOR_OK lane: {len(segs)} segments, {len(bad)} clearance problems")

@@ -51,7 +51,9 @@ elif key == "esp":
     esp_plan.corner(R, FP, log=quiet)
     esp_plan.escapes(R, FP, log=quiet)
     esp_plan.brake(R, FP, log=quiet)
-    what = "ESP32 group (host UART, north bundle)"
+    esp_plan.usb(R, FP, log=quiet)
+    esp_plan.motor_ok_link(R, log=quiet)
+    what = "ESP32 group (host UART, north bundle, BRAKE_ACT, USB)"
 elif key == "espnet":
     import esp_plan
     esp_plan.local(R, FP, log=quiet)

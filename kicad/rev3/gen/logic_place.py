@@ -155,6 +155,7 @@ def place(FP, obstacles):
     # ---- ESP32 support: under the module and around USB; USB ESD by the receptacle (the UART's ESD: at J33, above)
     esp_area = [(125.6, 67.2, 149.4, 92.5)]
     ic("U14", 138.3, 87.0, lambda p: p["1"][0] > p["4"][0] + 1.0, esp_area)
+    esp_plan.usb_keep(obstacles)                      # USB-C's fan-out vias, U14's ways out: no parts there
     esp = _loose(FP, _sheet(FP, "ESP32-S3")) + aux_3v3
     tp_field = [(125.6, 112.5, 149.4, 142.0)]
     run("ESP32 support", "U14", esp_area, esp, extra_ics=("U15",), decaps=True,
