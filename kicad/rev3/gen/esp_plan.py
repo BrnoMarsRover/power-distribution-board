@@ -13,6 +13,15 @@ U15: no crossing anywhere). Each line:
 U15's connector-side pins 4 / 6 go straight up to J33's pins 1 / 2 (0.4 mm, the discharge's path), its supply pin
 to a +3V3 via between them, its GND pin to a via below it.
 
+The north bundle (decided 2026-11-22: MOTOR_OK moved to pin 35): PWR_HOLD, MOTOR_OK and the power button's sense line
+leave the module's bottom row together (pins 33, 35; PWR_BTN's pin 34 goes through its RC filter R175 / C120, placed
+right there, so the bundle's third line is BTN_SNS) and run on L3 as one bundle to the top-right corner:
+
+  vias inside the module's bottom edge -> nested runs east under the module -> north up the board's right side
+  (right of the I2C path, under U12 and the aux diodes) -> a jog right past the aux supply's GND via -> north right
+  of J33's, J36's pins -> west between J36 and J37 into the corner, each line peeling off in order:
+  BTN_SNS north into J37's pin 3 (through-hole), MOTOR_OK to a via at R167, PWR_HOLD to vias at R172 and R173.
+
 KEEP_TOP: the band above the module's top pin row (its pins' escapes: the FLT bus's pin vias and these lines) and
 the resistors with their tracks; KEEP_BOTTOM: the vias south of U15, in the aux network's pocket.
 """
@@ -20,6 +29,7 @@ W, ESD_W = 0.25, 0.4
 KEEP_TOP = [(129.2, 55.5, 149.4, 60.3),          # above the module's top pin row (pads from y 60.3)
             (133.0, 49.3, 142.4, 55.5),          # the UART resistors and their tracks to the corridor vias
             (139.8, 37.2, 141.1, 38.6), (140.85, 39.95, 142.15, 41.25), (143.15, 39.3, 144.45, 40.6)]  # U15's vias
+KEEP_MODULE = [(138.4, 72.4, 146.2, 78.3)]       # the bundle's vias, PWR_BTN's RC and stubs, under the module
 KEEP_BOTTOM = [(139.8, 37.2, 141.1, 38.6),       # U15's vias: TX beside pin 3 (in the power stage's kept area),
                (140.85, 39.95, 142.15, 41.25),   # GND down-left of pin 2,
                (143.15, 39.3, 144.45, 40.6)]     # RX under pin 1; the pocket right of U15 stays whole
@@ -31,8 +41,21 @@ VIA_X = {"UART_TX": 140.1, "UART_RX": 140.9, "UART_SP": 141.7}   # the corridor 
 # U15's vias, none right of it (the aux network's resistors need that pocket whole): TX left of pin 3 (inside the
 # power stage's kept area), RX straight under pin 1, GND down-left of pin 2
 U15_VIA = {"UART_TX": (140.45, 37.9), "UART_RX": (143.8, 39.95), "GND": (141.5, 40.6)}
-SP_X = 146.2                                     # SP: north-east to x 146.2, north to J33's pin 4
 U15_V3 = 34.3                                    # U15's +3V3 via, between its connector lines
+SP_COL = (141.7, 43.3, 145.0)                    # SP: north from its via to y 43.3, north-east to x 145, north
+
+# the north bundle, west to east heading north
+BUNDLE = ("PWR_HOLD", "MOTOR_OK", "BTN")         # (BTN: the power button's sense line, after R175)
+MOD_VIA_Y = 76.9                                 # the bundle's vias inside the module's bottom edge
+RUN_Y = {"PWR_HOLD": 74.5, "MOTOR_OK": 75.3, "BTN": 76.1}         # nested runs east under the module
+COL_X = {"PWR_HOLD": 146.3, "MOTOR_OK": 146.8, "BTN": 147.3}      # north under the module's right side
+JOG_Y, JOG_DX = {"PWR_HOLD": 45.3, "MOTOR_OK": 45.6, "BTN": 45.9}, 1.3   # right, past the aux GND via (148.2, 46.23)
+WEST_Y = {"PWR_HOLD": 18.4, "MOTOR_OK": 17.5, "BTN": 16.6}        # west between J36 and J37 (0.9 pitch: vias)
+R175_C, C120_C = (143.6, 75.5), (143.6, 73.4)    # PWR_BTN's RC at its pin (bottom side), the PWR_BTN pads left
+BTN_DETOUR_Y = 77.75                             # PWR_BTN: under the pin row, past MOTOR_OK's via, up to the RC
+C120_GND_VIA = (145.4, 72.9)
+PORT_X = {"MOTOR_OK": 137.6, "PWR_HOLD": 136.6}  # the bundle's corner ports: the router takes them on to their pads
+CORNER_BOX = (125.5, 0.6, 139.2, 20.0)           # (the corner group packs itself: its pads move)
 J33_TURN = {"4": 34.0, "6": 33.3}                # U15's connector lines: straight up to here, then north-west
 
 
@@ -61,6 +84,19 @@ def place(FP, obstacles):
         power42._upright(FP[ref], px, RES_Y, other, mcu, bottom=False)
         FP[ref].SetLocked(True)
         done.append(ref)
+    # PWR_BTN's RC filter at its pin (bottom side, under the module): R175 (to the sense line) and C120
+    from i2c_plan import _flat_b
+    from satellites import _box
+    r175 = next(r for r, f in FP.items() if r.startswith("R") and "PWR_BTN" in {p.GetNetname() for p in f.Pads()})
+    c120 = next(r for r, f in FP.items() if r.startswith("C") and {p.GetNetname() for p in f.Pads()} == {"PWR_BTN", "GND"})
+    for ref, (x, y) in ((r175, R175_C), (c120, C120_C)):
+        a = _pad(FP, ref, "PWR_BTN").GetNumber()
+        b = next(p.GetNumber() for p in FP[ref].Pads() if p.GetNumber() != a)
+        _flat_b(FP[ref], x, y, a, b)
+        FP[ref].SetLocked(True)
+        obstacles.append(_box(FP[ref]))
+        done.append(ref)
+    obstacles += KEEP_MODULE
     return done
 
 
@@ -96,8 +132,9 @@ def route(R, FP, log=print):
         via(side, vx, y)
         if net == "UART_SP":                                      # L3 to J33's pin 4
             jx, jy = j33["4"]["c"]
-            lay(side, IN2, [(vx, y), (SP_X, y - (SP_X - vx)), (SP_X, jy + 2.0), (jx, jy + 2.0 - (jx - SP_X)),
-                            (jx, jy)])
+            x0, y1, x2 = SP_COL                                   # north, north-east past U15, north to the pin
+            lay(side, IN2, [(vx, y), (x0, y1), (x2, y1 - (x2 - x0)), (x2, jy + 2.0),
+                            (jx, jy + 2.0 - (jx - x2)), (jx, jy)])
             continue
         ux, uy = U15_VIA[net]
         num = next(n for n, q in u15.items() if q["net"] == side)
@@ -123,10 +160,71 @@ def route(R, FP, log=print):
         assert net == j33[jn]["net"], f"ESP plan: U15.{num} / J33.{jn} on different nets"
         lay(net, B, [(ax, ay), (ax, ty), (jx, ty - (ax - jx)), (jx, jy)], ESD_W)
 
+    s2, v2 = north(R, FP, lay, via)
     bad = route_plan._check_exact(R, segs) + far42._check_vias(R, vias)
     for msg in bad[:30]:
-        log(f"   host UART clearance: {msg}")
+        log(f"   host UART / north bundle clearance: {msg}")
     if bad:
-        R.failed.append("host UART")
-    log(f"   host UART: {len(segs)} segments, {len(vias)} vias, {len(bad)} clearance problems")
+        R.failed.append("host UART / north bundle")
+    log(f"   host UART and north bundle: {len(segs)} segments, {len(vias)} vias, {len(bad)} clearance problems")
     return segs, vias
+
+
+def north(R, FP, lay, via):
+    """The north bundle (lay / via: route()'s, so its copper is checked with the UART's)."""
+    from route import B, F, IN2
+    c = lambda ref, num: R.pad(ref, num)["c"]
+    at = lambda ref, net: next(q for q in R.geo.pads if q["ref"] == ref and q["net"] == net)
+    r175 = next(q["ref"] for q in R.geo.pads if q["net"] == "PWR_BTN" and q["ref"].startswith("R"))
+    btn = next(q["net"] for q in R.geo.pads if q["ref"] == r175 and q["net"] != "PWR_BTN")
+    nets = {"PWR_HOLD": "PWR_HOLD", "MOTOR_OK": "MOTOR_OK", "BTN": btn}
+    c120 = next(q["ref"] for q in R.geo.pads if q["net"] == "PWR_BTN" and q["ref"].startswith("C"))
+    # the module end: PWR_HOLD / MOTOR_OK pins to vias inside the edge; PWR_BTN's pin to its via, under the pin row
+    # to its RC; the sense line from R175 to its via
+    start = {}
+    for key in ("PWR_HOLD", "MOTOR_OK"):
+        px, py = at("U13", nets[key])["c"]
+        lay(nets[key], F, [(px, py), (px, MOD_VIA_Y)])
+        via(nets[key], px, MOD_VIA_Y)
+        start[key] = (px, MOD_VIA_Y)
+    px, py = at("U13", "PWR_BTN")["c"]
+    lay("PWR_BTN", F, [(px, py), (px, MOD_VIA_Y)])
+    via("PWR_BTN", px, MOD_VIA_Y)
+    (rx, ry), (cx, cy) = at(r175, "PWR_BTN")["c"], at(c120, "PWR_BTN")["c"]
+    d = BTN_DETOUR_Y
+    lay("PWR_BTN", B, [(px, MOD_VIA_Y), (px, d), (rx - (d - ry - 1.46), d), (rx, ry + 1.46), (rx, ry), (cx, cy)])
+    bx, by = at(r175, btn)["c"]
+    lay(btn, B, [(bx, by), (bx, MOD_VIA_Y)])
+    via(btn, bx, MOD_VIA_Y)
+    start["BTN"] = (bx, MOD_VIA_Y)
+    gx, gy = next(q["c"] for q in R.geo.pads if q["ref"] == c120 and q["net"] == "GND")
+    lay("GND", B, [(gx, gy), C120_GND_VIA], ESD_W)
+    via("GND", *C120_GND_VIA)
+    # the bundle on L3
+    j37 = {q["num"]: q for q in R.geo.pads if q["ref"].startswith("J") and q["net"] == btn}
+    (tx, ty), = [q["c"] for q in j37.values()]
+    for key in BUNDLE:
+        vx, vy = start[key]
+        ry_, cx_, jy, wy = RUN_Y[key], COL_X[key], JOG_Y[key], WEST_Y[key]
+        ex = cx_ + JOG_DX
+        pts = [(vx, vy), (vx, ry_ + 0.5), (vx + 0.5, ry_), (cx_ - 0.5, ry_), (cx_, ry_ - 0.5), (cx_, jy),
+               (ex, jy - JOG_DX), (ex, wy + 0.5), (ex - 0.5, wy)]
+        if key == "BTN":                                          # north into J37's pin 3
+            pts += [(tx + 0.5, wy), (tx, wy - 0.5), (tx, ty)]
+        else:                                                     # to its port at the corner's edge
+            pts += [(PORT_X[key], wy)]
+        lay(nets[key], IN2, pts)
+    return None, None
+
+
+def corner(R, FP, log=print):
+    """MOTOR_OK and PWR_HOLD from the bundle's ports to their pads in the corner, by the router (after the bundle is
+    laid and checked)."""
+    from route import IN2
+    for key in ("MOTOR_OK", "PWR_HOLD"):
+        net = key
+        port = dict(points=[(IN2, PORT_X[key], WEST_Y[key])], pads=set(), segs=[], vias=[])
+        pads = [R.t_pad(q["ref"], q["num"]) for q in R.geo.pads
+                if q["net"] == net and q["ref"].startswith("R") and q["c"][1] < CORNER_BOX[3]]
+        if not R.route_net(net, pads + [port], W, CORNER_BOX, label=f"{net} in the corner"):   # (pads seed the
+            log(f"   {net}: no way from the bundle's port to its pads")                           # tree, the port joins)

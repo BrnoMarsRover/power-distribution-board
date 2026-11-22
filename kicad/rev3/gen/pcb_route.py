@@ -48,7 +48,8 @@ elif key == "i2c":
 elif key == "esp":
     import esp_plan
     esp_plan.route(R, FP, log=quiet)
-    what = "ESP32 group (host UART)"
+    esp_plan.corner(R, FP, log=quiet)
+    what = "ESP32 group (host UART, north bundle)"
 elif key == "ina":
     import ina_link
     ina_link.route(R, FP, log=quiet)

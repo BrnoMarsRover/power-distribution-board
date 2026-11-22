@@ -799,7 +799,8 @@ Pins that stay unused:
 TWAI and UART are routed through the GPIO matrix, so these assignments can move during
 layout. Moved so far (2026-11-22): UART1 TX to GPIO8, RX to GPIO17 and FLT 24V to GPIO18
 (module pins 12, 10, 11), so that the UART's lines run straight north on the top side in J33's
-order, clear of FLT_24's pin via.
+order, clear of FLT_24's pin via; MOTOR_OK to GPIO42 (pin 35, beside PWR_HOLD / PWR_BTN), so that
+the three lines to the top-right corner leave the module together (GPIO14 is spare).
 
 | Function | GPIO |
 |----------|------|
@@ -810,7 +811,7 @@ order, clear of FLT_24's pin via.
 | INA228 ALERT | 10 |
 | CAN TX / RX | 11 / 12 |
 | CAN transceiver standby | 13 |
-| Motor switch sense (MOTOR_OK) | 14 |
+| Motor switch sense (MOTOR_OK) | 42 |
 | Host UART1 TX / RX | 8 / 17 |
 | Host UART1 spare (RTS or reset) | 15 |
 | USB D− / D+ | 19 / 20 |
@@ -819,7 +820,7 @@ order, clear of FLT_24's pin via.
 | Brake chopper active (BRAKE_ACT) | 39 |
 | Soft-power hold (PWR_HOLD, AQY282S) | 40 |
 | Power button sense (PWR_BTN, low = on) | 41 |
-| Spare | 42 |
+| Spare | 14 |
 
 ---
 
@@ -1484,6 +1485,26 @@ order, clear of FLT_24's pin via.
          2.2 kΩ (decided 2026-11-22, D20), which gives a rise time of about 160 ns at 1.5 mA sink current,
          inside Fast-mode's 300 ns at the bus's 400 kHz (section 5.3). The 4.7 kΩ they replace gave about
          340 ns.
+     - **Host UART and the north bundle (decided 2026-11-22, `esp_plan.py`, run as `pcb_route.py esp` after the
+       I²C bus):**
+       - **Host UART:** the ESD array U15 sits at J33 (see placement). The 1 kΩ series resistors sit on the top
+         side just north of their module pins; the top side is empty there, the bottom is the aux supply's.
+         Each line runs pin → top track → resistor → nested top track east → a via right of the aux inductor
+         L2 → L3 north, at least 5 mm from the buck's switch node → TX / RX into U15's pin vias, SP into J33's
+         pin 4. U15's connector-side pins go straight up to J33 at 0.4 mm. The module's pins were reassigned so
+         that nothing crosses: TX on pin 12, RX on pin 10, FLT_24 on pin 11 (section 6.6). U15's vias sit left
+         of and under it, so the aux network keeps its pocket. Even so, its placement needs seed set 1:
+         the other seed sets no longer fit all eight of its parts.
+       - **North bundle:** PWR_HOLD, MOTOR_OK (moved to pin 35, section 6.6) and the power button's sense line
+         leave the module's bottom row together and run on L3 to the top-right corner. The route goes east
+         under the module, north up the right side (right of the I²C path, under U12 and the aux diodes), right
+         past the aux supply's GND via and J33's and J36's pins, then west between J36 and J37. The lines peel
+         off in order: the sense line into J37's pin 3, MOTOR_OK and PWR_HOLD from ports at the corner's edge,
+         by the router, to their pads (the corner group packs itself). PWR_BTN's RC filter (R175, C120) moved
+         from the corner to the ESP32's pin, so the long line is the button's sense line. MOTOR_OK's latch
+         side joins the bundle's via at pin 35 along the module's south side.
+       - **ALERT** now runs north under the module at x 132.45 (it had taken the left-column pins' edge-via
+         spots), jogging over south of the module; its hop and R4 stay beside SW2.
      - **Router additions (rails):** the A* expansion limit grows with the window, and round pads (the
        test pads) are modelled as circles, so a route ends inside the copper.
   3. `gen/pcb_silk.py` — the silkscreen.

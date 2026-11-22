@@ -329,14 +329,17 @@ def sw_control(R, FP, log=print):
                             max(r, R.pad(cap, cp)["box"][2]) + 3, max(b2, R.pad(cap, cp)["box"][3]) + 3),
                            label=f"{cap} to {ic}.{num}", layers=(B,), neck=neck):
             R.failed.append(f"{cap} to {ic}.{num}")
-    # routed: the short nets, negotiated
+    # routed: the short nets, negotiated. MOTOR_OK's latch side joins the north bundle's via at the ESP32's pin 35
+    # (esp_plan: the bundle takes it to the motor-switch connector), along the module's south side
+    mpin = next(q["c"] for q in R.geo.pads if q["ref"] == "U13" and q["net"] == "MOTOR_OK")
+    mok_via = min(((v[1], v[2]) for v in R.geo.vias if v[0] == "MOTOR_OK"), key=lambda p: math.dist(p, mpin))
     jobs = [
         (R.pad("U19", "2")["net"], [R.t_pad("U19", "2"), R.t_pad("C115", "1"), R.t_pad("D21", "2"),
                                     R.t_pad("R169", "2")]),
-        ("MOTOR_OK", [R.t_pad("D21", "1"), R.t_pad("R169", "1"), R.t_pad("C114", "1")]),
+        ("MOTOR_OK", [R.t_pad("D21", "1"), R.t_pad("R169", "1"), R.t_pad("C114", "1"), R.t_via(*mok_via)]),
         (arm, [R.t_pad("R165", "1"), R.t_via(px, ARM_UP_Y)]),
     ]
-    box = (55.0, 49.5, 128.0, 83.5)
+    box = (55.0, 49.5, 143.0, 83.5)
     N = route.Negotiator(R, box, origin=(55.0, 50.0))
     for net, terms in jobs:
         N.add(net, terms, W, f"{net}")

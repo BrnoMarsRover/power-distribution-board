@@ -62,7 +62,9 @@ CAP_DX, CAP_DY = 1.2, 2.355                      # U21's 100 nF (horizontal) fro
 # the ESP32: the turn north, east under the module (SCL y 72, SDA y 73), up the pins' x to the vias under its edge
 ESP_TURN = {"I2C_SCL": (133.3, 72.0), "I2C_SDA": (134.3, 73.0)}
 ESP_VIA_Y = 62.55
-ALERT_X, ALERT_PIN_VIA = 131.75, (131.75, 67.45)
+ALERT_X, ALERT_PIN_VIA = 131.75, (132.75, 67.45)  # the hop's x (SW2's pads beside it); the pin via
+ALERT_COL, ALERT_JOG_Y = 132.45, 80.0            # L3 north under the module at x 132.45 (x 131.6 stays free for the
+                                                 # left-column pins' edge vias), jogging over south of the module
 # the test pads' lines and the pull-ups (bottom layer)
 TP_X = {"I2C_SCL": 125.7, "I2C_SDA": 124.75}
 PU_Y = 94.0
@@ -70,7 +72,7 @@ PU_SPOTS = {"I2C_SCL": (127.6125, PU_Y), "I2C_SDA": (122.8375, PU_Y)}   # centre
 R4_SPOT = (ALERT_X - 0.9125, (HOP_Y + TRUNK_Y["INA_ALERT"]) / 2)       # its ALERT pad on the hop
 
 # kept from the packers: early (the ESP32 / CAN areas) and after the switch-control ICs (near their pins)
-KEEP_EARLY = [(131.1, 66.8, 132.4, 68.1),                    # ALERT's via at pin 18
+KEEP_EARLY = [(132.1, 66.8, 133.4, 68.1),                    # ALERT's via at pin 18
               (131.1, 89.2, 132.4, 92.35),                   # its hop
               (124.3, 90.2, 126.15, 111.5)]                  # the test pads' lines
 KEEP_SW = [(69.9, 70.9, 72.0, 73.0),                         # U20's pin vias
@@ -253,7 +255,9 @@ def route(R, FP, log=print):
     via("INA_ALERT", ALERT_X, TRUNK_Y["INA_ALERT"])
     via("INA_ALERT", ALERT_X, HOP_Y)
     lay("INA_ALERT", B, [(ALERT_X, TRUNK_Y["INA_ALERT"]), (ALERT_X, HOP_Y)])
-    lay("INA_ALERT", IN2, [(ALERT_X, HOP_Y), ALERT_PIN_VIA])
+    px_, py_ = ALERT_PIN_VIA
+    lay("INA_ALERT", IN2, [(ALERT_X, HOP_Y), (ALERT_X, ALERT_JOG_Y), (ALERT_COL, ALERT_JOG_Y - (ALERT_COL - ALERT_X)),
+                           (ALERT_COL, py_ + (px_ - ALERT_COL)), ALERT_PIN_VIA])
     via("INA_ALERT", *ALERT_PIN_VIA)
     ax, ay = at("U13", "INA_ALERT")
     vx, vy = ALERT_PIN_VIA
