@@ -18,6 +18,7 @@ The test pads go first, in one column with their names to the right, so the clus
 import hashlib
 import json
 import math
+import multiprocessing
 import os
 import random
 import time
@@ -38,6 +39,26 @@ HAND = {"24", "12", "5"}               # rail eFuses placed by the hand template
 HAND42 = {"42D", "42C"}                # the same for the 42 V blocks (efuse_hand.SLOTS42)
 ITERATIONS = int(os.environ.get("SAT_ITER", 150000))   # annealing moves per run (SAT_ITER: quick debug runs)
 RUNS = 3                               # annealing runs per cluster (different seeds), the best is kept
+# the runs are independent: each in its own forked process, in parallel (the same seeds, so the same placement;
+# SAT_SERIAL=1 runs them one after another, as before)
+_RUN = None                            # the cluster's anneal, for the workers (forked: no pickling of the closure)
+
+
+def _run(seed):
+    return _RUN(seed)
+
+
+def _runs(anneal, seeds):
+    """The anneal for every seed, in seed order (min() then breaks ties as before)."""
+    global _RUN
+    if os.environ.get("SAT_SERIAL") or len(seeds) < 2:
+        return [anneal(s) for s in seeds]
+    _RUN = anneal
+    try:
+        with multiprocessing.get_context("fork").Pool(len(seeds)) as pool:
+            return pool.map(_run, seeds)
+    finally:
+        _RUN = None
 COMPACT = 0.15                         # cost per mm from a part to its IC: keeps the cluster round
 CAP_PULL = 2.0                         # cost per mm from a capacitor pad to the IC pin on its net (GND aside)
 CROSS = 15.0                           # cost of two nets' straight connections crossing (routing them needs a via,
@@ -837,7 +858,7 @@ def _place_cluster(FP, ic_ref, area, obstacles, pin_order, fixed_anchors=None, d
     t_start = time.time()
     start = total_cost(greedy)
     base = 1 + 10 * VARIANT.get(ic_ref, int(os.environ.get("SAT_VARIANT", 0)))
-    runs = ([anneal(seed) for seed in range(base, base + RUNS)] if refs   # nothing left to move: the greedy result
+    runs = (_runs(anneal, list(range(base, base + RUNS))) if refs   # nothing left to move: the greedy result
             else [(start, dict(greedy), [])])
     c0, st, left = min(runs, key=lambda t: t[0])
     if not left and not unfit and c0 > start:            # annealing made it worse: keep the greedy result

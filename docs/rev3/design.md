@@ -1188,7 +1188,9 @@ layout.
        overlaps allowed at a price that rises as it cools, then legalised) shorten the connections.
        Cost: each net's spanning tree over its terminals, gate-drive nets ×3; capacitors pulled to the
        IC pins on their nets (bootstrap: BST and SRC); VIN / BUS42 pads pulled towards their pour; a
-       little compactness. The best run is kept.
+       little compactness. The best run is kept. The three runs are independent, so since 2026-11-22
+       each runs in its own forked process, at the same time (the same seeds, so the same placement;
+       `SAT_SERIAL=1` runs them one after another).
      - **Test pads first,** in one column with their names to the right; `pcb_optimize.py` keeps the
        label room of placed pads free.
      - **Like blocks look alike:** 12 V is a copy of the 24 V cluster, shifted by the FET offset
