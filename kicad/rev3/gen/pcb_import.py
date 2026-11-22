@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """One-time import of the rev3 schematic into PowerBoard_rev3.kicad_pcb, with KiCad's own Python.
 
-    flatpak run --command=python3 org.kicad.KiCad kicad/rev3/gen/pcb_import.py
+    python3 kicad/rev3/gen/pcb_import.py
 
 Reads gen/out/netlist.net (kicad-cli sch export netlist), loads every footprint, links it to its
 schematic symbol (path = sheet UUID / symbol UUID, so KiCad's "Update PCB from Schematic" matches
@@ -22,7 +22,7 @@ from kisym import find, parse, unq  # noqa: E402
 PROJ = HERE.parent
 BOARD = PROJ / "PowerBoard_rev3.kicad_pcb"
 NETLIST = HERE / "out" / "netlist.net"
-STOCK_FP = Path("/app/extensions/Library/footprints")
+STOCK_FP = Path("/usr/share/kicad/footprints")
 
 OUTLINE = (120.0, 140.0)          # mm, target from design.md section 8; the user asked for smaller than rev2
 ORIGIN = (50.0, 50.0)             # board corner on the page

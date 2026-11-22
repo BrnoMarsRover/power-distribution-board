@@ -3,7 +3,7 @@
 boost, the aux supply, the GND plane (L2) and the GND fill on the bottom (L4). Run with KiCad's Python after
 pcb_optimize.py; the signal routing (pcb_route.py) and the +3V3 distribution (pcb_3v3.py) follow:
 
-    flatpak run --command=python3 org.kicad.KiCad kicad/rev3/gen/pcb_power42.py
+    python3 kicad/rev3/gen/pcb_power42.py
 """
 import sys
 from pathlib import Path

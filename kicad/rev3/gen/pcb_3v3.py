@@ -3,7 +3,7 @@
 power copper and the signal routes already on the board. Then every zone is refilled. Run with KiCad's Python
 after pcb_route.py:
 
-    flatpak run --command=python3 org.kicad.KiCad kicad/rev3/gen/pcb_3v3.py
+    python3 kicad/rev3/gen/pcb_3v3.py
 """
 import sys
 from pathlib import Path

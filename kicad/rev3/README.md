@@ -22,7 +22,7 @@ That run does six things:
 1. Writes the custom symbols (`PowerBoard_rev3.kicad_sym`).
 2. Writes the custom footprints (`PowerBoard_rev3.pretty`).
 3. Writes the 14 sheets.
-4. Upgrades every file to the KiCad 10 format with `kicad-cli` from the KiCad flatpak.
+4. Upgrades every file to the KiCad 10 format with `kicad-cli` (KiCad 10 from the `kicad-10.0-releases` PPA).
 5. Runs ERC.
 6. Exports KiCad's own netlist and checks it pin by pin against the netlist the script
    intended.

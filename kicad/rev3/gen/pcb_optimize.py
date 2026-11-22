@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Placement optimizer for the small parts (run with KiCad's Python, after pcb_place.py, before pcb_silk.py):
 
-    flatpak run --command=python3 org.kicad.KiCad kicad/rev3/gen/pcb_optimize.py [--iterations N]
+    python3 kicad/rev3/gen/pcb_optimize.py [--iterations N]
 
 Simulated annealing over positions and 90-degree rotations of the movable parts: passives, small ICs and
 transistors, SMD diodes, LEDs and signal test pads. Connectors, FETs, inductors, PTCs, electrolytics, bypass

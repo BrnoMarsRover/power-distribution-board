@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Silkscreen for people who have never seen the board (run with KiCad's Python, right after pcb_place.py):
 
-    flatpak run --command=python3 org.kicad.KiCad kicad/rev3/gen/pcb_silk.py
+    python3 kicad/rev3/gen/pcb_silk.py
 
 - Column headers carry the polarity: "+" at the left end, "-" at the right, matching every connector below.
 - Every input is named with its voltage; + / - sit under its pins.

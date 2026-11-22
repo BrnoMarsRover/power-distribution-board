@@ -35,16 +35,17 @@ spec = importlib.util.spec_from_file_location("rails", REPO / "docs/rev3/rails.p
 rails = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(rails)
 
-KICAD_CLI = ["flatpak", "run", "--command=kicad-cli", "org.kicad.KiCad"]
+KICAD_CLI = ["kicad-cli"]
 SCH_VERSION = "20260306"   # KiCad 10
 SYM_VERSION = "20251024"
 NS = uuid.UUID("5b3f2a8e-6c1d-4d7a-9a4e-7f0c2b9d1e10")
 
 
+KICAD_SHARE = Path("/usr/share/kicad")            # KiCad 10 from the kicad-10.0-releases PPA
+
+
 def kicad_dir(ext):
-    loc = subprocess.run(["flatpak", "info", "--show-location", f"org.kicad.KiCad.Library.{ext}"],
-                         capture_output=True, text=True).stdout.strip()
-    return Path(loc) / "files" / ext.lower()
+    return KICAD_SHARE / ext.lower()
 
 
 SYM_DIR = kicad_dir("Symbols")

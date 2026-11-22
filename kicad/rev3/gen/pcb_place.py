@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Rev3 floorplan in rev2's style (run with KiCad's Python, before any hand placement):
 
-    flatpak run --command=python3 org.kicad.KiCad kicad/rev3/gen/pcb_place.py --overwrite-placement
+    python3 kicad/rev3/gen/pcb_place.py --overwrite-placement
 
 150 x 150 mm, rev2's five M3 holes. Reading the board from the top down:
   inputs row      -> each input above the switch it feeds

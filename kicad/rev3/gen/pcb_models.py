@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """3D models for every part that has a body (run with KiCad's Python; safe to rerun at any time):
 
-    flatpak run --command=python3 org.kicad.KiCad kicad/rev3/gen/pcb_models.py
+    python3 kicad/rev3/gen/pcb_models.py
 
 KiCad 10's 3D library has no model for several of its own footprints (AMASS XT30UPB, Molex CLIK-Mate,
 2920 fuse, two package variants, ESP32-S3-WROOM-1U), and the custom footprints had none.
@@ -18,7 +18,7 @@ PROJ = "kicad/rev3"
 LIB = f"{PROJ}/PowerBoard_rev3.pretty"
 EXT = "${KIPRJMOD}/../ext/SamacSys_Parts.3dshapes"
 K3D = "${KICAD10_3DMODEL_DIR}"
-K3D_PATH = "/app/extensions/Library/3dmodels"
+K3D_PATH = "/usr/share/kicad/3dmodels"
 
 # name -> (model, offset xyz, rotation xyz, scale xyz)
 XT90 = ((26, 5, 0), (-90, 0, 180))                 # rev2 board's placement of the SamacSys XT90 models

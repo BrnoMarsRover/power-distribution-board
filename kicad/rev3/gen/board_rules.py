@@ -22,7 +22,7 @@ from pathlib import Path
 
 PROJ = Path(__file__).resolve().parent.parent
 NAME = "PowerBoard_rev3"
-KICAD_CLI = ["flatpak", "run", "--command=kicad-cli", "org.kicad.KiCad"]
+KICAD_CLI = ["kicad-cli"]
 
 # ---------------------------------------------------------------- JLC standard process
 # What costs extra on a 4-layer order, and the margin taken here:

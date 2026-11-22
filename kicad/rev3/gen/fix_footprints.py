@@ -13,7 +13,7 @@ from pathlib import Path
 import pcbnew
 
 LIB = Path(__file__).resolve().parent.parent / "PowerBoard_rev3.pretty"
-STOCK = "/app/extensions/Library/footprints/RF_Module.pretty"
+STOCK = "/usr/share/kicad/footprints/RF_Module.pretty"
 MM = pcbnew.FromMM
 IO = pcbnew.PCB_IO_KICAD_SEXPR()
 
