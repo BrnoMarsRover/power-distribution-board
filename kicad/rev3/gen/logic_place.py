@@ -120,8 +120,14 @@ def place(FP, obstacles):
     away_nets = {"VSNS_OUT_54", "BOOST_DIS"}
     away = [r for r in boost if (_nets(FP, r) & away_nets and not r.startswith("Q"))
             or any(n.startswith("Net-(D15") for n in _nets(FP, r))]
-    run("boost network", "U10", [(4.5, 121.3, 26.0, 149.4)], [r for r in boost if r not in away],
-        pin_order=["10", "11", "7", "8", "12", "14", "6", "5", "4", "3"])
+    # the loop network north of U10 and the sense filter at pins 3 / 4 by hand (boost_plan, 2026-11-22: the
+    # analog lines peel off the band over U10's top in order, the Kelvin pair arrives side by side); the rest packs
+    # west of U10, clear of the brake corner
+    import boost_plan
+    done.extend(boost_plan.place(FP, obstacles))
+    boost = _loose(FP, _sheet(FP, "54 V boost"), tps=False)
+    run("boost network", "U10", boost_plan.BOOST_AREA, [r for r in boost if r not in away],
+        pin_order=["5", "6", "7", "8"])                  # VIN's 1206 cap first, by its pin
     run("boost, outer parts", "U10", [(50.5, 100.0, 61.0, 149.4)], away)
 
     bottom_band = [(51.0, 136.6, 123.5, 149.4)]                    # test pads along the bottom edge

@@ -1544,6 +1544,45 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
            AUX5 divider's R147 / R148 moved away.
          - VBUS_USB still has to reach the OR diode D17 in the aux block (y 51). That crossing of the
            module's area belongs with +5V_LOGIC's way south to the CAN transceiver (step 3).
+     - **54 V boost, controller side** (`boost_plan.py`, key `boost`, right after the 42 V bus; decided
+       2026-11-22). The router's attempt tangled the gate drive: 13 of 23 nets failed, and VCC, BST,
+       HO and SW looped under the IC and through the power stage. The controller is laid out by hand:
+       - **Placement.** U10 moved 3.2 mm west and 0.35 mm north, to (16.9, 142.85). Its gate-drive pins (11 ... 20) face Q24's
+         leads, and the corridor between them must carry COMP, SLOPE and RES, then LO, VCC, SW and HO,
+         side by side. The order is fixed: every line leaves east, so a line turning north passes
+         outside every pin below it.
+       - **Gate-drive parts.** The BST cap C78 stands right of pins 18 ... 20, centred on HO's pin, so HO
+         leaves between its pads (0.25 mm, 0.2 mm each side). The VCC cap C79 lies north of U10, at the end
+         of VCC's run. The bootstrap diode D13 sits on the top side under pin 20: the 0.5 mm courtyard gap
+         leaves no room for it on the bottom side there. BST reaches its cathode through a via under
+         C78's BST pad. VCC reaches its anode through one L3 hop from a via at the foot of its run. The
+         VCC test pad is beside that via.
+       - **LO.** A via right beside its pin, then L3. It runs north, then east between Q24's source and
+         gate leads and under its quiet OUT54 tab, then north to Q23's gate via (power54's escape). It
+         never runs under the switch node.
+       - **SW and HO.** SW (0.5 mm, a power-class net) runs from C78's SW pad up the corridor into Q24's
+         source lead, so the high-side driver returns through Q24's source. HO runs outside SW and into
+         Q24's gate lead from below.
+       - **The loop network.** It stands in one row north of U10 (by hand: C81, R128, C82 / R129, C83,
+         R131, R130), in the order the analog lines peel off a band kept free over the IC's top. FB
+         runs straight up from pin 10 and along the row's lower pads.
+       - **The FB divider's OUT54 feed.** It starts at a via in the slot between Q24's gate lead and its
+         tab, and runs on L3 north of LO's run and over to R130.
+       - **The 42 V side of the supply and sense filters, on the top side** south-west of U10: R125
+         (UVLO top), R122 (VIN), R123 / R124 (sense), with C76 (VIN, 1206) and C77 (sense) west of them.
+         The bottom side west of U10 is too narrow between the IC and the mounting hole H3. Under U10 on
+         the top side, its pad vias leave only the strip south of y 145.9, and the Kelvin pair from the
+         shunt and the OUT42C feed have to come in there anyway. UVLO, VIN, CSP and CSN each drop to
+         the bottom side through one via. The sense pair fans out to pins 4 / 3 without crossing.
+       - **Remaining parts.** RT's resistor sits right above pin 8 and SS's cap beside pin 7. The UVLO
+         pull-down R126 sits on UVLO's line, and Q25 in the strip north-west of the network. The router
+         joins those two to the UVLO via.
+       - **Brake FET Q22.** It is a TO-263 on the top side, and its tab pad covers x 11.8 ... 21.2,
+         y 129.6 ... 140.4, so no via goes there. C79's GND via sits just east of it. U10's exposed-pad
+         vias moved in to +-1.5 mm, so the top one keeps 0.5 mm from the tab.
+       - **Still to do:** the Kelvin pair and the OUT42C feed from the shunt R121 (top side, down the
+         free strip east of the brake column, then west under U10's south edge), BOOST_DIS, and the
+         output's small parts.
      - **Router additions (rails):** the A* expansion limit grows with the window, and round pads (the
        test pads) are modelled as circles, so a route ends inside the copper.
   3. `gen/pcb_silk.py` — the silkscreen.

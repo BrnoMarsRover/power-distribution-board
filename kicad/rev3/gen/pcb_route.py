@@ -62,6 +62,10 @@ elif key == "ina":
     import ina_link
     ina_link.route(R, FP, log=quiet)
     what = "INA228 link"
+elif key == "boost":
+    import boost_plan
+    boost_plan.route(R, FP, log=quiet)
+    what = "54 V boost controller"
 elif key == "flt":
     import flt_bus
     flt_bus.route(R, FP, log=quiet)

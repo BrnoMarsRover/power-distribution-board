@@ -29,7 +29,17 @@ COL_X = (38.25, 42.15, 46.05)          # first-row ceramics right of the FETs
 ROW2_LEFT_X = (26.5, 30.4, 34.3)       # second-row ceramics under Q24
 D14_X = 38.89                          # output TVS in the second row
 BULK = ((43.46, 111.6, True), (43.46, 125.5, False))   # 100 uF caps on top: body centre, legs vertical?
-U10_XY = (20.1, 143.2)                 # controller left of Q24's leads, its pad vias clear of the brake FET's tab
+U10_XY = (16.9, 142.85)                # controller left of Q24's leads, its pad vias clear of the brake FET's tab;
+                                       # 3.2 mm west of the first spot (2026-11-22): its gate-drive side needs a
+                                       # corridor for the analog escapes, LO, VCC, SW and HO up to Q24's leads
+# gate-drive helpers (boost_plan.py, 2026-11-22), from U10's right pad edge E and its pins:
+#   C78 (BST cap) upright right of pins 18-20, centred on HO's pin so HO leaves between its pads;
+#   C79 (VCC cap) flat north of U10, VCC pad right (VCC comes up the corridor), GND pad left;
+#   D13 (bootstrap diode) on the top side under pin 20, cathode right (BST via under C78), anode left (VCC via)
+CB_DX = 3.02                           # C78's centre, right of E (its courtyard clear of C87)
+CV_XY = (1.3, -4.27)                   # C79's centre: dx from E, dy from pin 11 (SW, 0.5 mm, passes right of it)
+DB_DXY = (0.45, 2.425)                 # D13's centre on TOP: dx from E, dy from pin 20 (no room on the bottom
+                                       # side under U10 with the 0.5 mm courtyard gap); BST and VCC reach it by vias
 VIA_D, VIA_DRILL = 1.0, 0.45
 ESC_D, ESC_DRILL = 0.9, 0.4
 LEG_KEEP = 1.0                         # around a through-hole leg on the bottom: room for the iron
@@ -38,6 +48,7 @@ KEEP_BOTTOM = [(XL, 92.0, XR, 104.0),                 # OUT42C feed and input ce
                (XL, 104.0, 44.9, 109.2),               # input GND strips, R121, top of LIN
                (XL, 109.2, 41.2, 149.4),               # L1, LIN, SW, FET stack, left ceramic row
                (41.2, 120.5, XR, 149.4)]               # GND / OUT54 stripes, ceramics, J13's legs
+KEEP_BOTTOM += [(U10_XY[0] + 3.45, 133.3, XL, 149.4)]   # U10's gate-drive corridor up to Q24's leads (boost_plan)
 KEEP_TOP = [(XL, 97.8, 45.0, 113.2),                   # OUT42C via row, input GND vias: no top parts on them
             (U10_XY[0] - 1.6, U10_XY[1] - 3.0, U10_XY[0] + 1.6, U10_XY[1] + 3.0)]   # U10's pad vias
 
@@ -61,6 +72,11 @@ def _box(fp):
     fp.BuildCourtyardCaches()
     poly = fp.GetCourtyard(pcbnew.B_CrtYd if fp.IsFlipped() else pcbnew.F_CrtYd)
     bb = poly.BBox()
+    return TOMM(bb.GetLeft()) - X0, TOMM(bb.GetTop()) - Y0, TOMM(bb.GetRight()) - X0, TOMM(bb.GetBottom()) - Y0
+
+
+def _pbox(fp, num):
+    bb = _pad(fp, num).GetBoundingBox()
     return TOMM(bb.GetLeft()) - X0, TOMM(bb.GetTop()) - Y0, TOMM(bb.GetRight()) - X0, TOMM(bb.GetBottom()) - Y0
 
 
@@ -111,21 +127,21 @@ def place(FP):
         _at(u, *U10_XY, deg, bottom=True)
         if _pxy(u, "18")[0] > _pxy(u, "3")[0] + 3:
             break
-    # gate-drive helpers next to pins 16-20 (lower right): bootstrap and VCC caps in the strip under U10,
-    # bootstrap diode just above it. Found by net, so renumbering cannot swap them.
+    # gate-drive helpers next to pins 16-20 (boost_plan.py): found by net, so renumbering cannot swap them
     sw, bst, vcc = (_pad(u, n).GetNetname() for n in ("18", "20", "17"))
     nets = lambda r: {p.GetNetname() for p in FP[r].Pads()}
+    pnum = lambda r, n: next(p.GetNumber() for p in FP[r].Pads() if p.GetNetname() == n)
     cb = next(r for r in FP if r.startswith("C") and nets(r) == {sw, bst})
     cv = next(r for r in FP if r.startswith("C") and nets(r) == {vcc, "GND"})
     db = next(r for r in FP if r.startswith("D") and {vcc, bst} <= nets(r))
-    bx, by = _pxy(u, "20")
-    ub = _box(u)
-    for ref, x in ((cb, bx - 0.6), (cv, bx - 4.7)):
-        f = FP[ref]
-        _at(f, x, 0.0, 0, bottom=True)
-        _shift(f, 0.0, ub[3] + GAP - _box(f)[1])
-    _at(FP[db], bx - 1.3, 0.0, 0, bottom=True)
-    _shift(FP[db], 0.0, ub[1] - GAP - _box(FP[db])[3])
+    e = _pbox(u, "19")[2]                                                       # right pad edge
+    _upright(FP[cb], e + CB_DX, _pxy(u, "19")[1], pnum(cb, sw), pnum(cb, bst), bottom=True)
+    _flat_bottom(FP[cv], e + CV_XY[0], _pxy(u, "11")[1] + CV_XY[1], pnum(cv, "GND"), pnum(cv, vcc))
+    for deg in (0, 90, 180, 270):                                               # top: cathode right, anode upper left
+        _at(FP[db], e + DB_DXY[0], _pxy(u, "20")[1] + DB_DXY[1], deg, bottom=False)
+        (kx, ky), (ax, ay) = _pxy(FP[db], pnum(db, bst)), _pxy(FP[db], pnum(db, vcc))
+        if kx > ax + 1.0 and ay < ky - 0.5:
+            break
     done += ["R121", "L1", "Q23", "Q24", *out, "D14", *bulk(FP), "U10", cb, cv, db]
     for ref in done:
         FP[ref].SetLocked(True)
@@ -281,7 +297,7 @@ def copper(b):
     ex = pbox("U10", "21")
     cx, cy = (ex[0] + ex[2]) / 2, (ex[1] + ex[3]) / 2
     long_y = (ex[3] - ex[1]) > (ex[2] - ex[0])
-    for k in (-1.9, 1.9):
+    for k in (-1.5, 1.5):                       # (+-1.5: the top one keeps 0.5 mm from the brake FET's tab, top side)
         via("GND", cx if long_y else cx + k, cy + k if long_y else cy, ESC_D, ESC_DRILL, force=True)
     via("GND", cx, cy, 1.6, 1.0, force=True)
     # the fuse's OUT54 pad (top) reaches L3 through two vias just past it
