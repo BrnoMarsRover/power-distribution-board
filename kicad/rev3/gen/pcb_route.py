@@ -58,6 +58,10 @@ elif key == "can":
     import can_plan
     can_plan.route(R, FP, log=quiet)
     what = "CAN bus"
+elif key == "v5":
+    import logic5v
+    logic5v.route(R, FP, log=quiet)
+    what = "+5V_LOGIC and VBUS"
 elif key == "espnet":
     import esp_plan
     esp_plan.local(R, FP, log=quiet)

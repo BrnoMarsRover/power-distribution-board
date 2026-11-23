@@ -8,9 +8,9 @@ Stack, top to bottom:
   input ceramics (one straight above U11's VIN / RTN pins: the buck's hot loop is that cap and the IC)
   -> U11 (LM5017: VIN / RTN pins on top, SW pin under them) -> L2 standing, its SW pad right under U11's SW pin
   -> output ceramics in a row under L2's 5.3 V pad
-  right column: OR diodes lying flat, D16 (aux 5.3 V) level with L2's 5.3 V pad and D17 (USB VBUS) above it,
-  cathodes on the right joined on +5V_LOGIC with the 5 V cap; the AP7361 under them, input pin up, tab down,
-  its 3.3 V cap beside the tab.
+  right column: the OR diode D16 (aux 5.3 V) lying flat level with L2's 5.3 V pad, cathode on the right, joined on
+  +5V_LOGIC with the 5 V cap above it; the AP7361 under it, input pin up, tab down, its 3.3 V cap beside the tab.
+  (The USB OR diode D17 stood above D16 until 2026-11-23; it now sits at the USB receptacle, logic5v.)
 BUS42 arrives on an L3 track (about 0.1 A) from the 42 V bar, along y 21.7 above the rail blocks' L3
 copies; the logic rails leave by routing.
 """
@@ -28,6 +28,7 @@ C_BST_XY = (131.38, 42.62)           # flat under pins 8 / 7, SW pad west
 C_VCC_XY = (137.6, 42.62)            # flat past the bottom-right corner, VCC pad west
 BUS42_Y = 21.7                       # L3 feed from the 42 V bar runs along here (rail L3 copies start at 22.5)
 GAP = 0.6
+C5_BOTTOM = 48.75                    # the 5 V cap's courtyard bottom (where D17 above D16 had put it)
 # the power stage's copper; the pocket right of U11 (x 135.3-149.4, y 38.2-44.8, and above it right of the input
 # caps) is left for U11's resistors (placed by logic_place.py)
 # and the GND-fill patch between L2 and the diodes (x 139.9-145.8, y 44.8-49.4)
@@ -157,19 +158,19 @@ def place(FP):
         _orient(f, lambda f_: _pxy(f_, "1")[1] < _pxy(f_, "2")[1] - 1)
         _put(f, left=x, top=lb[3] + GAP)
         x = _box(f)[2] + GAP
-    # OR diodes lying flat at the right edge, anode left: D16 level with L2's 5.3 V pad, D17 above it
+    # the aux OR diode lying flat at the right edge, anode left, level with L2's 5.3 V pad; the USB one at the USB
+    # receptacle (logic5v, 2026-11-23)
     lout_y = _pxy(ind, "2")[1]
     da = FP[P["d_aux"]]
     _orient(da, lambda f: _pxy(f, "2")[0] < _pxy(f, "1")[0] - 1)
     _put(da, right=149.4)
     _shift(da, 0.0, lout_y - _pxy(da, "2")[1])
-    du = FP[P["d_usb"]]
-    _orient(du, lambda f: _pxy(f, "2")[0] < _pxy(f, "1")[0] - 1)
-    _put(du, right=149.4, bottom=_box(da)[1] - GAP)
-    # 5 V cap standing above D17, at the cathode end
+    import logic5v
+    logic5v.place_d17(FP[P["d_usb"]])
+    # 5 V cap standing at the cathode end, where it stood above D17 (its +5V_LOGIC pad on the column's pour)
     c5 = FP[P["c5"][0]]
     _orient(c5, lambda f: abs(_pxy(f, "1")[0] - _pxy(f, "2")[0]) < 0.05 and _pxy(f, "1")[1] > _pxy(f, "2")[1])
-    _put(c5, right=149.4, bottom=_box(du)[1] - GAP)
+    _put(c5, right=149.4, bottom=C5_BOTTOM)
     # LDO under D16: pins up (input pin toward the cathodes), tab down; its 3.3 V cap left of the tab
     ldo = FP[P["ldo"]]
     _orient(ldo, lambda f: max(TOMM(p.GetPosition().y) for p in f.Pads() if p.GetNumber() == "2"
@@ -332,10 +333,10 @@ def copper(b):
         via("GND", x, g0[3] - 0.65)
         x += 2.2
     # +5V_LOGIC: a column at the right edge joining both cathodes, the 5 V cap and the LDO's input pin
-    k1, k2 = pb(P["d_aux"], "1"), pb(P["d_usb"], "1")
+    k1 = pb(P["d_aux"], "1")
     lin = pb(P["ldo"], "3")
     c5 = pb(P["c5"][0], "1")
-    xl5 = min(k1[0], k2[0], lin[0]) - 0.3
+    xl5 = min(k1[0], lin[0]) - 0.3
     zone("+5V_LOGIC", rect(xl5, c5[1] - 0.3, 149.4, lin[3] + 0.3), "aux 5V logic")
     # +3V3: the LDO's tab and output pin, the 3.3 V cap (routing takes it to the ESP32 and the logic)
     tab = max((p for p in FP[P["ldo"]].Pads() if p.GetNumber() == "2"), key=lambda p: p.GetSize().x * p.GetSize().y)

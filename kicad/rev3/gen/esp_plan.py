@@ -230,8 +230,8 @@ LEFT_PINS = ("19", "20", "21", "23", "24", "25")  # CAN x3, LED x3
 BOTTOM_PINS = ("31", "36", "37", "38", "39")      # spare, RXD0, TXD0, AUX5 and NTC sense (32 BRAKE_ACT: its own plan)
 IO0_VIA = (130.1, 80.4)                          # IO0: beside pin 27, a top-side stub on to the BOOT switch
 EN_VIA, EN_SW_VIA = (145.38, 62.55), (136.9, 84.5)   # EN: under the module edge; at the RESET switch (under its body)
-V3_VIA = (148.4, 63.05)                          # +3V3: pin 2 east under the module edge, right of the north
-GND_VIAS = {"1": (148.4, 61.9), "40": (147.92, 80.4)}   # bundle's L3 columns, then a bottom stub to U12's tab
+V3_VIA = (148.08, 63.05)                          # +3V3: pin 2 east under the module edge, right of the north
+GND_VIAS = {"1": (148.08, 61.9), "40": (147.92, 80.4)}   # bundle's L3 columns, then a bottom stub to U12's tab
 KEEP_ESC = [(130.95, 67.2, 132.25, 76.2), (129.45, 79.75, 147.5, 81.05), (136.25, 83.85, 137.55, 85.15)]
 # BRAKE_ACT (pin 32) to the brake comparator in the bottom-left corner, about 170 mm on L3, all planned: south beside
 # the ESP32's group (east of the I2C trunk's end), west in the one long free L3 lane, between output rows 2 and 3
@@ -388,7 +388,7 @@ def local(R, FP, log=print):
 #  - both VBUS pads joined on L3, under the pad column;
 #  - GND pads into the shield tabs (top side; the tabs are plated through to the GND plane);
 #  - USB_DP / USB_DN: the module's pins 14 / 13 to vias under its corner, the router from there to U14's pins 4 / 6.
-# VBUS_USB on to the OR diode D17 (aux block, y 51) crosses the module's area with +5V_LOGIC's way south: step 3.
+# VBUS_USB on to the OR diode D17: since 2026-11-23 D17 sits just south of the receptacle (logic5v).
 USB_J32 = {"A9": (142.645, 84.365), "B5": (142.645, 85.015), "B6": (142.645, 86.015), "A7": (142.645, 86.515),
            "A6": (142.645, 87.015), "B7": (142.645, 87.515), "A5": (142.645, 88.015), "A4": (142.645, 89.165),
            "A12": (142.62, 83.565), "A1": (142.62, 89.965)}
@@ -422,8 +422,8 @@ USB_KEEP = [(140.2, 82.9, 141.95, 91.0), (137.2, 81.1, 140.2, 86.0), (138.2, 90.
 # the ESP32 support group's small parts, frozen where the packer had put them on 2026-11-22 (reviewed and routed
 # that way: USB, LEDs, EN / IO0, NTC, AUX5, CC). Its packer re-shuffles them whenever anything near the module
 # changes (2026-11-23: the CAN pin swap put R162 across the CAN lines and C105 on USB_DN). ref: (x, y, deg, nets)
-SUPPORT = {"C104": (143.412, 68.289, 0.0, "+3V3 GND"),    # (the aux sheet's spare +3V3 cap, packed with these)
-           "C105": (136.657, 70.027, -90.0, "+3V3 GND"), "C106": (147.304, 68.277, 0.0, "+3V3 GND"),
+SUPPORT = {"C104": (143.162, 68.289, 0.0, "+3V3 GND"),    # (the aux sheet's spare +3V3 cap, packed with these)
+           "C105": (136.657, 70.027, -90.0, "+3V3 GND"), "C106": (147.054, 68.277, 0.0, "+3V3 GND"),
            "C107": (135.62, 87.463, -90.0, "ESP_EN GND"), "C108": (147.901, 73.65, -90.0, "NTC_SNS GND"),
            "R142": (134.949, 82.503, 0.0, "+3V3 ESP_EN"), "R143": (130.188, 86.722, 180.0, "+3V3 ESP_IO0"),
            "R146": (146.621, 70.641, 180.0, "NTC_SNS GND"), "R147": (147.556, 87.318, 90.0, "+5V_LOGIC AUX5_SNS"),

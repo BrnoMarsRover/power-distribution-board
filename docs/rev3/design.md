@@ -854,7 +854,8 @@ the three lines reach the transceiver side by side in its pin order, without cro
     re-check the peaks.
 - **5 V logic node:** a Schottky diode-OR of the 5.3 V buck and USB VBUS. It feeds the CAN
   transceiver's VCC and a 1 A, 3.3 V LDO (SOT-223) that supplies the ESP32, expander, ADCs
-  and INA228.
+  and INA228. The buck's diode sits in the aux block and the USB one at the USB receptacle
+  (layout, 2026-11-23).
 - **Budget:** under 0.5 A at 5 V.
   - ESP32-S3 with BLE: roughly 100–150 mA, with peaks (more if Wi-Fi is used).
   - CAN transceiver: tens of mA when dominant.
@@ -1164,8 +1165,8 @@ the three lines reach the transceiver side by side in its pin order, without cro
          - SW sits beside a via into the small switch-node pour, not into L2's pad.
          - VCC sits on a via under its cap's pad.
          - +5V3_AUX sits on VOUT's L3 hop via.
-         - +5V_LOGIC and +3V3 sit in the free top area east; their links come with the +5V_LOGIC / +3V3
-           step.
+         - +5V_LOGIC and +3V3 sit in the free top area east. +5V_LOGIC's has a via beside it into the 5 V
+           cap's pad (`logic5v`); +3V3's is linked with the +3V3 step.
 
          The packer had dropped them wherever there was room, with no links (+5V3_AUX 25 mm away).
        - All planned in `power_aux.route` (pcb_route `aux`, right after the boost), checked exactly.
@@ -1182,9 +1183,10 @@ the three lines reach the transceiver side by side in its pin order, without cro
          VSNS_OUT legs.
        - RON, UVLO-top and ripple resistors are 0805 (150 V rating, at most ~50 mW at 72.7 V in).
      - **Output:** a 5.3 V strip from L2's lower pad onto three output ceramics and straight across to the
-       aux OR diode. Both OR diodes (aux 5.3 V, USB VBUS) lie flat at the right edge with their cathodes on
-       a +5V_LOGIC column, which also takes the 5 V cap and the AP7361's input pin. The LDO's 3.3 V tab and
-       its cap sit under it; routing takes +3V3 to the ESP32 and the logic.
+       aux OR diode. It lies flat at the right edge with its cathode on a +5V_LOGIC column, which also takes
+       the 5 V cap and the AP7361's input pin. The USB OR diode D17 stood above it until 2026-11-23 and now
+       sits at the USB receptacle (`logic5v`, below). The LDO's 3.3 V tab and its cap sit under it; routing
+       takes +3V3 to the ESP32 and the logic.
      - **BUS42** (about 0.1 A) reaches it on a 0.6 mm L3 track: from the 42 V bar's L3 copy up the free
        strip right of CHG_N, along y = 21.7 mm above the rail blocks' L3 copies (they start at 22.5 mm),
        down past the 5 V block, then west past the 5 V LED's vias to a via above the VIN cap, with a branch
@@ -1205,8 +1207,8 @@ the three lines reach the transceiver side by side in its pin order, without cro
      - **Switch-node shields:** L3 under the boost's and the aux buck's switch nodes (both on the bottom,
        0.2 mm above L3) is a GND patch instead of +3V3, tied to nearby GND vias, so their edges couple into
        their own return and not into the logic supply.
-     - +5V_LOGIC (the CAN transceiver, one pull-up) and USB VBUS (to its OR diode) are short and few:
-       routed as tracks.
+     - +5V_LOGIC (the CAN transceiver, the AUX5 divider) and USB VBUS (to its OR diode): planned tracks
+       (`logic5v`, routing below).
   2g. `gen/satellites.py` (run by `pcb_place.py` after the power blocks, before the packer) — template
      placement of each controller's small parts (decided 2026-11-20), so they sit around their IC
      instead of wherever the packer finds room. Done for the five TPS48111 eFuses. **Since 2026-11-21
@@ -1614,8 +1616,26 @@ the three lines reach the transceiver side by side in its pin order, without cro
            lines could not stay together past C105.
          - The packer keeps out of the via band, U14's way north and its GND via (`esp_plan.USB_KEEP`). The
            AUX5 divider's R147 / R148 moved away.
-         - VBUS_USB still has to reach the OR diode D17 in the aux block (y 51). That crossing of the
-           module's area belongs with +5V_LOGIC's way south to the CAN transceiver (step 3).
+         - VBUS_USB reaches the OR diode D17, which now sits just south of the receptacle (`logic5v`, below).
+     - **+5V_LOGIC and USB VBUS** (`logic5v.py`, decided 2026-11-23, by hand; key `v5`, after the CAN group).
+       The logic's 5 V node is the diode-OR of the aux buck (D16, aux block, north of the ESP32) and USB VBUS
+       (D17). It feeds the LDO U12 (aux block), the CAN transceiver (south-west of the module) and the AUX5
+       divider's top R147 (by the USB receptacle). With D17 in the aux block, VBUS had to cross the module's
+       area northward and +5V_LOGIC southward. Every way under the module is taken: the bottom-row escape
+       vias and the north bundle's L3 crossbars, the EPAD and U12 on the bottom side, the top-row escape vias
+       on L3, and the bundle's L3 columns.
+       - **D17 moved to the USB end.** It lies flat on the bottom side just south of J32, anode west.
+         VBUS reaches it from J32's south VBUS via straight down the bottom side, about 5 mm.
+       - **One line crosses.** +5V_LOGIC runs from D17's cathode up the board's east edge on the bottom side
+         (x 149.1, 0.7 mm from the edge, 0.4 mm wide: the Supply class; its clearance meets the edge band, so no GND sliver) into U12's input pin, where the aux
+         block's +5V_LOGIC pour starts. It passes outside the module's parts and vias and picks up R147 on
+         the way. It carries about 0.35 A only on USB alone; on the buck it carries the CAN transceiver's
+         and the divider's few tens of mA. The ESP32's GND / +3V3 pin-1 / pin-2 vias moved 0.32 mm west for it
+         (still clear of the bundle's L3 column), and the module decaps C104 / C106 moved 0.25 mm west.
+       - **The CAN branch** leaves D17's cathode west on the bottom side below D17 and the CAN group's vias.
+         It drops to L3 east of the CAN logic lines' step and runs under them to a via above C109.
+       - **TP35** (+5V_LOGIC, top side) has a via beside it into the 5 V cap's pad. **U12's pin 2** is tied
+         to its tab: the same pin inside the package, but KiCad asks for the link.
      - **CAN group** (`can_plan.py`, decided 2026-11-23, by hand; key `can`, after the ESP32
        group and before the router's stages). The packer had split the termination around U16: the jumpers sat
        north of the transceiver and their 60.4 Ω resistors south, crossed.
