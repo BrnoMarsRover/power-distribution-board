@@ -1139,22 +1139,54 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
        controller sits by the high-side gate and the ground-referenced LO takes the longer run.
   2e. `gen/power_aux.py` (copper also run by `pcb_power42.py`) — the always-on aux supply, designed by hand
      (2026-11-20), all on the bottom beside the ESP32 (x 126–149.4 mm, y 31–67 mm).
-     - **Buck (LM5017):** one input ceramic lies straight over U11's VIN / RTN pins (the buck's hot loop is
-       that cap and the IC, its internal FETs); the BUS42 pour runs above the pin row to the second input
-       cap, with a tab onto VIN, so UVLO and RON stay free to escape. U11's SW pin drops straight onto L2's
-       switch pad; L2 stands under U11. Bootstrap and VCC caps stand left of U11; its resistors (RON, UVLO,
-       ripple injection, FB) go in the pocket right of it, placed by `gen/logic_place.py`. The module's
-       keep-out covers only the power copper (BUS42 and the input caps, U11 / L2 / output caps, the diodes
-       and the LDO), so the pocket (x 135–149 mm, y 35–49 mm in three patches of GND fill) stays free. RON,
-       UVLO-top and ripple resistors are 0805 (150 V rating, at most ~50 mW at 72.7 V in): three 1206s did
-       not fit the pocket beside the pins.
+     - **Buck (LM5017), re-laid 2026-11-22.** The first layout left pins 5–7 (FB, VCC, BST) no way out:
+       they faced L2 0.3 mm above the switch-node pour, and the BST / VCC caps stood on the far side of the
+       IC, so BST would have crossed the switch node. U11 keeps its orientation (VIN / RTN pins on top, SW
+       at the bottom-left) and moved 2 mm up. L2 stays.
+       - **Gate drive:** the bootstrap cap lies flat right under pins 8 / 7 (SW pad under SW). SW runs
+         from pin 8 through that pad onto L2's switch pad: a 1.3 mm-wide pour, nothing else.
+       - **VCC:** the VCC cap lies past the bottom-right corner. VCC runs down from pin 6 and east under
+         pin 5.
+       - **VIN loop:** the VIN cap stands upright west of pins 1 / 2. VIN runs up from pin 2 and west over
+         pin 1 into its BUS42 pad; RTN runs from pin 1 down-west into its GND pad, with two GND vias below
+         and the exposed pad's vias.
+       - **RON / UVLO:** pins 4 / 3 go straight up to RON (R136) and the UVLO divider (R137 / R138). They
+         hang from a BUS42 bus north of U11 fed by its own L3 via, beside the second input cap.
+       - **FB:** pin 5 runs straight east into the divider, between U11 and the UART's ESD chip: its VOUT
+         resistor R140 level with the pin, its GND resistor R141 above with a GND via on top.
+       - **Ripple injection** (in the pocket beside L2, top to bottom): Cac from FB, Rr with SW straight in
+         from L2's switch pad under its body, Cr to VOUT. The ripple node joins their east pads.
+       - **VOUT for the divider and Cr** comes up the bottom side from the output pour into Cr, west of the
+         UART's corridor vias, then hops on L3 to R140.
+       - **Test pads (top side), placed by hand over their nets:**
+         - SW sits beside a via into the small switch-node pour, not into L2's pad.
+         - VCC sits on a via under its cap's pad.
+         - +5V3_AUX sits on VOUT's L3 hop via.
+         - +5V_LOGIC and +3V3 sit in the free top area east; their links come with the +5V_LOGIC / +3V3
+           step.
+
+         The packer had dropped them wherever there was room, with no links (+5V3_AUX 25 mm away).
+       - All planned in `power_aux.route` (pcb_route `aux`, right after the boost), checked exactly.
+       - **VSNS_IN_5** (the 5 V rail's input sense to U21) used to run down the strip now taken by the
+         north parts and the BUS42 feed. It is planned now (`route_plan.VSNS_IN_5_PATH`), crossing the 42 V
+         feed on the bottom side:
+         - down the bottom side between the 5 V block's Kelvin vias and the RON / UVLO parts;
+         - west under the 5 V LED;
+         - L3 down beside the VIN cap, west of the switch-node shield;
+         - the bottom side again across the FLT bus's L3 runs;
+         - L3 west into U21's fan via.
+
+         The router laid it first and took a detour through the 5 V block, which walled off the rails'
+         VSNS_OUT legs.
+       - RON, UVLO-top and ripple resistors are 0805 (150 V rating, at most ~50 mW at 72.7 V in).
      - **Output:** a 5.3 V strip from L2's lower pad onto three output ceramics and straight across to the
        aux OR diode. Both OR diodes (aux 5.3 V, USB VBUS) lie flat at the right edge with their cathodes on
        a +5V_LOGIC column, which also takes the 5 V cap and the AP7361's input pin. The LDO's 3.3 V tab and
        its cap sit under it; routing takes +3V3 to the ESP32 and the logic.
      - **BUS42** (about 0.1 A) reaches it on a 0.6 mm L3 track: from the 42 V bar's L3 copy up the free
        strip right of CHG_N, along y = 21.7 mm above the rail blocks' L3 copies (they start at 22.5 mm),
-       down past the 5 V block and through a via into the input pour.
+       down past the 5 V block, then west past the 5 V LED's vias to a via above the VIN cap, with a branch
+       to the RON / UVLO bus's via.
      - Top parts are kept off the via fields of both supplies (U10's and U11's pad vias, the input vias).
   2f. `gen/power_logic.py` (run by `pcb_3v3.py`, after the signal routing of 2i) — +3V3 distribution (decided
      2026-11-20): a +3V3

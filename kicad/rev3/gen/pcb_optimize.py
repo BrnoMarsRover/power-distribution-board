@@ -345,7 +345,7 @@ final = sum(net_cost(n) for n in nets) + sum(dec_cost(e) for e in dec_targets)
 assert abs(final - total) < 1e-3 * max(1.0, final), (final, total)     # the running total must match a recount
 b.Save(BOARD)
 print(f"optimized {len(parts)} parts, {len(nets)} nets, {len(dec_targets)} decoupling caps: "
-      f"cost {start:.0f} -> {total:.0f} ({100 * (1 - total / start):.0f} % lower), "
+      f"cost {start:.0f} -> {total:.0f} ({100 * (1 - total / start) if start else 0:.0f} % lower), "
       f"{accepted} of {ITER} moves accepted, {time.time() - t_start:.0f} s")
 
 # the native pcbnew (KiCad 10.0.8) can crash tearing itself down at interpreter exit, after the work is saved,

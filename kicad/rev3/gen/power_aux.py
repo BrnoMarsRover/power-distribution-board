@@ -18,15 +18,45 @@ import pcbnew
 
 from power42 import MM, TOMM, X0, Y0, _at, _pad, _pxy
 
-U11_XY = (132.65, 39.6)
+U11_XY = (132.65, 37.6)              # 2 mm higher than first drawn: the band under its pin row takes the BST cap
+L2_TOP = 43.94                       # L2's courtyard top (unchanged; it was U11's bottom + GAP)
+# the controller's own parts (decided 2026-11-22, by hand; the first layout left BST, VCC and FB no way out between
+# the pin row and the switch-node pour): centres
+C_IN1_XY = (127.65, 35.16)           # VIN cap, upright west of pins 1 / 2, BUS42 pad up (VIN comes over pin 1)
+C_IN2_XY = (134.6, 25.2)             # second input cap, flat at the BUS42 feed, BUS42 pad west
+C_BST_XY = (131.38, 42.62)           # flat under pins 8 / 7, SW pad west
+C_VCC_XY = (137.6, 42.62)            # flat past the bottom-right corner, VCC pad west
 BUS42_Y = 21.7                       # L3 feed from the 42 V bar runs along here (rail L3 copies start at 22.5)
 GAP = 0.6
 # the power stage's copper; the pocket right of U11 (x 135.3-149.4, y 38.2-44.8, and above it right of the input
 # caps) is left for U11's resistors (placed by logic_place.py)
 # and the GND-fill patch between L2 and the diodes (x 139.9-145.8, y 44.8-49.4)
 KEEP_BOTTOM = [(126.1, 31.9, 140.5, 38.2), (126.1, 38.2, 135.3, 67.0), (135.3, 49.4, 149.4, 67.0),
-               (135.3, 44.8, 139.9, 49.4), (145.8, 44.8, 149.4, 49.4)]
-KEEP_TOP = [(126.6, 31.6, 135.4, 43.4)]           # vias of U11's pad and the input cap's GND: no top parts on them
+               (135.3, 44.8, 139.9, 49.4), (145.8, 44.8, 149.4, 49.4)]     # (the network's parts are locked: no box)
+KEEP_TOP = [(126.6, 31.6, 135.4, 43.4)]           # vias of U11's pad, the input caps' GND, the BUS42 feed: no top parts
+# the network by hand (decided 2026-11-22): RON / UVLO north of U11 (pins 3 / 4 go straight up), hanging from a
+# BUS42 bus at y 27.6 fed by its own L3 via; the FB divider east of pin 5 (FB straight into it); the ripple
+# injection (Rr from SW, Cr to VOUT, Cac to FB) in the pocket beside L2. (nets: first one up / west), centre, upright
+NET_RON, NET_UVLO, NET_FB, NET_A = "Net-(U11-RON)", "Net-(U11-UVLO)", "Net-(U11-FB)", "Net-(C100-Pad2)"
+NETWORK = [(("BUS42", NET_RON), (136.0, 30.2), True),             # R136
+           (("BUS42", NET_UVLO), (133.28, 30.2), True),           # R137
+           (("GND", NET_UVLO), (131.0, 30.6), True),              # R138
+           ((NET_FB, "+5V3_AUX"), (137.6, 40.08), False),         # R140, level with pin 5
+           ((NET_FB, "GND"), (137.6, 37.98), False),              # R141, its GND via above it
+           ((NET_FB, NET_A), (141.5, 42.3), False),               # C101 (Cac)
+           (("SW", NET_A), (141.7, 45.0), False),                 # R139 (Rr), SW straight in under L2's body
+           (("+5V3_AUX", NET_A), (141.5, 47.7), False)]           # C100 (Cr), VOUT from the output pour
+VOUT_X = 139.3                       # VOUT: up the bottom side from the output pour to Cr, an L3 hop to the divider
+# the aux test pads (top side) by hand, over their nets: SW beside a via into the small switch-node pour (not into
+# L2's pad), VCC on a via under its cap's pad, VOUT on the L3 hop's via; +5V_LOGIC and +3V3 in the free top area
+# east (their links come with the +5V_LOGIC / +3V3 step)
+TP_XY = {"SW": (131.9, 45.6), "Net-(U11-VCC)": (136.74, 43.6), "+5V3_AUX": (VOUT_X, 47.7),
+         "+5V_LOGIC": (144.6, 46.6), "+3V3": (144.6, 53.0)}
+SW_TP_VIA = (130.5, 43.65)
+FEED_VIAS = {"cap": (128.2, 32.3), "bus": (132.0, 27.6)}         # the BUS42 feed's two vias (L3); the cap's keeps
+                                                                 # 0.25 mm from the 5 V LED's anode pad (top side)
+BUS_Y = 27.6
+C_IN1_GND_VIAS = ((126.5, 38.35), (128.5, 38.35))   # (VSNS_IN_5 runs down L3 between them, x 127.4)
 
 
 def _box(fp):
@@ -60,6 +90,12 @@ def _nets(fp):
     return {p.GetNetname() for p in fp.Pads()}
 
 
+def _centre(fp, x, y):
+    """Move so the pads' midpoint sits at (x, y)."""
+    pts = [_pxy(fp, p.GetNumber()) for p in fp.Pads() if p.GetNumber()]
+    _shift(fp, x - sum(p[0] for p in pts) / len(pts), y - sum(p[1] for p in pts) / len(pts))
+
+
 def parts(FP):
     """The aux supply's power parts, found by net (reference numbers move when sheets change)."""
     u = FP["U11"] if "U11" in FP else next(f for f in FP.values() if "LM5017" in f.GetValue())
@@ -89,30 +125,27 @@ def place(FP):
     _shift(u, U11_XY[0] - TOMM(u.GetPosition().x) + X0, U11_XY[1] - TOMM(u.GetPosition().y) + Y0)
     ub = _box(u)
     p1, p2 = _pxy(u, "1"), _pxy(u, "2")
-    # input cap 1 straight above pins 1-2: GND pad over RTN, BUS42 pad over VIN
+    # the input caps: 1 upright west of pins 1 / 2 (BUS42 pad up), 2 flat at the BUS42 feed (BUS42 pad west)
     c1 = FP[P["cin"][0]]
-    _orient(c1, lambda f: _pxy(f, "2")[0] < _pxy(f, "1")[0] and abs(_pxy(f, "1")[1] - _pxy(f, "2")[1]) < 0.05)
-    _shift(c1, (p1[0] + p2[0]) / 2 - (_pxy(c1, "1")[0] + _pxy(c1, "2")[0]) / 2, 0.0)
-    _put(c1, bottom=ub[1] - GAP)
-    # input cap 2 standing right of U11, BUS42 pad up
+    _orient(c1, lambda f: _pxy(f, "1")[1] < _pxy(f, "2")[1] - 1)
+    _centre(c1, *C_IN1_XY)
     c2 = FP[P["cin"][1]]
-    _orient(c2, lambda f: _pxy(f, "1")[1] < _pxy(f, "2")[1] - 1)
-    _put(c2, left=ub[2] + GAP, top=ub[1] - 0.1)
-    # bootstrap and VCC caps standing left of U11, near pins 7 / 6
-    for ref, top in ((P["cbst"], ub[1]), (P["cvcc"], None)):
+    _orient(c2, lambda f: _pxy(f, "1")[0] < _pxy(f, "2")[0] - 1)
+    _centre(c2, *C_IN2_XY)
+    # bootstrap cap flat under pins 8 / 7 (SW pad west), VCC cap flat past the corner (VCC pad west)
+    sw_n = _pad(u, "8").GetNetname()
+    for ref, xy in ((P["cbst"], C_BST_XY), (P["cvcc"], C_VCC_XY)):
         f = FP[ref]
-        _orient(f, lambda f_: abs(_pxy(f_, "1")[0] - _pxy(f_, "2")[0]) < 0.05)
-        if top is not None:
-            _put(f, right=ub[0] - GAP, top=top)
-            prev = _box(f)
-        else:
-            _put(f, right=ub[0] - GAP, top=prev[3] + GAP)
+        west = next(p.GetNumber() for p in f.Pads() if p.GetNetname() in (sw_n, _pad(u, "6").GetNetname()))
+        east = next(p.GetNumber() for p in f.Pads() if p.GetNumber() != west)
+        _orient(f, lambda f_: _pxy(f_, west)[0] < _pxy(f_, east)[0] - 1)
+        _centre(f, *xy)
     # L2 standing, SW pad (1) up, right under U11's SW pin
     ind = FP[P["ind"]]
     _orient(ind, lambda f: _pxy(f, "1")[1] < _pxy(f, "2")[1] - 1)
     sx = _pxy(u, "8")[0]
     _shift(ind, sx + 2.0 - _pxy(ind, "1")[0], 0.0)
-    _put(ind, top=ub[3] + GAP)
+    _put(ind, top=L2_TOP)
     lb = _box(ind)
     if lb[0] < 126.1:
         _put(ind, left=126.1)
@@ -151,6 +184,38 @@ def place(FP):
             P["c5"][0], P["c33"][0]]
     for ref in done:
         FP[ref].SetLocked(True)
+    return done
+
+
+def place_network(FP, obstacles):
+    """The LM5017's RON / UVLO / FB / ripple parts by hand (locked). Returns the references placed."""
+    from power42 import _upright, _flat
+    import power54
+    from satellites import _box
+    u = FP["U11"] if "U11" in FP else next(f for f in FP.values() if "LM5017" in f.GetValue())
+    sw = _pad(u, "8").GetNetname()
+    sheet = u.GetSheetname()
+    short = lambda p: p.GetNetname() if p.GetNetname() != sw else "SW"
+    done = []
+    for (a, b), (x, y), upright in NETWORK:
+        ref = next(r for r, f in FP.items() if f.GetSheetname() == sheet and r[0] in "RC" and r not in done
+                   and not f.IsLocked() and {short(p) for p in f.Pads()} == {a, b})
+        pa = next(p.GetNumber() for p in FP[ref].Pads() if short(p) == a)
+        pb = next(p.GetNumber() for p in FP[ref].Pads() if short(p) == b)
+        if upright:
+            _upright(FP[ref], x, y, pa, pb, bottom=True)
+        else:
+            power54._flat_bottom(FP[ref], x, y, pa, pb)
+        FP[ref].SetLocked(True)
+        obstacles.append(_box(FP[ref]))
+        done.append(ref)
+    from power42 import _at
+    for n, xy in TP_XY.items():
+        tp = next(r for r, f in FP.items() if r.startswith("TP") and f.GetSheetname() == sheet
+                  and {short(p) for p in f.Pads()} == {n})
+        _at(FP[tp], *xy, 0)
+        FP[tp].SetLocked(True)
+        done.append(tp)
     return done
 
 
@@ -221,24 +286,19 @@ def copper(b):
     c2v = pb(P["cin"][1], "1")
     pin2, pin8 = pb(u, "2"), pb(u, "8")
     l_sw, l_out = pb(P["ind"], "1"), pb(P["ind"], "2")
-    # BUS42: over cap 1's input pad and across to cap 2's, kept above U11's pin row except a tab onto VIN,
-    # so UVLO and RON stay free to escape
-    zone("BUS42", [(c1v[0] - 0.3, c1v[1] - 0.3), (c2v[2] + 0.3, c1v[1] - 0.3), (c2v[2] + 0.3, c2v[3] + 0.3),
-                   (c2v[0] - 0.3, c2v[3] + 0.3), (c2v[0] - 0.3, pin2[1] - 0.4), (pin2[2] + 0.25, pin2[1] - 0.4),
-                   (pin2[2] + 0.25, pin2[1] + 0.6), (pin2[0] - 0.25, pin2[1] + 0.6), (pin2[0] - 0.25, pin2[1] - 0.4),
-                   (c1v[0] - 0.3, pin2[1] - 0.4)], "aux BUS42")
-    # cap 1's GND pad: two vias to the L2 plane right beside it, and RTN below joins through the pad vias
-    for dy in (-0.7, 0.7):
-        via("GND", c1g[0] - 0.9, (c1g[1] + c1g[3]) / 2 + dy, force=True)
+    # BUS42 and the controller's own lines are planned tracks (route(), pcb_route "aux"); the input cap's GND pad: two
+    # vias to the L2 plane right below it
+    for x, y in C_IN1_GND_VIAS:
+        via("GND", x, y, force=True)
     # U11's exposed pad: GND vias (the pad also takes RTN, pin 1)
     ex = pb(u, "9")
     cx, cy = (ex[0] + ex[2]) / 2, (ex[1] + ex[3]) / 2
     for dx in (-0.9, 0.9):
         via("GND", cx + dx, cy, force=True)
-    # SW: pin 8 straight down onto L2's SW pad, nothing else
-    zone(sw, [(pin8[0] - 0.3, pin8[1] + 0.4), (pin8[2] + 0.25, pin8[1] + 0.4), (pin8[2] + 0.25, l_sw[1] - 0.6),
-              (l_sw[2] + 0.3, l_sw[1] - 0.6), (l_sw[2] + 0.3, l_sw[3] + 0.3), (l_sw[0] - 0.3, l_sw[3] + 0.3),
-              (l_sw[0] - 0.3, l_sw[1] - 0.6), (pin8[0] - 0.3, l_sw[1] - 0.6)], "aux SW")
+    # SW: pin 8 straight down through the bootstrap cap's SW pad onto L2's SW pad, nothing else
+    cb = pb(P["cbst"], next(p.GetNumber() for p in FP[P["cbst"]].Pads() if p.GetNetname() == sw))
+    x0, x1 = min(pin8[0], cb[0]) - 0.1, max(pin8[2], cb[2]) + 0.1
+    zone(sw, rect(x0, pin8[1] + 0.9, x1, l_sw[1] + 0.4), "aux SW")
     # L3 under the switch node: a GND shield over U11's pad vias (they tie it to GND), so the +3V3 fill does not
     # sit 0.2 mm under the switch node
     ex9 = pb(u, "9")
@@ -291,15 +351,124 @@ def copper(b):
     # BUS42 feed (about 0.1 A): from the 42 V bar's L3 copy up the free strip right of CHG_N, along y 21.7
     # above the rail blocks' L3 copies (they start at 22.5), down past the 5 V block and through a via into
     # the input pour. 0.6 mm: the HV classes ask 0.5 mm minimum.
-    feed = [(49.2, 30.6), (49.2, BUS42_Y), (131.0, BUS42_Y), (131.0, 30.5), (134.4, 30.5), (134.4, 33.2)]
-    for (x1, y1), (x2, y2) in zip(feed, feed[1:]):
-        t = pcbnew.PCB_TRACK(b)
-        t.SetStart(pcbnew.VECTOR2I(MM(X0 + x1), MM(Y0 + y1)))
-        t.SetEnd(pcbnew.VECTOR2I(MM(X0 + x2), MM(Y0 + y2)))
-        t.SetWidth(MM(0.6))
-        t.SetLayer(pcbnew.In2_Cu)
-        t.SetNet(net("BUS42"))
-        b.Add(t)
-        tracks.append(t)
-    via("BUS42", *feed[-1], force=True)
+    # ... then west past the 5 V LED's vias to a via above the VIN cap, with a branch to the RON / UVLO bus's via
+    fc, fb = FEED_VIAS["cap"], FEED_VIAS["bus"]
+    feed = [(49.2, 30.6), (49.2, BUS42_Y), (131.0, BUS42_Y), (131.0, 25.5), (fc[0], 25.5 + 131.0 - fc[0]), fc]
+    branch = [(131.0, 25.5), (fb[0], 25.5 + fb[0] - 131.0), fb]
+    for path in (feed, branch):
+        for (x1, y1), (x2, y2) in zip(path, path[1:]):
+            t = pcbnew.PCB_TRACK(b)
+            t.SetStart(pcbnew.VECTOR2I(MM(X0 + x1), MM(Y0 + y1)))
+            t.SetEnd(pcbnew.VECTOR2I(MM(X0 + x2), MM(Y0 + y2)))
+            t.SetWidth(MM(0.6))
+            t.SetLayer(pcbnew.In2_Cu)
+            t.SetNet(net("BUS42"))
+            b.Add(t)
+            tracks.append(t)
+    for xy in (fc, fb):
+        via("BUS42", *xy, force=True)
     return zones, vias, tracks
+
+
+# ---------------------------------------------------------------- the controller's lines (planned, pcb_route "aux")
+W_SIG, W_DRV, W_PWR = 0.25, 0.3, 0.5
+
+
+def route(R, FP, log=print):
+    """VIN / RTN, BST, VCC, FB, RON, UVLO, the BUS42 bus, the ripple network and its VOUT / SW feeds, the network's GND
+    vias: all planned and checked exactly."""
+    import far42
+    import route_plan
+    from route import B, F, IN2
+    P = parts(FP)
+    u = {q["num"]: q for q in R.geo.pads if q["ref"] == P["u"]}
+    sw = u["8"]["net"]
+    pad = lambda ref, net: next(q for q in R.geo.pads if q["ref"] == ref and q["net"] == net)
+    by_nets = lambda a, b: next(q["ref"] for q in R.geo.pads if q["net"] == a and q["ref"][0] in "RC"
+                                and any(o["net"] == b for o in R.geo.pads if o["ref"] == q["ref"]))
+    c = lambda q: q["c"]
+    segs, vias = [], []
+
+    def lay(net, pts, w=W_SIG):
+        segs.extend(R.track(net, B, pts, w))
+
+    def via(net, xy):
+        vias.append(R.via(net, *xy))
+
+    cin1, cin2, cb, cv = P["cin"][0], P["cin"][1], P["cbst"], P["cvcc"]
+    # VIN: pin 2 up, west over pin 1 into the VIN cap's BUS42 pad; the feed via down into it
+    p2, ci = c(u["2"]), c(pad(cin1, "BUS42"))
+    lay("BUS42", [p2, (p2[0], ci[1]), ci], W_PWR)
+    fc = FEED_VIAS["cap"]
+    lay("BUS42", [fc, (fc[0], pad(cin1, "BUS42")["box"][1] + 0.3)], W_PWR)
+    # RTN: pin 1 down-west into the cap's GND pad (the exposed pad's vias take it to the plane too)
+    p1, cg = c(u["1"]), c(pad(cin1, "GND"))
+    lay("GND", [p1, (p1[0], cg[1] - 0.8), (p1[0] - 0.8, cg[1]), cg], W_PWR)
+    # BST: pin 7 down into the bootstrap cap's BST pad; VCC: pin 6 down, east under pin 5 into the VCC cap
+    p7, cbp = c(u["7"]), c(pad(cb, u["7"]["net"]))
+    lay(u["7"]["net"], [p7, (p7[0], cbp[1] - 0.5 - abs(cbp[0] - p7[0])), (cbp[0], cbp[1] - 0.5), cbp], W_DRV)
+    p6, cvp = c(u["6"]), c(pad(cv, u["6"]["net"]))
+    yv = cvp[1] - 1.02
+    lay(u["6"]["net"], [p6, (p6[0], yv), (cvp[0] - 0.5, yv), (cvp[0], yv + 0.5), cvp], W_DRV)
+    # FB: pin 5 east into the divider's VOUT resistor, up into its GND resistor, down and east to the ripple's Cac
+    fb = u["5"]["net"]
+    r141, r140, c101 = by_nets(fb, "GND"), by_nets(fb, "+5V3_AUX"), by_nets(fb, NET_A)
+    p5, f0, f1, fa = c(u["5"]), c(pad(r140, fb)), c(pad(r141, fb)), c(pad(c101, fb))
+    lay(fb, [p5, (f0[0], p5[1])])
+    lay(fb, [f0, f1])
+    yf = cvp[1] - 1.47
+    lay(fb, [f0, (f0[0], yf), (fa[0] - (fa[1] - 0.51 - yf), yf), (fa[0], fa[1] - 0.51), fa])
+    g141 = c(pad(r141, "GND"))
+    gv = (g141[0], g141[1] - 1.48)
+    lay("GND", [g141, gv], 0.4)
+    via("GND", gv)
+    # the ripple node: Cac, Rr and Cr's east pads joined down their east side
+    r139, c100 = by_nets(NET_A, sw), by_nets(NET_A, "+5V3_AUX")
+    a1, a2, a3 = c(pad(c101, NET_A)), c(pad(r139, NET_A)), c(pad(c100, NET_A))
+    xa = a2[0] - 0.1
+    lay(NET_A, [a1, (xa, a1[1] + xa - a1[0]), (xa, a3[1] - xa + a3[0]), a3])
+    # Rr's SW end: straight in from L2's SW pad, under L2's body
+    l_sw = next(q for q in R.geo.pads if q["ref"] == P["ind"] and q["net"] == sw)
+    s9 = c(pad(r139, sw))
+    lay(sw, [(l_sw["box"][2] - 0.3, s9[1]), s9], W_PWR)
+    # VOUT: from the output pour up the bottom side into Cr, an L3 hop from there to the divider's top resistor
+    v0, v1 = c(pad(c100, "+5V3_AUX")), c(pad(r140, "+5V3_AUX"))
+    top = next(q for q in R.geo.pads if q["ref"] == P["ind"] and q["net"] == "+5V3_AUX")["box"][1]
+    lay("+5V3_AUX", [(VOUT_X, top + 0.6), (VOUT_X, v0[1]), v0])
+    via("+5V3_AUX", (VOUT_X, v0[1]))
+    segs.extend(R.track("+5V3_AUX", IN2, [(VOUT_X, v0[1]), (VOUT_X, v1[1])], W_SIG))
+    via("+5V3_AUX", (VOUT_X, v1[1]))
+    lay("+5V3_AUX", [(VOUT_X, v1[1]), v1])
+    # RON / UVLO: the BUS42 bus with its feed via, R136 / R137 hanging from it, their lines straight down to pins 4 / 3
+    r136, r137, r138 = by_nets("BUS42", NET_RON), by_nets("BUS42", NET_UVLO), by_nets("GND", NET_UVLO)
+    fbv = FEED_VIAS["bus"]
+    t136, t137, t2 = c(pad(r136, "BUS42")), c(pad(r137, "BUS42")), c(pad(cin2, "BUS42"))
+    lay("BUS42", [fbv, (t136[0], BUS_Y)], W_PWR)
+    for t in (t136, t137, t2):
+        lay("BUS42", [t, (t[0], BUS_Y)], W_PWR)
+    p4, ron = c(u["4"]), c(pad(r136, NET_RON))
+    lay(NET_RON, [ron, (ron[0], ron[1] + 0.8), (p4[0], ron[1] + 0.8 + ron[0] - p4[0]), p4])
+    p3, uv, ub = c(u["3"]), c(pad(r137, NET_UVLO)), c(pad(r138, NET_UVLO))
+    lay(NET_UVLO, [uv, p3])
+    yu = pad(r137, NET_UVLO)["box"][3] + 0.4
+    lay(NET_UVLO, [ub, (ub[0], yu), (uv[0], yu)])
+    g138 = c(pad(r138, "GND"))
+    lay("GND", [g138, (g138[0], g138[1] - 1.475)], 0.4)
+    via("GND", (g138[0], g138[1] - 1.475))
+    g2 = c(pad(cin2, "GND"))
+    lay("GND", [g2, (g2[0] + 1.44, g2[1])], W_PWR)
+    via("GND", (g2[0] + 1.44, g2[1]))
+    # test pads: SW from a via in the switch-node pour, VCC on a via under its cap, VOUT on the hop via (laid above)
+    tp = lambda n: next(q for q in R.geo.pads if q["ref"].startswith("TP") and q["net"] == n)
+    t32 = c(tp(sw))
+    via(sw, SW_TP_VIA)
+    segs.extend(R.track(sw, F, [SW_TP_VIA, (t32[0], SW_TP_VIA[1] + t32[0] - SW_TP_VIA[0]), t32], W_SIG))
+    t31 = c(tp(u["6"]["net"]))
+    lay(u["6"]["net"], [cvp, t31], W_DRV)
+    via(u["6"]["net"], t31)
+    bad = route_plan._check_exact(R, segs) + far42._check_vias(R, vias)
+    for msg in bad[:25]:
+        log(f"   aux controller clearance: {msg}")
+    if bad:
+        R.failed.append("aux controller")
+    log(f"   aux controller: {len(segs)} segments, {len(vias)} vias, {len(bad)} clearance problems")

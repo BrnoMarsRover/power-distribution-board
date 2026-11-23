@@ -67,6 +67,10 @@ elif key == "boost":
     import boost_plan
     boost_plan.route(R, FP, log=quiet)
     what = "54 V boost controller"
+elif key == "aux":
+    import power_aux
+    power_aux.route(R, FP, log=quiet)
+    what = "aux supply controller"
 elif key == "brake":
     import boost_plan
     boost_plan.comparator(R, log=quiet)

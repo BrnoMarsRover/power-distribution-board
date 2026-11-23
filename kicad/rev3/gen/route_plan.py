@@ -196,6 +196,17 @@ def u17_fan(R, log=print):
     return out
 
 
+# VSNS_IN_5 past the aux supply: L3 hop over the 5 V block's VS line, down the bottom side between the 5 V block's
+# Kelvin vias and the aux north parts, west under the 5 V LED, L3 down beside the aux VIN cap (west of its switch-node
+# shield), the bottom side again down x 125.6 across the FLT bus's L3 runs (as before the aux re-layout), and L3 west
+# into U21's fan via under the logic area. (layer, polyline) in order; a via at every layer change
+VSNS_IN_5_PATH = [("L3", [(126.5, 16.25), (127.7, 17.45)]),
+                  ("B", [(127.7, 17.45), (128.7, 17.45), (130.65, 19.4), (130.65, 26.6), (130.25, 27.0), (127.6, 27.0)]),
+                  ("L3", [(127.6, 27.0), (127.4, 27.2), (127.4, 47.08)]),     # (the drop: between the aux
+                  ("B", [(127.4, 47.08), (125.6, 48.88), (125.6, 56.95), (124.8, 57.75), (124.8, 58.05)]),  # TPs)
+                  ("L3", [(124.8, 58.05), (124.2, 58.05), (123.3, 58.95), (116.0, 58.95), (113.8, 61.15), (113.8, 61.25)])]
+
+
 def rails_legs(R, FP, log=print):
     """The rails' bus legs, on the bottom layer and L3 (in the logic area L3 is the +3V3 fill, which flows
     around; L2 stays whole: it carries the outputs' return current): IMON to the ADC U20, INP / INPG to the I/O
@@ -258,7 +269,28 @@ def rails_legs(R, FP, log=print):
             continue
         jobs.append((net, [R.t_pad(src["ref"], src["num"])] + terms))
     box = (50.6, 10.0, 149.0, 149.0)
-    first = {"VSNS_IN_5", "VSNS_IN_12", "VSNS_IN_24", "VSNS_OUT_54", "IMON_5"}   # the long ones: fixed first,
+    # VSNS_IN_5 (decided 2026-11-23): planned past the aux supply (its strip north and west of the LM5017 is full
+    # since the aux re-layout); the router only joins the divider to the planned copper's first via
+    for k, (net, terms) in enumerate(jobs):
+        if net == "VSNS_IN_5":
+            import far42
+            path = VSNS_IN_5_PATH
+            segs, vs = [], [R.via(net, *path[0][1][0])]
+            for k2, (lay_, pts) in enumerate(path):
+                last = k2 == len(path) - 1
+                segs += R.track(net, IN2 if lay_ == "L3" else B, pts + ([fan["10"]] if last else []), SIG_W)
+                if not last:
+                    vs.append(R.via(net, *pts[-1]))
+            bad = _check_exact(R, segs) + far42._check_vias(R, vs)
+            for msg in bad[:20]:
+                log(f"   VSNS_IN_5 clearance: {msg}")
+            if bad:
+                R.failed.append("VSNS_IN_5 plan")
+            if not R.route_net(net, [terms[0], R.t_via(*path[0][1][0])], SIG_W, box, label="VSNS_IN_5 start"):
+                R.failed.append("VSNS_IN_5 start")
+            del jobs[k]
+            break
+    first = {"VSNS_IN_12", "VSNS_IN_24", "VSNS_OUT_54", "IMON_5"}   # the long ones: fixed first,
     for net, terms in [j for j in jobs if j[0] in first]:             # the shortest corridors are theirs
         if not R.route_net(net, terms, SIG_W, box, label=f"{net} leg"):
             R.failed.append(f"{net} leg")

@@ -108,10 +108,13 @@ def place(FP, obstacles):
     # ---- aux network: the pocket right of U11 (the aux test pads stay on top, with the packer)
     aux_all = _loose(FP, _sheet(FP, "Always-on aux"), tps=False)
     aux_3v3 = [r for r in aux_all if not _nets(FP, r)]        # the sheet's spare +3V3 cap: with the ESP32's parts
-    aux = [r for r in aux_all if r not in aux_3v3]
-    run("aux network", "U11", [(135.3, 38.4, 149.4, 44.6), (140.5, 35.2, 149.4, 38.4), (139.9, 44.6, 145.8, 49.2)], aux,
-        pin_order=["5", "3", "4", "6", "8"], extra_ics=("U12",), decaps=True,
-        supply_pull={"BUS42": lambda x, y: 0.5 * max(0.0, y - 37.5)})
+    import power_aux                                          # its RON / UVLO / FB / ripple parts by hand
+    done.extend(power_aux.place_network(FP, obstacles))
+    aux = [r for r in _loose(FP, _sheet(FP, "Always-on aux"), tps=False) if r not in aux_3v3]
+    if aux:
+        run("aux network", "U11", [(135.3, 38.4, 149.4, 44.6), (140.5, 35.2, 149.4, 38.4), (139.9, 44.6, 145.8, 49.2)],
+            aux, pin_order=["5", "3", "4", "6", "8"], extra_ics=("U12",), decaps=True,
+            supply_pull={"BUS42": lambda x, y: 0.5 * max(0.0, y - 37.5)})
 
     # ---- boost network: the control loop left of U10 in the brake corner (its signal pins face left). By hand
     # (boost_plan, 2026-11-22): the loop network north of U10 and the sense filter at pins 3 / 4 (the analog lines
