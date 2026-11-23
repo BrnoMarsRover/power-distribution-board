@@ -55,7 +55,8 @@ WEST_Y = {"PWR_HOLD": 18.4, "MOTOR_OK": 17.5, "BTN": 16.6}        # west between
 R175_C, C120_C = (143.6, 75.5), (143.6, 73.4)    # PWR_BTN's RC at its pin (bottom side), the PWR_BTN pads left
 BTN_DETOUR_Y = 77.75                             # PWR_BTN: under the pin row, past MOTOR_OK's via, up to the RC
 C120_GND_VIA = (145.4, 72.9)
-PORT_X = {"MOTOR_OK": 137.6, "PWR_HOLD": 136.6}  # the bundle's corner ports: the router takes them on to their pads
+import corner_plan                                # the bundle's corner ports: corner_plan lays the rest (by hand)
+PORT_X = corner_plan.PORT_X
 CORNER_BOX = (125.5, 0.6, 139.2, 20.0)           # (the corner group packs itself: its pads move)
 J33_TURN = {"4": 34.0, "6": 33.3}                # U15's connector lines: straight up to here, then north-west
 
@@ -219,16 +220,8 @@ def north(R, FP, lay, via):
 
 
 def corner(R, FP, log=print):
-    """MOTOR_OK and PWR_HOLD from the bundle's ports to their pads in the corner, by the router (after the bundle is
-    laid and checked)."""
-    from route import IN2
-    for key in ("MOTOR_OK", "PWR_HOLD"):
-        net = key
-        port = dict(points=[(IN2, PORT_X[key], WEST_Y[key])], pads=set(), segs=[], vias=[])
-        pads = [R.t_pad(q["ref"], q["num"]) for q in R.geo.pads
-                if q["net"] == net and q["ref"].startswith("R") and q["c"][1] < CORNER_BOX[3]]
-        if not R.route_net(net, pads + [port], W, CORNER_BOX, label=f"{net} in the corner"):   # (pads seed the
-            log(f"   {net}: no way from the bundle's port to its pads")                           # tree, the port joins)
+    """MOTOR_OK and PWR_HOLD from the bundle's ports on, with the rest of the power-button corner (corner_plan)."""
+    corner_plan.route(R, FP, log=log)
 
 
 # ---- the group's own nets (pcb_route.py espnet, after the switch-control group): planned escapes, then the router

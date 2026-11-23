@@ -1543,12 +1543,25 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
          that nothing crosses: TX on pin 12, RX on pin 10, FLT_24 on pin 11 (section 6.6). U15's vias sit left
          of and under it, so the aux network keeps its pocket. Even so, its placement needs seed set 1:
          the other seed sets no longer fit all eight of its parts.
+       - **The power-button corner** (`corner_plan.py`, decided 2026-11-23, by hand; laid with the ESP32
+         group after the bundle). The packer had put the corner's resistors in a heap left of the connectors,
+         with no links to them.
+         - **Soft-start pair.** J38 (BMS soft-start) links to J37 (the button's pole 1) on the top side, from
+           through-hole pin to pin. The PhotoMOS U22's outputs face east: SS_A runs to J37 on the bottom side,
+           SS_B through a via and along the top side, because U22's pin order would make them cross on one
+           layer.
+         - **PWR_HOLD.** Its port moved west, above U22, so it runs north to the LED resistor R172 with the
+           pull-down R173 on the way.
+         - **The motor switch loop.** Its resistors sit at J36: R167 (to MOTOR_OK, whose port moved beside it)
+           above pin 2, R168 above it into J37's GND pin, and R166 (from +3V3) west of pin 1.
+         - **BTN_SNS.** The pull-up R174 sits right above J37's pin 3.
+         - No via sits in the bundle's L3 band east of the ports.
        - **North bundle:** PWR_HOLD, MOTOR_OK (moved to pin 35, section 6.6) and the power button's sense line
          leave the module's bottom row together and run on L3 to the top-right corner. The route goes east
          under the module, north up the right side (right of the I²C path, under U12 and the aux diodes), right
          past the aux supply's GND via and J33's and J36's pins, then west between J36 and J37. The lines peel
-         off in order: the sense line into J37's pin 3, MOTOR_OK and PWR_HOLD from ports at the corner's edge,
-         by the router, to their pads (the corner group packs itself). PWR_BTN's RC filter (R175, C120) moved
+         off in order: the sense line into J37's pin 3, MOTOR_OK to a port beside J36, PWR_HOLD to a port
+         above the PhotoMOS. PWR_BTN's RC filter (R175, C120) moved
          from the corner to the ESP32's pin, so the long line is the button's sense line. MOTOR_OK's latch
          side reaches pin 35 on the top side (`esp_plan.motor_ok_link`). The lane runs from the pin's pad south,
          then west along the module's south edge, between the bottom row's escape vias and the BOOT / RESET

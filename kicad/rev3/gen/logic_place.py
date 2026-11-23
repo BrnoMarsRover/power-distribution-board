@@ -207,5 +207,9 @@ def place(FP, obstacles):
     # the test pads join the switch-control ones along the bottom edge
     corner_tr = [(125.9, 0.6, 135.6, 18.3)]
     ic("U22", 130.5, 6.0, lambda p: True, corner_tr)
-    run("power button", "U22", corner_tr, _loose(FP, button), decaps=True, tp_area=bottom_band, tp_column=(52.4, 137.9))
+    import corner_plan                                # its resistors by hand (2026-11-23)
+    done.extend(corner_plan.place(FP, obstacles))
+    rest = _loose(FP, button)
+    if rest:
+        run("power button", "U22", corner_tr, rest, decaps=True, tp_area=bottom_band, tp_column=(52.4, 137.9))
     return done, missed
