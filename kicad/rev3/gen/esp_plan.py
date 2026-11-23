@@ -356,6 +356,9 @@ def local(R, FP, log=print):
     import route
     from route import B
     esc = escape_points(R)
+    import can_plan
+    for net in can_plan.logic_nets(R):             # (planned with the CAN bus, can_plan)
+        esc.pop(net, None)
     R.geo.route_keep, R.geo.via_keep, R.geo.hv_ok = [], [], {}
     N = route.Negotiator(R, LOCAL_BOX, origin=LOCAL_BOX[:2])
     for net, pts in esc.items():
@@ -414,6 +417,43 @@ MOK_LANE_Y = 81.3
 MOK_VIA = (130.9, 81.4)
 # bottom side kept from the packer (after U14 is placed): the via band, U14's way north, its GND via
 USB_KEEP = [(140.2, 82.9, 141.95, 91.0), (137.2, 81.1, 140.2, 86.0), (138.2, 90.0, 139.3, 91.2)]
+
+
+# the ESP32 support group's small parts, frozen where the packer had put them on 2026-11-22 (reviewed and routed
+# that way: USB, LEDs, EN / IO0, NTC, AUX5, CC). Its packer re-shuffles them whenever anything near the module
+# changes (2026-11-23: the CAN pin swap put R162 across the CAN lines and C105 on USB_DN). ref: (x, y, deg, nets)
+SUPPORT = {"C104": (143.412, 68.289, 0.0, "+3V3 GND"),    # (the aux sheet's spare +3V3 cap, packed with these)
+           "C105": (136.657, 70.027, -90.0, "+3V3 GND"), "C106": (147.304, 68.277, 0.0, "+3V3 GND"),
+           "C107": (135.62, 87.463, -90.0, "ESP_EN GND"), "C108": (147.901, 73.65, -90.0, "NTC_SNS GND"),
+           "R142": (134.949, 82.503, 0.0, "+3V3 ESP_EN"), "R143": (130.188, 86.722, 180.0, "+3V3 ESP_IO0"),
+           "R146": (146.621, 70.641, 180.0, "NTC_SNS GND"), "R147": (147.556, 87.318, 90.0, "+5V_LOGIC AUX5_SNS"),
+           "R148": (146.27, 84.321, 180.0, "AUX5_SNS GND"), "R149": (145.404, 88.184, -90.0, "CC1 GND"),
+           "R150": (143.234, 86.398, -90.0, "CC2 GND"), "R159": (135.553, 78.457, 0.0, "+3V3 SPARE_IO38"),
+           "R160": (128.669, 73.278, 180.0, "LED_1 Net-(D18-A)"), "R161": (128.74, 75.333, 180.0, "LED_2 Net-(D19-A)"),
+           "R162": (129.417, 77.485, 180.0, "LED_3 Net-(D20-A)"), "TH1": (147.545, 77.542, 90.0, "+3V3 NTC_SNS")}
+TP_LOOP = ("TP41", (128.795, 94.895, 0.0))       # the group's GND test loop (top side), clear of ALERT's vias
+KEEP_TOP_LOOP = [(126.6, 93.5, 131.0, 96.3)]      # (pcb_place / pcb_optimize: its courtyard, for the top packer)
+
+
+def place_support(FP, obstacles):
+    """The support group's parts at their frozen spots (bottom side) and its GND loop (top), locked. Returns the
+    references placed."""
+    import power42
+    from satellites import _box
+    done = []
+    for ref, (x, y, deg, nets) in SUPPORT.items():
+        have = sorted(p.GetNetname().split("/")[-1] for p in FP[ref].Pads() if p.GetNumber())
+        if have != sorted(nets.split()):
+            raise SystemExit(f"esp_plan.SUPPORT: {ref} is on {have}, not {nets} (references renumbered?)")
+        power42._at(FP[ref], x, y, deg, bottom=True)
+        obstacles.append(_box(FP[ref]))
+        done.append(ref)
+    ref, (x, y, deg) = TP_LOOP
+    power42._at(FP[ref], x, y, deg)
+    done.append(ref)
+    for r in done:
+        FP[r].SetLocked(True)
+    return done
 
 
 def usb_keep(obstacles):

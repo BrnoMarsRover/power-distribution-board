@@ -148,8 +148,12 @@ def place(FP, obstacles):
     # ---- CAN: transceiver with CANH / CANL facing the connectors on the right
     can_area = [(125.6, 92.5, 139.0, 112.0)]
     ic("U16", 132.0, 101.0, lambda p: p["7"][0] > p["2"][0] + 1.0, can_area)
+    # (the split termination by hand, top side, symmetric about the pair: can_plan, 2026-11-23)
+    import can_plan
+    done.extend(can_plan.place(FP, obstacles))
     can = _loose(FP, _sheet(FP, "CAN bus"))
-    run("CAN", "U16", can_area, can, decaps=True, tp_column=(127.6, 106.5))
+    if can:
+        run("CAN", "U16", can_area, can, decaps=True, tp_column=(127.6, 106.5))
 
     # ---- the host UART's series resistors on the top side, north of their module pins (esp_plan, 2026-11-22)
     import esp_plan
@@ -159,6 +163,7 @@ def place(FP, obstacles):
     esp_area = [(125.6, 67.2, 149.4, 92.5)]
     ic("U14", 138.3, 87.0, lambda p: p["1"][0] > p["4"][0] + 1.0, esp_area)
     esp_plan.usb_keep(obstacles)                      # USB-C's fan-out vias, U14's ways out: no parts there
+    done.extend(esp_plan.place_support(FP, obstacles))  # the support parts frozen where they were reviewed
     esp = _loose(FP, _sheet(FP, "ESP32-S3")) + aux_3v3
     tp_field = [(125.6, 112.5, 149.4, 142.0)]
     run("ESP32 support", "U14", esp_area, esp, extra_ics=("U15",), decaps=True,

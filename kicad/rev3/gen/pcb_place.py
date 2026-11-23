@@ -447,6 +447,9 @@ for ref in power_aux.place(FP):              # the always-on aux supply beside t
 placed[False] += power_aux.KEEP_TOP
 import esp_plan  # noqa: E402
 placed[False] += esp_plan.KEEP_TOP           # the module's top-row escapes
+import can_plan  # noqa: E402
+placed[False] += can_plan.KEEP_TOP           # the CAN termination (top, placed in logic_place) and the pair's lines
+placed[False] += esp_plan.KEEP_TOP_LOOP      # the ESP32 group's GND loop (placed in logic_place)
 placed[True] += power_aux.KEEP_BOTTOM
 # controllers and their small parts by template (satellites.py), before the packer; what finds no spot is packed
 ONLY = os.environ.get("PLACE_ONLY")          # development: only this rail's template (the packer does the rest)

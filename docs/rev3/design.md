@@ -800,7 +800,9 @@ TWAI and UART are routed through the GPIO matrix, so these assignments can move 
 layout. Moved so far (2026-11-22): UART1 TX to GPIO8, RX to GPIO17 and FLT 24V to GPIO18
 (module pins 12, 10, 11), so that the UART's lines run straight north on the top side in J33's
 order, clear of FLT_24's pin via; MOTOR_OK to GPIO42 (pin 35, beside PWR_HOLD / PWR_BTN), so that
-the three lines to the top-right corner leave the module together (GPIO14 is spare).
+the three lines to the top-right corner leave the module together (GPIO14 is spare). Moved
+2026-11-23: CAN standby to GPIO11, TX to GPIO12 and RX to GPIO13 (module pins 19, 20, 21), so that
+the three lines reach the transceiver side by side in its pin order, without crossing.
 
 | Function | GPIO |
 |----------|------|
@@ -809,8 +811,8 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
 | FLT inputs: 42V-D, 42V-C, 24V, 12V, 5V | 6, 7, 18, 9, 16 |
 | Spare input, 10 k pull-up (was FLT 54V) | 38 |
 | INA228 ALERT | 10 |
-| CAN TX / RX | 11 / 12 |
-| CAN transceiver standby | 13 |
+| CAN TX / RX | 12 / 13 |
+| CAN transceiver standby | 11 |
 | Motor switch sense (MOTOR_OK) | 42 |
 | Host UART1 TX / RX | 8 / 17 |
 | Host UART1 spare (RTS or reset) | 15 |
@@ -1257,9 +1259,14 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
        OUT42D dropper resistors and the zener beside it.
      - **Battery monitor:** the INA228 in the band under the battery XT90 (y 12.6–22.3 mm), IN+ / IN- facing
        the input shunt's Kelvin vias (about 15 mm of Kelvin pair); its test pads at the left edge.
-     - **CAN:** the transceiver with CANH / CANL facing the CAN connectors, split termination beside it.
+     - **CAN:** the transceiver with CANH / CANL facing the CAN connectors. The split termination is placed by hand
+       on the top side, west of the pair's vias (`can_plan.place`, see routing).
      - **ESP32 support:** under the module (EN RC, strapping and I²C pull-ups, FLT pull-ups, LED resistors,
-       NTC, AUX5 divider), the USB ESD array by the receptacle.
+       NTC, AUX5 divider), the USB ESD array by the receptacle. Since 2026-11-23 its 17 small parts and its
+       GND test loop are frozen where the packer had put them on 2026-11-22, when that layout was reviewed
+       and routed (`esp_plan.SUPPORT`, `place_support`). The packer re-shuffled them whenever anything near
+       the module changed: the CAN pin swap alone put an LED resistor across the CAN lines and a module
+       decap on USB_DN, and a keep-out for the CAN corridor cost the board NTC its spot.
      - **Host-UART ESD at J33 (decided 2026-11-22):** the ESD array U15 sits on the bottom right below
        J33's pins 1 / 2, beside the aux buck's input cap, its connector-side pins facing them. A cable
        discharge is then shunted at the board edge, instead of running 35 mm across the board (through
@@ -1573,9 +1580,9 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
          just outside it, and EN / +3V3 / GND go under the top edge. +3V3 runs east under the edge, clear of
          the bundle, to a via and a bottom stub onto U12's tab. The BOOT / RESET switches' pads (top side)
          get top-side stubs from their vias. The escapes are laid with the bundle, before the rails' legs
-         and the switch-control group. After those, the router takes CAN (to U16), the LEDs, EN, IO0, the
+         and the switch-control group. After those, the router takes the LEDs, EN, IO0, the
          spare input, AUX5 / NTC sense and UART0 (to its test pads) from the escapes to their parts: one to
-         three vias each, escape included. USB has its own plan (below).
+         three vias each, escape included. USB and the CAN lines have their own plans (below).
        - **BRAKE_ACT** (`esp_plan.brake`, laid with the escapes): about 170 mm from pin 32 to the brake
          comparator in the bottom-left corner, on L3, all planned. It runs:
          - south beside the ESP32's group, east of the I²C trunk's end;
@@ -1609,6 +1616,40 @@ the three lines to the top-right corner leave the module together (GPIO14 is spa
            AUX5 divider's R147 / R148 moved away.
          - VBUS_USB still has to reach the OR diode D17 in the aux block (y 51). That crossing of the
            module's area belongs with +5V_LOGIC's way south to the CAN transceiver (step 3).
+     - **CAN group** (`can_plan.py`, decided 2026-11-23, by hand; key `can`, after the ESP32
+       group and before the router's stages). The packer had split the termination around U16: the jumpers sat
+       north of the transceiver and their 60.4 Ω resistors south, crossed.
+       - **The pair.** U16 (bottom side) has CANL (pin 6) above CANH (pin 7), facing east. J34 and J35 (top side,
+         in parallel) have the same order: CANL on pin 2 above CANH on pin 1, GND (pins 3 and 4) above both.
+         Both lines run east on the bottom side and step down at 45° into a via each, in front of J34. CANL's via
+         sits east of BRAKE_ACT's L3 end, and CANH's further west. From each via, a top-side line runs straight
+         east into its J34 pin.
+       - **The one crossing.** Linking J34 to J35 on one layer west of the connectors would cross the lines,
+         since the pad column reads L H L H. CANH continues down the top side to J35's pin 1. CANL drops onto
+         L3 at its via, runs under CANH's stub to a via at J35's pin 2, and steps back up. Both layers sit
+         against the L2 GND plane.
+       - **Split termination, top side.** It forms a "C" west of the vias, symmetric about the pair. CANL's
+         jumper JP8 and R164 are in a row above it, CANH's jumper JP7 and R163 in a row below. Their mid node is
+         a short vertical with C111 (4.7 nF to GND, one via) west of it. The jumpers stay on top, so they can be
+         closed on the rover. Each jumper is 2–4 mm from its via.
+       - **GND.** Each connector's GND pins 3 and 4 go straight west onto a via each, into the L2 plane.
+         J34's vias sit east of BRAKE_ACT. J35's sit between CANH's top-side line and CANL's L3 line.
+       - **Logic side.** STB, TXD and RXD leave the ESP32's left-column escapes (module pins 19, 20, 21, top to
+         bottom; reassigned in that order, section 6.6) at 45° into a bottom-side corridor under the module's
+         left edge. They run south side by side at 0.7 mm pitch: RXD, TXD, STB from west to east. Between the
+         LED escapes and R143 they step 0.85 mm west and back, round the +3V3 pull-ups R159 / R142. Past the
+         INA228 ALERT's vias they step 1.75 mm west and enter U16. RXD goes into pin 4 from its north-east
+         corner; TXD and STB run under the body into pins 1 and 8. No vias. The router had taken them about
+         35 mm round the area, with up to three vias.
+       - **Supplies.** C109 (+5V_LOGIC, 100 nF) stands upright west of pin 3, which runs straight into it.
+         Its GND pad ties to pin 2 and down to C111's GND via. C110 (+3V3) sits above pin 5, and pin 5's
+         +3V3 via sits east of it. The CAN sheet's GND test loop TP42 stands above C110, and the two share one
+         GND via. The packer had moved these on every rebuild, which cost two +3V3 pull-ups their via spots.
+       - The packer keeps out of the via column, the termination and the lines' step into U16
+         (`can_plan.KEEP_TOP` / `KEEP_BOTTOM`). The top side also keeps off the INA228 ALERT's vias, where
+         the packer once put the ESP32's GND loop. The corridor itself is not kept: a keep-out there re-packs
+         the ESP32 support group, and that packer then finds no spot for the board NTC. Those parts get a
+         hand placement in the ESP32 leftovers step, and the corridor can straighten then.
      - **54 V boost, controller side** (`boost_plan.py`, key `boost`, right after the 42 V bus; decided
        2026-11-22). The router's attempt tangled the gate drive: 13 of 23 nets failed, and VCC, BST,
        HO and SW looped under the IC and through the power stage. The controller is laid out by hand:

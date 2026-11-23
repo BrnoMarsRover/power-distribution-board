@@ -260,7 +260,7 @@ def _nearest_spot(part, num, ax, ay, area, obstacles, rmax=16.0):
 
 
 CACHE_DIR = Path(__file__).resolve().parent / "out" / "place_cache"
-SOURCES = ("logic_place.py", "corner_plan.py", "power_rails.py", "power42.py", "power54.py", "power_aux.py", "far42.py", "flt_bus.py", "ina_link.py",
+SOURCES = ("logic_place.py", "corner_plan.py", "can_plan.py", "power_rails.py", "power42.py", "power54.py", "power_aux.py", "far42.py", "flt_bus.py", "ina_link.py",
            "i2c_plan.py", "esp_plan.py", "boost_plan.py")
 # this module's functions that do not place annealed clusters: editing them leaves the cache valid
 NOT_ENGINE = {"efuse", "efuse42", "replicate", "_rail_regions", "place_ic", "put_ic", "_sheet_parts", "_signature"}

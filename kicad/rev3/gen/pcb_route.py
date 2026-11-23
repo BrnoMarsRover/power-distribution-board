@@ -7,7 +7,7 @@ own process (pcbnew objects come back untyped after removals within one process)
 
 Blocks: ina (the INA228's link, first: the blocks route around it), the rail eFuses 24, 12, 5, the 42 V eFuses 42D, 42C, 42legs (the 42 V bus legs, after both), 42bus
 (their far end), flt (the FLT bus to the ESP32), i2c (the I2C bus and ALERT, i2c_plan), rails (the rails' bus
-legs, around it) and sw (the switch-control group). Prints what could not be routed;
+legs, around it), sw (the switch-control group) and can (the CAN pair and termination, can_plan). Prints what could not be routed;
 exits 1 if anything failed.
 """
 import os
@@ -54,6 +54,10 @@ elif key == "esp":
     esp_plan.usb(R, FP, log=quiet)
     esp_plan.motor_ok_link(R, log=quiet)
     what = "ESP32 group (host UART, north bundle, BRAKE_ACT, USB)"
+elif key == "can":
+    import can_plan
+    can_plan.route(R, FP, log=quiet)
+    what = "CAN bus"
 elif key == "espnet":
     import esp_plan
     esp_plan.local(R, FP, log=quiet)

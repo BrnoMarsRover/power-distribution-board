@@ -1572,7 +1572,7 @@ def sheet_aux():
 ESP_PINS = {"1": "GND", "2": "+3V3", "3": "ESP_EN", "4": "I2C_SDA", "5": "I2C_SCL", "6": "FLT_42D",
             "7": "FLT_42C", "8": "UART_SP", "9": "FLT_5", "10": "UART_RX", "11": "FLT_24", "12": "UART_TX",
             "13": "USB_DN", "14": "USB_DP", "15": None, "16": None, "17": "FLT_12", "18": "INA_ALERT",
-            "19": "CAN_TXD", "20": "CAN_RXD", "21": "CAN_STB", "22": None, "23": "LED_1",
+            "19": "CAN_STB", "20": "CAN_TXD", "21": "CAN_RXD", "22": None, "23": "LED_1",
             "24": "LED_2", "25": "LED_3", "26": None, "27": "ESP_IO0", "28": None, "29": None, "30": None,
             "31": "SPARE_IO38", "32": "BRAKE_ACT", "33": "PWR_HOLD", "34": "PWR_BTN", "35": "MOTOR_OK", "36": "L:RXD0",
             "37": "L:TXD0", "38": "AUX5_SNS", "39": "NTC_SNS"}
