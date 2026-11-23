@@ -66,7 +66,7 @@ SW_SPOTS = {
     "C116": (96.3, 77.1, 0),               # the latch's 100 nF, above it
     "C117": (68.3, 72.65, 180),            # U20's 1 uF, under it, its supply pad right below the supply pin (the
                                            # bus pins' vias beside it, i2c_plan; its 100 nF: far42.DECAPS)
-    "C119": (122.6, 71.3, 0),              # U21's 1 uF, right of it on the planes (its 100 nF: i2c_plan, under it)
+    "C119": (122.2, 71.3, 0),              # U21's 1 uF, right of it on the planes (its 100 nF: i2c_plan, under it)
     "C112": (89.4, 69.7, 90),              # U17's 100 nF, left of its supply pin (pin 24, bottom left)
 }
 

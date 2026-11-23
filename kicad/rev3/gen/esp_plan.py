@@ -282,16 +282,12 @@ def escapes(R, FP, log=print):
     sx, sy = sw["c"]
     lay(net, F, [(vx, vy), (sx, vy + (vx - sx)), (sx, sy)])
     esc[net] = [(vx, vy)]
-    # EN: pin 3 -> a via under the module edge; a via at the RESET switch with a top-side stub to its pad
+    # EN: pin 3 -> a via under the module edge (on to R142 / C107 / the RESET switch: esp_rest, 2026-11-23)
     q = pin["3"]
     (px, py), net = q["c"], q["net"]
     lay(net, F, [(px, py), EN_VIA])
     via(net, *EN_VIA)
-    sw = min((s for s in R.geo.pads if s["net"] == net and s["ref"].startswith("SW")), key=lambda s: math.dist(s["c"], EN_SW_VIA))
-    (sx, sy), (vx, vy) = sw["c"], EN_SW_VIA
-    via(net, vx, vy)
-    lay(net, F, [(vx, vy), (vx, sy + (vx - sx)), (sx, sy)])
-    esc[net] = [EN_VIA, EN_SW_VIA]
+    esc[net] = [EN_VIA]
     # +3V3: pin 2 straight down to U12's tab (0.5 mm); GND pins 1 / 40: a via each
     q = pin["2"]
     (px, py) = q["c"]
@@ -321,7 +317,7 @@ def escape_points(R):
     esc = {pin[n]["net"]: [(ESC_LEFT_X, pin[n]["c"][1])] for n in LEFT_PINS}
     esc.update({pin[n]["net"]: [(pin[n]["c"][0], ESC_BOTTOM_Y)] for n in BOTTOM_PINS})
     esc[pin["27"]["net"]] = [IO0_VIA]
-    esc[pin["3"]["net"]] = [EN_VIA, EN_SW_VIA]
+    esc[pin["3"]["net"]] = [EN_VIA]
     return esc
 
 
@@ -357,7 +353,8 @@ def local(R, FP, log=print):
     from route import B
     esc = escape_points(R)
     import can_plan
-    for net in can_plan.logic_nets(R):             # (planned with the CAN bus, can_plan)
+    import esp_rest
+    for net in can_plan.logic_nets(R) + esp_rest.logic_nets(R):   # (planned: can_plan, esp_rest)
         esc.pop(net, None)
     R.geo.route_keep, R.geo.via_keep, R.geo.hv_ok = [], [], {}
     N = route.Negotiator(R, LOCAL_BOX, origin=LOCAL_BOX[:2])
@@ -422,10 +419,10 @@ USB_KEEP = [(140.2, 82.9, 141.95, 91.0), (137.2, 81.1, 140.2, 86.0), (138.2, 90.
 # the ESP32 support group's small parts, frozen where the packer had put them on 2026-11-22 (reviewed and routed
 # that way: USB, LEDs, EN / IO0, NTC, AUX5, CC). Its packer re-shuffles them whenever anything near the module
 # changes (2026-11-23: the CAN pin swap put R162 across the CAN lines and C105 on USB_DN). ref: (x, y, deg, nets)
-SUPPORT = {"C104": (143.162, 68.289, 0.0, "+3V3 GND"),    # (the aux sheet's spare +3V3 cap, packed with these)
-           "C105": (136.657, 70.027, -90.0, "+3V3 GND"), "C106": (147.054, 68.277, 0.0, "+3V3 GND"),
+SUPPORT = {"C104": (143.35, 68.289, 0.0, "+3V3 GND"),    # (the aux sheet's spare +3V3 cap, packed with these)
+           "C105": (136.657, 70.027, -90.0, "+3V3 GND"), "C106": (147.254, 68.277, 0.0, "+3V3 GND"),
            "C107": (135.62, 87.463, -90.0, "ESP_EN GND"), "C108": (147.901, 73.65, -90.0, "NTC_SNS GND"),
-           "R142": (134.949, 82.503, 0.0, "+3V3 ESP_EN"), "R143": (130.188, 86.722, 180.0, "+3V3 ESP_IO0"),
+           "R142": (134.949, 82.503, 180.0, "+3V3 ESP_EN"), "R143": (130.188, 86.722, 180.0, "+3V3 ESP_IO0"),
            "R146": (146.621, 70.641, 180.0, "NTC_SNS GND"), "R147": (147.556, 87.318, 90.0, "+5V_LOGIC AUX5_SNS"),
            "R148": (146.27, 84.321, 180.0, "AUX5_SNS GND"), "R149": (145.404, 88.184, -90.0, "CC1 GND"),
            "R150": (143.234, 86.398, -90.0, "CC2 GND"), "R159": (135.553, 78.457, 0.0, "+3V3 SPARE_IO38"),
@@ -451,6 +448,8 @@ def place_support(FP, obstacles):
     ref, (x, y, deg) = TP_LOOP
     power42._at(FP[ref], x, y, deg)
     done.append(ref)
+    import esp_rest
+    obstacles += esp_rest.LED_KEEP_BOTTOM            # the status LEDs' fan (the switch-control packer comes later)
     for r in done:
         FP[r].SetLocked(True)
     return done

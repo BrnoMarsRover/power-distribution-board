@@ -1582,9 +1582,9 @@ the three lines reach the transceiver side by side in its pin order, without cro
          just outside it, and EN / +3V3 / GND go under the top edge. +3V3 runs east under the edge, clear of
          the bundle, to a via and a bottom stub onto U12's tab. The BOOT / RESET switches' pads (top side)
          get top-side stubs from their vias. The escapes are laid with the bundle, before the rails' legs
-         and the switch-control group. After those, the router takes the LEDs, EN, IO0, the
-         spare input, AUX5 / NTC sense and UART0 (to its test pads) from the escapes to their parts: one to
-         three vias each, escape included. USB and the CAN lines have their own plans (below).
+         and the switch-control group. After those, the router takes IO0, the spare input and the AUX5 /
+         NTC sense from the escapes to their parts: one to three vias each, escape included. USB, the CAN
+         lines, the status LEDs, EN and UART0 have their own plans (below).
        - **BRAKE_ACT** (`esp_plan.brake`, laid with the escapes): about 170 mm from pin 32 to the brake
          comparator in the bottom-left corner, on L3, all planned. It runs:
          - south beside the ESP32's group, east of the I²C trunk's end;
@@ -1631,11 +1631,38 @@ the three lines reach the transceiver side by side in its pin order, without cro
          block's +5V_LOGIC pour starts. It passes outside the module's parts and vias and picks up R147 on
          the way. It carries about 0.35 A only on USB alone; on the buck it carries the CAN transceiver's
          and the divider's few tens of mA. The ESP32's GND / +3V3 pin-1 / pin-2 vias moved 0.32 mm west for it
-         (still clear of the bundle's L3 column), and the module decaps C104 / C106 moved 0.25 mm west.
+         (still clear of the bundle's L3 column), and the module decaps C106 / C104 moved
+         0.05 / 0.06 mm west (C106's GND pad clears the run; C104 keeps the 0.5 mm courtyard gap and EN's way).
        - **The CAN branch** leaves D17's cathode west on the bottom side below D17 and the CAN group's vias.
          It drops to L3 east of the CAN logic lines' step and runs under them to a via above C109.
        - **TP35** (+5V_LOGIC, top side) has a via beside it into the 5 V cap's pad. **U12's pin 2** is tied
          to its tab: the same pin inside the package, but KiCad asks for the link.
+     - **ESP32 leftovers** (`esp_rest.py`, decided 2026-11-23, by hand; key `esprest`, after +5V_LOGIC).
+       - **Status LEDs.** D20 / D19 / D18 (red / yellow / green, top side) stand in a column against the
+         module's left pins. No via fits between their pads or between them and the pins, and L3 west of them
+         is the FLT bus's wall (y 65.6–66.6). So each anode gets a top-side line west to its own via, clear of
+         the wall: D18 straight west, D19 west then south, D20 west then south furthest out. From the vias, the
+         bottom side fans out to the resistors R160 / R161 / R162 (by the LED escapes) in order, D20 outermost.
+         The switch-control packer keeps out of the fan (C114 moved). U21's 1 µF C119 stands 0.4 mm further
+         west, with its +3V3 via south of it, clear of the FLT bus's L3 diagonals.
+       - **LED cathodes.** D19's and D18's are tied on the top side east of the column, and D18's continues
+         west to a GND via. D20's has its own via from the power copper.
+       - **Switches.** SW1 and SW2 each have two pad-1s (the button's two contacts). The escapes reach one,
+         and a top-side line joins the other (the router had left EN's and IO0's second pads open).
+       - **EN** runs from its escape via under the module's top edge, west along the bottom side past U12's
+         tab, between the EPAD / C103 and C104, to a via. It then takes L3 through the bottom escape row's
+         only free gap, on its east side (x 135.59), so the +3V3 fill still passes west of it. A via by R142
+         ties R142, C107 and the RESET switch's top-side link. The old via at the switch is gone.
+       - **+3V3 pull-ups.** R142 is turned (+3V3 pad east, EN pad west, EN coming in under it from its via).
+         R159 (the spare input) runs down its east side into R142's +3V3 pad, and from there into a via in the
+         main fill, between EN and BRAKE_ACT. North of the escape row the fill is an island, cut off by EN's L3
+         line. TH1 (the NTC's top) runs between
+         R146's pads into C106's +3V3 pad, because it had no room for a via. FLT_12's pull-up R157 keeps its
+         via beside the LED fan.
+       - **UART0 test pads.** RXD0 / TXD0 (pins 36 / 37) run on L3 from their escape vias, side by side east
+         of J32's pegs. RXD0 first runs along between TXD0's via and J32's west shield pad. Each then takes one
+         bottom-side diagonal into its test pad (TP38 / TP37, below the CAN block). The router had zigzagged
+         RXD0 under J32 between the AUX5 / CC resistors, which left a GND copper sliver.
      - **CAN group** (`can_plan.py`, decided 2026-11-23, by hand; key `can`, after the ESP32
        group and before the router's stages). The packer had split the termination around U16: the jumpers sat
        north of the transceiver and their 60.4 Ω resistors south, crossed.

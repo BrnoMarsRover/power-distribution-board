@@ -62,6 +62,10 @@ elif key == "v5":
     import logic5v
     logic5v.route(R, FP, log=quiet)
     what = "+5V_LOGIC and VBUS"
+elif key == "esprest":
+    import esp_rest
+    esp_rest.route(R, FP, log=quiet)
+    what = "ESP32 leftovers"
 elif key == "espnet":
     import esp_plan
     esp_plan.local(R, FP, log=quiet)

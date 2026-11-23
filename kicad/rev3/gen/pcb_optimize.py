@@ -38,6 +38,7 @@ import ina_link  # noqa: E402
 import i2c_plan  # noqa: E402
 import esp_plan  # noqa: E402
 import can_plan  # noqa: E402
+import esp_rest  # noqa: E402
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
 X0, Y0, W, H = 50.0, 50.0, 150.0, 150.0
@@ -133,7 +134,7 @@ for hx, hy in HOLES:
     for side in (False, True):
         fixed_boxes[side].append((hx - k, hy - k, hx + k, hy + k))
 for k in (KEEP + power42.KEEP_TOP + power_rails.KEEP_TOP + power54.KEEP_TOP + power_aux.KEEP_TOP
-          + esp_plan.KEEP_TOP + can_plan.KEEP_TOP + esp_plan.KEEP_TOP_LOOP):
+          + esp_plan.KEEP_TOP + can_plan.KEEP_TOP + esp_plan.KEEP_TOP_LOOP + esp_rest.LED_KEEP_TOP):
     fixed_boxes[False].append(k)
 for k in (power42.KEEP_BOTTOM + power_rails.KEEP_BOTTOM + power54.KEEP_BOTTOM + power_aux.KEEP_BOTTOM
           + efuse_hand.keep_bottom() + efuse_hand.keep_bottom42() + far42.KEEP + flt_bus.KEEP + ina_link.KEEP
