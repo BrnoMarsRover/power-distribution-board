@@ -14,6 +14,8 @@ The electrolytics and the fuse join OUT54 through an L3 pour, so their legs and 
 The controller U10 sits left of the FET stack (under the brake corner): HO, SW and BST are a few mm long, LO
 reaches Q23's gate through a via. GND: the L2 plane, stitched under every GND pour.
 """
+import math
+
 import pcbnew
 
 from power42 import MM, TOMM, X0, Y0, _at, _flat, _pad, _pxy, _upright
@@ -28,7 +30,10 @@ ROW2_Y = 143.6                         # second ceramic row: OUT54 pad up, GND p
 COL_X = (38.25, 42.15, 46.05)          # first-row ceramics right of the FETs
 ROW2_LEFT_X = (26.5, 30.4, 34.3)       # second-row ceramics under Q24
 D14_X = 38.89                          # output TVS in the second row
-BULK = ((43.46, 111.6, True), (43.46, 125.5, False))   # 100 uF caps on top: body centre, legs vertical?
+TP_GND_XY = (32.5, 126.5)             # the GND test loop, beside Q23's tab
+BULK = ((43.46, 111.6, True), (43.46, 126.3, False))   # 100 uF caps on top: body centre, legs vertical?
+                                                       # (the flat one 0.8 mm south of first drawn, 2026-11-24:
+                                                       #  its leg's pad touched L1's bottom-side outline)
 U10_XY = (16.9, 142.85)                # controller left of Q24's leads, its pad vias clear of the brake FET's tab;
                                        # 3.2 mm west of the first spot (2026-11-22): its gate-drive side needs a
                                        # corridor for the analog escapes, LO, VCC, SW and HO up to Q24's leads
@@ -101,6 +106,12 @@ def _dpak(fp, leads_right, source_low, left, top):
     raise RuntimeError(f"{fp.GetReference()}: no orientation")
 
 
+def _centre_pads(fp, x, y):
+    pts = [_pxy(fp, p.GetNumber()) for p in fp.Pads() if p.GetNumber()]
+    cx, cy = sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)
+    fp.SetPosition(fp.GetPosition() + pcbnew.VECTOR2I(MM(x - cx), MM(y - cy)))
+
+
 def place(FP):
     """Position and lock the boost's power parts. Returns the refs placed."""
     done = []
@@ -148,6 +159,15 @@ def place(FP):
     done += ["R121", "L1", "Q23", "Q24", *out, "D14", *bulk(FP), "U10", cb, cv, db]
     for ref in done:
         FP[ref].SetLocked(True)
+    # the boost's GND test loop (top side): beside Q23's tab, over the bottom GND (2026-11-24; the packer had put it on
+    # the switch node, where no GND via fits)
+    sheet = FP["U10"].GetSheetname()
+    tp = next(r for r, f in FP.items() if r.startswith("TP") and f.GetSheetname() == sheet
+              and {p.GetNetname() for p in f.Pads()} == {"GND"})
+    _at(FP[tp], *TP_GND_XY, 0)
+    _centre_pads(FP[tp], *TP_GND_XY)
+    FP[tp].SetLocked(True)
+    done.append(tp)
     return done
 
 
@@ -313,9 +333,12 @@ def copper(b):
     zone("GND", IN2, rect(XL - 0.5, gnd_in[3] - 1.6, swr + 0.5, q24_s[3] + 1.0), "54 boost SW shield (L3)",
          clear=0.3, prio=41)
     # stitching: GND A / GND B to the L2 plane, OUT54 bottom to L3
+    holes = [(TOMM(q.GetPosition().x) - X0, TOMM(q.GetPosition().y) - Y0, TOMM(q.GetDrillSize().x) / 2)
+             for f in FP.values() for q in f.Pads() if q.GetAttribute() == pcbnew.PAD_ATTRIB_PTH]
     for gx in (36.8, 39.4, 46.6, 49.2):
         for gy in (ga[1] + 1.2, ga[1] + 3.6, ga[1] + 6.0):
-            via("GND", gx, gy)
+            if all(math.hypot(gx - hx, gy - hy) > hr + 0.2 + 0.25 + 0.45 for hx, hy, hr in holes):   # (hole to hole)
+                via("GND", gx, gy)
     via("GND", q23_s[2] + 0.9, (q23_s[1] + q23_s[3]) / 2)
     for gx in range(26, 50, 3):
         via("GND", gx + 0.5, 148.3)

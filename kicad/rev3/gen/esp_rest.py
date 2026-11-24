@@ -28,6 +28,10 @@ LED_KEEP_TOP = [(122.9, 60.8, 126.6, 73.2)]              # the anodes' top-side 
 D18_GND_VIA = (123.4, 72.6)
 CATHODE_X = 128.84                                       # the cathodes' tie, between the LEDs and the module's pins
 UART_L3_X = {"RXD0": 144.7, "TXD0": 145.45}
+# NTC (pin 39): TH1 turned (2026-11-24), its NTC pad south by the pin's escape via; on to C108 / R146 on L3 up x 148.2
+# (between the button-sense line and the +5V_LOGIC run) to a via between their pads
+NTC_L3_X, NTC_VIA = 148.2, (148.2, 71.68)
+SW2_GND_VIA = (135.1, 90.5)                              # SW2's GND contacts: east of the CAN lines, clear of SDA
 UART_VIAS = {"RXD0": (144.2, 103.4), "TXD0": (145.45, 110.6)}
 UART_RXD0_Y = 81.36                                      # between TXD0's escape via and J32's west shield pad
 TH1_X = 146.625                                          # between R146's pads
@@ -47,7 +51,7 @@ V3_C119_VIA = (121.7, 72.6)
 def logic_nets(R):
     """The nets planned here that the ESP32 group's router (esp_plan.local) would otherwise take."""
     pin = {q["num"]: q["net"] for q in R.geo.pads if q["ref"] == "U13"}
-    return [pin[n] for n in ("3", "23", "24", "25", "36", "37")]
+    return [pin[n] for n in ("3", "23", "24", "25", "36", "37", "39")]
 
 
 def route(R, FP, log=print):
@@ -108,10 +112,12 @@ def route(R, FP, log=print):
     lay("GND", F, [k19, (CATHODE_X, k19[1]), (CATHODE_X, k18[1]), k18], W_GND)
     lay("GND", F, [k18, (D18_GND_VIA[0] + 0.5, k18[1]), D18_GND_VIA], W_GND)
     via("GND", D18_GND_VIA)
-    # ---- the switches' second pad-1s (top side)
+    # ---- the switches' second pad-1s (top side); SW2's two GND pads too (SW1's meet the USB GND's)
     for sw in ("SW1", "SW2"):
         ones = sorted((q for q in pads if q["ref"] == sw and q["num"] == "1"), key=lambda q: q["c"][1])
         lay(ones[0]["net"], F, [ones[0]["c"], ones[1]["c"]])
+    twos = sorted((q for q in pads if q["ref"] == "SW2" and q["num"] == "2"), key=lambda q: q["c"][1])
+    lay("GND", F, [twos[0]["c"], twos[1]["c"]], W_GND)
     # ---- +3V3: R159 into R142's pad; TH1 between R146's pads into C106's
     r159 = c_net("R159", "+3V3")
     r142 = c_net("R142", "+3V3")
@@ -145,6 +151,26 @@ def route(R, FP, log=print):
     c106, c104 = c_net("C106", "+3V3"), c_net("C104", "+3V3")      # (C106's L3 pocket is closed: its pad to C104's)
     lay("+3V3", B, [c106, (c106[0] - 1.02, c106[1] + 1.02), (c104[0] + 0.51, c106[1] + 1.02), (c104[0], c104[1] + 0.5),
                     c104], W_SUP)
+    tab = max((q for q in pads if q["ref"] == "U12" and q["num"] == "2"), key=lambda q: q["box"][1])
+    lay("+3V3", B, [c106, (c106[0], tab["box"][3] - 0.3)], W_SUP)       # C106 straight up into U12's tab
+    k108 = c_net("C108", "GND")                                       # C108's GND: down between TH1's pads and
+    x108, gv = 148.46, esp_plan.GND_VIAS["40"]                         # the +5V_LOGIC run to pin 40's GND via
+    lay("GND", B, [k108, (x108, k108[1] + (x108 - k108[0])), (x108, gv[1] - (x108 - gv[0])), gv], W_GND)
+    # NTC: escape via -> TH1 (bottom side); escape via -> L3 -> a via between R146 / C108 -> both pads
+    ntc = u13["39"]["net"]
+    (nx, ny), = esc[ntc]
+    t2 = c_net("TH1", ntc)
+    lay(ntc, B, [(nx, ny), (t2[0], ny - (t2[0] - nx)), t2])
+    lay(ntc, IN2, [(nx, ny), (NTC_L3_X, ny - (NTC_L3_X - nx)), NTC_VIA])
+    via(ntc, NTC_VIA)
+    lay(ntc, B, [c_net("R146", ntc), NTC_VIA, c_net("C108", ntc)])
+    # SW2's GND contacts (linked on top): a via east of the CAN lines, then the bottom side into C107's GND pad
+    s2 = max((q["c"] for q in pads if q["ref"] == "SW2" and q["num"] == "2"), key=lambda c: c[1])
+    gx, gy = SW2_GND_VIA
+    lay("GND", F, [s2, (gx - 0.56, s2[1] + (gx - 0.56 - s2[0])), (gx, gy)], W_GND)
+    via("GND", SW2_GND_VIA)
+    c107g = c_net("C107", "GND")
+    lay("GND", B, [(gx, gy), (c107g[0], gy - (c107g[0] - gx)), c107g], W_GND)
     th1 = c_net("TH1", "+3V3")
     c106 = c_net("C106", "+3V3")
     lay("+3V3", B, [th1, (TH1_X, th1[1]), (TH1_X, c106[1] + 0.3)], W_SUP)

@@ -245,11 +245,28 @@ if spot:
 else:
     missed.append("BMR logo")
 
-for v, bottom in tp_labels:                                  # test-pad names last, around the rest
-    settle(v, bottom, reach=4.0)
+hidden = []
+for v, bottom in tp_labels:                                  # test-pad names last, around the rest: beside the pad,
+    if settle(v, bottom, reach=4.0):                         # else turned upright, else further out; a name with
+        continue                                             # no free spot is hidden (the fab layer keeps the ref)
+    missed.pop()
+    TEXTS[bottom].pop()
+    v.SetTextAngleDegrees(90)
+    if settle(v, bottom, reach=4.0):
+        continue
+    missed.pop()
+    TEXTS[bottom].pop()
+    v.SetTextAngleDegrees(0)
+    if settle(v, bottom, reach=8.0):
+        continue
+    missed.pop()
+    TEXTS[bottom].pop()
+    v.SetVisible(False)
+    hidden.append(v.GetText())
 
 b.Save(BOARD)
-print(f"silkscreen added; {len(missed)} items found no free spot: {missed[:20]}")
+print(f"silkscreen added; {len(missed)} items found no free spot: {missed[:20]}"
+      + (f"; test-pad names hidden (no room): {hidden}" if hidden else ""))
 
 # the native pcbnew (KiCad 10.0.8) can crash tearing itself down at interpreter exit, after the work is saved,
 # which would stop the rebuild: leave at once

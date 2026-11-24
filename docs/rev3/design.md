@@ -1805,7 +1805,29 @@ the three lines reach the transceiver side by side in its pin order, without cro
            brake FET's tab and gate pads (top side).
      - **Router additions (rails):** the A* expansion limit grows with the window, and round pads (the
        test pads) are modelled as circles, so a route ends inside the copper.
-  3. `gen/pcb_silk.py` — the silkscreen.
+  2j. `gen/power_gnd.py` (run by `pcb_gnd.py`, after the +3V3 stage; decided 2026-11-24) — GND stitching. L2 is a
+     whole GND plane, so one via ties anything to GND.
+     - Every GND fill island on any layer with no GND via or through-hole GND pin gets a via inside it. Where
+       none fits, a short track runs to the nearest GND via.
+     - Every GND pad not in a tied island gets its own via with a short track. Failing that, the router takes
+       it to the plane (multi-segment).
+     - GND vias may pierce other nets' pours where those are wide enough not to be cut (42 / 54 V pours clear
+       0.5 mm round them), never a switch node or the boost's LIN. In the 42 V blocks the eFuses' GND pads get
+       their vias before the signals route, so the router goes round them.
+     - Two passes with a refill between.
+     Planned by hand where nothing else fits (`esp_rest`): SW2's GND contacts (a top-side link and a via east of
+     the CAN lines into C107's GND), C108's GND down between TH1 and the +5V_LOGIC run to the module's pin-40 GND
+     via, C106's +3V3 pad straight into U12's tab. TH1 is turned so its NTC pad faces the module's NTC escape:
+     NTC is planned too, on L3 up beside the button-sense line to a via between R146 and C108. The boost's GND
+     test loop TP29 is placed by hand beside Q23's tab, over the bottom GND (the packer had put it on the
+     switch node). The flat 100 µF C91 sits 0.8 mm further south, clear of L1's outline, and the boost's
+     stitching grid skips spots next to through-hole pins.
+     **Open (2026-11-24):** in each 42 V block the timer column (TMR caps, TMR / IWRN resistors) sits on the
+     bottom right under the FET's 9 × 11 mm drain tab, where no via fits. The TMR line runs down its west
+     side and the bus legs' corridor its east side, so five GND pads (C17 / R21, C27 / C28 / R39) have no way
+     out. This needs a rearranged timer column in the 42 V template.
+  3. `gen/pcb_silk.py` — the silkscreen. A test pad's name that finds no room beside its pad is tried turned
+     upright, then further out, and hidden if nothing fits (none is today).
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after
      "Update footprints from library", which resets the board-side model replacements.
 - **3D models:** KiCad 10 ships no model for several of its own footprints, and the custom

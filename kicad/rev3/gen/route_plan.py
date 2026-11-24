@@ -614,6 +614,15 @@ def _efuse(R, FP, spec, log=print):
             N.add(spec["vin"], low + [R.t_pad(ref, num)], SUP_W, f"{spec['vin']} feed below the bar")
         N.add(led_a, loc(led_a) + [R.t_via(*lv)], SIG_W, "LED")
 
+    # 42 V blocks: the parts' GND pads take their vias before the signals route (2026-11-24). Routed after, the
+    # TMR loop and the signal fan boxed several in (the timer caps, the IWRN resistor, the temperature transistor)
+    # under the block's 42 V pours, with no way down. GND vias may go anywhere in the block; the 42 V pours clear
+    # 0.5 mm round them, as in the drain copper beside the tabs.
+    if spec.get("bar"):
+        R.geo.hv_gnd_ok = list(spec["gnd_ok"]) + [box]
+        for ref, num in parts.get("GND", []):
+            if FP[ref].IsFlipped() and inside(ref):
+                R.fanout(ref, num, SUP_W, zone_layers=(IN1,), optional=True)
     N = route.Negotiator(R, box, origin=pins["12"]["c"])
     (jobs42 if spec.get("bar") else jobs)(N)
     bad = N.run(log=log)

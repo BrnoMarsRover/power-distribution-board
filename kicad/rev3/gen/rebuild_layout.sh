@@ -29,6 +29,8 @@ for block in ina 24 12 5 42D 42C 42legs 42bus boost aux flt i2c esp can v5 espre
 done
 echo "[$SECONDS s] +3V3"
 $KPY $R/gen/pcb_3v3.py 2>&1 | grep -v -i "swig/python\|debug\|GetWidth called"
+echo "[$SECONDS s] GND"
+$KPY $R/gen/pcb_gnd.py 2>&1 | grep -v -i "swig/python\|debug\|GetWidth called"
 echo "[$SECONDS s] silkscreen"
 $KPY $R/gen/pcb_silk.py 2>&1 | grep -v swig/python
 $KPY $R/gen/pcb_models.py 2>&1 | grep -v swig/python | grep -i missing || true

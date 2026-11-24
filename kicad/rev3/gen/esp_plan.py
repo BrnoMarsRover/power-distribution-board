@@ -427,7 +427,7 @@ SUPPORT = {"C104": (143.35, 68.289, 0.0, "+3V3 GND"),    # (the aux sheet's spar
            "R148": (146.27, 84.321, 180.0, "AUX5_SNS GND"), "R149": (145.404, 88.184, -90.0, "CC1 GND"),
            "R150": (143.234, 86.398, -90.0, "CC2 GND"), "R159": (135.553, 78.457, 0.0, "+3V3 SPARE_IO38"),
            "R160": (128.669, 73.278, 180.0, "LED_1 Net-(D18-A)"), "R161": (128.74, 75.333, 180.0, "LED_2 Net-(D19-A)"),
-           "R162": (129.417, 77.485, 180.0, "LED_3 Net-(D20-A)"), "TH1": (147.545, 77.542, 90.0, "+3V3 NTC_SNS")}
+           "R162": (129.417, 77.485, 180.0, "LED_3 Net-(D20-A)"), "TH1": (147.545, 77.542, -90.0, "+3V3 NTC_SNS")}
 TP_LOOP = ("TP41", (128.795, 94.895, 0.0))       # the group's GND test loop (top side), clear of ALERT's vias
 KEEP_TOP_LOOP = [(126.6, 93.5, 131.0, 96.3)]      # (pcb_place / pcb_optimize: its courtyard, for the top packer)
 
