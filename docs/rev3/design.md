@@ -973,6 +973,15 @@ the three lines reach the transceiver side by side in its pin order, without cro
   - The 42 V output strips are 7.4–7.7 mm wide on L1. At the full 30 A that is about a
     35 °C rise on L1 alone, only at the top of the strip: each XT90 takes its share on the
     way down, and the L3 plane runs in parallel.
+  - **Copper simulation (2026-11-24, `gen/copper_sim.py`):** DC current flow in every power net's copper, all
+    four layers joined through their vias, at the design load (42 V drive 30 A, converters 22 A, rails 11.1 /
+    11.1 / 16.6 A). It reports 9.4 W of copper loss in all. The biggest share, **GND, 5.5 W and 73 mV**, is the 42 V
+    return climbing the left side to J1, mostly on the 0.5 oz L2. Then VBAT 1.0 W (L1 only, J1 to R1), BUS42
+    0.6 W, OUT5 0.6 W, and the rest 0.04–0.3 W per net. Other nets' vias cost 1.8 W, mostly in GND. They matter in
+    two spots: OUT5's neck into its output strip (about ten vias, 17 A/mm, loss nearly doubled) and the 5 V shunt's
+    outlet (VS-feed vias, 14 A/mm). Inner copper what-if for GND: 1 oz 2.6 W / 36 mV, 2 oz 1.4 W / 20 mV.
+    **OPEN:** inner copper weight (JLC: 1 oz or 2 oz inner on 4 layers; 2 oz needs 1.6 mm and 2 oz outer); clearing
+    the two via fences.
   - **Solder-reinforced strips** remain a free extra if the 42 V strips run hot in testing:
     leave the mask open along them and flood with solder. Not planned for now.
 - **Pads:** power-connector pads connect solid, with no thermal spokes.
