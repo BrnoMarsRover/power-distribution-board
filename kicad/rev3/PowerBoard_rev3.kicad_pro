@@ -678,6 +678,10 @@
         "pattern": "/Brake*/BRK_SW"
       },
       {
+        "netclass": "HV_Bus",
+        "pattern": "*/CHG_N"
+      },
+      {
         "netclass": "HV_Power",
         "pattern": "OUT54"
       },
@@ -732,10 +736,6 @@
       {
         "netclass": "Power",
         "pattern": "/Rail inputs*/O*"
-      },
-      {
-        "netclass": "Power",
-        "pattern": "*/CHG_N"
       },
       {
         "netclass": "Supply",

@@ -918,13 +918,20 @@ the three lines reach the transceiver side by side in its pin order, without cro
   - **Netclasses:**
     - HV_Bus: VBAT, BUS42, the 42 V outputs, their drain rails and the brake switch node (BRK_SW).
     - HV_Power: the 54 V path and the boost's LIN and SW nodes.
-    - Power: the 24 / 12 / 5 V rails, every PTC output node and CHG_N.
+    - Power: the 24 / 12 / 5 V rails and every PTC output node. (CHG_N, the charger's 42 V return, moved
+      to HV_Bus on 2026-11-24.)
     - Supply and GND.
   - **Clearance is 0.2 mm in every class.** IPC-2221B asks 0.13 mm for 31–100 V under
     solder mask, and a larger class clearance would fail the 0.5 mm-pitch pins of the
     TPS48111 and INA228.
-  - **42 / 54 V pours and tracks ≥ 1 mm get 0.5 mm on the outer layers.** This is close
-    to the IPC 0.6 mm figure for bare copper.
+  - **42 / 54 V pours get 0.5 mm on every layer; tracks ≥ 1 mm get it on the outer layers.** This is
+    close to the IPC 0.6 mm figure for bare copper (inner layers need only 0.1 mm at 51–100 V). Until
+    2026-11-24 the pour rule was outer-only and one-sided, so on L3 the +3V3 fill came within 0.3 mm of
+    OUT54 / OUT42C / OUT42D and CHG_N; it now applies both ways round on every layer.
+  - **The big power connectors' pins keep 1 mm from other nets' pours on the inner layers** (XT90, XT60,
+    XT30, Deans). Where an inner layer has no pour of the pin's own net, the pin's ring stands alone
+    (a non-functional pad). It is kept, because it anchors the plated barrel against plug forces and
+    soldering heat, and it keeps the plane 1 mm + the ring width away from the drilled hole wall.
   - **Power-class tracks must be ≥ 0.5 mm.**
   - **Hand-soldering rules:**
     - Courtyards keep ≥ 0.5 mm apart, so the iron fits between parts.
@@ -1193,13 +1200,26 @@ the three lines reach the transceiver side by side in its pin order, without cro
        to the RON / UVLO bus's via.
      - Top parts are kept off the via fields of both supplies (U10's and U11's pad vias, the input vias).
   2f. `gen/power_logic.py` (run by `pcb_3v3.py`, after the signal routing of 2i) — +3V3 distribution (decided
-     2026-11-20): a +3V3
-     fill over the whole of L3 at low priority, so it takes only what the power blocks' L3 copies leave free
-     (under the output columns, the right-hand column, the strip above the rail blocks). It sits right under
-     the bottom-side logic, so each 3.3 V pin is one short via away and the plane helps decoupling; signal
-     tracks routed on L3 later cut through it.
-     - **Fan-out:** every +3V3 pin gets a via to the fill with a short track (up to about 6 mm), at the
-       nearest spot clear of other nets on every layer, where L3 really is fill. 3.3 V vias may pass
+     2026-11-20, reworked 2026-11-24). **L3's default fill is GND**, at the lowest priority under every
+     power copy. **+3V3 is a pour above it, only over the logic**: the logic band, the ESP32 / CAN group, the
+     output field below them and the right-hand column. It is cut back 2 mm from any 42 / 54 V copper on
+     L3 and 1 mm from the rails' copper, so GND always lies between battery-level copper and the logic
+     supply. The whole 42 / 54 V side and the rails' area above the logic band are GND. Reasons:
+     - A breakdown from 42 / 54 V copper now shorts to GND, which the eFuse or fuse clears. Into +3V3 it
+       would have put battery voltage on every logic IC at once.
+     - Switching edges couple into GND.
+     - L3 is 0.21 mm from the bottom layer and 1.065 mm from L2, so L3 is the bottom layer's reference plane.
+     The logic's own L3 lines (the I²C trunk, the FLT bus, BRAKE_ACT / BOOST_DIS, EN, the north bundle)
+     cut the pour into pieces that the old board-wide fill had joined round the outside, partly through
+     the 42 V area. Four bottom-side bridges (two vias and a short track each, `BRIDGES`) join them:
+     - the strips below the I²C trunk, up past it (west and east);
+     - the power-button corner's lower part, past the north bundle's band;
+     - the logic cluster, down past BRAKE_ACT / BOOST_DIS into the output field, which reaches the LDO's
+       side up the board's east edge.
+     A pour limited to the logic alone had no way to the LDO at all. C106's pad ties straight to C104's
+     (esp_rest), and the INA228's +3V3 via moved east of the I²C column (ina_link).
+     - **Fan-out:** every +3V3 pin gets a via to the pour with a short track (up to about 6 mm), at the
+       nearest spot clear of other nets on every layer, inside the +3V3 pour. 3.3 V vias may pass
        through the 24 / 12 / 5 V pours but never through 42 / 54 V copper, a switch node or LIN. The
        AP7361's tab gets a row of vias (it is the source). Pins over a power block's L3 copy with no fill
        in reach (the INA228 corner under the 42 V bar, a few parts under the 5 V block) are left to

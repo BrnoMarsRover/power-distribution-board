@@ -142,6 +142,9 @@ def route(R, FP, log=print):
     cv = V3_C119_VIA                                                 #  of the FLT bus's L3 diagonals)
     lay("+3V3", B, [c119, (c119[0], cv[1] - (cv[0] - c119[0])), cv], W_SUP)
     via("+3V3", cv)
+    c106, c104 = c_net("C106", "+3V3"), c_net("C104", "+3V3")      # (C106's L3 pocket is closed: its pad to C104's)
+    lay("+3V3", B, [c106, (c106[0] - 1.02, c106[1] + 1.02), (c104[0] + 0.51, c106[1] + 1.02), (c104[0], c104[1] + 0.5),
+                    c104], W_SUP)
     th1 = c_net("TH1", "+3V3")
     c106 = c_net("C106", "+3V3")
     lay("+3V3", B, [th1, (TH1_X, th1[1]), (TH1_X, c106[1] + 0.3)], W_SUP)

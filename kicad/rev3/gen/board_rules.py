@@ -82,12 +82,12 @@ CLASSES = [
     # name, track, clearance, via (dia, drill), colour, patterns
     ("Default", 0.25, 0.2, (0.9, 0.4), "rgba(0, 0, 0, 0.000)", []),
     ("HV_Bus", 3.0, 0.2, (1.2, 0.6), "rgb(255, 0, 0)",
-     ["VBAT", "BUS42", "OUT42D", "OUT42C", "/42 V*/DRN", "/Brake*/BRK_SW"]),
+     ["VBAT", "BUS42", "OUT42D", "OUT42C", "/42 V*/DRN", "/Brake*/BRK_SW", "*/CHG_N"]),
     ("HV_Power", 1.5, 0.2, (1.2, 0.6), "rgb(255, 120, 0)",
      ["OUT54", "/Rail inputs*/O54*", "/54 V boost*/LIN", "/54 V boost*/SW"]),   # O54_1: fuse to J13
     ("Power", 1.0, 0.2, (1.2, 0.6), "rgb(0, 160, 255)",
      ["VIN24", "VIN12", "VIN5", "OUT24", "OUT12", "OUT5", "/24 V*/DRN", "/12 V*/DRN",
-      "/5 V*/DRN", "/Rail inputs*/O*", "*/CHG_N"]),
+      "/5 V*/DRN", "/Rail inputs*/O*"]),
     ("Supply", 0.4, 0.2, (0.9, 0.4), "rgb(0, 200, 0)",
      ["+3V3", "+5V_LOGIC", "+5V3_AUX", "VBUS_USB"]),
     ("GND", 0.5, 0.2, (0.9, 0.4), "rgb(120, 120, 120)", ["GND"]),
@@ -150,15 +150,24 @@ DRU = """(version 1)
 # 42 V and 54 V copper: IPC-2221B asks 0.6 mm for bare conductors at 31-150 V (B2) and
 # 0.13 mm under solder mask (B4). Pours and wide tracks get 0.5 mm from other nets; pins of
 # fine-pitch parts keep the 0.2 mm default (they are masked and the part sets the pitch).
+# Pours on every layer, both ways round (2026-11-23: the rule had been outer-only and one-sided, so on L3 the
+# +3V3 fill came within 0.3 mm of the 42 / 54 V outputs).
 (rule "HV: 0.5 mm around 42 / 54 V pours"
-  (layer outer)
   (constraint clearance (min 0.5mm))
-  (condition "A.Type == 'Zone' && (A.hasNetclass('HV_Bus') || A.hasNetclass('HV_Power')) && A.Net != B.Net"))
+  (condition "((A.Type == 'Zone' && (A.hasNetclass('HV_Bus') || A.hasNetclass('HV_Power'))) || (B.Type == 'Zone' && (B.hasNetclass('HV_Bus') || B.hasNetclass('HV_Power')))) && A.Net != B.Net"))
 
 (rule "HV: 0.5 mm around wide 42 / 54 V tracks"
   (layer outer)
   (constraint clearance (min 0.5mm))
   (condition "A.Type == 'Track' && A.Width >= 1mm && (A.hasNetclass('HV_Bus') || A.hasNetclass('HV_Power')) && A.Net != B.Net"))
+
+# The big power connectors' pins on the inner layers: their rings stand alone in other nets' copper where the
+# layer has no pour of their own net (they anchor the plated barrel under plug forces and soldering heat; kept,
+# 2026-11-23). 1 mm between them and other nets' pours instead of the 0.3 mm pour clearance.
+(rule "Power connector pins: 1 mm on the inner layers"
+  (layer inner)
+  (constraint clearance (min 1.0mm))
+  (condition "A.Net != B.Net && ((A.Type == 'Pad' && A.Pad_Type == 'Through-hole' && (A.Library_Link == 'PowerBoard_rev3:XT90*' || A.Library_Link == 'PowerBoard_rev3:DEANS*' || A.Library_Link == 'Connector_AMASS:*') && B.Type == 'Zone') || (B.Type == 'Pad' && B.Pad_Type == 'Through-hole' && (B.Library_Link == 'PowerBoard_rev3:XT90*' || B.Library_Link == 'PowerBoard_rev3:DEANS*' || B.Library_Link == 'Connector_AMASS:*') && A.Type == 'Zone'))"))
 
 # Current-carrying nets: no track thinner than the class default once it leaves a pad area.
 (rule "Power: tracks >= 0.5 mm"

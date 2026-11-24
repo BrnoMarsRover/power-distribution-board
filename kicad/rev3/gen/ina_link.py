@@ -32,6 +32,8 @@ SEAM_X2 = (50.03, 50.51, 50.99, 51.47)              # past the lower gate via (y
 SEAM_X3 = (50.8, 51.3, 51.8, 52.3)                  # beside 42C's BUS42 feed, down to the end
 JOG1_Y, JOG2_Y, JOG3_Y, END_Y, V3_Y = 25.5, 35.5, 38.3, 48.6, 54.3
 ENDS = {n: (x, V3_Y if n == "+3V3" else END_Y) for n, x in zip(NETS, SEAM_X3)}
+# +3V3's via: east of the I2C column's L3 lines, inside the L3 +3V3 pour (2 mm from 42C's L3 copper, power_logic)
+V3_VIA = (53.6, 57.1)
 
 KEEP = [(17.6, 10.55, 52.0, 12.95), (49.0, 10.55, 51.75, 25.9), (49.6, 25.4, 52.6, 49.0), (50.3, 49.0, 51.3, 54.8)]
 
@@ -69,6 +71,8 @@ def paths(c8_plus, pins):
         pts += [(SEAM_X1[i], a), (SEAM_X2[i], b)]
         a, b = j3[i]
         pts += [(SEAM_X2[i], a), (SEAM_X3[i], b), ENDS[net]]
+        if net == "+3V3":
+            pts += [V3_VIA]
         out[net] = pts
     return out
 
@@ -84,8 +88,7 @@ def route(R, FP, log=print):
     for net, pts in paths(c8, u1).items():
         segs += R.track(net, B, pts, route_plan.SIG_W)
     segs += R.track("+3V3", B, [u1["+3V3"], c8], route_plan.SIG_W)  # the supply pin to its decap
-    x, y = ENDS["+3V3"]
-    vias.append(R.via("+3V3", x, y))
+    vias.append(R.via("+3V3", *V3_VIA))
     bad = route_plan._check_exact(R, segs) + far42._check_vias(R, vias)
     for msg in bad[:20]:
         log(f"   INA228 link clearance: {msg}")

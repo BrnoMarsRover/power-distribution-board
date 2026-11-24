@@ -1,8 +1,12 @@
-"""Logic supply distribution: a +3V3 fill on L3 and a via fan-out from every +3V3 pin to it.
+"""Logic supply distribution: a +3V3 pour on L3 over the logic, a GND fill everywhere else on L3, and a via
+fan-out from every +3V3 pin to the pour.
 
-Run by pcb_power42.py after the power blocks (their copper, vias and tracks must exist first).
-The fill covers the whole of L3 at low priority, so it takes only what the power blocks' L3 copies leave free
-(under the output columns, the right-hand column, the corners); signal tracks routed on L3 later cut through it.
+Run by pcb_3v3.py after routing (the power copper, its vias and the routes must exist first).
+Since 2026-11-23 the board-wide L3 fill is GND, not +3V3: a breakdown from 42 / 54 V copper then shorts to GND (the
+eFuse or fuse clears it) instead of putting battery voltage on every logic IC, switching edges couple into GND, and
+the bottom layer (0.21 mm from L3, 1.065 mm from L2) gets a ground reference. +3V3 is a pour only over the logic
+area and the right-hand column (REGIONS), cut back 2 mm from 42 / 54 V copper on L3 and 1 mm from the rails'
+copper (BAND), so GND always lies between them; outlying +3V3 pins get tracks (the INA228's, ina_link).
 Every +3V3 pin gets one via to it with a short track (up to about 6 mm), placed at the nearest spot that clears
 the other nets' pads, tracks and vias on every layer and lands where L3 is free for the fill. Pins over a power
 block's L3 copy with no fill within reach are left to routing (pcb_power42.py lists them). The AP7361's 3.3 V tab, the
@@ -20,6 +24,50 @@ TRACK_W = 0.3
 GAP_PAD, GAP_TRACK, GAP_VIA = 0.25, 0.25, 0.35
 EDGE = 1.2                                   # via centre to board edge
 HOLES = [(3.5, 3.5), (146.5, 3.5), (3.5, 146.5), (146.5, 146.5)]
+# the +3V3 pour's area on L3: the logic band, the ESP32 / CAN group, the output field below them, and the right-hand
+# column (aux supply, power-button corner, the UART's ESD); cut back from other power copper on L3 by class. Not the
+# 42 / 54 V side (x < 50.5) nor the rails' area above the logic band (both GND). The logic's own L3 lines cut a
+# tighter pour into islands with no way to the LDO (2026-11-24); the output field joins them, 1 mm from its rings.
+REGIONS = [(50.5, 47.0, 149.5, 149.5), (132.0, 0.5, 149.5, 47.0)]
+BAND = {"HV_Bus": 2.0, "HV_Power": 2.0, "Power": 1.0}
+# The logic's own L3 lines cut the pour into islands that the board-wide fill used to join round the outside (some
+# of it through the 42 V area). Bottom-side bridges, each a via either side of the cut: the strips under the I2C
+# trunk (west: R135; east: the CAN group, R142 / R144 / R145) up past the trunk, the power-button corner's lower part
+# (R166, U15) up past the north bundle's band to the part with R174 and the module's supply.
+# The logic cluster reaches the LDO's side through the output field: the eastern strip down past BRAKE_ACT /
+# BOOST_DIS's L3 lines, the field east of the UART0 lines up the right edge.
+BRIDGES = [((54.5, 93.75), (54.5, 89.5)), ((107.75, 93.75), (107.75, 89.5)), ((140.5, 19.75), (140.5, 17.0)),
+           ((103.0, 100.0), (103.0, 102.75))]
+
+
+def region(b):
+    """The +3V3 pour's outline: REGIONS less BAND around every other power net's copper on L3."""
+    rp = pcbnew.SHAPE_POLY_SET()
+    for x0, y0, x1, y1 in REGIONS:
+        rp.NewOutline()
+        for x, y in ((x0, y0), (x1, y0), (x1, y1), (x0, y1)):
+            rp.Append(MM(X0 + x), MM(Y0 + y))
+    keep = pcbnew.SHAPE_POLY_SET()
+    L = pcbnew.In2_Cu
+    band = lambda item: BAND.get(item.GetNetClassName())
+    for z in b.Zones():
+        d = band(z)
+        if d and z.IsOnLayer(L) and not z.GetIsRuleArea():
+            o = pcbnew.SHAPE_POLY_SET(z.Outline())
+            o.Inflate(MM(d), pcbnew.CORNER_STRATEGY_ROUND_ALL_CORNERS, MM(0.02))
+            keep.Append(o)
+    for t in b.GetTracks():
+        d = band(t)
+        if d and t.IsOnLayer(L):
+            t.TransformShapeToPolygon(keep, L, MM(d), MM(0.02), pcbnew.ERROR_OUTSIDE)
+    for p in b.GetPads():
+        d = band(p)
+        if d and p.IsOnLayer(L):
+            p.TransformShapeToPolygon(keep, L, MM(d), MM(0.02), pcbnew.ERROR_OUTSIDE)
+    keep.Simplify()
+    rp.BooleanSubtract(keep)
+    rp.Simplify()
+    return rp
 
 
 def copper(b):
@@ -67,8 +115,14 @@ def copper(b):
     def box_dist(px, py, l, t, r, bt):
         return math.hypot(max(l - px, 0, px - r), max(t - py, 0, py - bt))
 
+    v33 = region(b)
+    inner = pcbnew.SHAPE_POLY_SET(v33)
+    inner.Deflate(MM(VIA_D / 2 + 0.45), pcbnew.CORNER_STRATEGY_ROUND_ALL_CORNERS, MM(0.02))
+
     def via_ok(x, y):
         rr = VIA_D / 2
+        if not inner.Contains(pcbnew.VECTOR2I(MM(X0 + x), MM(Y0 + y))):
+            return False                                  # (only into the +3V3 pour)
         if not (EDGE <= x <= 150 - EDGE and EDGE <= y <= 150 - EDGE):
             return False
         if any(math.hypot(x - hx, y - hy) < 4.5 for hx, hy in HOLES):
@@ -160,19 +214,34 @@ def copper(b):
             if not done:
                 missed.append(f"{f.GetReference()}.{p.GetNumber()}")
 
-    # the fill: all of L3, under every power copy, islands (no via) removed
-    z = pcbnew.ZONE(b)
-    z.SetLayer(pcbnew.In2_Cu)
-    z.SetNet(net)
-    z.SetAssignedPriority(10)
-    z.SetLocalClearance(MM(0.3))
-    z.SetMinThickness(MM(0.3))
-    z.SetIslandRemovalMode(pcbnew.ISLAND_REMOVAL_MODE_ALWAYS)
-    z.SetZoneName("+3V3 fill (L3)")
-    o = z.Outline()
+    for (x1, y1), (x2, y2) in BRIDGES:
+        add_via(x1, y1)
+        add_via(x2, y2)
+        add_track(x1, y1, x2, y2, pcbnew.B_Cu)
+    # GND: all of L3 under every other pour, islands (no via) removed; +3V3 over the logic, above it
+    g = pcbnew.ZONE(b)
+    g.SetLayer(pcbnew.In2_Cu)
+    g.SetNet(b.FindNet("GND"))
+    g.SetAssignedPriority(10)
+    g.SetLocalClearance(MM(0.3))
+    g.SetMinThickness(MM(0.3))
+    g.SetIslandRemovalMode(pcbnew.ISLAND_REMOVAL_MODE_ALWAYS)
+    g.SetZoneName("GND fill (L3)")
+    o = g.Outline()
     o.NewOutline()
     for x, y in ((0.5, 0.5), (149.5, 0.5), (149.5, 149.5), (0.5, 149.5)):
         o.Append(MM(X0 + x), MM(Y0 + y))
+    b.Add(g)
+    zones.append(g)
+    z = pcbnew.ZONE(b)
+    z.SetLayer(pcbnew.In2_Cu)
+    z.SetNet(net)
+    z.SetAssignedPriority(20)
+    z.SetLocalClearance(MM(0.3))
+    z.SetMinThickness(MM(0.3))
+    z.SetIslandRemovalMode(pcbnew.ISLAND_REMOVAL_MODE_ALWAYS)
+    z.SetZoneName("+3V3 logic (L3)")
+    z.Outline().Append(v33)                           # (a copy: SetOutline would hand the zone Python's polygon)
     b.Add(z)
     zones.append(z)
     return zones, vias, tracks, missed
