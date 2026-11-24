@@ -1826,6 +1826,18 @@ the three lines reach the transceiver side by side in its pin order, without cro
      bottom right under the FET's 9 × 11 mm drain tab, where no via fits. The TMR line runs down its west
      side and the bus legs' corridor its east side, so five GND pads (C17 / R21, C27 / C28 / R39) have no way
      out. This needs a rearranged timer column in the 42 V template.
+  2k. Power zones adjusted by hand in KiCad, then folded into the scripts (2026-11-24; zone-only parameters,
+     the parts stay put):
+     - Rail inputs (`power_rails.RAILS[...]["inlet"]`): the input GND patch takes the whole connector − pin; on
+       24 / 12 V it steps east above the TVS, and the VIN notch follows it 0.5 mm off.
+     - Neighbouring OUT areas 1 mm apart (`out_col_r`); the output strips stay 1.35–1.65 mm clear of the PTC
+       output pads (`strip_w`); the 5 V block's copper ends at x 130.4 (`zone_r`), 1.2 mm from J38.
+     - 42 V: the 42C DRN / OUT copper and the L1 BUS42 bar end at x 50.0, 0.8 mm from the 24 V block
+       (`zone_r`, `BAR_F_R`); the full-width OUT columns start at y 73.0. Round J4 the 42D OUT notch is 9.5 on L1
+       and 10.5 on L3 (1.2 mm off J4.1, BRK_SW). BRK_SW starts at 11.5, 2 mm from it, and the brake GND patch
+       moves down to y 133.5–143.0, clear of the brake gate escape. The charger / CHG_N pair on L3 moves 1 mm west.
+     - Knock-on: the 24 V eFuse's VOUT sense line now drops to the OUT area at x 120.65 rather than the old
+       column edge, and four signal lines beside it shift slightly.
   3. `gen/pcb_silk.py` — the silkscreen. A test pad's name that finds no room beside its pad is tried turned
      upright, then further out, and hidden if nothing fits (none is today).
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after

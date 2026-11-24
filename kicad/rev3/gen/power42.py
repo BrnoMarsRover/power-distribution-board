@@ -18,15 +18,16 @@ MM, TOMM = pcbnew.FromMM, pcbnew.ToMM
 
 # ---------------------------------------------------------------- geometry
 VBAT_Y1 = 28.7                       # VBAT area bottom
-BAR = (0.5, 29.7, 50.3, 36.2)        # BUS42 bar
+BAR = (0.5, 29.7, 50.3, 36.2)        # BUS42 bar (L3 copy; its L1 copy ends at BAR_F_R)
+BAR_F_R = 50.0                       # 0.8 mm from the 24 V VIN area (zones hand-adjusted, 2026-11-24)
 DRN_TOP, DRN_BOT = 36.8, 71.6
-OUT_TOP, COL_TOP = 37.0, 72.3        # OUT strip top, start of the full-width OUT column
+OUT_TOP, COL_TOP = 37.0, 73.0        # OUT strip top, start of the full-width OUT column
 FET_ROWS = (42.3, 54.2, 66.1)        # pre-charge on top, the two main FETs nearest the outputs
 BLOCKS = {                           # dx, FETs (pre, main, main), shunt, bridge, LED, OUT strip right, DRN left, column bottom
     "42D": dict(dx=0.0, fets=("Q4", "Q2", "Q3"), shunt="R5", bridge="JP1", led="D2", out_r=8.2, drn_l=9.0,
                 drn_r=25.0, out_l=0.5, col_bot=113.2),
     "42C": dict(dx=25.0, fets=("Q8", "Q6", "Q7"), shunt="R23", bridge="JP2", led="D3", out_r=33.2, drn_l=34.0,
-                drn_r=50.3, out_l=25.8, col_bot=100.0,
+                drn_r=50.3, out_l=25.8, col_bot=100.0, zone_r=50.0,   # DRN / OUT copper right edge (drn_r: parts)
                 kelvin_dx=-0.35),    # Kelvin vias 0.35 mm left, as far as the shunt's pads allow: the INA228's link
 }                                    # passes right of them (ina_link)
 
@@ -39,8 +40,9 @@ SHUNT_X, SHUNT_Y = 21.9, 36.2         # block shunt centre (42D); pad 1 (BUS42) 
 BRIDGE_X, BRIDGE_Y = 22.6, 43.2       # bypass bridge pad 1 (DRN); pad 2 (OUT) 7.62 mm below, reaches L3
 LED_X, LED_Y = 22.6, 68.0
 BRAKE = dict(J4=(14.7, 119.0), D12=(10.2, 126.5), Q22=(15.0, 135.0))
-BRK_ZONE = (11.0, 113.8, 25.0, 141.0)
-BRK_GND = (0.5, 129.5, 10.4, 141.5)  # brake FET source lead -> GND (top patch + vias)
+BRK_ZONE = (11.5, 113.8, 25.0, 141.0)   # 2 mm from the 42D OUT notch (L1)
+BRK_GND = (0.5, 133.5, 10.4, 143.0)  # brake FET source lead -> GND (top patch + vias); clear of the gate escape
+NOTCH_F, NOTCH_L3 = 9.5, 10.5        # 42D OUT column notch round J4: L1 inside J4.2, L3 1.2 mm off J4.1 (BRK_SW)
 
 # regions other parts must stay out of (top, bottom); pcb_place.py and pcb_optimize.py honour them
 KEEP_TOP = [(0.5, 12.4, 50.5, 100.0), (0.5, 100.0, 26.0, 141.5)]
@@ -221,11 +223,11 @@ def copper(b):
 
     # -------------------------------------------- input: VBAT area, BUS42 bar, charger links on L3
     zone("VBAT", F, [(0.5, 0.5), (30.9, 0.5), (30.9, 11.0), (50.3, 11.0), (50.3, VBAT_Y1), (0.5, VBAT_Y1)], 40, "VBAT")
-    zone("BUS42", F, rect(*BAR), 40, "BUS42 bar")
-    zone("BUS42", IN2, [(0.5, BAR[1]), (31.0, BAR[1]), (31.0, 0.5), (40.5, 0.5), (40.5, BAR[1]), (BAR[2], BAR[1]),
+    zone("BUS42", F, rect(BAR[0], BAR[1], BAR_F_R, BAR[3]), 40, "BUS42 bar")
+    zone("BUS42", IN2, [(0.5, BAR[1]), (31.0, BAR[1]), (31.0, 0.5), (39.5, 0.5), (39.5, BAR[1]), (BAR[2], BAR[1]),
                         (BAR[2], BAR[3]), (0.5, BAR[3])], 40, "BUS42 bar + charger (L3)", clear=0.3)
     chg_n = pnet("J2", "1")
-    zone(chg_n, IN2, rect(41.5, 0.5, 49.5, 21.0), 40, "CHG_N (L3)", clear=0.3)
+    zone(chg_n, IN2, rect(40.5, 0.5, 49.5, 21.0), 40, "CHG_N (L3)", clear=0.3)
     # TVS ground pad: two vias beside it, joined by a short wide track
     gx, gy = _pxy(FP["D1"], "2")
     for vy in (gy - 0.7, gy + 0.7):
@@ -252,17 +254,17 @@ def copper(b):
         out = pnet(blk["fets"][1], "3")
         drn = pnet(blk["fets"][1], "2")
         ol, orr, dl, dr = blk["out_l"], blk["out_r"], blk["drn_l"], blk["drn_r"]
-        col_r = dr
+        col_r = blk.get("zone_r", dr)
         if key == "42D":
             out_poly = [(ol, OUT_TOP), (orr, OUT_TOP), (orr, COL_TOP), (col_r, COL_TOP), (col_r, blk["col_bot"]),
-                        (9.3, blk["col_bot"]), (9.3, 129.0), (ol, 129.0)]
+                        (NOTCH_F, blk["col_bot"]), (NOTCH_F, 129.0), (ol, 129.0)]
         else:
             out_poly = [(ol, OUT_TOP), (orr, OUT_TOP), (orr, COL_TOP), (col_r, COL_TOP), (col_r, blk["col_bot"]),
                         (ol, blk["col_bot"])]
         zone(out, F, out_poly, 40, f"{key} OUT", radius=OUT_RADIUS)
-        l3 = [(ol, OUT_TOP), (col_r, OUT_TOP)] + out_poly[4:]
+        l3 = [(ol, OUT_TOP), (col_r, OUT_TOP)] + [(NOTCH_L3 if x == NOTCH_F else x, y) for x, y in out_poly[4:]]
         zone(out, IN2, l3, 40, f"{key} OUT (L3)", clear=0.3, radius=OUT_RADIUS)
-        zone(drn, F, rect(dl, DRN_TOP, dr, DRN_BOT), 40, f"{key} DRN")
+        zone(drn, F, rect(dl, DRN_TOP, col_r, DRN_BOT), 40, f"{key} DRN")
         # FETs: gate escape via at the lead tip
         for ref, cy in zip(blk["fets"], FET_ROWS):
             cx = FET_CX + dx

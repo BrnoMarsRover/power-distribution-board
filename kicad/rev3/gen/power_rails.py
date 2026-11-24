@@ -41,13 +41,18 @@ RAILS = {
     # so the 12 V current goes round the hole
     "24": dict(xl=50.8, xr=76.0, vin="VIN24", out="OUT24", j_in="J5", tvs="D5",
                shunt="R41", fets=("Q11", "Q10"), bridge="JP3", led="D4", y_out=82.0,
-               seam=True),     # no source vias in its leftmost column: the INA228's link runs there (ina_link)
+               seam=True,      # no source vias in its leftmost column: the INA228's link runs there (ina_link)
+               out_col_r=75.5, strip_w=5.7,
+               inlet=dict(vin_r=68.0, gnd_l=68.5, step=12.5, vin_r2=70.0, gnd_l2=71.5)),
     "12": dict(xl=76.5, xr=103.2, vin="VIN12", out="OUT12", j_in="J6", tvs="D7",
-               shunt="R59", fets=("Q14", "Q13"), bridge="JP4", led="D6", y_out=82.0),
+               shunt="R59", fets=("Q14", "Q13"), bridge="JP4", led="D6", y_out=82.0,
+               out_col_r=103.0, strip_w=5.5,
+               inlet=dict(vin_r=94.5, gnd_l=95.5, step=12.5, vin_r2=96.5, gnd_l2=97.15)),
     # L-shaped: full switch width (to xr, J38 starts at 131.6) only above band_bot; DRN, OUT and outputs end at col_r
     "5": dict(xl=104.1, xr=130.9, col_r=125.6, band_bot=34.6, vin="VIN5", out="OUT5", j_in="J7", tvs="D9",
               shunt="R77", fets=("Q17", "Q16"), bridge="JP5", led="D8",
-              tvs_beside=True, bridge_below=True),
+              tvs_beside=True, bridge_below=True,
+              strip_w=5.4, zone_r=130.4, inlet=dict(vin_r=119.5, gnd_l=120.5)),
 }
 
 
@@ -68,6 +73,7 @@ def _geo(r):
         shunt_x=xr - 3.8, side_x=xr - 3.1,         # shunt, LED and bridge on the right of the DRN area
         ptc_x=xl + 4.625,                          # flat 2920: rail pad left edge 0.1 mm inside xl
         strip_r=xl + 6.5,                          # OUT strip edge in the output column (under the PTC bodies)
+        strip_zr=xl + r.get("strip_w", 6.5),       # its copper: 1.35..1.65 mm clear of the PTC output pads
     )
 
 
@@ -269,14 +275,24 @@ def copper(b):
         gnd_l = mx - 1.5                                      # ground patch: input - pin and the TVS ground pad
         gnd_bot = TOMM(_pad(FP[r["tvs"]], "2").GetBoundingBox().GetBottom()) - Y0 + 0.55
         col_r, band = g["col_r"], g["band_bot"]
-        # input: VIN area with a notch for the ground patch
-        zone(vin, F, [(xl, 0.5), (gnd_l - 0.6, 0.5), (gnd_l - 0.6, gnd_bot + 0.5), (xr, gnd_bot + 0.5),
-                      (xr, VIN_BOT), (xl, VIN_BOT)], 40, f"{key} VIN")
-        zone("GND", F, rect(gnd_l, 0.5, xr, gnd_bot), 40, f"{key} input GND")
+        zr = r.get("zone_r", xr)                              # copper right edge (xr: parts)
+        # input: VIN area with a notch for the ground patch. The patch takes the whole connector - pin (hand-drawn
+        # 2026-11-24, `inlet`); on 24 / 12 V it then steps east above the TVS, where the VIN neck widens again
+        inl = r.get("inlet", dict(vin_r=gnd_l - 0.6, gnd_l=gnd_l))
+        vr, gl = inl["vin_r"], inl["gnd_l"]
+        if "step" in inl:
+            st, vr2, gl2 = inl["step"], inl["vin_r2"], inl["gnd_l2"]
+            vin_notch = [(vr, 0.5), (vr, st + 0.5), (vr2, st + 0.5), (vr2, gnd_bot + 0.5)]
+            gnd_pts = [(gl, 0.5), (zr, 0.5), (zr, gnd_bot), (gl2, gnd_bot), (gl2, st), (gl, st)]
+        else:
+            vin_notch = [(vr, 0.5), (vr, gnd_bot + 0.5)]
+            gnd_pts = rect(gl, 0.5, zr, gnd_bot)
+        zone(vin, F, [(xl, 0.5)] + vin_notch + [(zr, gnd_bot + 0.5), (zr, VIN_BOT), (xl, VIN_BOT)], 40, f"{key} VIN")
+        zone("GND", F, gnd_pts, 40, f"{key} input GND")
         # switch: DRN area (full width above the band, column width below, tongue for a bridge under the FET),
         # OUT strip + full-width OUT area + output strip (L1), OUT copy under the switch (L3)
-        drn_pts = [(g["drn_l"], DRN_TOP), (xr, DRN_TOP)]
-        drn_pts += [(xr, band), (col_r, band)] if col_r < xr else []
+        drn_pts = [(g["drn_l"], DRN_TOP), (zr, DRN_TOP)]
+        drn_pts += [(zr, band), (col_r, band)] if col_r < xr else []
         if g["tongue"]:
             tl, tb = g["tongue"]
             drn_pts += [(col_r, tb), (tl, tb), (tl, DRN_BOT)]
@@ -284,13 +300,14 @@ def copper(b):
             drn_pts += [(col_r, DRN_BOT)]
         zone(drn, F, drn_pts + [(g["drn_l"], DRN_BOT)], 40, f"{key} DRN")
         y_end = _pxy(FP[rows[-1][1]], rows[-1][2])[1] + 3.2
+        ocr = r.get("out_col_r", col_r)                   # OUT area right edge: 1 mm from the next rail's OUT
         out_pts = [(xl, OUT_TOP), (g["out_r"], OUT_TOP), (g["out_r"], WIDE_TOP)]
         if g["tongue"]:                                   # around the tongue, 0.5 mm off
             out_pts += [(tl - 0.5, WIDE_TOP), (tl - 0.5, tb + 0.5), (col_r, tb + 0.5)]
         else:
-            out_pts += [(col_r, WIDE_TOP)]
-        wb = g["wide_bot"]
-        zone(out, F, out_pts + [(col_r, wb), (g["strip_r"], wb), (g["strip_r"], y_end), (xl, y_end)],
+            out_pts += [(ocr, WIDE_TOP)]
+        wb, sr = g["wide_bot"], g["strip_zr"]
+        zone(out, F, out_pts + [(ocr, wb), (sr, wb), (sr, y_end), (xl, y_end)],
              40, f"{key} OUT", radius=OUT_RADIUS)
         # L3 copy only under the OUT strip, where the source vias are (decided 2026-11-20): beside it, under the DRN
         # area and the wide OUT area, it carried little current; there L3 is +3V3 fill that signals may cut
