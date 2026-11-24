@@ -1469,8 +1469,8 @@ the three lines reach the transceiver side by side in its pin order, without cro
        rails' legs):
        - **MOTOR_KILL rides with the 42 V legs.** It goes from the drive group's EN switch (Q_EN, in
          42D's block) east to the 1 mm gap between the 42 V blocks, down it, and east in its own band slot
-         between 42C's legs and 42D's. 42C's five moved up 0.5 mm for it, and 42C's TMR resistor (R40)
-         now lies flat at the foot of its timer column, because upright its GND pad reached the slot.
+         between 42C's legs and 42D's. 42C's five moved up 0.5 mm for it. (42C's TMR resistor
+         lay flat for it then; since the timer column's rework, 2l, both blocks' 100k lie flat.)
          MOTOR_KILL crosses nothing in the 42 V area: L3 there is 42 V copper, so no hop would have been
          possible.
        - **At the far end** it runs in the bundle between 42C's lines and 42D's. East of the centre
@@ -1822,10 +1822,7 @@ the three lines reach the transceiver side by side in its pin order, without cro
      test loop TP29 is placed by hand beside Q23's tab, over the bottom GND (the packer had put it on the
      switch node). The flat 100 µF C91 sits 0.8 mm further south, clear of L1's outline, and the boost's
      stitching grid skips spots next to through-hole pins.
-     **Open (2026-11-24):** in each 42 V block the timer column (TMR caps, TMR / IWRN resistors) sits on the
-     bottom right under the FET's 9 × 11 mm drain tab, where no via fits. The TMR line runs down its west
-     side and the bus legs' corridor its east side, so five GND pads (C17 / R21, C27 / C28 / R39) have no way
-     out. This needs a rearranged timer column in the 42 V template.
+     The five GND pads under the 42 V drain tabs this left open are closed by 2l.
   2k. Power zones adjusted by hand in KiCad, then folded into the scripts (2026-11-24; zone-only parameters,
      the parts stay put):
      - Rail inputs (`power_rails.RAILS[...]["inlet"]`): the input GND patch takes the whole connector − pin; on
@@ -1838,6 +1835,22 @@ the three lines reach the transceiver side by side in its pin order, without cro
        moves down to y 133.5–143.0, clear of the brake gate escape. The charger / CHG_N pair on L3 moves 1 mm west.
      - Knock-on: the 24 V eFuse's VOUT sense line now drops to the OUT area at x 120.65 rather than the old
        column edge, and four signal lines beside it shift slightly.
+  2l. The 42 V timer column, planned by hand (`gen/timer42.py`, 2026-11-24). The column sits on the bottom
+     under the main FET's 9 × 11 mm drain tab, where no via fits. Routed freely, TMR ran down the column's west
+     side and the bus legs' corridor its east side, so five GND pads (C17 / R21, C27 / C28 / R39) had no way
+     out. Now (42D's numbers; 42C is the same 25 mm east):
+     - **Parts** (`efuse_hand.SLOTS42`): the temperature transistor 0.9 mm west; both timer caps upright side
+       by side below the second gate resistor, TMR pads on top; the 100k flat below them, TMR pad east. Every
+       timer part hangs west of the TMR line.
+     - **TMR:** straight down from its pin, a 0.45 mm jog east at y 51 (below the IWRN resistor), down the
+       column's east side to the caps (joined by a stub) and on to the tab's foot, then west onto the 100k.
+     - **Temperature:** straight down beside TMR, a jog west onto the transistor's base at y 52.6, the
+       collector tied back to it. Planned as well since 42C's router tangled it with PD round the gate test
+       pad; that pad moved 0.2 mm west and 0.5 mm down (TP7, clear of the line and of C24).
+     - **GND:** the caps' pads (bottom) joined and taken down past the 100k's GND pad to a via just below the
+       tab; the temperature transistor's GND down beside the gate resistor to a via in the gap between the
+       output strip and the drain copper; the IWRN resistor's GND straight down the strip between TMR and the
+       IMON leg to a via below the tab (42C's 0.5 mm higher, clear of MOTOR_KILL).
   3. `gen/pcb_silk.py` — the silkscreen. A test pad's name that finds no room beside its pad is tried turned
      upright, then further out, and hidden if nothing fits (none is today).
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after

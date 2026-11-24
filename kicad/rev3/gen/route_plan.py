@@ -23,6 +23,7 @@ import pcbnew
 import power42
 import power_rails
 import route
+import timer42
 from power42 import X0, Y0
 from route import B, F, IN1, IN2
 
@@ -64,7 +65,7 @@ def efuse42(R, FP, key, log=print):
         kelvin=((power42.kelvin_x(blk), 34.0), (power42.kelvin_x(blk), 38.9)),
         led_via=(power42.LED_X + dx + 1.7, power42.LED_Y + 1.02),
         gnd_ok=[(cx + 6.2 + 0.6, power42.DRN_TOP, blk["drn_r"] - 0.2, power42.DRN_BOT)],
-        bar=True, keep_cs_out=(cx + 5.5, 28.6, cx + 10.4, 40.6),
+        bar=True, key=key, keep_cs_out=(cx + 5.5, 28.6, cx + 10.4, 40.6),
         # the Kelvin corner: no supply via between the Kelvin + via and the channel right of the shunt, where CS-
         # comes down to its own via (0.25 mm track, 0.2 mm each side of it)
         via_keep=[(power42.kelvin_x(blk) - 1.5, 31.0, power42.kelvin_x(blk) + 1.55, 36.3)],
@@ -594,6 +595,8 @@ def _efuse(R, FP, spec, log=print):
         N.add(vs, [out_("20")] + loc(vs), 0.3, "VS")
         N.add(net("1"), [out_("1")] + loc(net("1")), SIG_W, "EN", cost_fn=away_from_gate)
         for num, label in (("9", "TMR"), ("8", "IWRN"), ("10", "temp sense")):
+            if net(num) in skip_nets:
+                continue
             N.add(net(num), [esc[num]] + loc(net(num)), SIG_W, label, cost_fn=away_from_gate)
         N.add(net("4"), [R.t_pad(U, "4"), R.t_pad(U, "5")], SIG_W, "FLT pins")   # its leg to the far end: later
         bar_bot = 36.2                             # the BUS42 bar's lower edge (power42): no input copper below
@@ -618,10 +621,13 @@ def _efuse(R, FP, spec, log=print):
     # TMR loop and the signal fan boxed several in (the timer caps, the IWRN resistor, the temperature transistor)
     # under the block's 42 V pours, with no way down. GND vias may go anywhere in the block; the 42 V pours clear
     # 0.5 mm round them, as in the drain copper beside the tabs.
+    planned, skip_nets = [], ()
     if spec.get("bar"):
         R.geo.hv_gnd_ok = list(spec["gnd_ok"]) + [box]
+        # the timer column (TMR, the temperature line and their GND pads), planned by hand (timer42.py)
+        planned, skip_nets = timer42.plan(R, U, esc, spec["key"], log)
         for ref, num in parts.get("GND", []):
-            if FP[ref].IsFlipped() and inside(ref):
+            if FP[ref].IsFlipped() and inside(ref) and (ref, num) not in planned:
                 R.fanout(ref, num, SUP_W, zone_layers=(IN1,), optional=True)
     N = route.Negotiator(R, box, origin=pins["12"]["c"])
     (jobs42 if spec.get("bar") else jobs)(N)
@@ -635,7 +641,7 @@ def _efuse(R, FP, spec, log=print):
     # 4. GND: a via into the plane next to every GND pad in the block where one fits (else the bottom GND fill
     # takes it); the far-end parts of the 42 V blocks get theirs after the bus is laid (far42)
     for ref, num in parts.get("GND", []):
-        if FP[ref].IsFlipped() and inside(ref):
+        if FP[ref].IsFlipped() and inside(ref) and (ref, num) not in planned:
             R.fanout(ref, num, SUP_W, zone_layers=(IN1,), optional=True)
     R.prune_stubs(log=log)
 

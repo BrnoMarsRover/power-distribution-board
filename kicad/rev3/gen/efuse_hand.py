@@ -139,10 +139,13 @@ SLOTS42 = {   # relative to the IC (42D: (15.0, 33.0)); 42C is the same block sh
     # the timer / IWRN parts stack on the left, the VS bulk cap, the EN divider and the motor-switch FET, the LED
     # resistor, the output test pad and the output divider's top resistor on the right (GND vias in the drain
     # copper's right column). IMON, INP / INPG and FLT only pass through: their parts sit at the far end.
-    "q_t": (-2.0, 23.6, 90),
-    "tmr_c1": (-1.4, 28.7, -90),
-    "tmr_c2": (-1.4, 34.3, -90),
-    "tmr_r": (-1.8, 39.2, -90),
+    # timer column (timer42.py, 2026-11-24): the temperature transistor 0.9 mm west, clear of TMR's run; both
+    # timer caps upright side by side below the second gate resistor (TMR pads on top), the 100k flat under them
+    # (TMR pad east), all west of TMR, so every GND pad reaches a via below the tab or in the strip gap
+    "q_t": (-2.9, 23.6, 90),
+    "tmr_c1": (-5.6, 34.75, -90),
+    "tmr_c2": (-2.6, 34.75, -90),
+    "tmr_r": (-3.4, 39.2, 180),
     "iwrn_r": (-0.7, 15.4, -90),            # first in the left column; temperature and TMR pass on its left
     "vs_c2": (4.8, 24.0, -90),
     "en_top": (7.4, 23.3, -90),             # BUS42 on top, EN below
@@ -170,16 +173,14 @@ SLOTS42_KEY = {"42C": {
     "pre_c": (-6.65, 7.6, -90),              # RC pad on top, GND below, clear of the field's top via row
     "pu_r": (-4.05, 5.85, 90),              # 0.35 mm right of and lower than 42D's: PD runs down between it and
                                             # the RC cap
-    "gate_tp": (-3.2, 11.5, 90),               # its label's room clear of the RC cap
+    "gate_tp": (-3.4, 12.0, 90),            # its label's room clear of the RC cap; 0.2 mm west of and 0.5 mm
+                                            # below 42D's spot, so TEMP's straight run passes on its right
     # above 42C's band, where 42D's EN switch sits (42C has none): the output test pad and the output divider,
     # whose VSNS pad goes straight down into the band, its output pad up to a via through the drain copper
     "out_tp": (4.0, 30.0, 90),
     "vout_r": (3.2, 34.4, -90),
     # the CS+ filter 0.35 mm left of 42D's: CS- comes down between it and the INA228's link (ina_link)
     "cs_r": (8.55, -2.4, 90),
-    # the TMR resistor lies flat at the foot of the timer column (TMR pad right, towards the lane): upright, its GND
-    # pad reached the band, where MOTOR_KILL now runs under 42C's legs (route_plan.MK_Y)
-    "tmr_r": (-1.8, 38.28, 180),
 }}
 
 
