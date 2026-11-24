@@ -417,8 +417,12 @@ rail and the 42 V groups. Every switch FET is the same part: **IPB042N10N3G** (1
   - **Overload below that:** the output fuse, a Littelfuse **0154003.DRT** (3 A slow-blow
     Nano2, 125 V AC/DC, 50 A breaking capacity) in an SMD OMNI-BLOK clip holder. 75 %
     derating gives 2.25 A, above the Zyxel's 1.85 A; it protects the 3 A JST-XH and its
-    cable. A blown fuse is replaced by clipping in a 0452003.MRL, without soldering. No SMD
-    PTC is rated for 54 V at 2 A; the 72 V radial PTCs are 18–21 mm discs, 24 mm tall.
+    cable. A blown fuse is replaced by clipping in a 0452003.MRL, without soldering.
+  - **Why not an SMD PTC (checked 2026-11-24):** the 60 V Littelfuse 3425L parts exist, but
+    the 3425L200/60 (2 A hold) holds only about 1.6 A warm, under the Zyxel's 1.85 A, and the
+    3425L260/60 trips at 5.2 A, so a 3–5 A overload on the 3 A XH connector and AWG 22 cable
+    could sit below its trip. 54–57 V also leaves little margin to its 60 V rating; the fuse
+    is rated 125 V. (The earlier note that no SMD PTC is rated for 54 V at 2 A was wrong.)
   - **Telemetry:** the boost's input current is part of IMON 42V-C; VOUT 54V still reads
     the boost output. The former IMON_54, VSNS_SW54, INP_54 and INP_G_54 channels and the
     FLT_54 GPIO are spare (the GPIO keeps its 10 k pull-up as SPARE_IO38).
