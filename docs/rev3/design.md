@@ -1851,6 +1851,21 @@ the three lines reach the transceiver side by side in its pin order, without cro
        tab; the temperature transistor's GND down beside the gate resistor to a via in the gap between the
        output strip and the drain copper; the IWRN resistor's GND straight down the strip between TMR and the
        IMON leg to a via below the tab (42C's 0.5 mm higher, clear of MOTOR_KILL).
+  2m. `gen/pcb_tidy.py` (after the GND stage; 2026-11-24) — track tidy-up, from the full-board review. It cleans up
+     the geometry the router and the plans leave behind, without changing what connects to what:
+     - track ends within 5 nm of a via centre or of each other (rounding) welded together; duplicate segments
+       dropped;
+     - kinks under 0.08 mm absorbed, collinear runs merged, router-grid staircases (pieces under 0.3 mm) replaced
+       by one 45° bend, hairpins straightened;
+     - vias a hair off their runs' line (0.025–0.075 mm) moved onto the point where those lines cross. Where the
+       runs are parallel but offset, the short run is slid across instead, its far end staying inside its pad;
+     - every 90° corner chamfered at 45° (up to 0.8 mm along each leg).
+     Every change is checked against the other nets' tracks, vias and pads on its layer. It keeps 0.5 mm wherever
+     the old copper had 0.5 mm. Otherwise it may come a little closer, down to 0.25 mm, or no closer than before
+     where the old gap was already under 0.25 mm. It enters no track keepout the old copper was not already in,
+     and the pours are refilled afterwards. On the board at baa5138: 11 duplicates, 41 merges, 8 staircases,
+     17 vias moved, 17 runs slid, 95 chamfers; afterwards no right angle, acute corner or piece under 0.05 mm
+     is left off a pad.
   3. `gen/pcb_silk.py` — the silkscreen. A test pad's name that finds no room beside its pad is tried turned
      upright, then further out, and hidden if nothing fits (none is today).
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after
