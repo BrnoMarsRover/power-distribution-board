@@ -7,7 +7,7 @@ others still go through pcb_place.py's generic column code.
 Current path, top to bottom (the 42 V blocks' pattern, one block per column):
   input connector + -> VIN area (bulk caps, TVS; the TVS ground pad shares a patch with the connector's - pin)
   -> shunt (upright, straddling VIN / DRN) -> DRN area (FET tabs, LED, bypass bridge pad 1)
-  -> D2PAK source leads (left) -> OUT strip -> full-width OUT area (bridge pad 2 lands here, on L1)
+  -> D2PAK source leads (left) -> OUT strip, with a band across to the bypass bridge's pad 2 (L1)
   -> OUT strip down the left of the output column, running under the PTCs: each PTC lies flat with its rail
      pad inside the strip and its other pad opening straight into the connector's + pin on the same row.
 The output current stays on L1 (no L3 copy: it carried next to nothing). GND returns on the L2 plane and the L4
@@ -26,7 +26,7 @@ Y_IN = 1.0                          # input connector courtyard top
 Y_SHUNT = 22.0                      # shunt centre: VIN above, DRN below
 VIN_BOT, DRN_TOP, OUT_TOP = Y_SHUNT - 0.3, Y_SHUNT + 0.3, Y_SHUNT + 0.5
 FET_ROWS = (Y_SHUNT + 6.1, Y_SHUNT + 18.0)        # pre-charge, main (main nearest the outputs)
-DRN_BOT, WIDE_TOP, WIDE_BOT = 45.5, 46.3, 73.8    # DRN area bottom; full-width OUT area under the switch
+DRN_BOT, WIDE_TOP, WIDE_BOT = 45.5, 46.3, 73.8    # DRN area bottom; the area under the switch (parts' keep-outs)
 Y_OUT, ROW = 75.0, 10.2             # output connector courtyard tops (a rail may set its own y_out)
 LED_Y = 30.0
 TVS_Y, CAP_Y = 14.5, 16.0           # low enough to leave the input's + / - marks their spot
@@ -37,21 +37,21 @@ CONN_GAP = 0.8                      # PTC courtyard to connector courtyard (a ra
 # per rail: column copper edges (xl, xr) and the parts; fets = (pre-charge, main). The bulk caps are found by net.
 RAILS = {
     # 24 / 12 V: outputs 7 mm lower (decided 2026-11-21) for rev2's centre hole at (75, 75) on their boundary and
-    # the 42 V far-end bundle (nine lines) passing under it; their full-width OUT area reaches down to the outputs,
-    # so the 12 V current goes round the hole
+    # the 42 V far-end bundle (nine lines) passing under it. band: the OUT copper's band to the bridge (top, bottom,
+    # right edge)
     "24": dict(xl=50.8, xr=76.0, vin="VIN24", out="OUT24", j_in="J5", tvs="D5",
                shunt="R41", fets=("Q11", "Q10"), bridge="JP3", led="D4", y_out=82.0,
-               out_col_r=75.5, strip_w=5.7,
+               strip_w=5.7, band=(46.0, 50.0, 75.0),
                inlet=dict(vin_r=68.0, gnd_l=68.5, step=12.5, vin_r2=70.0, gnd_l2=71.5)),
     "12": dict(xl=76.5, xr=103.2, vin="VIN12", out="OUT12", j_in="J6", tvs="D7",
                shunt="R59", fets=("Q14", "Q13"), bridge="JP4", led="D6", y_out=82.0,
-               out_col_r=103.0, strip_w=5.5,
+               strip_w=5.5, band=(46.0, 49.5, 102.0),
                inlet=dict(vin_r=94.5, gnd_l=95.5, step=12.5, vin_r2=96.5, gnd_l2=97.15)),
     # L-shaped: full switch width (to xr, J38 starts at 131.6) only above band_bot; DRN, OUT and outputs end at col_r
     "5": dict(xl=104.1, xr=130.9, col_r=125.6, band_bot=34.6, vin="VIN5", out="OUT5", j_in="J7", tvs="D9",
               shunt="R77", fets=("Q17", "Q16"), bridge="JP5", led="D8",
               tvs_beside=True, bridge_below=True,
-              strip_w=5.4, zone_r=130.4, inlet=dict(vin_r=119.5, gnd_l=120.5)),
+              strip_w=5.4, zone_r=130.4, band=(51.5, 55.5, 125.5), inlet=dict(vin_r=119.5, gnd_l=120.5)),
 }
 
 
@@ -278,7 +278,7 @@ def copper(b):
         zone(vin, F, [(xl, 0.5)] + vin_notch + [(zr, gnd_bot + 0.5), (zr, VIN_BOT), (xl, VIN_BOT)], 40, f"{key} VIN")
         zone("GND", F, gnd_pts, 40, f"{key} input GND")
         # switch: DRN area (full width above the band, column width below, tongue for a bridge under the FET),
-        # OUT strip + full-width OUT area + output strip (L1), OUT copy under the switch (L3)
+        # OUT strip and band (L1)
         drn_pts = [(g["drn_l"], DRN_TOP), (zr, DRN_TOP)]
         drn_pts += [(zr, band), (col_r, band)] if col_r < xr else []
         if g["tongue"]:
@@ -288,15 +288,12 @@ def copper(b):
             drn_pts += [(col_r, DRN_BOT)]
         zone(drn, F, drn_pts + [(g["drn_l"], DRN_BOT)], 40, f"{key} DRN")
         y_end = _pxy(FP[rows[-1][1]], rows[-1][2])[1] + 3.2
-        ocr = r.get("out_col_r", col_r)                   # OUT area right edge: 1 mm from the next rail's OUT
-        out_pts = [(xl, OUT_TOP), (g["out_r"], OUT_TOP), (g["out_r"], WIDE_TOP)]
-        if g["tongue"]:                                   # around the tongue, 0.5 mm off
-            out_pts += [(tl - 0.5, WIDE_TOP), (tl - 0.5, tb + 0.5), (col_r, tb + 0.5)]
-        else:
-            out_pts += [(ocr, WIDE_TOP)]
-        wb, sr = g["wide_bot"], g["strip_zr"]
-        zone(out, F, out_pts + [(ocr, wb), (sr, wb), (sr, y_end), (xl, y_end)],
-             40, f"{key} OUT", radius=OUT_RADIUS)
+        # OUT: the strip from the source leads straight down to the outputs, and a band across to the bypass
+        # bridge's pad 2 (hand-cut 2026-11-25, ec261d1: the full-width area under the switch is gone)
+        bt, bb, br = r["band"]
+        sr = g["strip_zr"]
+        zone(out, F, [(xl, OUT_TOP), (g["out_r"], OUT_TOP), (g["out_r"], bt), (br, bt), (br, bb), (sr, bb),
+                      (sr, y_end), (xl, y_end)], 40, f"{key} OUT", radius=OUT_RADIUS)
         # no L3 copy of the OUT copper (dropped 2026-11-25): copper_sim.py found it carried 0.2 % of the rail's
         # loss (the current stays on the 70 um L1 strip; 11-17 A, no layer change); as GND fill the same L3 and
         # the 58 source vias' antipads gone in L2 / L4 save GND 150 mW, against +1-2 mW per rail
