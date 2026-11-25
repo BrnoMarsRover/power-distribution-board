@@ -48,7 +48,7 @@ def efuse_rail(R, FP, key, log=print):
         kelvin=((g["shunt_x"] + 2.7, power_rails.Y_SHUNT - 2.2), (g["shunt_x"] + 2.7, power_rails.Y_SHUNT + 2.7)),
         led_via=(g["side_x"] + 1.7, power_rails.LED_Y + 1.02), gnd_ok=[],
         route_keep=LATER_KEEP if key == "5" else [], via_keep=OUTLET_KEEP.get(key, []),
-        vs_path=VS_PATH.get(key)), log)
+        vs_path=VS_PATH.get(key), gnd_ties=GND_TIES.get(key, {})), log)
 
 
 # fixed via spots of plans routed after the rails' eFuses (the power-button corner's PWR_HOLD, the aux supply's GND):
@@ -234,6 +234,15 @@ VSNS_IN_5_PATH = [("L3", [(126.5, 16.25), (127.7, 17.45), (128.7, 17.45), (130.6
                   ("L3", [(124.8, 58.05), (124.2, 58.05), (123.3, 58.95), (116.0, 58.95), (113.8, 61.15), (113.8, 61.25)])]
 
 
+# VSNS_IN_24, planned (2026-11-25): all on the bottom side, no via, from its divider's R57 east along y 11.85 (above
+# the 12 V input), down the 12 / 5 V seam (x 103.5) and south-east into U21's fan via. Routed freely it took a
+# shorter way down the 24 / 12 V seam that cut the bottom GND fill under the 12 V switch (a 90 mm2 island lost,
+# GND +0.16 W) and put vias in the VIN24 / VIN12 pours (+8 mW each)
+VSNS_IN_24_PATH = [(68.8, 16.85), (68.8, 15.05), (72.0, 11.85), (99.7, 11.85), (103.5, 15.65), (103.5, 45.85),
+                   (109.1, 51.45), (109.7, 51.45), (113.0, 54.75), (113.0, 58.95), (115.2, 61.15), (115.2, 61.25),
+                   (115.7, 61.75)]
+
+
 def rails_legs(R, FP, log=print):
     """The rails' bus legs, on the bottom layer and L3 (in the logic area L3 is the +3V3 fill, which flows
     around; L2 stays whole: it carries the outputs' return current): IMON to the ADC U20, INP / INPG to the I/O
@@ -315,6 +324,16 @@ def rails_legs(R, FP, log=print):
                 R.failed.append("VSNS_IN_5 plan")
             if not R.route_net(net, [terms[0], R.t_via(*path[0][1][0])], SIG_W, box, label="VSNS_IN_5 start"):
                 R.failed.append("VSNS_IN_5 start")
+            del jobs[k]
+            break
+    for k, (net, terms) in enumerate(jobs):
+        if net == "VSNS_IN_24":
+            assert math.dist(VSNS_IN_24_PATH[-1], fan["12"]) < 0.05, "VSNS_IN_24's plan misses U21's fan via"
+            bad = _check_exact(R, R.track(net, B, VSNS_IN_24_PATH[:-1] + [fan["12"]], SIG_W))
+            for msg in bad[:20]:
+                log(f"   VSNS_IN_24 clearance: {msg}")
+            if bad:
+                R.failed.append("VSNS_IN_24 plan")
             del jobs[k]
             break
     first = {"VSNS_IN_12", "VSNS_IN_24", "VSNS_OUT_54", "IMON_5"}   # the long ones: fixed first,
@@ -679,11 +698,23 @@ def _efuse(R, FP, spec, log=print):
     N.polish(log=log)
 
     # 4. GND: a via into the plane next to every GND pad in the block where one fits (else the bottom GND fill
-    # takes it); the far-end parts of the 42 V blocks get theirs after the bus is laid (far42)
+    # takes it); the far-end parts of the 42 V blocks get theirs after the bus is laid (far42). A tied pad joins a
+    # neighbour's GND pad on the bottom side instead (GND_TIES)
+    for (ref, num), (ref2, num2, mid) in spec.get("gnd_ties", {}).items():
+        segs = R.track("GND", B, [R.pad(ref, num)["c"]] + mid + [R.pad(ref2, num2)["c"]], SUP_W)
+        for msg in _check_exact(R, segs):
+            log(f"   GND tie {ref}.{num} clearance: {msg}")
+        planned.append((ref, num))
     for ref, num in parts.get("GND", []):
         if FP[ref].IsFlipped() and inside(ref) and (ref, num) not in planned:
             R.fanout(ref, num, SUP_W, zone_layers=(IN1,), optional=True)
     R.prune_stubs(log=log)
+
+
+# GND pads tied to a neighbour's on the bottom side, not given a via of their own (block key -> {pad: (pad, bend
+# points)}). 5 V's R92 (timer) sits under the 5 V output strip's top, its GND via had no spot out of the strip's
+# current but on VSNS_IN_24's planned way (2026-11-25): it joins C57's GND pad, whose via is east of the strip
+GND_TIES = {"5": {("R92", "2"): ("C57", "2", [(110.6, 50.61), (111.75, 51.76)])}}
 
 
 def escape_area(b, ref, box):
