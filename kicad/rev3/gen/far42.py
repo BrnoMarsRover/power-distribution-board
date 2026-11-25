@@ -17,9 +17,12 @@ where a line leaves the bundle, under the lines above it on L3 (a via down, a sh
                  U17, above the 12 V connectors), its test pad on the way. The other six climb back to the U17
                  levels, 42C's first.
   under U17      six lines, between the expander's pins and the 12 V output connector.
-  right of U17   INP_D, INP_C and INPG_D hop, INPG_C rises; all four enter U17 under its body from the right,
-                 a pull-down between each riser and the next.
-  east           FLT_C and FLT_D on to their test pads.
+  right of U17   all four rise straight in, west to east INPG_C, INP_C, INPG_D, INP_D (their bundle order), and
+                 enter U17 under its body from the right, a pull-down between each riser and the next. No hops
+                 here (2026-11-24): this is the 5 V output's current path into its strip (copper_sim corridors);
+                 INPG_42C / INP_42D swapped expander pins (P00 / P07) so the risers need not cross. FLT_C dives to
+                 L3 just before them, where the bundle has opened, and the FLT bus takes it on there.
+  east           FLT_D on to its test pad.
 
 Wherever a line hops, the bundle opens to 0.8 mm around it (a via needs 0.775 mm to the next line); elsewhere it
 runs at 0.5 mm. Everything is laid as planned polylines and then checked exactly (route_plan._check_exact).
@@ -41,9 +44,9 @@ SPOTS = {
     ("imon_tp", "D"): (78.6, 64.3, 0),
     ("imon_c", "C"): (73.75, 67.975, -90), ("imon_r", "C"): (75.85, 67.975, -90),  # below IMON_C's line
     ("imon_tp", "C"): (79.1, 69.0, 0),                                             # on IMON_C's riser (x 79.3)
-    ("inp_r", "D"): (102.9, 68.6, -90), ("inp_r", "C"): (105.1, 68.6, -90),         # beside their risers
-    ("inpg_r", "D"): (107.3, 68.6, -90), ("inpg_r", "C"): (109.5, 68.6, -90),
-    ("flt_tp", "C"): (110.5, 73.6, 90), ("flt_tp", "D"): (113.7, 76.0, 0),          # on their lines
+    ("inpg_r", "C"): (102.9, 68.6, -90), ("inp_r", "C"): (105.1, 68.6, -90),        # beside their risers
+    ("inpg_r", "D"): (107.3, 68.6, -90), ("inp_r", "D"): (109.5, 68.6, -90),
+    ("flt_tp", "C"): (111.1, 73.4, 90), ("flt_tp", "D"): (113.7, 76.0, 0),          # FLT_C's on its L3 via (FLT bus)
 }
 MK_TP = (90.5, 79.85, 0)                   # MOTOR_KILL's test pad, on its way to the latch
 MK_DIAG = 167.9                            # x + y of MOTOR_KILL's run beside 42D's lowest line's climb (167.15)
@@ -61,7 +64,7 @@ KEEP = [(50.8, 65.3, 54.2, 76.6),          # the risers and VSNS_D's hop, right 
         (76.8, 71.2, 84.0, 83.6),          # IMON's and MOTOR_KILL's hops
         (82.0, 72.0, 93.5, 85.0),          # the bundle climbing back, MOTOR_KILL's hop, line and test pad
         (85.5, 73.1, 99.6, 76.4),          # under U17
-        (99.2, 65.3, 110.8, 76.4),         # right of U17: INP / INPG's lines, risers and hops
+        (98.4, 65.3, 110.8, 76.4),         # right of U17: INP / INPG's lines, risers and FLT_C's dive
         (110.8, 73.1, 114.0, 76.4)]        # FLT on to its test pads
 
 U20_AT, U17_AT, U18_AT = (69.5, 67.0), (95.0, 67.0), (96.3, 80.1)  # logic_place puts them there
@@ -71,8 +74,8 @@ U20_AT, U17_AT, U18_AT = (69.5, 67.0), (95.0, 67.0), (96.3, 80.1)  # logic_place
 # bundle at 51.6; at 54.0 it drops below the centre hole (78.65 ... 82.65: the top line 3.65 mm from the hole's
 # centre, its pad is 3.2 in radius; the bottom one 0.65 mm clear of the 24 V connector's pads); east of the
 # connector it opens around IMON's and MOTOR_KILL's hop vias (76.5, 77.0); 42C's lines climb back at 82.2, 42D's at
-# 83.8 to the U17 levels (73.5 ... 76.0); right of U17 it opens to 0.8 mm at 99.6.
-L_OPEN, L_CLOSE, R_OPEN, R_CLOSE, S_OPEN = 51.6, 54.0, 76.5, 82.2, 99.6
+# 83.8 to the U17 levels (73.5 ... 76.0); right of U17 it opens to 0.8 mm at 98.8 (FLT_C's dive via at 100.6).
+L_OPEN, L_CLOSE, R_OPEN, R_CLOSE, S_OPEN = 51.6, 54.0, 76.5, 82.2, 98.8
 EVENTS = [   # (x, {net key: new y}): where the bundle opens or closes. Lines that move the same way together
              # are staggered (the leading one first, each next STAGGER later), so their parallel 45-degree jogs
              # keep 0.57 mm apart (not 0.5 / sqrt 2)
@@ -88,13 +91,12 @@ EVENTS = [   # (x, {net key: new y}): where the bundle opens or closes. Lines th
 ]
 STAGGER = 0.3
 # hops: net key -> (x of the via in the bundle, y of the upper via). Risers: net -> (x, entry index, side)
-HOPS = {"V_D": (53.4, 70.4), "I_C": (79.3, 71.4), "I_D": (81.5, 71.4), "K": (80.4, 84.6),
-        "P_D": (101.8, 71.2), "P_C": (104.0, 71.2), "G_D": (106.2, 71.2)}
+HOPS = {"V_D": (53.4, 70.4), "I_C": (79.3, 71.4), "I_D": (81.5, 71.4), "K": (80.4, 84.6)}
 RISERS = {"V_C": (51.2, 0, "L"), "V_D": (53.4, 1, "L"), "I_D": (81.5, 0, "R"), "I_C": (79.3, 1, "R"),
-          "G_C": (108.4, 0, "R"), "G_D": (106.2, 1, "R"), "P_C": (104.0, 2, "R"), "P_D": (101.8, 3, "R")}
+          "G_C": (101.8, 3, "R"), "P_C": (104.0, 2, "R"), "G_D": (106.2, 1, "R"), "P_D": (108.4, 0, "R")}
 PINS = {"V_C": ("U20", "9"), "V_D": ("U20", "10"), "I_C": ("U20", "15"), "I_D": ("U20", "16"),
-        "P_D": ("U17", "4"), "P_C": ("U17", "5"), "G_D": ("U17", "10"), "G_C": ("U17", "11")}
-FLT_END = {"F_C": 110.5, "F_D": 113.7}
+        "G_C": ("U17", "4"), "P_C": ("U17", "5"), "G_D": ("U17", "10"), "P_D": ("U17", "11")}
+FLT_END = {"F_C": 100.6, "F_D": 113.7}       # F_C: its dive via (flt_bus.L3), F_D: its test pad
 NAMES = {"V": "VSNS_OUT", "G": "INPG", "P": "INP", "F": "FLT", "I": "IMON"}
 
 
@@ -244,7 +246,7 @@ def route(R, FP, log=print):
             hop(net, x, y, yu)
             lay(net, rise(key, x, yu))
             continue
-        if key == "G_C":                         # the top line right of U17 rises
+        if key in ("G_C", "P_C", "G_D", "P_D"):  # right of U17: each rises straight in, in bundle order
             x = RISERS[key][0]
             pts, y = _path(y0, BUNDLE[key], x)
             lay(net, pts[:-1] + rise(key, x, y))

@@ -536,7 +536,8 @@ job.
 
 ### 5.1 Switching
 
-- **One TCA9535** 16-bit I2C expander (TSSOP-24) holds INP and INP_G for all five switches:
+- **One TCA9535** 16-bit I2C expander (TSSOP-24) holds INP and INP_G for all five switches
+  (pin map: `gen/build.py` EXP_MAP; INPG_42C and INP_42D swapped to P00 / P07 on 2026-11-24 for the layout):
   10 lines, plus MOTOR_ARM and BOOST_DIS, with 4 spare. It keeps its outputs while the ESP32 resets, so an MCU crash or a
   reflash does not drop the rover (R4).
 - **Power-on defaults (R4):** at power-on the expander pins are inputs, so each INP and
@@ -980,8 +981,12 @@ the three lines reach the transceiver side by side in its pin order, without cro
     0.6 W, OUT5 0.6 W, and the rest 0.04–0.3 W per net. Other nets' vias cost 1.8 W, mostly in GND. They matter in
     two spots: OUT5's neck into its output strip (about ten vias, 17 A/mm, loss nearly doubled) and the 5 V shunt's
     outlet (VS-feed vias, 14 A/mm). Inner copper what-if for GND: 1 oz 2.6 W / 36 mV, 2 oz 1.4 W / 20 mV.
-    **OPEN:** inner copper weight (JLC: 1 oz or 2 oz inner on 4 layers; 2 oz needs 1.6 mm and 2 oz outer); clearing
-    the two via fences.
+    **After the corridor work (2n, 2026-11-24):** OUT5 0.61 → 0.46 W (its vias' share 0.28 → 0.14 W, peak 17 →
+    9.7 A/mm, drop 42 → 32 mV), the rail inputs and the 12 V drain a few mW each; all nets but GND 3.99 → 3.83 W.
+    Left: the 5 V shunt outlet's fence (the block's VS / VIN5 / Kelvin / VSNS_IN_5 vias at x ≈ 125, 0.08 W), the
+    far end's IMON / MOTOR_KILL hops at the top of the 12 V strip (0.04 W), the INA228's VBUS tap in VBAT, and GND
+    fan-outs boxed in by other lines.
+    **OPEN:** inner copper weight (JLC: 1 oz or 2 oz inner on 4 layers; 2 oz needs 1.6 mm and 2 oz outer).
   - **Solder-reinforced strips** remain a free extra if the 42 V strips run hot in testing:
     leave the mask open along them and flood with solder. Not planned for now.
 - **Pads:** power-connector pads connect solid, with no thermal spokes.
@@ -1405,6 +1410,13 @@ the three lines reach the transceiver side by side in its pin order, without cro
            negotiating router did it with about 40 vias spread over the logic area.
          - **Hops:** the plan takes six, 12 vias. Each one is where a line leaves the bundle: a via
            down, a short run on L3 under the lines above it, a via up.
+         - **Right of U17 (changed 2026-11-24):** no hops there any more. That spot is the 5 V
+           output's current path into its strip (2n); its three hops and FLT_42C's via fenced the
+           neck (17 A/mm). INPG_42C and INP_42D swapped expander pins (INPG_42C on P00 / pin 4,
+           INP_42D on P07 / pin 11), so the four risers climb into U17 in bundle order without
+           crossing. FLT_42C dives to L3 just before them, where the bundle has opened, and the FLT
+           bus takes it on there (its test pad hangs on a via just east of the 5 V current).
+           **Firmware:** the expander map changes for those two bits.
          - **Pin access:** both ICs' input rows face up, for the rails' lines from above. So the
            42 V lines enter under the IC body, between the pin rows: VSNS from the ADC's left end,
            IMON from its right end, INP and INPG from the expander's right end.
@@ -1879,6 +1891,21 @@ the three lines reach the transceiver side by side in its pin order, without cro
      and the pours are refilled afterwards. On the board at baa5138: 11 duplicates, 41 merges, 8 staircases,
      17 vias moved, 17 runs slid, 95 chamfers; afterwards no right angle, acute corner or piece under 0.05 mm
      is left off a pad.
+     Since 2026-11-24 it also moves GND fan-out vias out of the power nets' current (2n): a GND via on a single
+     fan-out track from its pad, standing in a corridor, goes to the nearest spot round its pad outside every
+     corridor (0.25 mm from other copper, no new 42 / 54 V pour pierced, no pour's narrow neck cut). Where none
+     is within 3.5 mm (pads boxed in by other lines, like the far end's pull-downs), it stays.
+  2n. `gen/pcb_corridors.py` (after the power copper, before the routing; 2026-11-24) — current corridors. It
+     solves each power net's DC current in the bare power copper (`copper_sim.corridors`) and saves the cells
+     carrying 1 A/mm or more, grown by a via's clearance hole, to `gen/out/corridors.npz`. Another net's via
+     there stands in that current and makes the copper narrower; the copper simulation showed it costing up to
+     half of a net's loss at a few necks. Who uses them:
+     - the GND stage's stitching vias stay out of them;
+     - `Router.via` reports every via of another net placed in one (the routing log's "stands in the current
+       of" lines), which is how the plans' hand-placed vias were found and moved (the far end, FLT, ALERT);
+     - the tidy stage moves GND fan-out vias out of them (2m).
+     The router itself does not use them (`route.CORR_ROUTE`): pricing vias in them, or only moving GND's
+     fan-outs out during routing, reshuffled whole blocks' negotiated routes and broke them.
   3. `gen/pcb_silk.py` — the silkscreen. A test pad's name that finds no room beside its pad is tried turned
      upright, then further out, and hidden if nothing fits (none is today).
   4. `gen/pcb_models.py` — 3D models. Safe to rerun at any time, for example after

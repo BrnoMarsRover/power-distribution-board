@@ -1838,8 +1838,10 @@ def sheet_can():
 # unused ADC inputs are tied to GND, the expander pins left open like the other spares.
 ADC_MAP = [["IMON_42D", "IMON_42C", "IMON_24", "IMON_12", "IMON_5", "GND", "VSNS_OUT_42D", "VSNS_OUT_42C"],
            ["VSNS_OUT_24", "VSNS_OUT_12", "VSNS_OUT_5", "VSNS_OUT_54", "VSNS_IN_24", "VSNS_IN_12", "VSNS_IN_5", "GND"]]
-EXP_MAP = {4: "INP_42D", 5: "INP_42C", 6: "INP_24", 7: "INP_12", 8: "INP_5", 9: None, 10: "INPG_42D",
-           11: "INPG_42C", 13: "INPG_24", 14: "INPG_12", 15: "INPG_5", 16: None, 17: "MOTOR_ARM",
+# INPG_42C and INP_42D swapped 2026-11-24 (P00 / P07), so the 42 V far end reaches the expander in pin order with no
+# L3 hops in the 5 V output's current (far42.py)
+EXP_MAP = {4: "INPG_42C", 5: "INP_42C", 6: "INP_24", 7: "INP_12", 8: "INP_5", 9: None, 10: "INPG_42D",
+           11: "INP_42D", 13: "INPG_24", 14: "INPG_12", 15: "INPG_5", 16: None, 17: "MOTOR_ARM",
            18: "BOOST_DIS", 19: None, 20: None}
 
 

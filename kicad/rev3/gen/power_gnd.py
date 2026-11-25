@@ -15,6 +15,7 @@ import math
 import pcbnew
 
 from power42 import MM, TOMM, X0, Y0
+from route import corridors
 
 NET = "GND"
 VIA_D, VIA_DRILL = 0.9, 0.4
@@ -73,12 +74,16 @@ def stitch(b):
     def box_dist(px, py, l, t, r, bt):
         return math.hypot(max(l - px, 0, px - r), max(t - py, 0, py - bt))
 
+    CORR = corridors()
+
     def via_ok(x, y):
         rr = VIA_D / 2
         if not (EDGE <= x <= 150 - EDGE and EDGE <= y <= 150 - EDGE):
             return False
         if any(math.hypot(x - hx, y - hy) < 4.5 for hx, hy in HOLES):
             return False
+        if CORR.blocked(NET, x, y):
+            return False                                  # out of the power nets' current (copper_sim.corridors)
         for l, t, r, bt, n, on_f, on_b in pads:
             if n != NET and box_dist(x, y, l, t, r, bt) < rr + GAP_PAD:
                 return False

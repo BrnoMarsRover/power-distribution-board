@@ -607,6 +607,131 @@ while merge_pass():
     merged += 1
 
 
+# ---- GND fan-out vias out of the power nets' current (2026-11-24) ----------------------------------------------
+# A GND via on a single fan-out track from a GND pad, standing in a power net's current corridor
+# (copper_sim.corridors), moves to the nearest spot round its pad outside every corridor: 0.25 mm from other nets'
+# copper on every layer (its track 0.22 mm), no new 42 / 54 V pour pierced, no other pour's narrow neck cut (the
+# GND stage's rule), clear of via keep-outs and holes. Done here, after the routing, because moving them during it
+# reshuffled the negotiated routes.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import copper_sim  # noqa: E402
+
+CORR = copper_sim.Corridors()
+GNDC = b.FindNet("GND").GetNetCode() if b.FindNet("GND") else None
+VIA_KEEPOUTS = [z for z in b.Zones() if z.GetIsRuleArea() and z.GetDoNotAllowVias()]
+_fills = {}
+
+
+def _fill(z, L):
+    k = (uid(z), L)
+    if k not in _fills:
+        f = pcbnew.SHAPE_POLY_SET(z.GetFilledPolysList(L))
+        w = pcbnew.SHAPE_POLY_SET(f)
+        w.Deflate(iu(1.6), pcbnew.CORNER_STRATEGY_ROUND_ALL_CORNERS, iu(0.02))
+        _fills[k] = (f, w)
+    return _fills[k]
+
+
+def _hv(z):
+    n = b.FindNet(z.GetNetname())
+    return n is not None and n.GetNetClassName() in ("HV_Bus", "HV_Power")
+
+
+def _gnd_spot_ok(v, q, pad, L, w, hv_old):
+    x, y = mm(q[0]) - 50.0, mm(q[1]) - 50.0
+    if not (1.2 <= x <= 148.8 and 1.2 <= y <= 148.8) or CORR.blocked("GND", x, y):
+        return False
+    P = V(*q)
+    for z in VIA_KEEPOUTS:
+        if z.Outline().Contains(P):
+            return False
+    r = mm(v.GetWidth(pcbnew.F_Cu)) / 2
+    for z in b.Zones():
+        if z.GetIsRuleArea() or z.GetNetCode() == GNDC:
+            continue
+        if _hv(z) and z.Outline().Contains(P) and uid(z) not in hv_old:
+            return False
+        for Lz in CU:
+            if z.IsOnLayer(Lz):
+                f, wide = _fill(z, Lz)
+                if f.OutlineCount() and f.Collide(P, iu(r + 0.55)) and not wide.Contains(P):
+                    return False
+    for f in b.GetFootprints():                           # holes
+        for p in f.Pads():
+            if p.GetDrillSizeX() > 0 and math.dist(pt(p.GetPosition()), q) < iu(mm(p.GetDrillSizeX()) / 2 + 0.2 + 0.45):
+                return False
+    for o in vias():
+        if uid(o) != uid(v) and math.dist(pt(o.GetPosition()), q) < iu(r + mm(o.GetWidth(pcbnew.F_Cu)) / 2 + 0.25):
+            return False
+    old = pt(v.GetPosition())
+    v.SetPosition(P)
+    try:
+        box = (q[0] - iu(1.5), q[1] - iu(1.5), q[0] + iu(1.5), q[1] + iu(1.5))
+        for Lv in CU:
+            sh = v.GetEffectiveShape(Lv)
+            if any(sh.Collide(o.GetEffectiveShape(Lv), iu(0.25)) for o in neighbours(GNDC, Lv, box)):
+                return False
+        c = pt(pad.GetPosition())
+        tr = seg(GNDC, L, w, c, q).GetEffectiveShape(L)
+        tb = (min(c[0], q[0]), min(c[1], q[1]), max(c[0], q[0]), max(c[1], q[1]))
+        if any(tr.Collide(o.GetEffectiveShape(L), iu(0.22)) for o in neighbours(GNDC, L, tb)):
+            return False
+        if in_keepout(tr, L) is not None:
+            return False
+    finally:
+        v.SetPosition(V(*old))
+    return True
+
+
+def gnd_relocate():
+    if not CORR.masks or GNDC is None:
+        return 0, []
+    J = joints()
+    moved, stuck = 0, []
+    for v in vias():
+        if v.GetNetCode() != GNDC:
+            continue
+        c = pt(v.GetPosition())
+        x, y = mm(c[0]) - 50.0, mm(c[1]) - 50.0
+        if not CORR.blocked("GND", x, y):
+            continue
+        att = [(t, e, L) for L in CU for t, e in J.get((GNDC, L, c), ())]
+        if len(att) != 1:
+            continue                                      # a stitching via, or more than a fan-out: leave it
+        t, e, L = att[0]
+        o = far(t, e)
+        pad = next((p for p in anc.get((GNDC, L), ()) if p.Type() == pcbnew.PCB_PAD_T and p.HitTest(V(*o), 0)), None)
+        if pad is None or len(J.get((GNDC, L, o), ())) != 1:
+            continue
+        P = pt(pad.GetPosition())
+        hv_old = {uid(z) for z in b.Zones() if not z.GetIsRuleArea() and z.GetNetCode() != GNDC and _hv(z)
+                  and z.Outline().Contains(V(*c))}
+        bb = pad.GetBoundingBox()
+        r0 = max(bb.GetWidth(), bb.GetHeight()) / 2 + iu(mm(v.GetWidth(pcbnew.F_Cu)) / 2 + 0.25)
+        dirs = [k * math.pi / 4 for k in range(8)] + [math.pi / 16 + k * math.pi / 8 for k in range(16)]
+        found = None
+        d = r0
+        while d <= iu(3.5) and found is None:
+            for a in dirs:
+                q = (P[0] + d * math.cos(a), P[1] + d * math.sin(a))
+                q = (round(q[0] / 1000) * 1000, round(q[1] / 1000) * 1000)   # 1 um grid
+                if _gnd_spot_ok(v, q, pad, L, t.GetWidth(), hv_old):
+                    found = q
+                    break
+            d += iu(0.1)
+        if found is None:
+            stuck.append((round(x, 2), round(y, 2)))
+            continue
+        v.SetPosition(V(*found))
+        set_end(t, e, found)                              # (e is the track's end at the via)
+        set_end(t, 1 - e, P)
+        moved += 1
+    return moved, stuck
+
+
+gnd_moved, gnd_stuck = gnd_relocate()
+
+
 def chamfer_pass():
     global chamfered
     skipped = []
@@ -670,7 +795,8 @@ for t in [t for t in b.GetTracks() if uid(t) in DEAD]:
     b.Remove(t)
 pcbnew.ZONE_FILLER(b).Fill(b.Zones())
 print(f"tidy: {welded} track ends welded, {dup} duplicate and {zero} zero-length segments removed, {kinks} kinks absorbed, {merged} collinear "
-      f"joints merged, {stairs} staircases straightened, {snapped} vias put back on their runs, {shifted} runs slid onto their vias, {hairpins} hairpins straightened, {chamfered} right angles chamfered"
+      f"joints merged, {stairs} staircases straightened, {snapped} vias put back on their runs, {shifted} runs slid onto their vias, {hairpins} hairpins straightened, {chamfered} right angles chamfered, {gnd_moved} GND fan-out vias moved out of the power current"
+      + (f" ({len(gnd_stuck)} found no spot: {gnd_stuck})" if gnd_stuck else "")
       + (f"; no room for a chamfer at {len(skipped)}: {skipped}" if skipped else ""))
 b.Save(BOARD)
 sys.stdout.flush()

@@ -22,6 +22,8 @@ echo "[$SECONDS s] optimizer"
 $KPY $R/gen/pcb_optimize.py 2>&1 | grep -v swig/python
 echo "[$SECONDS s] power copper"
 $KPY $R/gen/pcb_power42.py 2>&1 | grep -v -i "swig/python\|debug\|GetWidth called"
+echo "[$SECONDS s] corridors"
+$KPY $R/gen/pcb_corridors.py 2>&1 | grep -v -i "swig/python\|debug\|GetWidth called"
 echo "[$SECONDS s] routing"
 cp $R/PowerBoard_rev3.kicad_pcb $R/gen/out/stage_copper.kicad_pcb    # for development: placed + power copper
 for block in ina 24 12 5 42D 42C 42legs 42bus boost aux flt i2c esp can v5 esprest brake rails sw espnet; do                        # signal routing, block by block

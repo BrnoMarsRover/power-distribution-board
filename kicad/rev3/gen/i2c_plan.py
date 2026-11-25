@@ -39,10 +39,10 @@ NETS = ("I2C_SCL", "I2C_SDA", "INA_ALERT")
 
 # the column: from the link's ends (bottom layer) onto L3
 COL_B = {"I2C_SDA": [(51.8, 48.6), (51.8, 49.45), (52.15, 49.8)],
-         "INA_ALERT": [(52.3, 48.6), (53.3, 49.6)],
+         "INA_ALERT": [(52.3, 48.6), (52.3, 48.8), (53.6, 50.1)],     # (its via out of the 24 V output's current)
          "I2C_SCL": [(51.3, 48.6), (51.3, 50.9), (51.95, 51.55), (54.4, 51.55)]}
 COL_L3 = {"I2C_SDA": [(52.15, 49.8), (51.62, 50.33), (51.62, 92.07), (52.1, 92.55)],
-          "INA_ALERT": [(53.3, 49.6), (53.3, 50.4), (52.1, 51.6), (52.1, 91.2), (52.6, 91.7)],
+          "INA_ALERT": [(53.6, 50.1), (52.1, 51.6), (52.1, 91.2), (52.6, 91.7)],
           "I2C_SCL": [(54.4, 51.55), (52.6, 53.35), (52.6, 90.35), (53.1, 90.85)]}
 
 # U20 / U17: the west bus pin's via straight below it, the east one's 0.28 mm east and 0.75 mm lower (the vias'

@@ -12,7 +12,7 @@ the ESP32 the router weaved through the rails' bus legs with up to five vias a l
                         D19 and a top-side track into pin 17 (no via fits beside that pin).
   5 V                   from its test pad (TP18, right beside the module) a via down, L3 south-east, east under
                         the module and up into its pin via (it may not cross FLT_12's line: round below its via).
-  42C / 42D             from their test pads' lines (far42) a via each west of the pads, L3 east and north-east
+  42C / 42D             42C from its dive right of U17 (far42), 42D from a via west of its test pad, L3 east and north-east
                         to join FLT_5's run as a three-line bundle under the module, each peeling up into its
                         pin via in turn (FLT_5, 42C, 42D: no crossings).
 
@@ -31,6 +31,7 @@ BUS_Y = {"FLT_24": 49.7, "FLT_12": 54.2}        # the rails' lanes on L3 (and th
 PULLUPS = {"FLT_24": (135.3, 64.9), "FLT_5": (137.76, 64.9), "FLT_42C": (139.1, 59.25),
            "FLT_12": (126.25, 66.6), "FLT_42D": (113.0, 79.5)}
 SPINE_X = 139.1                                 # the pull-ups' +3V3 spine (bottom layer)
+PU_V33_DX = 1.39                                # FLT_42D's pull-up: its +3V3 via this far right of its pad
 
 # pin vias (above the top row; FLT_12's beside the module, between the LEDs D20 and D19)
 PIN_VIAS = {"FLT_24": (135.3, 59.2), "FLT_5": (137.76, 59.75), "FLT_42C": (140.3, 59.75),
@@ -42,16 +43,20 @@ L3 = {
                (134.8, 57.0), (135.3, 57.5), (135.3, 59.2)],
     "FLT_12": [(116.0, 54.2), (117.4, 55.6), (125.75, 55.6), (126.25, 56.1), (126.25, 64.5)],
     "FLT_5": [(123.5, 63.5), (125.6, 65.6), (136.26, 65.6), (137.76, 64.1), (137.76, 59.75)],
-    "FLT_42C": [(108.6, 73.6), (117.0, 73.6), (124.5, 66.1), (138.8, 66.1), (140.3, 64.6), (140.3, 59.75)],
-    "FLT_42D": [(108.7, 76.0), (115.31, 76.0), (124.71, 66.6), (140.07, 66.6), (141.57, 65.1), (141.57, 59.75)],
+    # 42C dives where far42's bundle opens right of U17 and stays on L3 under the risers, out of the 5 V output's
+    # current (2026-11-24); its test pad hangs on a via at TP_VIA. 42D's via sits just east of that current.
+    "FLT_42C": [(100.6, 73.6), (101.6, 74.6), (116.0, 74.6), (124.5, 66.1), (138.8, 66.1), (140.3, 64.6),
+                (140.3, 59.75)],
+    "FLT_42D": [(110.4, 76.0), (115.31, 76.0), (124.71, 66.6), (140.07, 66.6), (141.57, 65.1), (141.57, 59.75)],
 }
+TP_VIA = {"FLT_42C": (111.1, 74.6)}             # a test pad's via onto its L3 line (on the line)
 
 # kept for the plan's bottom-side copper (the pull-ups block their own courtyards)
 KEEP = [(134.5, 57.1, 139.4, 66.7),     # the rails' pin vias, their pull-ups and the +3V3 spine
         (139.4, 57.1, 142.1, 62.7),     # the 42 V pin vias and FLT_42C's pull-up
         (122.6, 62.6, 124.4, 64.4),     # FLT_5's via beside its test pad
         (125.6, 63.9, 127.0, 65.2),     # FLT_12's via beside the module
-        (107.9, 72.9, 109.5, 76.8),     # the 42 V lines' vias
+        (109.9, 73.9, 111.7, 76.8),     # the 42 V lines' vias (42C's dive sits in far42's keep)
         (112.6, 76.6, 114.0, 78.2)]     # FLT_42D's pull-up stub
 
 
@@ -119,6 +124,9 @@ def route(R, FP, log=print):
         if net == "FLT_5":                     # from the test pad down to the via
             lay(net, B, [c(tp, "1"), pts[0]])
         lay(net, IN2, pts)
+        if net in TP_VIA:                      # the test pad on its own via off the L3 line
+            via(net, *TP_VIA[net])
+            lay(net, B, [TP_VIA[net], c(tp, "1")])
         vx, vy = PIN_VIAS[net]                 # the pin via and its top-side stub
         assert math.dist(pts[-1], (vx, vy)) < 1e-6, f"FLT bus: {net} ends off its pin via"
         via(net, vx, vy)
@@ -136,6 +144,11 @@ def route(R, FP, log=print):
         elif net == "FLT_42D":
             tx, ty = c(tp, "1")
             lay(net, B, [(tx, ty), (fx, ty + abs(tx - fx)), (fx, fy)])
+            # its +3V3 pad: a via into the L3 fill beside it, placed here so the later routes keep off the spot
+            # (2026-11-24: MOTOR_OK, off its old L3 drop through the 5 V strip, took it)
+            ux, uy = c(pu, "1")
+            vias.append(R.via("+3V3", ux + PU_V33_DX, uy))
+            lay("+3V3", B, [(ux, uy), (ux + PU_V33_DX, uy)], SW)
         else:
             lay(net, B, [(vx, vy), (fx, fy)])
     # the +3V3 spine: FLT_42C's pull-up down to the rails' pull-ups, with a branch into C103's +3V3 pad

@@ -5,14 +5,16 @@
     INNER_UM=35 NETS=GND,OUT42D python3 kicad/rev3/gen/copper_sim.py /tmp/x     (what-if: 1 oz inner, two nets)
 
 For each power net it rasterises that net's copper on every layer (filled pours, tracks, pads; 0.15 mm cells,
-0.25 mm for GND), joins the layers through the net's vias and through-hole pins (plated barrels), feeds the
+0.4 mm for GND), joins the layers through the net's vias and through-hole pins (plated barrels), feeds the
 design currents in at the parts the current comes from and takes them out where it goes, and solves Kirchhoff's
 equations for the copper. It reports per net:
   - the voltage drop from the source to each sink and the copper's I^2R loss;
   - the peak current per mm of copper width on each layer, away from the pads (the hot spots), and where;
   - the same with every other net's via and through-hole moved out of the net's pours ("no foreign vias"), which
     is what those holes cost.
-A heat map per net and layer goes to OUT_DIR (default kicad/rev3/gen/out/copper_sim).
+A map per net goes to OUT_DIR (default kicad/rev3/gen/out/copper_sim): one column per layer, current per mm of
+width on top, voltage (mV above the first sink) below, the terminals marked with their currents and the net's
+parts labelled (only the connectors for GND).
 
 Copper: 70 um outer, 15.2 um inner (board_rules.STACKUP), resistivity at 20 C; via barrels 20 um plating; the big
 connectors' pins short their layers. Rule of thumb for the maps: on 2 oz outer copper, 4 A per mm of width runs
@@ -30,7 +32,8 @@ import scipy.sparse.linalg as spla
 from PIL import Image, ImageDraw
 
 BOARD = "kicad/rev3/PowerBoard_rev3.kicad_pcb"
-OUT = sys.argv[1] if len(sys.argv) > 1 else "kicad/rev3/gen/out/copper_sim"
+OUT = "kicad/rev3/gen/out/copper_sim"
+CORRIDORS = "kicad/rev3/gen/out/corridors.npz"
 RHO = 1.72e-8                                   # ohm m, copper at 20 C
 X0, Y0, SIZE = 50.0, 50.0, 150.0                # board position on the page, mm
 LAYERS = [pcbnew.F_Cu, pcbnew.In1_Cu, pcbnew.In2_Cu, pcbnew.B_Cu]
@@ -61,16 +64,22 @@ SCEN = [
     ("VIN5", 0.15, {"J7.2": I5}, {"R77.1": I5}),
     ("DRN@5", 0.15, {"R77.4": I5}, {"Q16.2": I5}),
     ("OUT5", 0.15, {"Q16.3": I5}, {f"F{k}.1": I5 / 6 for k in range(13, 19)}),
-    ("GND", float(os.environ.get("GND_H", "0.25")),
+    ("GND", float(os.environ.get("GND_H", "0.4")),
      dict({"J8.2": I42D / 3, "J9.2": I42D / 3, "J10.2": I42D / 3, "J11.2": I42C / 2, "J12.2": I42C / 2},
           **{f"J{k}.1": I24 / 6 for k in range(14, 20)}, **{f"J{k}.1": I12 / 6 for k in range(20, 26)},
           **{f"J{k}.1": I5 / 6 for k in range(26, 32)}),
      {"J1.2": I42D + I42C, "J5.1": I24, "J6.1": I12, "J7.1": I5}),
 ]
 
-b = pcbnew.LoadBoard(BOARD)
-pcbnew.ZONE_FILLER(b).Fill(b.Zones())
-FP = {f.GetReference(): f for f in b.GetFootprints()}
+b, FP = None, {}
+
+
+def load(board):
+    """Work on this board (a path or a loaded BOARD); its pours are refilled."""
+    global b, FP
+    b = pcbnew.LoadBoard(board) if isinstance(board, str) else board
+    pcbnew.ZONE_FILLER(b).Fill(b.Zones())
+    FP = {f.GetReference(): f for f in b.GetFootprints()}
 
 
 def pad(name):
@@ -286,11 +295,12 @@ def solve(net, g, masks, src, snk):
     else:
         M = sp.diags(1.0 / Ak.diagonal())
         v, info = spla.cg(Ak, rhs[keep], M=M, tol=1e-10, maxiter=60000)
-    V = np.zeros(k + nterm)
+    V = np.full(k + nterm, np.nan)
     V[keep] = v
+    V[ref] = 0.0
     # results
     loss = 0.0
-    jmap = {}
+    jmap, vmap = {}, {}
     for L in LAYERS:
         G = THICK[L] / RHO
         I = idx[L]
@@ -301,9 +311,10 @@ def solve(net, g, masks, src, snk):
         loss += float((fx ** 2).sum() / G + (fy ** 2).sum() / G)
         ix[:, :-1] += fx / 2; ix[:, 1:] += fx / 2
         iy[:-1, :] += fy / 2; iy[1:, :] += fy / 2
-        jmap[L] = np.where(I >= 0, np.hypot(ix, iy) / g.h, np.nan)      # A per mm of width
+        jmap[L] = np.where(np.isnan(Vg), np.nan, np.hypot(ix, iy) / g.h)   # A per mm of width
+        vmap[L] = Vg * 1e3                                                   # mV above the first sink
     tv = {t: V[k + j] for j, (t, _) in enumerate(terms)}
-    return dict(loss=loss, tv=tv, jmap=jmap, tcells=tcells, ncells=k)
+    return dict(loss=loss, tv=tv, jmap=jmap, vmap=vmap, tcells=tcells, ncells=k)
 
 
 def peaks(g, jmap, tcells, L, top=4):
@@ -324,56 +335,180 @@ def peaks(g, jmap, tcells, L, top=4):
     return out
 
 
-def heatmap(g, jmap, masks, name, vmax):
+def labels_for(net, src, snk):
+    """(x, y, text, kind): the terminals with their currents, and the parts on the net (connectors only for GND)."""
+    out = []
+    terms = set()
+    for t, cur in list(src.items()) + [(t, -c) for t, c in snk.items()]:
+        c = pad(t).GetPosition()
+        out.append((mm(c.x) - X0, mm(c.y) - Y0, f"{t} {cur:+.1f} A", "src" if cur > 0 else "snk"))
+        terms.add(t.split(".")[0])
+    for f in b.GetFootprints():
+        ref = f.GetReference()
+        if ref in terms or not any(p.GetNetname() == net for p in f.Pads()):
+            continue
+        if net.split("/")[-1] == "GND" and not ref.startswith("J"):
+            continue
+        c = f.GetPosition()
+        out.append((mm(c.x) - X0, mm(c.y) - Y0, ref, "part"))
+    return out
+
+
+def heatmap(g, r, masks, name, vmax, labels, ref):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     used = [L for L in LAYERS if masks[L].any()]
     ys, xs = np.nonzero(np.any([masks[L] for L in used], axis=0))
-    pad = int(2 / g.h)
-    x0, x1 = max(0, xs.min() - pad), min(g.n, xs.max() + pad)
-    y0, y1 = max(0, ys.min() - pad), min(g.n, ys.max() + pad)
+    pad_ = int(2 / g.h)
+    x0, x1 = max(0, xs.min() - pad_), min(g.n, xs.max() + pad_)
+    y0, y1 = max(0, ys.min() - pad_), min(g.n, ys.max() + pad_)
+    ext = (x0 * g.h, x1 * g.h, y1 * g.h, y0 * g.h)
     scale = float(os.environ.get("FIGSCALE", "1"))
-    fig, axs = plt.subplots(1, len(used), figsize=(4.2 * scale * len(used) * max(0.6, (x1 - x0) / (y1 - y0)),
-                                                   5.2 * scale), squeeze=False)
-    for ax, L in zip(axs[0], used):
-        J = jmap[L][y0:y1, x0:x1]
-        im = ax.imshow(J, cmap="inferno", vmin=0, vmax=vmax, extent=(x0 * g.h, x1 * g.h, y1 * g.h, y0 * g.h),
-                       interpolation="nearest")
-        ax.set_title(f"{name} {LNAME[L]}", fontsize=9)
-        ax.set_facecolor("#d8d8d8")
-        ax.tick_params(labelsize=7)
-    fig.colorbar(im, ax=axs[0].tolist(), shrink=0.8, label="A per mm of width")
+    aspect = max(0.6, (x1 - x0) / (y1 - y0))
+    fig, axs = plt.subplots(2, len(used), figsize=(4.4 * scale * len(used) * aspect, 10.6 * scale), squeeze=False)
+    vals = np.concatenate([r["vmap"][L][y0:y1, x0:x1].ravel() for L in used])
+    vals = vals[~np.isnan(vals)]
+    vlo, vhi = (float(vals.min()), float(vals.max())) if vals.size else (0.0, 1.0)
+    fs = 5.5 if len(labels) > 25 else 6.5
+    for row, (key, cmap, lo, hi) in enumerate((("jmap", "inferno", 0, vmax), ("vmap", "viridis", vlo, vhi))):
+        for ax, L in zip(axs[row], used):
+            im = ax.imshow(r[key][L][y0:y1, x0:x1], cmap=cmap, vmin=lo, vmax=hi, extent=ext, interpolation="nearest")
+            ax.set_title(f"{name} {LNAME[L]}: " + ("current" if row == 0 else "voltage"), fontsize=9)
+            ax.set_facecolor("#d8d8d8")
+            ax.tick_params(labelsize=7)
+            for x, y, text, kind in labels:
+                if not (ext[0] <= x <= ext[1] and ext[3] <= y <= ext[2]):
+                    continue
+                if kind == "part":
+                    ax.text(x, y, text, fontsize=fs, ha="center", va="center", color="black",
+                            bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.65))
+                else:
+                    ax.plot(x, y, marker="^" if kind == "src" else "v", ms=7, mec="black", mew=0.6,
+                            color="#00e5ff" if kind == "src" else "#7CFC00")
+                    ax.text(x, y + 1.6, text, fontsize=fs, ha="center", va="top", color="black",
+                            bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.75))
+        fig.colorbar(im, ax=axs[row].tolist(), shrink=0.85,
+                     label="A per mm of width" if row == 0 else f"mV above {ref}")
+    fig.suptitle(f"{name}: current in (^) and out (v) at the marked pads; grey = no copper of this net", fontsize=10)
     os.makedirs(OUT, exist_ok=True)
     fig.savefig(f"{OUT}/{name.replace('@', '_')}.png", dpi=110, bbox_inches="tight")
     plt.close(fig)
 
 
-rows = []
-ONLY = os.environ.get("NETS")                     # what-if: NETS=GND,OUT42D
-for name, h, src, snk in SCEN:
-    if ONLY and name not in ONLY.split(","):
-        continue
-    g = Grid(h)
-    net = net_of(name, list(src) + list(snk))
-    masks = masks_for(net, g)
-    r = solve(net, g, masks, src, snk)
-    r2 = r if os.environ.get("SKIP_ALT") else solve(net, g, foreign_fill(net, g, masks), src, snk)
-    vsrc = max(r["tv"][t] for t in src)
-    drops = {t: (vsrc - r["tv"][t]) * 1e3 for t in snk}
-    drops2 = {t: (max(r2["tv"][s] for s in src) - r2["tv"][t]) * 1e3 for t in snk}
-    pk = {LNAME[L]: peaks(g, r["jmap"], r["tcells"], L) for L in LAYERS if masks[L].any()}
-    pk2 = {LNAME[L]: peaks(g, r2["jmap"], r2["tcells"], L, 1) for L in LAYERS if masks[L].any()}
-    nvia_own = sum(1 for t in b.GetTracks() if t.Type() == pcbnew.PCB_VIA_T and t.GetNetname() == net)
-    heatmap(g, r["jmap"], masks, name, vmax=float(os.environ.get("VMAX", "8")))
-    rows.append((name, sum(src.values()), max(drops.values()), max(drops2.values()), r["loss"], r2["loss"], pk, pk2,
-                 nvia_own))
-    print(f"{name:9s} {sum(src.values()):5.1f} A  drop max {max(drops.values()):6.2f} mV "
-          f"(no foreign vias {max(drops2.values()):6.2f})  loss {r['loss'] * 1e3:7.1f} mW "
-          f"({r2['loss'] * 1e3:7.1f})  own vias {nvia_own:3d}", flush=True)
-    for Ln, lst in pk.items():
-        s = ", ".join(f"{j:.1f} A/mm @({x:.1f},{y:.1f})" for j, x, y in lst[:3])
-        alt = pk2[Ln][0][0] if pk2[Ln] else 0
-        print(f"      {Ln}: {s}   [no foreign vias: peak {alt:.1f}]", flush=True)
-sys.stdout.flush()
-os._exit(0)
+
+# ---- current corridors: where another net's via would stand in a power net's current (2026-11-24) ---------------
+CORR_H = 0.25           # mm cells
+CORR_J = 1.0            # A per mm of width: a cell carrying this much (on any layer) is in the corridor
+CORR_GROW = 0.5         # mm: a via's clearance hole reaches this far past its centre's cell
+
+
+def corridors(board, out=CORRIDORS, log=print):
+    """Solve every power net but GND on the board as it stands (run on the bare power copper, before routing) and
+    save, per net, the cells where its current runs at CORR_J or more, grown by CORR_GROW: another net's via
+    centre should not go there. gen/out/corridors.npz: 'nets' (names) and 'mask<i>' ([y, x], CORR_H cells)."""
+    load(board)
+    g = Grid(CORR_H)
+    grow = int(round(CORR_GROW / CORR_H))
+    names, out_masks = [], []
+    for name, h, src, snk in SCEN:
+        if name == "GND":
+            continue
+        net = net_of(name, list(src) + list(snk))
+        masks = masks_for(net, g)
+        r = solve(net, g, masks, src, snk)
+        m = np.zeros((g.n, g.n), bool)
+        for L in LAYERS:
+            m |= np.nan_to_num(r["jmap"][L]) >= CORR_J
+        for _ in range(grow):
+            m[1:, :] |= m[:-1, :]; m[:-1, :] |= m[1:, :]; m[:, 1:] |= m[:, :-1]; m[:, :-1] |= m[:, 1:]
+        if net in names:                                  # a net in two scenarios: one mask
+            out_masks[names.index(net)] |= m
+        else:
+            names.append(net)
+            out_masks.append(m)
+        log(f"   corridor {name}: {m.sum() * CORR_H ** 2:.0f} mm2")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    np.savez_compressed(out, nets=np.array(names), h=CORR_H, **{f"mask{i}": m for i, m in enumerate(out_masks)})
+    return dict(zip(names, out_masks))
+
+
+class Corridors:
+    """The saved corridors, for the via placers: blocked(net, x, y) is True where a via of net would stand in
+    another power net's current. A via within FANOUT mm of a pad of its own net (a fan-out) is never blocked."""
+    FANOUT = 1.5
+
+    def __init__(self, path=CORRIDORS):
+        self.masks = {}
+        if os.path.exists(path):
+            z = np.load(path)
+            self.h = float(z["h"])
+            for i, n in enumerate(z["nets"]):
+                self.masks[str(n)] = z[f"mask{i}"]
+        self.any = None
+        if self.masks:
+            self.any = np.zeros_like(next(iter(self.masks.values())))
+            for m in self.masks.values():
+                self.any |= m
+
+    def owner(self, x, y):
+        """The power nets whose corridor covers (x, y) (board mm)."""
+        if not self.masks:
+            return []
+        ix, iy = int(x / self.h), int(y / self.h)
+        if not (0 <= iy < self.any.shape[0] and 0 <= ix < self.any.shape[1]) or not self.any[iy, ix]:
+            return []
+        return [n for n, m in self.masks.items() if m[iy, ix]]
+
+    def blocked(self, net, x, y):
+        return any(n != net for n in self.owner(x, y))
+
+    def grid(self, net, X, Y):
+        """Boolean mask over the board-mm grid X, Y: True where net's vias are blocked."""
+        if not self.masks:
+            return np.zeros(X.shape, bool)
+        m = np.zeros_like(self.any)
+        for n, mk in self.masks.items():
+            if n != net:
+                m |= mk
+        ix = np.clip((X / self.h).astype(int), 0, m.shape[1] - 1)
+        iy = np.clip((Y / self.h).astype(int), 0, m.shape[0] - 1)
+        return m[iy, ix]
+
+
+def main():
+    global OUT
+    OUT = sys.argv[1] if len(sys.argv) > 1 else OUT
+    load(BOARD)
+    rows = []
+    ONLY = os.environ.get("NETS")                     # what-if: NETS=GND,OUT42D
+    for name, h, src, snk in SCEN:
+        if ONLY and name not in ONLY.split(","):
+            continue
+        g = Grid(h)
+        net = net_of(name, list(src) + list(snk))
+        masks = masks_for(net, g)
+        r = solve(net, g, masks, src, snk)
+        r2 = r if os.environ.get("SKIP_ALT") else solve(net, g, foreign_fill(net, g, masks), src, snk)
+        vsrc = max(r["tv"][t] for t in src)
+        drops = {t: (vsrc - r["tv"][t]) * 1e3 for t in snk}
+        drops2 = {t: (max(r2["tv"][s] for s in src) - r2["tv"][t]) * 1e3 for t in snk}
+        pk = {LNAME[L]: peaks(g, r["jmap"], r["tcells"], L) for L in LAYERS if masks[L].any()}
+        pk2 = {LNAME[L]: peaks(g, r2["jmap"], r2["tcells"], L, 1) for L in LAYERS if masks[L].any()}
+        nvia_own = sum(1 for t in b.GetTracks() if t.Type() == pcbnew.PCB_VIA_T and t.GetNetname() == net)
+        heatmap(g, r, masks, name, float(os.environ.get("VMAX", "8")), labels_for(net, src, snk), next(iter(snk)))
+        rows.append((name, sum(src.values()), max(drops.values()), max(drops2.values()), r["loss"], r2["loss"], pk, pk2,
+                     nvia_own))
+        print(f"{name:9s} {sum(src.values()):5.1f} A  drop max {max(drops.values()):6.2f} mV "
+              f"(no foreign vias {max(drops2.values()):6.2f})  loss {r['loss'] * 1e3:7.1f} mW "
+              f"({r2['loss'] * 1e3:7.1f})  own vias {nvia_own:3d}", flush=True)
+        for Ln, lst in pk.items():
+            s = ", ".join(f"{j:.1f} A/mm @({x:.1f},{y:.1f})" for j, x, y in lst[:3])
+            alt = pk2[Ln][0][0] if pk2[Ln] else 0
+            print(f"      {Ln}: {s}   [no foreign vias: peak {alt:.1f}]", flush=True)
+
+
+if __name__ == "__main__":
+    main()
+    sys.stdout.flush()
+    os._exit(0)

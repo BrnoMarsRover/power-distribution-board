@@ -4722,6 +4722,30 @@
 		)
 		(uuid "c2e54540-9710-588f-b902-dff8683156c2")
 	)
+	(global_label "INP_42D"
+		(shape passive)
+		(at 129.54 106.68 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1 1)
+			)
+			(justify left)
+		)
+		(uuid "0097a621-c172-5117-a0c7-1d9cf1e1e791")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 129.54 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+	)
 	(global_label "I2C_SDA"
 		(shape passive)
 		(at 248.92 91.44 0)
@@ -4892,7 +4916,7 @@
 	)
 	(global_label "INPG_42C"
 		(shape passive)
-		(at 129.54 106.68 0)
+		(at 129.54 88.9 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -4900,9 +4924,9 @@
 			)
 			(justify left)
 		)
-		(uuid "74fe450f-b60e-530f-892c-b424767642c0")
+		(uuid "72324e34-8136-55fd-b73b-2d7f60dabc8a")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 129.54 106.68 0)
+			(at 129.54 88.9 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5463,30 +5487,6 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
-			)
-		)
-	)
-	(global_label "INP_42D"
-		(shape passive)
-		(at 129.54 88.9 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1 1)
-			)
-			(justify left)
-		)
-		(uuid "f704fa52-71c6-5a9c-8b4d-a09e707dcb06")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 129.54 88.9 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
 			)
 		)
 	)

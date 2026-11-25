@@ -31,6 +31,18 @@ import pcbnew
 
 from power42 import MM, TOMM, X0, Y0
 
+_CORR = None
+
+
+def corridors():
+    """The power nets' current corridors (copper_sim.corridors, written after the power copper stage): no other
+    net's via goes in them, except a fan-out within Corridors.FANOUT of a pad of its own net."""
+    global _CORR
+    if _CORR is None:
+        import copper_sim
+        _CORR = copper_sim.Corridors()
+    return _CORR
+
 F, IN1, IN2, B = pcbnew.F_Cu, pcbnew.In1_Cu, pcbnew.In2_Cu, pcbnew.B_Cu
 COPPER = (F, IN1, IN2, B)
 LAYER_NAME = {F: "F", IN1: "In1", IN2: "In2", B: "B"}
@@ -43,6 +55,10 @@ FILLS = {"GND", "+3V3"}         # pours that flow around other nets' tracks
 HV = ("VBAT", "BUS42", "OUT42", "OUT54", "/54 V", "/42 V", "/Brake", "/Battery")
 LAYER_COST = {B: 1.0, IN2: 1.6}
 VIA_COST = 1.6                  # mm of track a via is worth
+CORR_ROUTE = False              # the router ignores the corridors (2026-11-24: pricing vias in them, or only moving GND's
+                                # fan-outs out, reshuffled whole blocks' negotiated routes and broke them); Router.via
+                                # reports a via in one, and pcb_tidy moves GND fan-out vias out afterwards
+CORR_VIA = 8.0                  # (if on) a via in another power net's current corridor costs this many times more
 TURN = {0: 0.0, 1: 0.12, 2: 0.6}   # by heading change in 45 deg steps; 3 and 4 not allowed
 DIRS = [(1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1), (1, -1)]
 NEAR = 1.0                      # nets with copper this close to a conflict are re-routed with it (PathFinder)
@@ -236,7 +252,7 @@ class Window:
 
     def reset_cost(self):
         self.cost = {l_: c.copy() for l_, c in self.base.items()}
-        self.via_cost = np.ones((self.ny, self.nx))
+        self.via_cost = np.where(self.corr, CORR_VIA, 1.0) if CORR_ROUTE else np.ones((self.ny, self.nx))
 
     def cell(self, x, y):
         return int(round((y - self.y0) / PITCH)), int(round((x - self.x0) / PITCH))
@@ -348,6 +364,18 @@ class Window:
             bad[s] |= (z & ~ok_gnd[s]) if pierce else z
         for l, t, r_, b in g.via_keep:
             bad |= (self.X >= l) & (self.X <= r_) & (self.Y >= t) & (self.Y <= b)
+        C = corridors()
+        cm = C.grid(net, self.X, self.Y) if CORR_ROUTE else np.zeros(self.X.shape, bool)
+        if cm.any():                                       # in a power net's current, bar fan-outs: priced, not
+            fan = np.zeros_like(cm)                        # barred (reset_cost), so a route still finds its way
+            for p in g.pads:                               # (GND gets none: its plane is everywhere)
+                if p["net"] == net and net and net != "GND":
+                    s = self._near(p["box"], C.FANOUT)
+                    if s:
+                        fan[s] |= _dist_box(self.X[s], self.Y[s], p["box"]) <= C.FANOUT
+            self.corr = cm & ~fan
+        else:
+            self.corr = cm
         e = EDGE + VIA_D / 2
         bad |= (self.X < e) | (self.X > 150 - e) | (self.Y < e) | (self.Y > 150 - e)
         return ~bad
@@ -564,6 +592,12 @@ class Router:
         return out
 
     def via(self, net, x, y):
+        C = corridors()
+        hit = [n for n in C.owner(x, y) if n != net]
+        if hit and (net == "GND" or not any(p["net"] == net and _dist_box(x, y, p["box"]) <= C.FANOUT
+                                            for p in self.geo.pads)):
+            print(f"   ! via of {net.split('/')[-1]} at ({x:.2f}, {y:.2f}) stands in the current of "
+                  f"{', '.join(h.split('/')[-1] for h in hit)}")
         v = pcbnew.PCB_VIA(self.b)
         v.SetPosition(pcbnew.VECTOR2I(MM(X0 + x), MM(Y0 + y)))
         v.SetWidth(MM(VIA_D))
@@ -726,7 +760,10 @@ class Router:
         vt = frozenset()
         if zone_layers:
             own = own_copper(self.geo, win, net, zone_layers)
-            ys, xs = np.nonzero(own & win.via_ok)
+            ok = own & win.via_ok
+            if (ok & ~win.corr).any():                 # into its pour out of the power nets' current if it can
+                ok = ok & ~win.corr
+            ys, xs = np.nonzero(ok)
             vt = frozenset(zip(ys.tolist(), xs.tolist()))
         path = astar(win, starts, targets, vt)
         win.block = saved
@@ -798,30 +835,33 @@ class Router:
         if zone_layers:
             own = own_copper(self.geo, win, net, zone_layers)
         l, t, r, b = pad["box"]
-        dist = max(r - l, b - t) / 2 + VIA_D / 2 + 0.2
-        while dist <= rmax:
-            for k in range(32):
-                a = 2 * math.pi * k / 32
-                x, y = cx + dist * math.cos(a), cy + dist * math.sin(a)
-                iy, ix = win.cell(x, y)
-                if not (0 <= iy < win.ny and 0 <= ix < win.nx) or not win.via_ok[iy, ix]:
-                    continue
-                if own is not None and not own[iy, ix]:
-                    continue
-                vx, vy = win.xy(iy, ix)
-                n = max(2, int(math.hypot(vx - cx, vy - cy) / (PITCH / 2)))
-                clear = True
-                for kk in range(n + 1):
-                    px, py = cx + (vx - cx) * kk / n, cy + (vy - cy) * kk / n
-                    jy, jx = win.cell(px, py)
-                    if not (l <= px <= r and t <= py <= b) and win.block[layer][jy, jx]:
-                        clear = False
-                        break
-                if clear:
-                    self.track(net, layer, [(cx, cy), (vx, vy)], w)
-                    self.via(net, vx, vy)
-                    return True
-            dist += 0.1
+        for in_corr in (False, True):                      # out of the power nets' current if at all possible
+            dist = max(r - l, b - t) / 2 + VIA_D / 2 + 0.2
+            while dist <= rmax:
+                for k in range(32):
+                    a = 2 * math.pi * k / 32
+                    x, y = cx + dist * math.cos(a), cy + dist * math.sin(a)
+                    iy, ix = win.cell(x, y)
+                    if not (0 <= iy < win.ny and 0 <= ix < win.nx) or not win.via_ok[iy, ix]:
+                        continue
+                    if win.corr[iy, ix] and (not in_corr or net == "GND"):
+                        continue                           # GND: rather the GND stage's way to its plane
+                    if own is not None and not own[iy, ix]:
+                        continue
+                    vx, vy = win.xy(iy, ix)
+                    n = max(2, int(math.hypot(vx - cx, vy - cy) / (PITCH / 2)))
+                    clear = True
+                    for kk in range(n + 1):
+                        px, py = cx + (vx - cx) * kk / n, cy + (vy - cy) * kk / n
+                        jy, jx = win.cell(px, py)
+                        if not (l <= px <= r and t <= py <= b) and win.block[layer][jy, jx]:
+                            clear = False
+                            break
+                    if clear:
+                        self.track(net, layer, [(cx, cy), (vx, vy)], w)
+                        self.via(net, vx, vy)
+                        return True
+                dist += 0.1
         if not optional:
             self.failed.append(label or f"{ref}.{num} via")
             self.log(f"   no via spot: {label or f'{ref}.{num}'}")
@@ -919,7 +959,7 @@ class Negotiator:
         vk = int(math.ceil((VIA_D / 2 + CLEAR / 2) / PITCH))
         voffs = [(dy, dx) for dy in range(-vk, vk + 1) for dx in range(-vk, vk + 1)
                  if math.hypot(dx, dy) * PITCH <= VIA_D / 2 + CLEAR / 2]
-        vmult = np.ones((win.ny, win.nx))
+        vmult = win.via_cost.copy()
         same = [j["mask"] for j in self.jobs if j is not job and j["net"] == job["net"] and j["mask"] is not None]
         for l_ in win.layers:
             occ_all = self.occ[l_].copy()

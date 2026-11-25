@@ -46,7 +46,14 @@ def efuse_rail(R, FP, key, log=print):
         gate_vias={gate(r["fets"][0]): (g["fet_cx"] - 10.85, pre - 2.54),
                    gate(r["fets"][1]): (g["fet_cx"] - 10.85, main - 2.54)},
         kelvin=((g["shunt_x"] + 2.7, power_rails.Y_SHUNT - 2.2), (g["shunt_x"] + 2.7, power_rails.Y_SHUNT + 2.7)),
-        led_via=(g["side_x"] + 1.7, power_rails.LED_Y + 1.02), gnd_ok=[]), log)
+        led_via=(g["side_x"] + 1.7, power_rails.LED_Y + 1.02), gnd_ok=[],
+        route_keep=LATER_KEEP if key == "5" else []), log)
+
+
+# fixed via spots of plans routed after the rails' eFuses (the power-button corner's PWR_HOLD, the aux supply's GND):
+# the 5 V block's negotiated routes keep out (2026-11-24: with vias priced out of the 5 V drain copper, its EN feed
+# went east into them)
+LATER_KEEP = [(130.2, 17.6, 131.8, 19.2), (130.2, 27.4, 131.8, 29.0)]
 
 
 def efuse42(R, FP, key, log=print):
