@@ -52,6 +52,9 @@ SLACK = 0.02                    # route points are exact grid nodes; this covers
 VIA_D, VIA_DRILL = 0.9, 0.4     # smallest via for 2 oz outer copper (board_rules.py)
 EDGE = 0.45                     # copper to board edge (rule 0.3)
 FILLS = {"GND", "+3V3"}         # pours that flow around other nets' tracks
+# L3 under the rail switches' source leads stays GND fill, no tracks: there the output copper used to have an L3
+# copy (dropped 2026-11-25, power_rails); its place goes to the GND return, and the routes keep their old ways
+LAYER_KEEP = [(pcbnew.In2_Cu, n, box) for n, box in __import__("power_rails").L3_GND]
 HV = ("VBAT", "BUS42", "OUT42", "OUT54", "/54 V", "/42 V", "/Brake", "/Battery")
 LAYER_COST = {B: 1.0, IN2: 1.6}
 VIA_COST = 1.6                  # mm of track a via is worth
@@ -315,6 +318,10 @@ class Window:
         for l, t, r_, b in g.route_keep:                  # kept corridors: nothing of this plan's nets in them
             d = w / 2 + 0.05
             m |= (self.X >= l - d) & (self.X <= r_ + d) & (self.Y >= t - d) & (self.Y <= b + d)
+        for l_, n, (l, t, r_, b) in LAYER_KEEP:           # whole-board keep-outs per layer: other nets' tracks
+            if l_ == layer and n != net:
+                d = w / 2 + 0.3 + SLACK
+                m |= (self.X >= l - d) & (self.X <= r_ + d) & (self.Y >= t - d) & (self.Y <= b + d)
         e = EDGE + w / 2
         m |= (self.X < e) | (self.X > 150 - e) | (self.Y < e) | (self.Y > 150 - e)
         return m

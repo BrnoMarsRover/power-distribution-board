@@ -4,7 +4,7 @@ Rail eFuse (TPS48111 on the bottom under its switch), in this order:
   1. every IC pin gets its escape stub first, so later routes leave room for the pins still to come; CS- pin 19
      escapes inward and joins pin 17 under the body (CS+ sits between them);
   2. gate drive, 0.4 mm (0.25 mm at the IC): BST to the bootstrap cap; SRC from the pin through the cap's SRC pad
-     to the main FET's source vias (a source reference of its own, not through a plane); PD / PU through the
+     to the main FET's source lead (a source reference of its own, not through a plane); PD / PU through the
      10 ohm, PD on through the 2.2 ohm to the main gate's escape via and to the GATE test pad; the pre-charge gate
      G through its RC's resistor to its escape via;
   3. the shunt's Kelvin pair, 0.25 mm: CS- from both pins to its via, then CS+ through the 100 ohm filter to its
@@ -12,7 +12,7 @@ Rail eFuse (TPS48111 on the bottom under its switch), in this order:
   4. VS and its filter, then the small-signal pins (timer, current warning, IMON, enable, INP / INPG, fault,
      the temperature transistor), the LED resistor to the LED's anode via, the two output-sense dividers;
   5. supply pads: a via into the GND plane next to every GND pad; VIN24 pads to the VIN pour (top); OUT24 pads
-     to the output copper (the L3 strip under the source vias, or the L1 output area below the switch).
+     to the output copper (L1: the output strip beside the source leads, or the output area below the switch).
 Nets that leave the block (INP, INPG, IMON, FLT, VSNS_IN, VSNS_OUT to the ADCs / expander / ESP32) are routed
 only between their local parts here; the bus legs come with the bus routing.
 """

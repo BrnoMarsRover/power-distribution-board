@@ -10,7 +10,7 @@ Current path, top to bottom (the 42 V blocks' pattern, one block per column):
   -> D2PAK source leads (left) -> OUT strip -> full-width OUT area (bridge pad 2 lands here, on L1)
   -> OUT strip down the left of the output column, running under the PTCs: each PTC lies flat with its rail
      pad inside the strip and its other pad opening straight into the connector's + pin on the same row.
-L3 carries a copy of the OUT area under the switch, stitched to L1. GND returns on the L2 plane and the L4
+The output current stays on L1 (no L3 copy: it carried next to nothing). GND returns on the L2 plane and the L4
 fill, through the connectors' plated - pins. Gates, Kelvin pairs and the LED escape to the bottom through vias.
 
 5 V is L-shaped: its XT30 column is narrower than the switch needs, so the switch is full width only beside the
@@ -41,7 +41,6 @@ RAILS = {
     # so the 12 V current goes round the hole
     "24": dict(xl=50.8, xr=76.0, vin="VIN24", out="OUT24", j_in="J5", tvs="D5",
                shunt="R41", fets=("Q11", "Q10"), bridge="JP3", led="D4", y_out=82.0,
-               seam=True,      # no source vias in its leftmost column: the INA228's link runs there (ina_link)
                out_col_r=75.5, strip_w=5.7,
                inlet=dict(vin_r=68.0, gnd_l=68.5, step=12.5, vin_r2=70.0, gnd_l2=71.5)),
     "12": dict(xl=76.5, xr=103.2, vin="VIN12", out="OUT12", j_in="J6", tvs="D7",
@@ -192,13 +191,17 @@ for _r in RAILS.values():
     _g = _geo(_r)
     KEEP_TOP += [(_r["xl"], 0.5, _r["xr"], _g["band_bot"]), (_r["xl"], _g["band_bot"], _g["col_r"], _g["wide_bot"]),
                  (_r["xl"], _g["wide_bot"], _g["strip_r"], 136.0 + _g["y_out"] - Y_OUT)]
-    KEEP_BOTTOM += [(_r["xl"], OUT_TOP, _g["out_r"], WIDE_TOP),           # FET source via fields
+    KEEP_BOTTOM += [(_r["xl"], OUT_TOP, _g["out_r"], WIDE_TOP),           # under the source leads (kept: placement)
                     (_r["xl"], WIDE_TOP, _r["xl"] + 3.7, WIDE_BOT)]       # stitching column
     KEEP_BOTTOM += [(x - 1.0, y - 1.0, x + 1.0, y + 1.0) for x, y in _escapes(_r)]
 
+# L3 under the source leads, where the output copper's L3 copy was (dropped 2026-11-25): GND fill, no tracks of
+# other nets (route.py); the rail's own output may still cross it, as it could cross its copy (the 5 V LED feed)
+L3_GND = [(_r["out"], (_r["xl"], OUT_TOP, _geo(_r)["out_r"] + 0.6, WIDE_TOP + 1.2)) for _r in RAILS.values()]
+
 
 # ---------------------------------------------------------------- copper
-F, IN2 = pcbnew.F_Cu, pcbnew.In2_Cu
+F = pcbnew.F_Cu
 VIA_D, VIA_DRILL = 1.0, 0.45
 ESC_D, ESC_DRILL = 0.9, 0.4
 OUT_RADIUS = 2.5
@@ -251,21 +254,6 @@ def copper(b):
             b.Add(t)
             tracks.append(t)
 
-    pads = []
-    for f in b.GetFootprints():
-        for p in f.Pads():
-            bb = p.GetBoundingBox()
-            pads.append((TOMM(bb.GetLeft()) - X0, TOMM(bb.GetTop()) - Y0, TOMM(bb.GetRight()) - X0,
-                         TOMM(bb.GetBottom()) - Y0, p.GetNetname()))
-
-    def clear_of_pads(x, y, netname, gap_other=0.55, gap_same=0.35):
-        rr = VIA_D / 2
-        for l, t, r_, bt, n in pads:
-            gp = rr + (gap_same if n == netname else gap_other)
-            if l - gp < x < r_ + gp and t - gp < y < bt + gp:
-                return False
-        return all((x - vx) ** 2 + (y - vy) ** 2 > 1.5 ** 2 for vx, vy, _ in vias)
-
     for key, r in RAILS.items():
         g = _geo(r)
         xl, xr, vin, out = r["xl"], r["xr"], r["vin"], r["out"]
@@ -309,10 +297,9 @@ def copper(b):
         wb, sr = g["wide_bot"], g["strip_zr"]
         zone(out, F, out_pts + [(ocr, wb), (sr, wb), (sr, y_end), (xl, y_end)],
              40, f"{key} OUT", radius=OUT_RADIUS)
-        # L3 copy only under the OUT strip, where the source vias are (decided 2026-11-20): beside it, under the DRN
-        # area and the wide OUT area, it carried little current; there L3 is +3V3 fill that signals may cut
-        zone(out, IN2, rect(xl, OUT_TOP, g["out_r"] + 0.6, WIDE_TOP + 1.2), 40, f"{key} OUT (L3)", clear=0.3,
-             radius=OUT_RADIUS)
+        # no L3 copy of the OUT copper (dropped 2026-11-25): copper_sim.py found it carried 0.2 % of the rail's
+        # loss (the current stays on the 70 um L1 strip; 11-17 A, no layer change); as GND fill the same L3 and
+        # the 58 source vias' antipads gone in L2 / L4 save GND 150 mW, against +1-2 mW per rail
         # each output: PTC output pad -> connector + pin, one patch per row
         for j, f, rail, other, plus, minus in rows:
             p = _pad(FP[f], other).GetBoundingBox()
@@ -338,14 +325,4 @@ def copper(b):
             lx, ly = _pxy(FP[r["led"]], num)
             via(pnet(r["led"], num), lx + 1.7, ly, ESC_D, ESC_DRILL)
             track(pnet(r["led"], num), [(lx, ly), (lx + 1.7, ly)], 0.4)
-        # FET source vias to the L3 copy: a row between the leads, two rows below each source lead
-        for cy in FET_ROWS:
-            cx = g["fet_cx"]
-            for vx in (cx - 9.2, cx - 7.65, cx - 6.1):
-                if clear_of_pads(vx, cy + 0.1, out, gap_same=0.3):
-                    via(out, vx, cy + 0.1)
-            for vy in (cy + 4.2, cy + 5.9):
-                for vx in (xl + 1.1, xl + 2.9, xl + 4.7, xl + 6.5)[1 if r.get("seam") else 0:]:
-                    if clear_of_pads(vx, vy, out):
-                        via(out, vx, vy)
     return zones, vias, tracks

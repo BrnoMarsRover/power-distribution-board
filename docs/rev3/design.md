@@ -968,9 +968,10 @@ the three lines reach the transceiver side by side in its pin order, without cro
   | 20 A (half of the 42 V input) | 6.1 mm | 12.3 mm | 64 mm |
   | 30 A (drive group) | 10.7 mm | 21.5 mm | 112 mm |
 
-  - The inner 0.5 oz layers carry little current, so the heavy paths live on L1. L3 copper
-    under them adds a little and spreads heat; via arrays tie the two only where current
-    changes layer (budget roughly 1 A per 0.45 mm via).
+  - The inner 0.5 oz layers carry little current, so the heavy paths live on L1. On the 42 V
+    strips L3 copper runs under them in parallel and adds a little; via arrays tie the two only
+    where current changes layer (budget roughly 1 A per 0.45 mm via). The 24 / 12 / 5 V outputs
+    have no L3 copy: there it carried next to nothing (copper simulation below).
   - The 42 V output strips are 7.4–7.7 mm wide on L1. At the full 30 A that is about a
     35 °C rise on L1 alone, only at the top of the strip: each XT90 takes its share on the
     way down, and the L3 plane runs in parallel.
@@ -993,6 +994,11 @@ the three lines reach the transceiver side by side in its pin order, without cro
     west of them), the INA228's VBUS tap (4 mW), the 5 V LED's OUT5 via (6 mW, boxed in by the EN feed), and
     the I2C column's drops in the 24 V output (lower, they saved 3 mW there but their longer bottom-side runs
     cut the bottom GND fill under the 24 V block's return: GND +40 mW). A move is checked on GND too.
+    **Rails' L3 copy dropped (2026-11-25):** the 24 / 12 / 5 V outputs' L3 copy under the source leads carried
+    0.4–0.9 mW of each rail's 190–400 mW (0.2 %): the current stays on the 70 µm L1 strip and never changes
+    layer. The copy and its 58 source vias are gone; that L3 is GND fill again, and other nets' tracks stay out of
+    it (`power_rails.L3_GND`) so the routes keep their ways. OUT24 / 12 / 5 +1.0 / +0.9 / +2.1 mW (drops +0.1 mV),
+    GND 5.29 → 5.14 W (70.5 → 69.0 mV), 62 vias fewer on the board. All nets 8.98 → 8.84 W.
     **OPEN:** inner copper weight (JLC: 1 oz or 2 oz inner on 4 layers; 2 oz needs 1.6 mm and 2 oz outer).
   - **Solder-reinforced strips** remain a free extra if the 42 V strips run hot in testing:
     leave the mask open along them and flood with solder. Not planned for now.
@@ -1147,10 +1153,12 @@ the three lines reach the transceiver side by side in its pin order, without cro
        yellow / green from the top, named on their left.
      - **Ground:** the TVS ground pad shares an L1 patch with the input's − pin. The outputs' − pins
        reach the L2 plane and the L4 fill through their plated holes.
-     - **L3:** an OUT24 copy only under the output strip, where the source vias are (trimmed
-       2026-11-20). Beside it, under the DRN area and the full-width area, it carried little current, so
-       there L3 is +3V3 fill that the eFuse's signals may cross. Under the output column L3 stays free
-       for signals.
+     - **L3:** no copy of the output copper (dropped 2026-11-25). The 2026-11-20 copy under the output
+       strip, with its 18–20 source vias per rail, carried 0.2 % of the rail's loss: the current stays on
+       the 70 µm L1 strip and never changes layer. Its place under the source leads is GND fill that
+       other nets' tracks may not cross (`power_rails.L3_GND`, `route.LAYER_KEEP`), for the 42 V
+       return. Beside it, under the DRN area and the full-width area, L3 is +3V3 fill that the eFuse's
+       signals may cross. Under the output column L3 stays free for signals.
      - **Escapes:** both gates, the Kelvin pair and the LED go to vias whose bottom spots are reserved,
        as in the 42 V blocks.
   2d. `gen/power54.py` (copper also run by `pcb_power42.py`) — the 54 V boost, designed by hand (2026-11-20),

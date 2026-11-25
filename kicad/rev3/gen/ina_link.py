@@ -8,8 +8,8 @@ The battery monitor sits in the battery-input corner, walled in by the input con
                   (the supply pin is tied to it). ALERT's pull-up moved to the ESP32 end, where +3V3 is everywhere.
   the corner      east along y 11.0 ... 12.5 between the battery XT90's pads and the charger XT60's.
   the column      down x 49.45 ... 50.95, right of the charger XT60, left of the 24 V switch's gate track.
-  the seam        between 42C's Kelvin corner and the 24 V switch: its leftmost column of L3 stitching vias is
-                  gone (power_rails, 24 V "seam") and 42C's Kelvin vias sit 0.35 mm further left (power42, as far
+  the seam        between 42C's Kelvin corner and the 24 V switch: the rails have no source vias there any more
+                  (power_rails, 2026-11-25), and 42C's Kelvin vias sit 0.35 mm further left (power42, as far
                   as the shunt's pads allow), so four lines pass. They step around the two FET gate vias at the
                   lead tips (x 52.25, y 25.56 / 37.46): 50.6 ... 52.1, then 50.03 ... 51.47 past the lower one
                   (0.48 mm pitch there: the gate via and 42C's CS- via leave 1.45 mm), then 50.8 ... 52.3 beside
