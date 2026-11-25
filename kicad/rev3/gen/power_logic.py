@@ -36,7 +36,7 @@ BAND = {"HV_Bus": 2.0, "HV_Power": 2.0, "Power": 1.0}
 # (R166, U15) up past the north bundle's band to the part with R174 and the module's supply.
 # The logic cluster reaches the LDO's side through the output field: the eastern strip down past BRAKE_ACT /
 # BOOST_DIS's L3 lines, the field east of the UART0 lines up the right edge.
-BRIDGES = [((54.5, 93.75), (54.5, 89.5)), ((107.75, 93.75), (107.75, 89.5)), ((140.5, 19.75), (140.5, 17.0)),
+BRIDGES = [((57.45, 93.35), (57.45, 90.0)), ((110.45, 93.75), (110.45, 89.5)), ((140.5, 19.75), (140.5, 17.0)),
            ((103.0, 100.0), (103.0, 102.75))]
 
 

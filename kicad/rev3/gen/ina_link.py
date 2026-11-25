@@ -13,8 +13,9 @@ The battery monitor sits in the battery-input corner, walled in by the input con
                   as the shunt's pads allow), so four lines pass. They step around the two FET gate vias at the
                   lead tips (x 52.25, y 25.56 / 37.46): 50.6 ... 52.1, then 50.03 ... 51.47 past the lower one
                   (0.48 mm pitch there: the gate via and 42C's CS- via leave 1.45 mm), then 50.8 ... 52.3 beside
-                  42C's BUS42 feed down to y 48.6, where the logic area's L3 opens. +3V3 runs on to y 54.3, past
-                  the BUS42 feed's end, and drops into the L3 fill there. 42C's CS- comes in from the west at
+                  42C's BUS42 feed down to y 44.9, where the I2C plan turns them east to their vias. +3V3 runs on
+                  to y 53, past the BUS42 feed's end, and east under the 24 V output strip to its via in the L3
+                  fill east of it (out of the strip's current, 2026-11-25). 42C's CS- comes in from the west at
                   y 27.2, just below the westmost lane's step, and down between the CS+ filter (moved 0.35 mm left,
                   efuse_hand) and the link.
 
@@ -30,10 +31,12 @@ COLUMN_X = (49.45, 49.95, 50.45, 50.95)             # down beside the charger XT
 SEAM_X1 = (50.6, 51.1, 51.6, 52.1)                  # from y 27.55 (after the upper gate via)
 SEAM_X2 = (50.03, 50.51, 50.99, 51.47)              # past the lower gate via (y 37.46), 0.48 mm pitch
 SEAM_X3 = (50.8, 51.3, 51.8, 52.3)                  # beside 42C's BUS42 feed, down to the end
-JOG1_Y, JOG2_Y, JOG3_Y, END_Y, V3_Y = 25.5, 35.5, 38.3, 48.6, 54.3
+JOG1_Y, JOG2_Y, JOG3_Y, END_Y, V3_Y = 25.5, 35.5, 38.3, 44.9, 52.95
 ENDS = {n: (x, V3_Y if n == "+3V3" else END_Y) for n, x in zip(NETS, SEAM_X3)}
-# +3V3's via: east of the I2C column's L3 lines, inside the L3 +3V3 pour (2 mm from 42C's L3 copper, power_logic)
-V3_VIA = (53.6, 57.1)
+# +3V3's via: east of the 24 V output strip (out of its current, 2026-11-25), inside the L3 +3V3 pour, between the
+# eFuse's C35 and R51 on the bottom; the lane turns east to it under the strip
+V3_JOG = (51.3, 53.45)
+V3_VIA = (57.75, 53.45)
 
 KEEP = [(17.6, 10.55, 52.0, 12.95), (49.0, 10.55, 51.75, 25.9), (49.6, 25.4, 52.6, 49.0), (50.3, 49.0, 51.3, 54.8)]
 
@@ -72,7 +75,7 @@ def paths(c8_plus, pins):
         a, b = j3[i]
         pts += [(SEAM_X2[i], a), (SEAM_X3[i], b), ENDS[net]]
         if net == "+3V3":
-            pts += [V3_VIA]
+            pts += [V3_JOG, V3_VIA]
         out[net] = pts
     return out
 

@@ -55,6 +55,17 @@ FILLS = {"GND", "+3V3"}         # pours that flow around other nets' tracks
 # L3 under the rail switches' source leads stays GND fill, no tracks: there the output copper used to have an L3
 # copy (dropped 2026-11-25, power_rails); its place goes to the GND return, and the routes keep their old ways
 LAYER_KEEP = [(pcbnew.In2_Cu, n, box) for n, box in __import__("power_rails").L3_GND]
+# FLT_24's lane under the rails' bands (flt_bus, laid after the blocks): L3 kept for it from its via east, and the
+# bottom side round that via
+_FY = __import__("flt_bus").BUS_Y["FLT_24"]
+LAYER_KEEP += [(pcbnew.In2_Cu, "FLT_24", (68.0, _FY - 0.125, 118.5, _FY + 0.125)),
+               (pcbnew.B_Cu, "FLT_24", (67.9, _FY - 0.65, 69.2, _FY + 0.65))]
+# whole-board via keep-outs: (net that may, box). The rails' output strips (power_rails.STRIP_KEEP: no via of another
+# net in their current, 2026-11-25) and FLT_24's L3 lane
+VIA_KEEP = __import__("power_rails").STRIP_KEEP + [("FLT_24", (68.0, _FY - 0.8, 118.5, _FY + 0.8))]
+# (net, box): where a net's via may stand in a strip after all, at its edge, because it has no other way: MOTOR_OK
+# from R169 / D21 (on the bottom inside the 5 V strip, walled east by F13's output pad, R169 and VSNS_OUT_54's line)
+VIA_OK = [("MOTOR_OK", (109.3, 80.4, 110.1, 81.4))]
 HV = ("VBAT", "BUS42", "OUT42", "OUT54", "/54 V", "/42 V", "/Brake", "/Battery")
 LAYER_COST = {B: 1.0, IN2: 1.6}
 VIA_COST = 1.6                  # mm of track a via is worth
@@ -371,6 +382,14 @@ class Window:
             bad[s] |= (z & ~ok_gnd[s]) if pierce else z
         for l, t, r_, b in g.via_keep:
             bad |= (self.X >= l) & (self.X <= r_) & (self.Y >= t) & (self.Y <= b)
+        keep = np.zeros_like(bad)
+        for n, (l, t, r_, b) in VIA_KEEP:
+            if n != net:
+                keep |= (self.X >= l) & (self.X <= r_) & (self.Y >= t) & (self.Y <= b)
+        for n, (l, t, r_, b) in VIA_OK:
+            if n == net:
+                keep &= ~((self.X >= l) & (self.X <= r_) & (self.Y >= t) & (self.Y <= b))
+        bad |= keep
         C = corridors()
         cm = C.grid(net, self.X, self.Y) if CORR_ROUTE else np.zeros(self.X.shape, bool)
         if cm.any():                                       # in a power net's current, bar fan-outs: priced, not

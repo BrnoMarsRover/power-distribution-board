@@ -999,6 +999,15 @@ the three lines reach the transceiver side by side in its pin order, without cro
     layer. The copy and its 58 source vias are gone; that L3 is GND fill again, and other nets' tracks stay out of
     it (`power_rails.L3_GND`) so the routes keep their ways. OUT24 / 12 / 5 +1.0 / +0.9 / +2.1 mW (drops +0.1 mV),
     GND 5.29 → 5.14 W (70.5 → 69.0 mV), 62 vias fewer on the board. All nets 8.98 → 8.84 W.
+    **Output strips cut back (ec261d1, 2026-11-25, by hand):** the 24 / 12 / 5 V outputs' full-width area under
+    the switch is gone; each output is a strip from the source leads to its outputs plus a band to the bypass
+    bridge (`power_rails.RAILS` band). Every other net's via is kept out of the strips' current path
+    (`power_rails.STRIP_KEEP`, `route.VIA_KEEP`): the INA228 / I2C drops and +3V3's moved east into the band
+    (`i2c_plan.COL_B`, `ina_link.V3_VIA`), VSNS_D's hop east of the 24 V strip (`far42.HOPS`), the +3V3 bridges
+    beside the strips (`power_logic.BRIDGES`). Left in a strip: IMON_42C / 42D's hops in the 12 V strip (0.08 W;
+    east of them the U17 I2C branches, F7's output pad and MOTOR_KILL's hop leave no spot), INPG_42D's pull-down
+    GND via in the 5 V strip (13 mW; the pull-down stands between two risers), MOTOR_OK's hop at the 5 V strip's
+    edge (`route.VIA_OK`). Loss 24 / 12 / 5 V: 256 / 371 / 493 mW (full-width area: 190 / 198 / 406 mW).
     **OPEN:** inner copper weight (JLC: 1 oz or 2 oz inner on 4 layers; 2 oz needs 1.6 mm and 2 oz outer).
   - **Solder-reinforced strips** remain a free extra if the 42 V strips run hot in testing:
     leave the mask open along them and flood with solder. Not planned for now.

@@ -9,9 +9,11 @@ pin 18 with its pull-up. The plan:
                 SCL, ALERT, SDA: the quiet interrupt line between clock and data, 0.85 mm pitch. Under the ICs
                 (y 71 ... 84) run the 42 V far end's IMON / VSNS lines and the rails' legs; the bus crosses them,
                 it does not run with them.
-  the column    the link's three ends (bottom layer, x 51.3 ... 52.3) onto L3 at the seam, one via each: SDA and
-                ALERT straight down, SCL under them on the bottom layer to the column's east side (the trunk's
-                order needs SCL there). Down x 51.62 ... 52.6, west of the 42 V far end's L3 hop, to the trunk.
+  the column    the link's three ends (bottom layer, x 51.3 ... 52.3, y 44.9) east under the 24 V output strip,
+                below the main FET's source lead, to one via each in the band to the bypass bridge (out of the
+                strip's current, 2026-11-25): SDA's and ALERT's side by side, SCL under them to its own east of
+                them (the trunk's order needs SCL east). L3 back west at y 48 ... 49, down x 51.62 ... 52.6 under
+                the strip to the trunk.
   the branches  U20 and U17: a via under each I2C pin, L3 diagonally down across the 42 V bundle (it is on the
                 bottom layer there), straight down to the trunk; the line arriving at the near trunk line tees
                 into it, the other one hops over on the bottom layer (two vias). U21: its pins face the FLT lines'
@@ -38,12 +40,16 @@ TRUNK_Y = {"I2C_SCL": 90.85, "INA_ALERT": 91.7, "I2C_SDA": 92.55}
 NETS = ("I2C_SCL", "I2C_SDA", "INA_ALERT")
 
 # the column: from the link's ends (bottom layer) onto L3
-COL_B = {"I2C_SDA": [(51.8, 48.6), (51.8, 49.45), (52.15, 49.8)],
-         "INA_ALERT": [(52.3, 48.6), (52.3, 48.8), (53.6, 50.1)],     # (its via out of the 24 V output's current)
-         "I2C_SCL": [(51.3, 48.6), (51.3, 50.9), (51.95, 51.55), (54.4, 51.55)]}
-COL_L3 = {"I2C_SDA": [(52.15, 49.8), (51.62, 50.33), (51.62, 92.07), (52.1, 92.55)],
-          "INA_ALERT": [(53.6, 50.1), (52.1, 51.6), (52.1, 91.2), (52.6, 91.7)],
-          "I2C_SCL": [(54.4, 51.55), (52.6, 53.35), (52.6, 90.35), (53.1, 90.85)]}
+# (2026-11-25: the vias left the 24 V output strip, where they stood in its full current, 0.15 W at full load; they
+# sit in the band to the bypass bridge, which carries current only when the eFuse is bridged. On the bottom the
+# lines turn east under the strip below the main FET's source lead, ALERT on top; SCL passes under SDA's and
+# ALERT's vias to its own, east of them, which puts it east in the column. L3 back west at y 48 ... 49.)
+COL_B = {"I2C_SDA": [(51.8, 44.9), (51.8, 45.4), (52.3, 45.9), (59.6, 45.9), (59.6, 46.5)],
+         "INA_ALERT": [(52.3, 44.9), (52.8, 45.4), (60.7, 45.4), (60.7, 46.5)],
+         "I2C_SCL": [(51.3, 44.9), (51.3, 46.8), (51.8, 47.3), (61.6, 47.3)]}
+COL_L3 = {"I2C_SDA": [(59.6, 46.5), (59.6, 48.0), (52.12, 48.0), (51.62, 48.5), (51.62, 92.07), (52.1, 92.55)],
+          "INA_ALERT": [(60.7, 46.5), (60.7, 48.5), (52.6, 48.5), (52.1, 49.0), (52.1, 91.2), (52.6, 91.7)],
+          "I2C_SCL": [(61.6, 47.3), (61.6, 49.0), (53.1, 49.0), (52.6, 49.5), (52.6, 90.35), (53.1, 90.85)]}
 
 # U20 / U17: the west bus pin's via straight below it, the east one's 0.28 mm east and 0.75 mm lower (the vias'
 # 1.1 mm); L3 diagonally down to a column (x), straight down to the trunk. The line on the far trunk line (SDA)

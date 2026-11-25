@@ -54,7 +54,10 @@ SPOTS = {
 }
 # GND vias placed here rather than by the fan-out (which runs before U17's fan vias exist): INPG_C's pull-down sits
 # between its riser and U17's fan vias of INPG_24 (99.6, 69.3) and INPG_12 (100.0, 71.0)
-GND_VIAS = {("inpg_r", "C"): (101.0, 70.4)}
+GND_VIAS = {("inpg_r", "C"): (101.0, 70.4),
+            # INPG_D's pull-down stands between INPG_D's and INP_D's risers, inside the 5 V output strip
+            # (2026-11-25, the hand-cut strip): its GND via has no spot outside it, so the least-loss one, below it
+            ("inpg_r", "D"): (107.3, 70.75)}
 MK_TP = (90.5, 79.85, 0)                   # MOTOR_KILL's test pad, on its way to the latch
 MK_DIAG = 167.9                            # x + y of MOTOR_KILL's run beside 42D's lowest line's climb (167.15)
 
@@ -82,7 +85,7 @@ U20_AT, U17_AT, U18_AT = (69.5, 67.0), (95.0, 67.0), (96.3, 80.1)  # logic_place
 # centre, its pad is 3.2 in radius; the bottom one 0.65 mm clear of the 24 V connector's pads); east of the
 # connector it opens around IMON's and MOTOR_KILL's hop vias (76.5, 77.0); 42C's lines climb back at 82.2, 42D's at
 # 83.8 to the U17 levels (73.5 ... 76.0); right of U17 it opens to 0.8 mm at 98.8 (FLT_C's dive via at 100.6).
-L_OPEN, L_CLOSE, R_OPEN, R_CLOSE, S_OPEN = 51.6, 54.0, 76.5, 82.2, 98.8
+L_OPEN, L_CLOSE, R_OPEN, R_CLOSE, S_OPEN = 51.6, 58.1, 76.5, 82.2, 98.8
 EVENTS = [   # (x, {net key: new y}): where the bundle opens or closes. Lines that move the same way together
              # are staggered (the leading one first, each next STAGGER later), so their parallel 45-degree jogs
              # keep 0.57 mm apart (not 0.5 / sqrt 2)
@@ -101,8 +104,9 @@ STAGGER = 0.3
 # (MOTOR_KILL's hop, 2026-11-25: at the 12 V output strip's east edge, west of F7's output pad, just before the foot
 # of its run beside 42D's climb; at x 80.4 its upper via stood in the strip's mouth, 0.02 W at full load. IMON's
 # cannot move: their risers enter U20 in pin order, I_D east of I_C, and the centre hole is just west of I_C's)
-HOPS = {"V_D": (53.4, 70.4), "I_C": (79.3, 71.4), "I_D": (81.5, 71.4), "K": (82.85, 84.6)}
-RISERS = {"V_C": (51.2, 0, "L"), "V_D": (53.4, 1, "L"), "I_D": (81.5, 0, "R"), "I_C": (79.3, 1, "R"),
+# (VSNS_D's, 2026-11-25: east of the 24 V output strip, out of its current; it was at x 53.4, in the strip)
+HOPS = {"V_D": (57.5, 70.4), "I_C": (79.3, 71.4), "I_D": (81.5, 71.4), "K": (82.85, 84.6)}
+RISERS = {"V_C": (51.2, 0, "L"), "V_D": (57.5, 1, "L"), "I_D": (81.5, 0, "R"), "I_C": (79.3, 1, "R"),
           "G_C": (101.8, 3, "R"), "P_C": (104.0, 2, "R"), "G_D": (106.2, 1, "R"), "P_D": (108.4, 0, "R")}
 PINS = {"V_C": ("U20", "9"), "V_D": ("U20", "10"), "I_C": ("U20", "15"), "I_D": ("U20", "16"),
         "G_C": ("U17", "4"), "P_C": ("U17", "5"), "G_D": ("U17", "10"), "P_D": ("U17", "11")}

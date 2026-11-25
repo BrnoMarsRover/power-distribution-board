@@ -199,6 +199,23 @@ for _r in RAILS.values():
 # other nets (route.py); the rail's own output may still cross it, as it could cross its copy (the 5 V LED feed)
 L3_GND = [(_r["out"], (_r["xl"], OUT_TOP, _geo(_r)["out_r"] + 0.6, WIDE_TOP + 1.2)) for _r in RAILS.values()]
 
+# the output strips' current path (from just above the main FET's source lead to the last output; not the band to
+# the bridge, which carries current only when the eFuse is bridged): no other net's via (route.py), grown so a via's
+# clearance hole (0.45 + the pour's 0.5) stays off the copper. Hand-placed vias are checked by copper_sim instead.
+STRIP_M = 0.95
+
+
+def _strips(r):
+    g = _geo(r)
+    bt, bb, br = r["band"]
+    y_end = 136.0 + g["y_out"] - Y_OUT + 4.7             # below the last output's PTC pad
+    m = STRIP_M
+    return [(r["out"], (r["xl"] - m, FET_ROWS[1] + 1.0, g["out_r"] + m, bt + 1.0)),   # (and the corner into the band)
+            (r["out"], (r["xl"] - m, bt, g["strip_zr"] + m, y_end + m))]
+
+
+STRIP_KEEP = [k for _r in RAILS.values() for k in _strips(_r)]
+
 
 # ---------------------------------------------------------------- copper
 F = pcbnew.F_Cu
