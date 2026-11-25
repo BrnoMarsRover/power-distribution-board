@@ -47,13 +47,29 @@ def efuse_rail(R, FP, key, log=print):
                    gate(r["fets"][1]): (g["fet_cx"] - 10.85, main - 2.54)},
         kelvin=((g["shunt_x"] + 2.7, power_rails.Y_SHUNT - 2.2), (g["shunt_x"] + 2.7, power_rails.Y_SHUNT + 2.7)),
         led_via=(g["side_x"] + 1.7, power_rails.LED_Y + 1.02), gnd_ok=[],
-        route_keep=LATER_KEEP if key == "5" else []), log)
+        route_keep=LATER_KEEP if key == "5" else [], via_keep=OUTLET_KEEP.get(key, []),
+        vs_path=VS_PATH.get(key)), log)
 
 
 # fixed via spots of plans routed after the rails' eFuses (the power-button corner's PWR_HOLD, the aux supply's GND):
 # the 5 V block's negotiated routes keep out (2026-11-24: with vias priced out of the 5 V drain copper, its EN feed
-# went east into them)
-LATER_KEEP = [(130.2, 17.6, 131.8, 19.2), (130.2, 27.4, 131.8, 29.0)]
+# went east into them). Each box is just the via's own disc (2026-11-25: the earlier 1.6 mm squares also barred
+# VS's lane up the block's right edge, past the Kelvin vias, so VS crossed the Kelvin pair on L3 instead, through
+# two vias in the shunt's outlet)
+LATER_KEEP = [(130.55, 17.95, 131.45, 18.85), (130.55, 27.76, 131.45, 28.66)]
+
+# no via where the 5 V drain current leaves its shunt (2026-11-25, copper_sim): the copper between the shunt's
+# drain pad and the FETs' tabs carries the full 16.6 A, and the hop vias of VS, the EN divider's VIN feed and
+# VSNS_IN_5 standing in it cost 0.08 W at full load. The 24 / 12 V blocks route those lines around it already.
+OUTLET_KEEP = {"5": [(122.5, 22.0, 125.95, 27.4)]}
+
+# the 5 V block's VS line, laid before the negotiation (2026-11-25): from the feed resistor east above the shunt,
+# through the gap between the Kelvin+ via and PWR_HOLD's via spot (0.38 / 0.32 mm), down the block's right edge
+# past the CS- via and west below the Kelvin pair to the 100 nF cap at pin 20. Left to the router it crossed that
+# gap on L3, which shut VSNS_IN_5's L3 way east. (bottom side, 0.3 mm; first point the feed resistor's VS pad,
+# last the cap's)
+VS_PATH = {"5": [(126.51, 17.40), (128.7, 17.40), (130.65, 19.35), (130.65, 26.6), (130.25, 27.0), (124.45, 27.0),
+                 (124.0, 27.44)]}
 
 
 def efuse42(R, FP, key, log=print):
@@ -204,13 +220,16 @@ def u17_fan(R, log=print):
     return out
 
 
-# VSNS_IN_5 past the aux supply: L3 hop over the 5 V block's VS line, down the bottom side between the 5 V block's
-# Kelvin vias and the aux north parts, west under the 5 V LED, L3 down beside the aux VIN cap (west of its switch-node
-# shield), the bottom side again down x 125.6 across the FLT bus's L3 runs (as before the aux re-layout), and L3 west
-# into U21's fan via under the logic area. (layer, polyline) in order; a via at every layer change
-VSNS_IN_5_PATH = [("L3", [(126.5, 16.25), (127.7, 17.45)]),
-                  ("B", [(127.7, 17.45), (128.7, 17.45), (130.65, 19.4), (130.65, 26.6), (130.25, 27.0), (127.6, 27.0)]),
-                  ("L3", [(127.6, 27.0), (127.4, 27.2), (127.4, 47.08)]),     # (the drop: between the aux
+# VSNS_IN_5 past the aux supply, on L3 from the divider's via: east between the 5 V block's Kelvin+ via and
+# PWR_HOLD's, down east of the 42 V feed to the aux supply (its L3 run turns down at x 131 to the aux input caps),
+# west below that feed's via at the aux VIN cap, down beside the cap (west of the aux switch-node shield), the
+# bottom side again down x 125.6 across the FLT bus's L3 runs, and L3 west into U21's fan via under the logic area.
+# (2026-11-25: it used to cross on the bottom side down the 5 V block's right edge and drop to L3 in the 5 V drain
+# copper; that edge is VS's lane now, so VS needs no hop over the Kelvin pair.) (layer, polyline) in order; a via
+# at every layer change
+VSNS_IN_5_PATH = [("L3", [(126.5, 16.25), (127.7, 17.45), (128.7, 17.45), (130.65, 19.4), (132.2, 20.95),
+                          (132.2, 24.6), (133.3, 25.7), (133.3, 32.6), (132.3, 33.6), (128.4, 33.6), (127.4, 34.6),
+                          (127.4, 47.08)]),                                   # (the drop: between the aux
                   ("B", [(127.4, 47.08), (125.6, 48.88), (125.6, 56.95), (124.8, 57.75), (124.8, 58.05)]),  # TPs)
                   ("L3", [(124.8, 58.05), (124.2, 58.05), (123.3, 58.95), (116.0, 58.95), (113.8, 61.15), (113.8, 61.25)])]
 
@@ -477,6 +496,14 @@ def _efuse(R, FP, spec, log=print):
     R.to_pour("GND", R.t_pad(U, "6", escape="in", w=NECK_W, length=0.45) if spec.get("bar") else esc["6"],
               SUP_W, box, (IN1,), label="U GND", neck=neck)
 
+    # 2b. a planned VS line (VS_PATH): fixed copper before the negotiation
+    vs_fixed = []
+    if spec.get("vs_path"):
+        vs_fixed = R.track(pins["20"]["net"], B, spec["vs_path"], 0.3)
+        for msg in _check_exact(R, vs_fixed):
+            log(f"   VS clearance: {msg}")
+            R.failed.append("VS plan")
+
     # 3. the signal nets, negotiated together
     gp = net("11")
     gate_vias = dict(spec["gate_vias"])
@@ -532,7 +559,13 @@ def _efuse(R, FP, spec, log=print):
             add(iscp, ["19"], loc(iscp), SIG_W, "ISCP", cost_fn=away_from_gate)
         add(csp, ["18"], loc(csp), SIG_W, "CS+", cost_fn=along_cs)
         add(kp, [], loc(kp) + [R.t_via(*kv_p)], SIG_W, "Kelvin +", cost_fn=along_cs)
-        add(vs, ["20"], loc(vs), 0.3, "VS")
+        if vs_fixed:                               # the planned line joins the feed resistor and the pin's cap:
+            ends = [min(loc(vs), key=lambda t: math.dist(t["points"][0][1:], q))
+                    for q in (spec["vs_path"][0], spec["vs_path"][-1])]
+            add(vs, ["20"], [ends[1]], 0.3, "VS pin")  # the pin to its cap, the bulk cap to the feed resistor
+            add(vs, [], [ends[0]] + [t for t in loc(vs) if t not in ends], 0.3, "VS bulk cap")
+        else:
+            add(vs, ["20"], loc(vs), 0.3, "VS")
         for num, label in (("9", "TMR"), ("8", "IWRN"), ("7", "IMON"), ("1", "EN"), ("3", "INP"), ("2", "INPG"),
                            ("10", "temp sense")):
             add(net(num), [num], loc(net(num)), SIG_W, label, cost_fn=away_from_gate)

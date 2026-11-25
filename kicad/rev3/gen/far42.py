@@ -18,7 +18,8 @@ where a line leaves the bundle, under the lines above it on L3 (a via down, a sh
                  levels, 42C's first.
   under U17      six lines, between the expander's pins and the 12 V output connector.
   right of U17   all four rise straight in, west to east INPG_C, INP_C, INPG_D, INP_D (their bundle order), and
-                 enter U17 under its body from the right, a pull-down between each riser and the next. No hops
+                 enter U17 under its body from the right, a pull-down beside each (INPG_C's left of its riser,
+                 the others right of theirs, so only one GND via stands in the 5 V output's copper). No hops
                  here (2026-11-24): this is the 5 V output's current path into its strip (copper_sim corridors);
                  INPG_42C / INP_42D swapped expander pins (P00 / P07) so the risers need not cross. FLT_C dives to
                  L3 just before them, where the bundle has opened, and the FLT bus takes it on there.
@@ -44,10 +45,16 @@ SPOTS = {
     ("imon_tp", "D"): (78.6, 64.3, 0),
     ("imon_c", "C"): (73.75, 67.975, -90), ("imon_r", "C"): (75.85, 67.975, -90),  # below IMON_C's line
     ("imon_tp", "C"): (79.1, 69.0, 0),                                             # on IMON_C's riser (x 79.3)
-    ("inpg_r", "C"): (102.9, 68.6, -90), ("inp_r", "C"): (105.1, 68.6, -90),        # beside their risers
+    # beside their risers: INPG_C's left of its riser and INP_C's right of INPG_C's (2026-11-25: the 5 V output's
+    # copper starts at x 104.1, and the GND vias of the two pull-downs that stood in it, one each side of INP_C's
+    # riser, fenced the 5 V current's way into its output strip: 0.07 W at full load; now only INPG_D's is in it)
+    ("inpg_r", "C"): (100.95, 68.6, -90), ("inp_r", "C"): (102.9, 68.6, -90),
     ("inpg_r", "D"): (107.3, 68.6, -90), ("inp_r", "D"): (109.5, 68.6, -90),
     ("flt_tp", "C"): (111.1, 73.4, 90), ("flt_tp", "D"): (113.7, 76.0, 0),          # FLT_C's on its L3 via (FLT bus)
 }
+# GND vias placed here rather than by the fan-out (which runs before U17's fan vias exist): INPG_C's pull-down sits
+# between its riser and U17's fan vias of INPG_24 (99.6, 69.3) and INPG_12 (100.0, 71.0)
+GND_VIAS = {("inpg_r", "C"): (101.0, 70.4)}
 MK_TP = (90.5, 79.85, 0)                   # MOTOR_KILL's test pad, on its way to the latch
 MK_DIAG = 167.9                            # x + y of MOTOR_KILL's run beside 42D's lowest line's climb (167.15)
 
@@ -91,7 +98,10 @@ EVENTS = [   # (x, {net key: new y}): where the bundle opens or closes. Lines th
 ]
 STAGGER = 0.3
 # hops: net key -> (x of the via in the bundle, y of the upper via). Risers: net -> (x, entry index, side)
-HOPS = {"V_D": (53.4, 70.4), "I_C": (79.3, 71.4), "I_D": (81.5, 71.4), "K": (80.4, 84.6)}
+# (MOTOR_KILL's hop, 2026-11-25: at the 12 V output strip's east edge, west of F7's output pad, just before the foot
+# of its run beside 42D's climb; at x 80.4 its upper via stood in the strip's mouth, 0.02 W at full load. IMON's
+# cannot move: their risers enter U20 in pin order, I_D east of I_C, and the centre hole is just west of I_C's)
+HOPS = {"V_D": (53.4, 70.4), "I_C": (79.3, 71.4), "I_D": (81.5, 71.4), "K": (82.85, 84.6)}
 RISERS = {"V_C": (51.2, 0, "L"), "V_D": (53.4, 1, "L"), "I_D": (81.5, 0, "R"), "I_C": (79.3, 1, "R"),
           "G_C": (101.8, 3, "R"), "P_C": (104.0, 2, "R"), "G_D": (106.2, 1, "R"), "P_D": (108.4, 0, "R")}
 PINS = {"V_C": ("U20", "9"), "V_D": ("U20", "10"), "I_C": ("U20", "15"), "I_D": ("U20", "16"),
@@ -253,16 +263,17 @@ def route(R, FP, log=print):
             continue
         pts, y = _path(y0, BUNDLE[key], FLT_END[key])   # FLT: east to its test pad
         lay(net, pts)
-    # MOTOR_KILL: east in the bundle, a hop under 42D's lines (between IMON's hops and between the 12 V PTC's top-side
-    # pads), east under them, north-east beside them (0.53 mm off the lowest one's climb) and east through its test
-    # pad into the latch's pin 3 (its neighbours leave 0.2 mm)
+    # MOTOR_KILL: east in the bundle, a hop under 42D's lines (east of the 12 V output strip, before they climb),
+    # north-east beside them (0.53 mm off the lowest one's climb) and east through its test pad into the latch's
+    # pin 3 (its neighbours leave 0.2 mm)
     x, yl = HOPS["K"]
     pts, y = _path(slots["K"], BUNDLE["K"], x)
     lay("MOTOR_KILL", pts)
     hop("MOTOR_KILL", x, y, yl)
     p3 = R.pad("U18", "3")["c"]
     assert abs(p3[1] - MK_TP[1]) < 1e-6, "MOTOR_KILL's test pad is off its line"
-    lay("MOTOR_KILL", [(x, yl), (MK_DIAG - yl, yl), (MK_DIAG - p3[1], p3[1]), p3])
+    run = [(x, yl)] + ([(MK_DIAG - yl, yl)] if MK_DIAG - yl > x + 1e-6 else [])   # (the hop is at the run's foot)
+    lay("MOTOR_KILL", run + [(MK_DIAG - p3[1], p3[1]), p3])
     # the parts on the lines: a straight stub from the line to each signal pad
     stubs = {("vsns_c", "C"): "V_C", ("vsns_r", "C"): "V_C", ("vsns_c", "D"): "V_D", ("vsns_r", "D"): "V_D",
              ("imon_c", "D"): "I_D", ("imon_r", "D"): "I_D", ("imon_tp", "D"): "I_D",
@@ -291,6 +302,11 @@ def route(R, FP, log=print):
     bad = route_plan._check_exact(R, segs) + _check_vias(R, vias)
     for (role, blk), ref in sorted(rl.items()):        # then a GND via beside each part's GND pad
         for q in [q for q in R.geo.pads if q["ref"] == ref and q["net"] == "GND"]:
+            if (role, blk) in GND_VIAS:
+                gv = GND_VIAS[(role, blk)]
+                gs = R.track("GND", B, [q["c"], gv], route_plan.SUP_W)
+                bad += route_plan._check_exact(R, gs) + _check_vias(R, [R.via("GND", *gv)])
+                continue
             R.fanout(ref, q["num"], route_plan.SUP_W, zone_layers=(route.IN1,), optional=True)
     for msg in bad[:20]:
         log(f"   far-end clearance: {msg}")

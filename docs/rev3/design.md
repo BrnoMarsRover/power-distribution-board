@@ -983,9 +983,16 @@ the three lines reach the transceiver side by side in its pin order, without cro
     outlet (VS-feed vias, 14 A/mm). Inner copper what-if for GND: 1 oz 2.6 W / 36 mV, 2 oz 1.4 W / 20 mV.
     **After the corridor work (2n, 2026-11-24):** OUT5 0.61 → 0.46 W (its vias' share 0.28 → 0.14 W, peak 17 →
     9.7 A/mm, drop 42 → 32 mV), the rail inputs and the 12 V drain a few mW each; all nets but GND 3.99 → 3.83 W.
-    Left: the 5 V shunt outlet's fence (the block's VS / VIN5 / Kelvin / VSNS_IN_5 vias at x ≈ 125, 0.08 W), the
-    far end's IMON / MOTOR_KILL hops at the top of the 12 V strip (0.04 W), the INA228's VBUS tap in VBAT, and GND
-    fan-outs boxed in by other lines.
+    **Second via pass (2026-11-25):** the 5 V shunt's outlet: VS planned round the Kelvin vias on the bottom side
+    like the 24 / 12 V blocks' (`route_plan.VS_PATH`; the PWR_HOLD / aux keep boxes had barred that lane), no
+    vias in the outlet (`OUTLET_KEEP`), VSNS_IN_5 on L3 east of the aux feed; the far end: INPG_42C's pull-down
+    west of its riser (its GND via and INP_42C's out of the 5 V copper), MOTOR_KILL's hop out of the 12 V
+    strip's mouth. DRN 5 V 154 → 96 mW (drop 9.3 → 5.8 mV), OUT5 0.46 → 0.40 W (32 → 29 mV), OUT12 210 →
+    197 mW, VIN5 126 → 119 mW; GND +7 mW (VSNS_IN_5's L3 run cuts the L3 fill). All nets 9.11 → 8.98 W.
+    Not done, on purpose: IMON_42C / 42D's hops (their risers enter U20 in pin order and the centre hole is
+    west of them), the INA228's VBUS tap (4 mW), the 5 V LED's OUT5 via (6 mW, boxed in by the EN feed), and
+    the I2C column's drops in the 24 V output (lower, they saved 3 mW there but their longer bottom-side runs
+    cut the bottom GND fill under the 24 V block's return: GND +40 mW). A move is checked on GND too.
     **OPEN:** inner copper weight (JLC: 1 oz or 2 oz inner on 4 layers; 2 oz needs 1.6 mm and 2 oz outer).
   - **Solder-reinforced strips** remain a free extra if the 42 V strips run hot in testing:
     leave the mask open along them and flood with solder. Not planned for now.
@@ -1196,11 +1203,13 @@ the three lines reach the transceiver side by side in its pin order, without cro
          The packer had dropped them wherever there was room, with no links (+5V3_AUX 25 mm away).
        - All planned in `power_aux.route` (pcb_route `aux`, right after the boost), checked exactly.
        - **VSNS_IN_5** (the 5 V rail's input sense to U21) used to run down the strip now taken by the
-         north parts and the BUS42 feed. It is planned now (`route_plan.VSNS_IN_5_PATH`), crossing the 42 V
-         feed on the bottom side:
-         - down the bottom side between the 5 V block's Kelvin vias and the RON / UVLO parts;
-         - west under the 5 V LED;
-         - L3 down beside the VIN cap, west of the switch-node shield;
+         north parts and the BUS42 feed. It is planned now (`route_plan.VSNS_IN_5_PATH`), on L3 from the
+         divider's via (since 2026-11-25; before, it crossed on the bottom side down the 5 V block's right edge
+         and dropped to L3 in the 5 V drain copper, and that edge is the 5 V VS line's lane now):
+         - east between the 5 V block's Kelvin+ via and PWR_HOLD's;
+         - down east of the 42 V feed to the aux supply (its L3 run turns down at x 131 to the aux input caps);
+         - west below that feed's via at the aux VIN cap;
+         - down beside the VIN cap, west of the switch-node shield;
          - the bottom side again across the FLT bus's L3 runs;
          - L3 west into U21's fan via.
 
@@ -1416,7 +1425,9 @@ the three lines reach the transceiver side by side in its pin order, without cro
            INP_42D on P07 / pin 11), so the four risers climb into U17 in bundle order without
            crossing. FLT_42C dives to L3 just before them, where the bundle has opened, and the FLT
            bus takes it on there (its test pad hangs on a via just east of the 5 V current).
-           **Firmware:** the expander map changes for those two bits.
+           **Firmware:** the expander map changes for those two bits. The pull-downs (2026-11-25): INPG_42C's
+           left of its riser (west of the 5 V copper, its GND via set between U17's INPG_24 / INPG_12 fan vias),
+           INP_42C's in the slot it left; only INPG_42D's GND via still stands in the 5 V copper.
          - **Pin access:** both ICs' input rows face up, for the rails' lines from above. So the
            42 V lines enter under the IC body, between the pin rows: VSNS from the ADC's left end,
            IMON from its right end, INP and INPG from the expander's right end.
@@ -1499,8 +1510,9 @@ the three lines reach the transceiver side by side in its pin order, without cro
          MOTOR_KILL crosses nothing in the 42 V area: L3 there is 42 V copper, so no hop would have been
          possible.
        - **At the far end** it runs in the bundle between 42C's lines and 42D's. East of the centre
-         hole it hops under 42D's lines on L3 (2 vias, between IMON's hops and between the 12 V PTC's
-         pads). It then runs east under them, north-east beside their climb, and through its test pad
+         hole it hops under 42D's lines on L3 (2 vias, at the 12 V output strip's east edge just before their
+         climb, west of F7's output pad; until 2026-11-25 between IMON's hops, where its upper via stood in the
+         strip's mouth). It then runs east under them, north-east beside their climb, and through its test pad
          TP43 into the latch. The 24 V / 12 V outputs moved down 7 mm in all, so that the bundle's
          ninth line fits.
        - **The latch** (U18, U19, the hold-off network C115 / D21 / R169 and their 100 nF) moved out of
