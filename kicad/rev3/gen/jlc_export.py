@@ -8,7 +8,9 @@
   sourcing.md               what is substituted, global-sourced, or left out
 
 LCSC numbers: gen/jlc_parts.json (looked up on jlcpcb.com by MPN, 2026-11-26), overridden by SUBSTITUTE where the
-looked-up code had no stock (same part under another code, or an equivalent: same value, package and rating).
+looked-up code had too little stock (same part under another code, or an equivalent: same value, package and
+rating). JLC places at least its minimum quantity of a part (often 20) whatever the board count, so a line needs
+max(minimum, boards x per-board quantity) in stock.
 Left out of the assembly: parts with MPN "none: ..." (PCB pads, solder jumpers, wire bridges) and the Deans T
 connectors (no LCSC stock; fitted by hand). Rotations follow KiCad's footprint orientation: check them in JLC's
 placement preview before paying.
@@ -42,6 +44,10 @@ SUBSTITUTE = {
     "ERJ-3RQF3R0V": ("C137724", "Yageo RC0603FR-073RL", "3.0 Ohm 1 % 0603"),
     "RC0603FR-1371K5L": ("C185312", "Yageo RC0603FR-0771K5L", "71.5 k 1 % 0603 (other reel size)"),
     "RC0603FR-1339K2L": ("C23037", "UniOhm 0603WAF3922T5E", "39.2 k 1 % 0603"),
+    # stocked, but under JLC's minimum placement quantity (20 for these passives, whatever the board count)
+    "C0603C820J5GACTU": ("C1683", "FH 0603CG820J500NT", "82 pF 50 V C0G 5 % 0603"),
+    "RC0603FR-0762KL": ("C23221", "UniOhm 0603WAF6202T5E", "62 k 1 % 0603"),
+    "ERJ-6ENF60R4V": ("C72998", "UniOhm 0805W8F604JT5E", "60.4 Ohm 1 % 0805"),
 }
 GLOBAL = {"MSS1583-223MED": "boost inductor L1 (Coilcraft): no stock",
           "CSS2H-2512R-L500F": "input shunt R5 (Bourns 0.5 mOhm Kelvin): 1 in stock, 2 needed",
