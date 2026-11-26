@@ -12,8 +12,9 @@ looked-up code had too little stock (same part under another code, or an equival
 rating). JLC places at least its minimum quantity of a part (often 20) whatever the board count, so a line needs
 max(minimum, boards x per-board quantity) in stock.
 Left out of the assembly: parts with MPN "none: ..." (PCB pads, solder jumpers, wire bridges) and the Deans T
-connectors (no LCSC stock; fitted by hand). Rotations follow KiCad's footprint orientation: check them in JLC's
-placement preview before paying.
+connectors (no LCSC stock) and the other through-hole connectors (HAND_FIT_KEEP: the SMD ones stay), all fitted by
+hand. CPL positions are the centres of the parts' pads (KiCad's origin is pin 1 on many connectors). Rotations follow
+KiCad's footprint orientation: check polarized parts in JLC's placement preview before paying.
 
     python3 kicad/rev3/gen/jlc_export.py
 """
@@ -49,6 +50,10 @@ SUBSTITUTE = {
     "RC0603FR-0762KL": ("C23221", "UniOhm 0603WAF6202T5E", "62 k 1 % 0603"),
     "ERJ-6ENF60R4V": ("C72998", "UniOhm 0805W8F604JT5E", "60.4 Ohm 1 % 0805"),
 }
+# fitted by hand, not by JLC (2026-11-26): the through-hole connectors (power and JST headers). The fine-pitch SMD
+# ones stay with JLC: USB-C J32 (0.5 mm pins), the CAN CLIK-Mates J34 / J35
+HAND_FIT_KEEP = {"J32", "J34", "J35"}
+hand_fit = lambda ref: ref.startswith("J") and ref not in HAND_FIT_KEEP
 GLOBAL = {"MSS1583-223MED": "boost inductor L1 (Coilcraft): no stock",
           "CSS2H-2512R-L500F": "input shunt R5 (Bourns 0.5 mOhm Kelvin): 1 in stock, 2 needed",
           "TL3342F160QG": "BOOT / RESET buttons SW1, SW2 (E-Switch): 1 in stock, 4 needed"}
@@ -63,6 +68,23 @@ def refs(s):
             out += [f"{m.group(1)}{i}" for i in range(int(m.group(2)), int(m.group(3)) + 1)]
         elif part:
             out.append(part)
+    return out
+
+
+def pad_centres():
+    """ref -> (dx, dy): the centre of the part's pads' bounding box minus its KiCad origin, board mm, y down. JLC
+    places a part by its body centre; many KiCad connectors (and the D2PAK) have their origin on pin 1."""
+    import pcbnew
+    b = pcbnew.LoadBoard(str(BOARD))
+    out = {}
+    for f in b.GetFootprints():
+        ps = list(f.Pads())
+        if not ps:
+            continue
+        xs = [p.GetPosition().x for p in ps]
+        ys = [p.GetPosition().y for p in ps]
+        out[f.GetReference()] = (pcbnew.ToMM((min(xs) + max(xs)) / 2 - f.GetPosition().x),
+                                 pcbnew.ToMM((min(ys) + max(ys)) / 2 - f.GetPosition().y))
     return out
 
 
@@ -87,7 +109,7 @@ def main():
         "--labels", "MPN,Value,Footprint,Qty,References", "--group-by", "MPN,Footprint", "--sort-field", "MPN",
         "-o", str(tmp / "bom.csv"), str(SCH))
     by_mpn = {p["MPN"]: p for p in PARTS}
-    bom, left, subs, glob_ = [], [], [], []
+    bom, left, subs, glob_, fitted = [], [], [], [], []
     for r in csv.DictReader((tmp / "bom.csv").open()):
         mpn = r["MPN"].strip()
         if not mpn or mpn.startswith("none"):
@@ -102,7 +124,14 @@ def main():
             glob_.append((mpn, code, GLOBAL[mpn], r["References"]))
         if not code:
             sys.exit(f"no LCSC code for {mpn}")
-        bom.append({"Comment": f'{r["Value"]} ({mpn})', "Designator": ",".join(refs(r["References"])),
+        rr = refs(r["References"])
+        hand = [x for x in rr if hand_fit(x)]
+        if hand:
+            fitted.append((r["Value"], ",".join(hand), mpn))
+            rr = [x for x in rr if not hand_fit(x)]
+            if not rr:
+                continue
+        bom.append({"Comment": f'{r["Value"]} ({mpn})', "Designator": ",".join(rr),
                     "Footprint": r["Footprint"].split(":")[-1], "LCSC Part #": code})
     with (OUT / "bom_jlc.csv").open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=["Comment", "Designator", "Footprint", "LCSC Part #"])
@@ -112,11 +141,13 @@ def main():
     run("kicad-cli", "pcb", "export", "pos", "--format", "csv", "--units", "mm", "--side", "both",
         "-o", str(tmp / "pos.csv"), str(BOARD))
     want = {d for b in bom for d in b["Designator"].split(",")}
+    centre = pad_centres()
     cpl, found = [], set()
     for r in csv.DictReader((tmp / "pos.csv").open()):
         if r["Ref"] in want:
             found.add(r["Ref"])
-            cpl.append({"Designator": r["Ref"], "Mid X": f'{float(r["PosX"]):.4f}mm', "Mid Y": f'{float(r["PosY"]):.4f}mm',
+            dx, dy = centre[r["Ref"]]                     # pad centre minus origin, board mm (y down)
+            cpl.append({"Designator": r["Ref"], "Mid X": f'{float(r["PosX"]) + dx:.4f}mm', "Mid Y": f'{float(r["PosY"]) - dy:.4f}mm',
                         "Layer": "Top" if r["Side"].lower() == "top" else "Bottom", "Rotation": f'{float(r["Rot"]):.1f}'})
     with (OUT / "cpl_jlc.csv").open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=["Designator", "Mid X", "Mid Y", "Layer", "Rotation"])
@@ -132,6 +163,8 @@ def main():
     lines += ["", "## Global sourcing at JLC (short of stock; choose \"Global Sourcing\" for these in the BOM step)", "",
               "| MPN | LCSC | Why | Parts |", "|---|---|---|---|"]
     lines += [f"| {a} | {b} | {c} | {d} |" for a, b, c, d in glob_]
+    lines += ["", "## Fitted by hand (through-hole connectors)", "", "| Part | MPN | Refs |", "|---|---|---|"]
+    lines += [f"| {v} | {m} | {rf} |" for v, rf, m in fitted]
     lines += ["", "## Not assembled by JLC", ""] + [f"- {v} ({rf}): {m}" for v, rf, m in left]
     if missing:
         lines += ["", "## In the BOM but not on the board (check!)", ""] + [f"- {m}" for m in missing]
