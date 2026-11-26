@@ -1010,8 +1010,8 @@ the three lines reach the transceiver side by side in its pin order, without cro
     edge (`route.VIA_OK`). Loss 24 / 12 / 5 V: 256 / 371 / 493 mW (full-width area: 190 / 198 / 406 mW).
     **Hand via cleanup (2026-11-26), hand layout from here on:** doubled and unneeded vias removed by hand in KiCad
     (599 -> 534 on the board, mostly GND and +3V3), IMON_42C / 42D's hops redone east of the 12 V output strip
-    (out of its current: OUT12 371 -> 294 mW). No via stands in an SMD pad of its own net, except U10's
-    exposed-pad vias (the LM5122's thermal pad, soldered from the back): the others moved just off their pads
+    (out of its current: OUT12 371 -> 294 mW). No via stands in an SMD pad (U10's three exposed-pad vias out
+    too: its pad joins the bottom GND fill and its GND pins directly): the others moved just off their pads
     (D5, D6, C75, R127, U9, R140, TP31, TP34, R30, U13 pin 1 with the module's +3V3 via 0.45 mm lower). The
     board file is the source from now on: `gen/rebuild_layout.sh` would discard this (and the routing is not
     exactly reproducible: the router works to time budgets), so it refuses without `--discard-hand-layout`.
