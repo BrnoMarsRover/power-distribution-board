@@ -1008,6 +1008,13 @@ the three lines reach the transceiver side by side in its pin order, without cro
     east of them the U17 I2C branches, F7's output pad and MOTOR_KILL's hop leave no spot), INPG_42D's pull-down
     GND via in the 5 V strip (13 mW; the pull-down stands between two risers), MOTOR_OK's hop at the 5 V strip's
     edge (`route.VIA_OK`). Loss 24 / 12 / 5 V: 256 / 371 / 493 mW (full-width area: 190 / 198 / 406 mW).
+    **Hand via cleanup (2026-11-26), hand layout from here on:** doubled and unneeded vias removed by hand in KiCad
+    (599 -> 534 on the board, mostly GND and +3V3), IMON_42C / 42D's hops redone east of the 12 V output strip
+    (out of its current: OUT12 371 -> 294 mW). No via stands in an SMD pad of its own net, except U10's
+    exposed-pad vias (the LM5122's thermal pad, soldered from the back): the others moved just off their pads
+    (D5, D6, C75, R127, U9, R140, TP31, TP34, R30, U13 pin 1 with the module's +3V3 via 0.45 mm lower). The
+    board file is the source from now on: `gen/rebuild_layout.sh` would discard this (and the routing is not
+    exactly reproducible: the router works to time budgets), so it refuses without `--discard-hand-layout`.
     **OPEN:** inner copper weight (JLC: 1 oz or 2 oz inner on 4 layers; 2 oz needs 1.6 mm and 2 oz outer).
   - **Solder-reinforced strips** remain a free extra if the 42 V strips run hot in testing:
     leave the mask open along them and flood with solder. Not planned for now.

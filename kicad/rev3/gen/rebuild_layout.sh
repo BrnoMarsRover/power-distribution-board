@@ -3,7 +3,11 @@
 # to the schematic: use only before hand layout starts. Run from the repository root.
 #   kicad/rev3/gen/rebuild_layout.sh --yes
 set -euo pipefail
-[ "${1:-}" = "--yes" ] || { echo "rebuilds schematic and board from the generators; pass --yes"; exit 1; }
+# Hand layout started 2026-11-26 (vias cleaned up by hand in KiCad, in-pad vias moved): the board file is the source
+# now, and a rebuild would throw that work away (the routing is not exactly reproducible either: the router works to
+# time budgets). Kept for reference; it needs --discard-hand-layout as well.
+[ "${1:-}" = "--yes" ] && [ "${2:-}" = "--discard-hand-layout" ] || {
+    echo "the board is hand-maintained since 2026-11-26: a rebuild discards that work; pass --yes --discard-hand-layout"; exit 1; }
 # KiCad 10 from the kicad-10.0-releases PPA: its pcbnew module is in the system Python. Development switches:
 # HAND_DUMP (efuse_hand.py), SAT_NOCACHE, SAT_KEY_DUMP and SAT_DEBUG (satellites.py), from the environment
 KPY="python3"
