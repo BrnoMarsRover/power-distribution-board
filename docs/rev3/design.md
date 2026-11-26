@@ -1015,6 +1015,12 @@ the three lines reach the transceiver side by side in its pin order, without cro
     (D5, D6, C75, R127, U9, R140, TP31, TP34, R30, U13 pin 1 with the module's +3V3 via 0.45 mm lower). The
     board file is the source from now on: `gen/rebuild_layout.sh` would discard this (and the routing is not
     exactly reproducible: the router works to time budgets), so it refuses without `--discard-hand-layout`.
+    **Second solver and 1 oz outer (2026-11-26):** padne (open-source FEM, `gen/padne_check/`) on the same board and
+    load cases: 11.7 W in all against copper_sim's 9.2 W, the difference mostly padne's point-fed pads; between
+    points away from the pads the two agree within 6 % on the L1 strips and 12 % on the GND plane (OUT42D, shared
+    with L3 through a via array, 42 %: unexplained). **1 oz outer copper is not feasible:** both tools double
+    every outer net's loss and drop (all nets 9.2 -> 13.4 W, the 5 V output drop 33 -> 66 mV), and by IPC-2221 the
+    42 V drive strips would run 45-110 °C above ambient (2 oz: 14-36 °C), the 5 V strip about 50 °C.
     **OPEN:** inner copper weight (JLC: 1 oz or 2 oz inner on 4 layers; 2 oz needs 1.6 mm and 2 oz outer).
   - **Solder-reinforced strips** remain a free extra if the 42 V strips run hot in testing:
     leave the mask open along them and flood with solder. Not planned for now.

@@ -1,0 +1,80 @@
+# load cases = copper_sim.SCEN (design currents), paired source -> sink
+!padne COPPER conductivity=5.814e+07 plating=20u
+# VBAT
+!padne CURRENT i=52.0000 f=R1.1 t=J1.1
+# BUS42
+!padne CURRENT i=30.0000 f=R5.1 t=R1.4
+!padne CURRENT i=22.0000 f=R23.1 t=R1.4
+# DRN@42D
+!padne CURRENT i=15.0000 f=Q2.2 t=R5.4
+!padne CURRENT i=15.0000 f=Q3.2 t=R5.4
+# DRN@42C
+!padne CURRENT i=11.0000 f=Q6.2 t=R23.4
+!padne CURRENT i=11.0000 f=Q7.2 t=R23.4
+# OUT42D
+!padne CURRENT i=10.0000 f=J8.1 t=Q2.3
+!padne CURRENT i=5.0000 f=J9.1 t=Q2.3
+!padne CURRENT i=5.0000 f=J9.1 t=Q3.3
+!padne CURRENT i=10.0000 f=J10.1 t=Q3.3
+# OUT42C
+!padne CURRENT i=9.7000 f=J11.1 t=Q6.3
+!padne CURRENT i=1.3000 f=J12.1 t=Q6.3
+!padne CURRENT i=8.4000 f=J12.1 t=Q7.3
+!padne CURRENT i=2.6000 f=R121.1 t=Q7.3
+# VIN24
+!padne CURRENT i=11.1000 f=R41.1 t=J5.2
+# DRN@24
+!padne CURRENT i=11.1000 f=Q10.2 t=R41.4
+# OUT24
+!padne CURRENT i=1.8500 f=F1.1 t=Q10.3
+!padne CURRENT i=1.8500 f=F2.1 t=Q10.3
+!padne CURRENT i=1.8500 f=F3.1 t=Q10.3
+!padne CURRENT i=1.8500 f=F4.1 t=Q10.3
+!padne CURRENT i=1.8500 f=F5.1 t=Q10.3
+!padne CURRENT i=1.8500 f=F6.1 t=Q10.3
+# VIN12
+!padne CURRENT i=11.1000 f=R59.1 t=J6.2
+# DRN@12
+!padne CURRENT i=11.1000 f=Q13.2 t=R59.4
+# OUT12
+!padne CURRENT i=1.8500 f=F7.1 t=Q13.3
+!padne CURRENT i=1.8500 f=F8.1 t=Q13.3
+!padne CURRENT i=1.8500 f=F9.1 t=Q13.3
+!padne CURRENT i=1.8500 f=F10.1 t=Q13.3
+!padne CURRENT i=1.8500 f=F11.1 t=Q13.3
+!padne CURRENT i=1.8500 f=F12.1 t=Q13.3
+# VIN5
+!padne CURRENT i=16.6000 f=R77.1 t=J7.2
+# DRN@5
+!padne CURRENT i=16.6000 f=Q16.2 t=R77.4
+# OUT5
+!padne CURRENT i=2.7667 f=F13.1 t=Q16.3
+!padne CURRENT i=2.7667 f=F14.1 t=Q16.3
+!padne CURRENT i=2.7667 f=F15.1 t=Q16.3
+!padne CURRENT i=2.7667 f=F16.1 t=Q16.3
+!padne CURRENT i=2.7667 f=F17.1 t=Q16.3
+!padne CURRENT i=2.7667 f=F18.1 t=Q16.3
+# GND
+!padne CURRENT i=10.0000 f=J1.2 t=J8.2
+!padne CURRENT i=10.0000 f=J1.2 t=J9.2
+!padne CURRENT i=10.0000 f=J1.2 t=J10.2
+!padne CURRENT i=11.0000 f=J1.2 t=J11.2
+!padne CURRENT i=11.0000 f=J1.2 t=J12.2
+!padne CURRENT i=1.8500 f=J5.1 t=J14.1
+!padne CURRENT i=1.8500 f=J5.1 t=J15.1
+!padne CURRENT i=1.8500 f=J5.1 t=J16.1
+!padne CURRENT i=1.8500 f=J5.1 t=J17.1
+!padne CURRENT i=1.8500 f=J5.1 t=J18.1
+!padne CURRENT i=1.8500 f=J5.1 t=J19.1
+!padne CURRENT i=1.8500 f=J6.1 t=J20.1
+!padne CURRENT i=1.8500 f=J6.1 t=J21.1
+!padne CURRENT i=1.8500 f=J6.1 t=J22.1
+!padne CURRENT i=1.8500 f=J6.1 t=J23.1
+!padne CURRENT i=1.8500 f=J6.1 t=J24.1
+!padne CURRENT i=1.8500 f=J6.1 t=J25.1
+!padne CURRENT i=2.7667 f=J7.1 t=J26.1
+!padne CURRENT i=2.7667 f=J7.1 t=J27.1
+!padne CURRENT i=2.7667 f=J7.1 t=J28.1
+!padne CURRENT i=2.7667 f=J7.1 t=J29.1
+!padne CURRENT i=2.7667 f=J7.1 t=J30.1
+!padne CURRENT i=2.7667 f=J7.1 t=J31.1
