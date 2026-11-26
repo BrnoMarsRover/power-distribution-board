@@ -1021,7 +1021,7 @@ the three lines reach the transceiver side by side in its pin order, without cro
     with L3 through a via array, 42 %: unexplained). **1 oz outer copper is not feasible:** both tools double
     every outer net's loss and drop (all nets 9.2 -> 13.4 W, the 5 V output drop 33 -> 66 mV), and by IPC-2221 the
     42 V drive strips would run 45-110 °C above ambient (2 oz: 14-36 °C), the 5 V strip about 50 °C.
-    **OPEN:** inner copper weight (JLC: 1 oz or 2 oz inner on 4 layers; 2 oz needs 1.6 mm and 2 oz outer).
+    **Decided (2026-11-26): 2 oz outer, 0.5 oz inner copper** (the GND plane's loss stays at about 5.3 W).
   - **Solder-reinforced strips** remain a free extra if the 42 V strips run hot in testing:
     leave the mask open along them and flood with solder. Not planned for now.
 - **Pads:** power-connector pads connect solid, with no thermal spokes.
@@ -2083,7 +2083,7 @@ the three lines reach the transceiver side by side in its pin order, without cro
 | D2  | ~~Rail design current~~ | **Decided:** battery input 40 A, 42 V drives 30 A, 42 V converter feeds 30 A (now including the 54 V boost, about 3.6 A at 30 V), 24 V 12.5 A, 12 V 12.5 A, 5 V 15 A. |
 | D3  | Who owns the CAN bus once the PC is up | The ESP32 stays the only CANopen master; the Orin sends drive commands to it over the host link. The alternative is the Orin taking over through its own CAN adapter. Bridging a 1 Mbit/s CAN bus through the UART is not practical. |
 | D4  | How the PC talks to the EPOS4s today | (needed to settle D3) |
-| D5  | ~~Assembly~~ | **Decided:** hand soldering, leaded parts only (section 8.1) |
+| D5  | ~~Assembly~~ | **Decided (2026-11-26):** JLCPCB assembles both boards completely (both sides, through-hole included) from `kicad/rev3/fab/jlc/` (`gen/jlc_export.py`); only the Deans T connectors are fitted by hand. The board stays hand-solderable (leaded parts, section 8.1) for repairs. Earlier: hand soldering. |
 | D6  | Converters: external modules fed from the 42 V XT90 outputs? | Yes |
 | D7  | ~~Connector mix-ups~~ | **Resolved** by dropping 15 V: every voltage now has its own connector family. Male inputs, female outputs. |
 | D8  | Controller models and firmware | 1708 / 1914, updated to firmware ≥ 5 |
